@@ -23,25 +23,42 @@ canvas = np.full((height, width, channels), background, dtype=np.uint8)
 cv2.circle(canvas, (200, 200), 180, black, thickness=2)
 
 # 点R
-cx = 200
-cy = 200
+center = (200, 200)  # x, y
 range = 180
 theta = 0
-x = int(range * math.sin(math.radians(theta)) + cx)
-y = int(-range * math.cos(math.radians(theta)) + cy)  # yは上下反転
-cv2.circle(canvas, (x, y), 10, red, thickness=-1)
+pr = (int(range * math.sin(math.radians(theta)) + center[0]),
+      int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
+cv2.circle(canvas, pr, 10, red, thickness=-1)
 
 # 点G
 theta = 240  # 時計回り
-x = int(range * math.sin(math.radians(theta)) + cx)
-y = int(-range * math.cos(math.radians(theta)) + cy)  # yは上下反転
-cv2.circle(canvas, (x, y), 10, green, thickness=-1)
+pg = (int(range * math.sin(math.radians(theta)) + center[0]),
+      int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
+cv2.circle(canvas, pg, 10, green, thickness=-1)
 
 # 点B
 theta = 120
-x = int(range * math.sin(math.radians(theta)) + cx)
-y = int(-range * math.cos(math.radians(theta)) + cy)  # yは上下反転
-cv2.circle(canvas, (x, y), 10, blue, thickness=-1)
+pb = (int(range * math.sin(math.radians(theta)) + center[0]),
+      int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
+cv2.circle(canvas, pb, 10, blue, thickness=-1)
+
+# バーR
+bar_top = 10
+bar_width = 98
+bar_height = 380
+barr_x = 400
+cv2.rectangle(canvas, (barr_x, bar_top),
+              (barr_x+bar_width, bar_top+bar_height), red, thickness=-1)
+
+# バーG
+barg_x = 500
+cv2.rectangle(canvas, (barg_x, bar_top),
+              (barg_x+bar_width, bar_top+bar_height), green, thickness=-1)
+
+# バーB
+barb_x = 600
+cv2.rectangle(canvas, (barb_x, bar_top),
+              (barb_x+bar_width, bar_top+bar_height), blue, thickness=-1)
 
 images.append(Image.fromarray(canvas))
 

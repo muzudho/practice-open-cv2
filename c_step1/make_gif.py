@@ -5,6 +5,7 @@ from datetime import datetime
 import math
 
 # 色 BGR
+white = (255, 255, 255)
 black = (16, 16, 16)
 red = (250, 100, 100)
 green = (100, 250, 100)
@@ -42,23 +43,38 @@ pb = (int(range * math.sin(math.radians(theta)) + center[0]),
       int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
 cv2.circle(canvas, pb, 10, blue, thickness=-1)
 
+# バーの筋
+barr_x = 400
+barg_x = 500
+barb_x = 600
+
+# 水平線R
+# 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
+cv2.line(canvas, (pr[0], pr[1]), (barr_x, pr[1]), red, thickness=1)
+
+# 水平線G
+cv2.line(canvas, (pg[0], pg[1]), (barg_x, pg[1]), green, thickness=1)
+
+# 水平線B
+cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=1)
+
 # バーR
 bar_top = 10
 bar_width = 98
 bar_height = 380
-barr_x = 400
-cv2.rectangle(canvas, (barr_x, bar_top),
-              (barr_x+bar_width, bar_top+bar_height), red, thickness=-1)
+barr_p1 = (barr_x, bar_top)
+barr_p2 = (barr_x+bar_width, bar_top+bar_height)
+cv2.rectangle(canvas, barr_p1, barr_p2, red, thickness=-1)
 
 # バーG
-barg_x = 500
-cv2.rectangle(canvas, (barg_x, bar_top),
-              (barg_x+bar_width, bar_top+bar_height), green, thickness=-1)
+barg_p1 = (barg_x, bar_top)
+barg_p2 = (barg_x+bar_width, bar_top+bar_height)
+cv2.rectangle(canvas, barg_p1, barg_p2, green, thickness=-1)
 
 # バーB
-barb_x = 600
-cv2.rectangle(canvas, (barb_x, bar_top),
-              (barb_x+bar_width, bar_top+bar_height), blue, thickness=-1)
+barb_p1 = (barb_x, bar_top)
+barb_p2 = (barb_x+bar_width, bar_top+bar_height)
+cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
 
 images.append(Image.fromarray(canvas))
 

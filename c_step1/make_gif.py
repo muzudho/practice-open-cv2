@@ -76,6 +76,14 @@ barb_p1 = (barb_x, pb[1])
 barb_p2 = (barb_x+bar_width, bar_bottom)
 cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
 
+# 色円
+valurr = 255-int(pr[1]/bar_height*255)
+valurg = 255-int(pg[1]/bar_height*255)
+valurb = 255-int(pb[1]/bar_height*255)
+color = (valurr, valurg, valurb)
+print(f"color={color}")
+cv2.circle(canvas, (10, 10), 10, color, thickness=-1)
+
 images.append(Image.fromarray(canvas))
 
 # cv2.imshow('canvas',canvas)

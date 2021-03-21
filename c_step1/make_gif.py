@@ -13,8 +13,6 @@ def make_gif(base_theta):
     green = (100, 250, 100)
     blue = (100, 100, 250)
 
-    images = []
-
     # 描画する画像を作る,128を変えると色を変えれます 0黒→255白
     canvas_width = 800
     canvas_height = 400
@@ -25,13 +23,13 @@ def make_gif(base_theta):
     canvas = np.full((canvas_height, canvas_width, channels),
                      background, dtype=np.uint8)
 
-    bar_top = 40
-    bar_max_height = 340
-    bar_bottom = bar_top + bar_max_height
-
     circle_center = (200, 200)  # x, y
     circle_range = 140
     color_pallete_range = 175
+
+    bar_top = circle_center[1] - circle_range
+    bar_max_height = 2*circle_range
+    bar_bottom = bar_top + bar_max_height
 
     # 円、描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
     cv2.circle(canvas, circle_center, circle_range, black, thickness=2)
@@ -86,32 +84,40 @@ def make_gif(base_theta):
     cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
 
     # 色円
-    valurr = 255-int(pr[1]/bar_max_height*255)
-    valurg = 255-int(pg[1]/bar_max_height*255)
-    valurb = 255-int(pb[1]/bar_max_height*255)
+    valurr = 255-int((pr[1]-bar_top)/bar_max_height*255)
+    valurg = 255-int((pg[1]-bar_top)/bar_max_height*255)
+    valurb = 255-int((pb[1]-bar_top)/bar_max_height*255)
     color = (valurr, valurg, valurb)
-    print(f"color={color}")
+    # print(f"({pr[1]},{pg[1]},{pb[1]})")
+    print(f"({pr[1]-bar_top},{pg[1]-bar_top},{pb[1]-bar_top})")
+    # print(
+    #    f"color={color} ({int(pr[1]/bar_max_height*255)},{int(pg[1]/bar_max_height*255)},{int(pb[1]/bar_max_height*255)})")
+    # print(
+    #    f"color={color} ({pr[1]},{pg[1]},{pb[1]}) bar_max_height={bar_max_height}")
     theta = base_theta
     pr = (int(color_pallete_range * math.sin(math.radians(theta)) + circle_center[0]),
           int(-color_pallete_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
     cv2.circle(canvas, pr, 20, color, thickness=-1)
 
-    images.append(Image.fromarray(canvas))
+    return Image.fromarray(canvas)
 
-    # cv2.imshow('canvas',canvas)
-    # cv2.imwrite('form.jpg',canvas)
-    date = datetime.now().strftime("%Y%m%d-%H%M%S")
-    path = f"out-{date}-{base_theta}.gif"
-    fps = 1
-    duration_time = int(1000.0 / fps)
-    images[0].save(path,
-                   save_all=True,
-                   append_images=images[1:],
-                   optimize=False,
-                   duration=duration_time,
-                   loop=0)
 
+images = []
 
 for i in range(0, 36):
     theta = 10*i
-    make_gif(theta)
+    image = make_gif(theta)
+    images.append(image)
+
+# cv2.imshow('canvas',canvas)
+# cv2.imwrite('form.jpg',canvas)
+date = datetime.now().strftime("%Y%m%d-%H%M%S")
+path = f"out-{date}.gif"
+fps = 4
+duration_time = int(1000.0 / fps)
+images[0].save(path,
+               save_all=True,
+               append_images=images[1:],
+               optimize=False,
+               duration=duration_time,
+               loop=0)

@@ -29,6 +29,7 @@ bar_bottom = bar_top + bar_max_height
 
 circle_center = (200, 200)  # x, y
 circle_range = 140
+color_pallete_range = 175
 
 # 円、描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
 cv2.circle(canvas, circle_center, circle_range, black, thickness=2)
@@ -88,7 +89,10 @@ valurg = 255-int(pg[1]/bar_max_height*255)
 valurb = 255-int(pb[1]/bar_max_height*255)
 color = (valurr, valurg, valurb)
 print(f"color={color}")
-cv2.circle(canvas, (10, 10), 10, color, thickness=-1)
+theta = 0
+pr = (int(color_pallete_range * math.sin(math.radians(theta)) + circle_center[0]),
+      int(-color_pallete_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
+cv2.circle(canvas, pr, 20, color, thickness=-1)
 
 images.append(Image.fromarray(canvas))
 

@@ -50,30 +50,30 @@ barb_x = 600
 
 # 水平線R
 # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-cv2.line(canvas, (pr[0], pr[1]), (barr_x, pr[1]), red, thickness=1)
+cv2.line(canvas, (pr[0], pr[1]), (barr_x, pr[1]), red, thickness=2)
 
 # 水平線G
-cv2.line(canvas, (pg[0], pg[1]), (barg_x, pg[1]), green, thickness=1)
+cv2.line(canvas, (pg[0], pg[1]), (barg_x, pg[1]), green, thickness=2)
 
 # 水平線B
-cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=1)
+cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=2)
 
 # バーR
-bar_top = 10
+bar_bottom = 380
 bar_width = 98
 bar_height = 380
-barr_p1 = (barr_x, bar_top)
-barr_p2 = (barr_x+bar_width, bar_top+bar_height)
+barr_p1 = (barr_x, pr[1])
+barr_p2 = (barr_x+bar_width, bar_bottom)
 cv2.rectangle(canvas, barr_p1, barr_p2, red, thickness=-1)
 
 # バーG
-barg_p1 = (barg_x, bar_top)
-barg_p2 = (barg_x+bar_width, bar_top+bar_height)
+barg_p1 = (barg_x, pg[1])
+barg_p2 = (barg_x+bar_width, bar_bottom)
 cv2.rectangle(canvas, barg_p1, barg_p2, green, thickness=-1)
 
 # バーB
-barb_p1 = (barb_x, bar_top)
-barb_p2 = (barb_x+bar_width, bar_top+bar_height)
+barb_p1 = (barb_x, pb[1])
+barb_p2 = (barb_x+bar_width, bar_bottom)
 cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
 
 images.append(Image.fromarray(canvas))

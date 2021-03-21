@@ -65,7 +65,7 @@ def img_resize(img, scale):
 def merge_images(bg, fg_alpha, fgx, fgy):
     """画像を合成する関数(s_xは画像を貼り付けるx座標、s_yは画像を貼り付けるy座標)
     """
-    b, g, r = get_bg_bgr(fg_alpha)  # 背景色を取得
+    b, g, r = rgb_to_bgr_0_0(fg_alpha)  # 左上(0,0)を背景色として、BGRを取得
 
     # 背景色をマスク化
     bgr = np.array([b, g, r])
@@ -97,7 +97,7 @@ def merge_images(bg, fg_alpha, fgx, fgy):
     return work_img2
 
 
-def get_bg_bgr(img):
+def rgb_to_bgr_0_0(img):
     """左上の1pxのBGRの色を取得する関数
     """
     color = img[0, 0]  # 座標(y, x) = (0, 0)の色を取得

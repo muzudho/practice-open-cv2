@@ -14,39 +14,47 @@ blue = (100, 100, 250)
 images = []
 
 # 描画する画像を作る,128を変えると色を変えれます 0黒→255白
-width = 800
-height = 400
+canvas_width = 800
+canvas_height = 400
 channels = 3
 background = 255
 
+# キャンバス
+canvas = np.full((canvas_height, canvas_width, channels),
+                 background, dtype=np.uint8)
+
+bar_top = 40
+bar_max_height = 340
+bar_bottom = bar_top + bar_max_height
+
+circle_center = (200, 200)  # x, y
+circle_range = 140
+
 # 円、描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
-canvas = np.full((height, width, channels), background, dtype=np.uint8)
-cv2.circle(canvas, (200, 200), 180, black, thickness=2)
+cv2.circle(canvas, circle_center, circle_range, black, thickness=2)
 
 # 点R
-center = (200, 200)  # x, y
-range = 180
 theta = 0
-pr = (int(range * math.sin(math.radians(theta)) + center[0]),
-      int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
+pr = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
+      int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
 cv2.circle(canvas, pr, 10, red, thickness=-1)
 
 # 点G
 theta = 240  # 時計回り
-pg = (int(range * math.sin(math.radians(theta)) + center[0]),
-      int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
+pg = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
+      int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
 cv2.circle(canvas, pg, 10, green, thickness=-1)
 
 # 点B
 theta = 120
-pb = (int(range * math.sin(math.radians(theta)) + center[0]),
-      int(-range * math.cos(math.radians(theta)) + center[1]))  # yは上下反転
+pb = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
+      int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
 cv2.circle(canvas, pb, 10, blue, thickness=-1)
 
 # バーの筋
-barr_x = 400
-barg_x = 500
-barb_x = 600
+barr_x = 450
+barg_x = 550
+barb_x = 650
 
 # 水平線R
 # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
@@ -59,9 +67,7 @@ cv2.line(canvas, (pg[0], pg[1]), (barg_x, pg[1]), green, thickness=2)
 cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=2)
 
 # バーR
-bar_bottom = 380
 bar_width = 98
-bar_height = 380
 barr_p1 = (barr_x, pr[1])
 barr_p2 = (barr_x+bar_width, bar_bottom)
 cv2.rectangle(canvas, barr_p1, barr_p2, red, thickness=-1)
@@ -77,9 +83,9 @@ barb_p2 = (barb_x+bar_width, bar_bottom)
 cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
 
 # 色円
-valurr = 255-int(pr[1]/bar_height*255)
-valurg = 255-int(pg[1]/bar_height*255)
-valurb = 255-int(pb[1]/bar_height*255)
+valurr = 255-int(pr[1]/bar_max_height*255)
+valurg = 255-int(pg[1]/bar_max_height*255)
+valurb = 255-int(pb[1]/bar_max_height*255)
 color = (valurr, valurg, valurb)
 print(f"color={color}")
 cv2.circle(canvas, (10, 10), 10, color, thickness=-1)

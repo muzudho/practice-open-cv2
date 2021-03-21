@@ -12,11 +12,14 @@ pip install opencv-python
 ## Start
 
 ```shell
-cd step1
+cd b_step1
 
-python gif_blend.py
+python make_gif.py
 ```
 
 ## References
 
-[【python/OpenCV/Pillow】Pillowを使ってgifアニメーションを作成してみる](https://rikoubou.hatenablog.com/entry/2020/04/03/151906)
+* a
+  * [【python/OpenCV/Pillow】Pillowを使ってgifアニメーションを作成してみる](https://rikoubou.hatenablog.com/entry/2020/04/03/151906) - 読んでも分からない（＾～＾）インデックス・パレット使ってる（＾～＾）
+* b
+  * [python : gifの作成（アニメーション）](https://kangkang1981.hatenablog.com/entry/2020/03/19/224219)

@@ -59,20 +59,37 @@ def make_frame(base_theta):
         y = grid_interval_h*i
         cv2.line(canvas, (0, y), (canvas_width, y), pale_gray, thickness=1)
 
+    # バーの筋
+    bar_left = 300
+    bar_width = 24
+    barr_x = bar_left
+    barg_x = 325
+    barb_x = 350
+    bar_right = barb_x + bar_width
+
+    # RGBバーの１段目の高さ
+    bar_box_height1 = 4 * grid_interval_h
+
+    # RGBバー１段目（レールとなる円より上にある）
+    bar_top1 = 1 * grid_interval_h
+
     # レールとなる円
-    circle_rail_top = 3 * grid_interval_h
+    circle_rail_top = bar_top1 + bar_box_height1
     circle_rail_left = 3 * grid_interval_h
-    circle_rail_range = 90
-    circle_rail_center = (circle_rail_top+circle_rail_range,
-                          circle_rail_left+circle_rail_range)  # x, y
+    circle_rail_range = 5 * grid_interval_h
+    circle_rail_center = (circle_rail_left+circle_rail_range,
+                          circle_rail_top+circle_rail_range)  # x, y
+
+    # RGBバー２段目
+    bar_top2 = circle_rail_top
+    bar_area1_p1 = (bar_left, bar_top1)
+    bar_area1_p2 = (bar_right, bar_top2)
 
     # 色円
     color_pallete_range = circle_rail_range + 2*grid_interval_h
     color_pallete_circle_range = grid_interval_h
 
-    bar_top1 = circle_rail_center[1] - circle_rail_range
-    bar_box_height1 = 0
-    bar_top2 = bar_top1 + bar_box_height1
+    # バー２段目（レールとなる円と水平線を合わす）
     bar_box_height2 = 2*circle_rail_range
     bar_top3 = bar_top2 + bar_box_height2
     bar_box_height3 = 0
@@ -102,12 +119,6 @@ def make_frame(base_theta):
           int(-circle_rail_range * math.cos(math.radians(theta)) + circle_rail_center[1]))  # yは上下反転
     cv2.circle(canvas, pb, point_range, blue, thickness=-1)
 
-    # バーの筋
-    bar_width = 24
-    barr_x = 300
-    barg_x = 325
-    barb_x = 350
-
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, (pr[0], pr[1]), (barr_x, pr[1]), red, thickness=2)
@@ -118,10 +129,12 @@ def make_frame(base_theta):
     # 水平線B
     cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=2)
 
+    cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, light_gray, thickness=4)
+
     # RGBバー(中部)領域
-    bar_area_p1 = (barr_x, bar_top2)
-    bar_area_p2 = (barb_x+bar_width, bar_bottom)
-    cv2.rectangle(canvas, bar_area_p1, bar_area_p2, light_gray, thickness=4)
+    bar_area2_p1 = (bar_left, bar_top2)
+    bar_area2_p2 = (bar_right, bar_bottom)
+    cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, light_gray, thickness=4)
 
     # バーR
     barr_p1 = (barr_x, pr[1])

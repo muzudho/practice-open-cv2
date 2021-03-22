@@ -67,8 +67,10 @@ def make_frame(base_theta):
     barb_x = 350
     bar_right = barb_x + bar_width
 
-    # RGBバーの１段目の高さ
-    bar_box_height1 = 4 * grid_interval_h
+    # RGBバーの１段目、２段目、３段目の高さ（２０分率）
+    bar_box_height1 = 2 * grid_interval_h
+    bar_box_height2 = 4 * grid_interval_h
+    bar_box_height3 = 14 * grid_interval_h
 
     # RGBバー１段目（レールとなる円より上にある）
     bar_top1 = 1 * grid_interval_h
@@ -76,7 +78,7 @@ def make_frame(base_theta):
     # レールとなる円
     circle_rail_top = bar_top1 + bar_box_height1
     circle_rail_left = 3 * grid_interval_h
-    circle_rail_range = 5 * grid_interval_h
+    circle_rail_range = int(bar_box_height2 / 2)
     circle_rail_center = (circle_rail_left+circle_rail_range,
                           circle_rail_top+circle_rail_range)  # x, y
 
@@ -90,9 +92,7 @@ def make_frame(base_theta):
     color_pallete_circle_range = grid_interval_h
 
     # バー２段目（レールとなる円と水平線を合わす）
-    bar_box_height2 = 2*circle_rail_range
     bar_top3 = bar_top2 + bar_box_height2
-    bar_box_height3 = 0
     bar_bottom = bar_top3 + bar_box_height3
     bar_box_height = bar_box_height1 + bar_box_height2 + bar_box_height3
 
@@ -150,6 +150,11 @@ def make_frame(base_theta):
     barb_p1 = (barb_x, pb[1])
     barb_p2 = (barb_x+bar_width, bar_bottom)
     cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
+
+    # RGBバー３段目
+    bar_area3_p1 = (bar_left, bar_top3)
+    bar_area3_p2 = (bar_right, bar_bottom)
+    cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, light_gray, thickness=4)
 
     # 色値
     valurr = 255-int((pr[1]-bar_top1)/bar_box_height*255)

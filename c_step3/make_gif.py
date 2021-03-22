@@ -5,7 +5,33 @@ from datetime import datetime
 import math
 
 
-def make_gif(base_theta):
+def main():
+    """RGB値の仕組みが分かるgifアニメ画像を出力します
+    """
+    images = []
+
+    for i in range(0, 36):
+        theta = 10*i
+        image = make_frame(theta)
+        images.append(image)
+
+    # cv2.imshow('canvas',canvas)
+    # cv2.imwrite('form.jpg',canvas)
+    date = datetime.now().strftime("%Y%m%d-%H%M%S")
+    path = f"out-{date}.gif"
+    fps = 4
+    duration_time = int(1000.0 / fps)
+    images[0].save(path,
+                   save_all=True,
+                   append_images=images[1:],
+                   optimize=False,
+                   duration=duration_time,
+                   loop=0)
+
+
+def make_frame(base_theta):
+    """アニメの１コマを作成します
+    """
     # 色 BGR
     # white = (255, 255, 255)
     pale_gray = (235, 235, 235)
@@ -27,46 +53,53 @@ def make_gif(base_theta):
     canvas = np.full((canvas_height, canvas_width, channels),
                      background, dtype=np.uint8)
 
-    circle_center = (140, 140)  # x, y
-    circle_range = 90
-    color_pallete_range = 120
-    color_pallete_circle_range = 20
+    # 水平線グリッド
+    grid_interval_h = 16
+    for i in range(0, int(canvas_height/grid_interval_h)):
+        y = grid_interval_h*i
+        cv2.line(canvas, (0, y), (canvas_width, y), pale_gray, thickness=1)
 
-    bar_top1 = circle_center[1] - circle_range
+    # レールとなる円
+    circle_rail_top = 3 * grid_interval_h
+    circle_rail_left = 3 * grid_interval_h
+    circle_rail_range = 90
+    circle_rail_center = (circle_rail_top+circle_rail_range,
+                          circle_rail_left+circle_rail_range)  # x, y
+
+    # 色円
+    color_pallete_range = circle_rail_range + 2*grid_interval_h
+    color_pallete_circle_range = grid_interval_h
+
+    bar_top1 = circle_rail_center[1] - circle_rail_range
     bar_box_height1 = 0
     bar_top2 = bar_top1 + bar_box_height1
-    bar_box_height2 = 2*circle_range
+    bar_box_height2 = 2*circle_rail_range
     bar_top3 = bar_top2 + bar_box_height2
     bar_box_height3 = 0
     bar_bottom = bar_top3 + bar_box_height3
     bar_box_height = bar_box_height1 + bar_box_height2 + bar_box_height3
 
-    # 水平線グリッド
-    grid_interval = 16
-    for i in range(0, int(canvas_height/grid_interval)):
-        y = grid_interval*i
-        cv2.line(canvas, (0, y), (canvas_width, y), pale_gray, thickness=1)
-
     # 円、描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
-    cv2.circle(canvas, circle_center, circle_range, black, thickness=2)
+    cv2.circle(canvas, circle_rail_center,
+               circle_rail_range, black, thickness=2)
 
     # 点R
     point_range = 6
     theta = (0+base_theta) % 360
-    pr = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
-          int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
+    pr = (int(circle_rail_range * math.sin(math.radians(theta)) + circle_rail_center[0]),
+          int(-circle_rail_range * math.cos(math.radians(theta)) + circle_rail_center[1]))  # yは上下反転
     cv2.circle(canvas, pr, point_range, red, thickness=-1)
 
     # 点G
     theta = (240+base_theta) % 360  # 時計回り
-    pg = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
-          int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
+    pg = (int(circle_rail_range * math.sin(math.radians(theta)) + circle_rail_center[0]),
+          int(-circle_rail_range * math.cos(math.radians(theta)) + circle_rail_center[1]))  # yは上下反転
     cv2.circle(canvas, pg, point_range, green, thickness=-1)
 
     # 点B
     theta = (120+base_theta) % 360
-    pb = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
-          int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
+    pb = (int(circle_rail_range * math.sin(math.radians(theta)) + circle_rail_center[0]),
+          int(-circle_rail_range * math.cos(math.radians(theta)) + circle_rail_center[1]))  # yは上下反転
     cv2.circle(canvas, pb, point_range, blue, thickness=-1)
 
     # バーの筋
@@ -150,29 +183,11 @@ def make_gif(base_theta):
     # print(
     #    f"color={color} ({pr[1]},{pg[1]},{pb[1]}) bar_max_height={bar_max_height}")
     theta2 = base_theta
-    pr = (int(color_pallete_range * math.sin(math.radians(theta2)) + circle_center[0]),
-          int(-color_pallete_range * math.cos(math.radians(theta2)) + circle_center[1]))  # yは上下反転
+    pr = (int(color_pallete_range * math.sin(math.radians(theta2)) + circle_rail_center[0]),
+          int(-color_pallete_range * math.cos(math.radians(theta2)) + circle_rail_center[1]))  # yは上下反転
     cv2.circle(canvas, pr, color_pallete_circle_range, color, thickness=-1)
 
     return Image.fromarray(canvas)
 
 
-images = []
-
-for i_frame in range(0, 36):
-    theta = 10*i_frame
-    image = make_gif(theta)
-    images.append(image)
-
-# cv2.imshow('canvas',canvas)
-# cv2.imwrite('form.jpg',canvas)
-date = datetime.now().strftime("%Y%m%d-%H%M%S")
-path = f"out-{date}.gif"
-fps = 4
-duration_time = int(1000.0 / fps)
-images[0].save(path,
-               save_all=True,
-               append_images=images[1:],
-               optimize=False,
-               duration=duration_time,
-               loop=0)
+main()

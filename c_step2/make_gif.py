@@ -8,6 +8,7 @@ import math
 def make_gif(base_theta):
     # 色 BGR
     # white = (255, 255, 255)
+    light_gray = (200, 200, 200)
     black = (16, 16, 16)
     red = (250, 100, 100)
     green = (100, 250, 100)
@@ -72,6 +73,11 @@ def make_gif(base_theta):
     # 水平線B
     cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=2)
 
+    # RGBバー領域
+    bar_area_p1 = (barr_x, bar_top)
+    bar_area_p2 = (barb_x+bar_width, bar_bottom)
+    cv2.rectangle(canvas, bar_area_p1, bar_area_p2, light_gray, thickness=4)
+
     # バーR
     barr_p1 = (barr_x, pr[1])
     barr_p2 = (barr_x+bar_width, bar_bottom)
@@ -131,9 +137,9 @@ def make_gif(base_theta):
     #    f"color={color} ({int(pr[1]/bar_max_height*255)},{int(pg[1]/bar_max_height*255)},{int(pb[1]/bar_max_height*255)})")
     # print(
     #    f"color={color} ({pr[1]},{pg[1]},{pb[1]}) bar_max_height={bar_max_height}")
-    theta = base_theta
-    pr = (int(color_pallete_range * math.sin(math.radians(theta)) + circle_center[0]),
-          int(-color_pallete_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
+    theta2 = base_theta
+    pr = (int(color_pallete_range * math.sin(math.radians(theta2)) + circle_center[0]),
+          int(-color_pallete_range * math.cos(math.radians(theta2)) + circle_center[1]))  # yは上下反転
     cv2.circle(canvas, pr, color_pallete_circle_range, color, thickness=-1)
 
     return Image.fromarray(canvas)

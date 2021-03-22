@@ -13,19 +13,22 @@ def make_gif(base_theta):
     green = (100, 250, 100)
     blue = (100, 100, 250)
 
-    # 描画する画像を作る,128を変えると色を変えれます 0黒→255白
-    canvas_width = 800
-    canvas_height = 400
+    # 描画する画像を作る
+    # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
+    canvas_width = 400
+    canvas_height = 280
     channels = 3
+    # 0黒→255白
     background = 255
 
     # キャンバス
     canvas = np.full((canvas_height, canvas_width, channels),
                      background, dtype=np.uint8)
 
-    circle_center = (200, 200)  # x, y
-    circle_range = 140
-    color_pallete_range = 175
+    circle_center = (140, 140)  # x, y
+    circle_range = 90
+    color_pallete_range = 120
+    color_pallete_circle_range = 20
 
     bar_top = circle_center[1] - circle_range
     bar_max_height = 2*circle_range
@@ -35,27 +38,29 @@ def make_gif(base_theta):
     cv2.circle(canvas, circle_center, circle_range, black, thickness=2)
 
     # 点R
+    point_range = 6
     theta = (0+base_theta) % 360
     pr = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
           int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
-    cv2.circle(canvas, pr, 10, red, thickness=-1)
+    cv2.circle(canvas, pr, point_range, red, thickness=-1)
 
     # 点G
     theta = (240+base_theta) % 360  # 時計回り
     pg = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
           int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
-    cv2.circle(canvas, pg, 10, green, thickness=-1)
+    cv2.circle(canvas, pg, point_range, green, thickness=-1)
 
     # 点B
     theta = (120+base_theta) % 360
     pb = (int(circle_range * math.sin(math.radians(theta)) + circle_center[0]),
           int(-circle_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
-    cv2.circle(canvas, pb, 10, blue, thickness=-1)
+    cv2.circle(canvas, pb, point_range, blue, thickness=-1)
 
     # バーの筋
-    barr_x = 450
-    barg_x = 550
-    barb_x = 650
+    bar_width = 24
+    barr_x = 300
+    barg_x = 325
+    barb_x = 350
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
@@ -68,7 +73,6 @@ def make_gif(base_theta):
     cv2.line(canvas, (pb[0], pb[1]), (barb_x, pb[1]), blue, thickness=2)
 
     # バーR
-    bar_width = 98
     barr_p1 = (barr_x, pr[1])
     barr_p2 = (barr_x+bar_width, bar_bottom)
     cv2.rectangle(canvas, barr_p1, barr_p2, red, thickness=-1)
@@ -97,7 +101,7 @@ def make_gif(base_theta):
     theta = base_theta
     pr = (int(color_pallete_range * math.sin(math.radians(theta)) + circle_center[0]),
           int(-color_pallete_range * math.cos(math.radians(theta)) + circle_center[1]))  # yは上下反転
-    cv2.circle(canvas, pr, 20, color, thickness=-1)
+    cv2.circle(canvas, pr, color_pallete_circle_range, color, thickness=-1)
 
     return Image.fromarray(canvas)
 

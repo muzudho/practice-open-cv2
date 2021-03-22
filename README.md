@@ -7,7 +7,11 @@ gifアニメ作成の練習（＾～＾）
 
 ```shell
 pip install opencv-python
+pip install pylint
+python -m pylint --generate-rcfile > pylintrc
 ```
+
+VSCode `[File] - [Preferences] - [Settings]`。 検索欄に `Python.linting.pylintArgs` を入れて検索。 `--extension-pkg-whitelist=cv2` を追加。  
 
 ## Start
 
@@ -23,3 +27,7 @@ python make_gif.py
   * [【python/OpenCV/Pillow】Pillowを使ってgifアニメーションを作成してみる](https://rikoubou.hatenablog.com/entry/2020/04/03/151906) - 読んでも分からない（＾～＾）インデックス・パレット使ってる（＾～＾）
 * b
   * [python : gifの作成（アニメーション）](https://kangkang1981.hatenablog.com/entry/2020/03/19/224219)
+* OpenCV2
+  * [OpenCVをVisual Studio Codeで使う時にcv2モジュールのインテリセンスが表示されない問題](https://qiita.com/FXsimone/items/577e3924f40aa4a9d4ea)
+* pylint
+  * [pylintでコードチェックをしたいが，そもそも実行エラーが出てしまう．](https://teratail.com/questions/197652)

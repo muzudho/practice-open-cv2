@@ -87,13 +87,18 @@ def make_gif(base_theta):
     barb_p2 = (barb_x+bar_width, bar_bottom)
     cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
 
+    # 色値
+    valurr = 255-int((pr[1]-bar_top)/bar_max_height*255)
+    valurg = 255-int((pg[1]-bar_top)/bar_max_height*255)
+    valurb = 255-int((pb[1]-bar_top)/bar_max_height*255)
+
     # R値テキスト
     font = cv2.FONT_HERSHEY_SIMPLEX
     font_height = 20
-    font_scale = 0.8
+    font_scale = 0.6
     line_type = 2
     cv2.putText(canvas,
-                'xx',
+                f"{valurr:02x}",
                 (barr_p2[0]-bar_width, barr_p2[1]+font_height),  # x,y
                 font,
                 font_scale,
@@ -102,7 +107,7 @@ def make_gif(base_theta):
 
     # G値テキスト
     cv2.putText(canvas,
-                'xx',
+                f"{valurg:02x}",
                 (barg_p2[0]-bar_width, barg_p2[1]+font_height),  # x,y
                 font,
                 font_scale,
@@ -111,7 +116,7 @@ def make_gif(base_theta):
 
     # B値テキスト
     cv2.putText(canvas,
-                'xx',
+                f"{valurb:02x}",
                 (barb_p2[0]-bar_width, barb_p2[1]+font_height),  # x,y
                 font,
                 font_scale,
@@ -119,9 +124,6 @@ def make_gif(base_theta):
                 line_type)
 
     # 色円
-    valurr = 255-int((pr[1]-bar_top)/bar_max_height*255)
-    valurg = 255-int((pg[1]-bar_top)/bar_max_height*255)
-    valurb = 255-int((pb[1]-bar_top)/bar_max_height*255)
     color = (valurr, valurg, valurb)
     # print(f"({pr[1]},{pg[1]},{pb[1]})")
     print(f"({pr[1]-bar_top},{pg[1]-bar_top},{pb[1]-bar_top})")

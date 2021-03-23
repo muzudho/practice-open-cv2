@@ -16,14 +16,18 @@ BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 460
-CANVAS_HEIGHT = 320
+CANVAS_WIDTH = 440
+CANVAS_HEIGHT = 300
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
 # 水平線グリッド
-GRID_INTERVAL_H = 12
+GRID_INTERVAL_H = 10
+# RGBバー１段目（レールとなる円より上にある）
+BAR_TOP1 = 5 * GRID_INTERVAL_H
+# 円レール circle rail left
+CRAIL_LEFT = 5 * GRID_INTERVAL_H
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -105,17 +109,16 @@ def make_canvas(base_theta, bar_rate, tone_name):
     bar_box_height3 = int(bar_rate[2] * 20 * GRID_INTERVAL_H)
 
     # 円レール
-    crail_left = 3 * GRID_INTERVAL_H
     crail_range = int(bar_box_height2 / 2)
     # 色円
     color_pallete_range = crail_range + 2*GRID_INTERVAL_H
     color_pallete_circle_range = GRID_INTERVAL_H
     # バー箱の左
-    bar_left = int(crail_left + 21.5*GRID_INTERVAL_H +
+    range_width = 10
+    outer_circle_margin = 2
+    width = 2 * (range_width + outer_circle_margin)
+    bar_left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
                    2*color_pallete_circle_range)
-
-    # RGBバー１段目（レールとなる円より上にある）
-    bar_top1 = 3 * GRID_INTERVAL_H
 
     # バーの筋
     bar_width = 24
@@ -125,13 +128,13 @@ def make_canvas(base_theta, bar_rate, tone_name):
     bar_right = barb_x + bar_width
 
     # レールとなる円 circle rail
-    crail_top = bar_top1 + bar_box_height1
-    crail_center = (crail_left+crail_range,
+    crail_top = BAR_TOP1 + bar_box_height1
+    crail_center = (CRAIL_LEFT+crail_range,
                     crail_top+crail_range)  # x, y
 
     # RGBバー２段目
     bar_top2 = crail_top
-    bar_area1_p1 = (bar_left, bar_top1)
+    bar_area1_p1 = (bar_left, BAR_TOP1)
     bar_area1_p2 = (bar_right, bar_top2)
 
     # バー２段目（レールとなる円と水平線を合わす）
@@ -211,9 +214,9 @@ def make_canvas(base_theta, bar_rate, tone_name):
     cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
 
     # 色値
-    valurr = 255-int((red_p[1]-bar_top1)/bar_box_height*255)
-    valurg = 255-int((green_p[1]-bar_top1)/bar_box_height*255)
-    valurb = 255-int((blue_p[1]-bar_top1)/bar_box_height*255)
+    valurr = 255-int((red_p[1]-BAR_TOP1)/bar_box_height*255)
+    valurg = 255-int((green_p[1]-BAR_TOP1)/bar_box_height*255)
+    valurb = 255-int((blue_p[1]-BAR_TOP1)/bar_box_height*255)
 
     # R値テキスト
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -247,7 +250,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
                 line_type)
 
     # バー率
-    rate_y = int((bar_top1 + bar_top2)/2)
+    rate_y = int((BAR_TOP1 + bar_top2)/2)
     cv2.putText(canvas,
                 f"{bar_rate[0]}",
                 (bar_right+bar_width, rate_y),  # x,y
@@ -275,7 +278,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     # トーン名
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_left, bar_top1-font_height),  # x,y
+                (bar_left, BAR_TOP1-font_height),  # x,y
                 font,
                 font_scale,
                 BLACK,

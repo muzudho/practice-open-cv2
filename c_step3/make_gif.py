@@ -15,8 +15,6 @@ def main():
         image = make_frame(theta)
         images.append(image)
 
-    # cv2.imshow('canvas',canvas)
-    # cv2.imwrite('form.jpg',canvas)
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     path = f"out-{date}.gif"
     fps = 4
@@ -205,6 +203,10 @@ def make_frame(base_theta):
           int(-color_pallete_range * math.cos(math.radians(theta2)) + circle_rail_center[1]))  # yは上下反転
     cv2.circle(canvas, pr, color_pallete_circle_range, color, thickness=-1)
 
+    cv2.imshow('Title', canvas)
+    # cv2.imwrite('form.jpg',canvas)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     return Image.fromarray(canvas)
 
 

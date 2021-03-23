@@ -22,8 +22,8 @@ CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
-# バーの筋
-BAR_LEFT = 420
+# 水平線グリッド
+GRID_INTERVAL_H = 16
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -94,42 +94,45 @@ def make_canvas(base_theta, bar_rate, tone_name):
                      MONO_BACKGROUND, dtype=np.uint8)
 
     # 水平線グリッド
-    grid_interval_h = 16
-    for i in range(0, int(CANVAS_HEIGHT/grid_interval_h)):
-        y_num = grid_interval_h*i
+    for i in range(0, int(CANVAS_HEIGHT/GRID_INTERVAL_H)):
+        y_num = GRID_INTERVAL_H*i
         cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
                  PALE_GRAY, thickness=1)
 
+    # RGBバーの１段目、２段目、３段目の高さ（２０分率）
+    bar_box_height1 = int(bar_rate[0] * 20 * GRID_INTERVAL_H)
+    bar_box_height2 = int(bar_rate[1] * 20 * GRID_INTERVAL_H)
+    bar_box_height3 = int(bar_rate[2] * 20 * GRID_INTERVAL_H)
+
+    # 円レール
+    crail_left = 3 * GRID_INTERVAL_H
+    crail_range = int(bar_box_height2 / 2)
+    # 色円
+    color_pallete_range = crail_range + 2*GRID_INTERVAL_H
+    color_pallete_circle_range = GRID_INTERVAL_H
+    # バー箱の左
+    bar_left = int(crail_left + 21.5*GRID_INTERVAL_H +
+                   2*color_pallete_circle_range)
+
+    # RGBバー１段目（レールとなる円より上にある）
+    bar_top1 = 3 * GRID_INTERVAL_H
+
     # バーの筋
     bar_width = 24
-    barr_x = BAR_LEFT
+    barr_x = bar_left
     barg_x = barr_x + bar_width + 1
     barb_x = barg_x + bar_width + 1
     bar_right = barb_x + bar_width
 
-    # RGBバー１段目（レールとなる円より上にある）
-    bar_top1 = 3 * grid_interval_h
-
-    # RGBバーの１段目、２段目、３段目の高さ（２０分率）
-    bar_box_height1 = int(bar_rate[0] * 20 * grid_interval_h)
-    bar_box_height2 = int(bar_rate[1] * 20 * grid_interval_h)
-    bar_box_height3 = int(bar_rate[2] * 20 * grid_interval_h)
-
     # レールとなる円 circle rail
     crail_top = bar_top1 + bar_box_height1
-    crail_left = 3 * grid_interval_h
-    crail_range = int(bar_box_height2 / 2)
     crail_center = (crail_left+crail_range,
                     crail_top+crail_range)  # x, y
 
     # RGBバー２段目
     bar_top2 = crail_top
-    bar_area1_p1 = (BAR_LEFT, bar_top1)
+    bar_area1_p1 = (bar_left, bar_top1)
     bar_area1_p2 = (bar_right, bar_top2)
-
-    # 色円
-    color_pallete_range = crail_range + 2*grid_interval_h
-    color_pallete_circle_range = grid_interval_h
 
     # バー２段目（レールとなる円と水平線を合わす）
     bar_top3 = bar_top2 + bar_box_height2
@@ -175,7 +178,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, LIGHT_GRAY, thickness=4)
 
     # RGBバー(中部)領域
-    bar_area2_p1 = (BAR_LEFT, bar_top2)
+    bar_area2_p1 = (bar_left, bar_top2)
     bar_area2_p2 = (bar_right, bar_bottom)
     cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, LIGHT_GRAY, thickness=4)
 
@@ -195,7 +198,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     cv2.rectangle(canvas, barb_p1, barb_p2, BLUE, thickness=-1)
 
     # RGBバー３段目
-    bar_area3_p1 = (BAR_LEFT, bar_top3)
+    bar_area3_p1 = (bar_left, bar_top3)
     bar_area3_p2 = (bar_right, bar_bottom)
     cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
 
@@ -264,7 +267,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     # トーン名
     cv2.putText(canvas,
                 f"{tone_name}",
-                (BAR_LEFT, bar_top1-font_height),  # x,y
+                (bar_left, bar_top1-font_height),  # x,y
                 font,
                 font_scale,
                 BLACK,

@@ -17,7 +17,7 @@ BLUE = (100, 100, 250)
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
 CANVAS_WIDTH = 512
-CANVAS_HEIGHT = 384
+CANVAS_HEIGHT = 400
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -83,20 +83,20 @@ def make_canvas(base_theta, bar_rate):
                  PALE_GRAY, thickness=1)
 
     # バーの筋
-    bar_left = 300
+    bar_left = 356
     bar_width = 24
     barr_x = bar_left
-    barg_x = 325
-    barb_x = 350
+    barg_x = barr_x + bar_width + 1
+    barb_x = barg_x + bar_width + 1
     bar_right = barb_x + bar_width
+
+    # RGBバー１段目（レールとなる円より上にある）
+    bar_top1 = 3 * grid_interval_h
 
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
     bar_box_height1 = int(bar_rate[0] * 20 * grid_interval_h)
     bar_box_height2 = int(bar_rate[1] * 20 * grid_interval_h)
     bar_box_height3 = int(bar_rate[2] * 20 * grid_interval_h)
-
-    # RGBバー１段目（レールとなる円より上にある）
-    bar_top1 = 1 * grid_interval_h
 
     # レールとなる円 circle rail
     crail_top = bar_top1 + bar_box_height1

@@ -7,42 +7,64 @@ import numpy as np
 
 # 色 BGR
 # white = (255, 255, 255)
-pale_gray = (235, 235, 235)
-light_gray = (200, 200, 200)
-black = (16, 16, 16)
-red = (250, 100, 100)
-green = (100, 250, 100)
-blue = (100, 100, 250)
+PALE_GRAY = (235, 235, 235)
+LIGHT_GRAY = (200, 200, 200)
+BLACK = (16, 16, 16)
+RED = (250, 100, 100)
+GREEN = (100, 250, 100)
+BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-canvas_width = 512
-canvas_height = 384
-channels = 3
+CANVAS_WIDTH = 512
+CANVAS_HEIGHT = 384
+CHANNELS = 3
 # モノクロ背景 0黒→255白
-background = 255
+MONO_BACKGROUND = 255
+
+# とりあえず 11トーン
+BAR_RATES = [
+    [0.0, 0.8, 0.2],  # Bright
+    [0.0, 0.2, 0.8],  # Strong
+    [0.0, 0.4, 0.6],  # Deep
+    [0.0, 0.3, 0.7],  # Light
+    [0.2, 0.4, 0.4],  # Soft
+    [0.3, 0.5, 0.2],  # Dull
+    [0.0, 0.6, 0.4],  # Dark
+    [0.0, 0.2, 0.8],  # Pale
+    [0.1, 0.3, 0.6],  # Light grayish
+    [0.4, 0.3, 0.3],  # Grayish
+    [0.6, 0.2, 0.2],  # Dark grayish
+]
+# 一周分のフレーム数
+FRAME_COUNTS = 72
 
 
 def main():
     """RGB値の仕組みが分かるgifアニメ画像を出力します
     """
 
-    make_circle()
+    # 連番
+    seq = 0
+    size = len(BAR_RATES)
+    for i in range(0, size):
+        seq = make_circle(seq, BAR_RATES[i])
 
 
-def make_circle():
+def make_circle(seq, bar_rate):
     """一周分の画像を出力
     """
-    frame_counts = 72
 
-    for i in range(0, frame_counts):
-        theta = 360/frame_counts*i
-        bar_rate = [0.1, 0.2, 0.7]
+    for i in range(0, FRAME_COUNTS):
+        theta = 360/FRAME_COUNTS*i
         canvas = make_canvas(theta, bar_rate)
         # BGRをRGBにする
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
-        cv2.imwrite(f"./shared/out-cstep4-{i}.png", canvas)
+        cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+        seq += 1
+
+    return seq
 
 
 def make_canvas(base_theta, bar_rate):
@@ -50,15 +72,15 @@ def make_canvas(base_theta, bar_rate):
     """
 
     # キャンバス
-    canvas = np.full((canvas_height, canvas_width, channels),
-                     background, dtype=np.uint8)
+    canvas = np.full((CANVAS_HEIGHT, CANVAS_WIDTH, CHANNELS),
+                     MONO_BACKGROUND, dtype=np.uint8)
 
     # 水平線グリッド
     grid_interval_h = 16
-    for i in range(0, int(canvas_height/grid_interval_h)):
+    for i in range(0, int(CANVAS_HEIGHT/grid_interval_h)):
         y_num = grid_interval_h*i
-        cv2.line(canvas, (0, y_num), (canvas_width, y_num),
-                 pale_gray, thickness=1)
+        cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
+                 PALE_GRAY, thickness=1)
 
     # バーの筋
     bar_left = 300
@@ -99,66 +121,66 @@ def make_canvas(base_theta, bar_rate):
 
     # 円、描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
     cv2.circle(canvas, crail_center,
-               crail_range, black, thickness=2)
+               crail_range, BLACK, thickness=2)
 
     # 点R
     point_range = 6
     theta = (0+base_theta) % 360
     red_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
              int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
-    cv2.circle(canvas, red_p, point_range, red, thickness=-1)
+    cv2.circle(canvas, red_p, point_range, RED, thickness=-1)
 
     # 点G
     theta = (240+base_theta) % 360  # 時計回り
     green_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
                int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
-    cv2.circle(canvas, green_p, point_range, green, thickness=-1)
+    cv2.circle(canvas, green_p, point_range, GREEN, thickness=-1)
 
     # 点B
     theta = (120+base_theta) % 360
     blue_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
               int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
-    cv2.circle(canvas, blue_p, point_range, blue, thickness=-1)
+    cv2.circle(canvas, blue_p, point_range, BLUE, thickness=-1)
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, (red_p[0], red_p[1]),
-             (barr_x, red_p[1]), red, thickness=2)
+             (barr_x, red_p[1]), RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, (green_p[0], green_p[1]),
-             (barg_x, green_p[1]), green, thickness=2)
+             (barg_x, green_p[1]), GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, (blue_p[0], blue_p[1]),
-             (barb_x, blue_p[1]), blue, thickness=2)
+             (barb_x, blue_p[1]), BLUE, thickness=2)
 
-    cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, light_gray, thickness=4)
+    cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, LIGHT_GRAY, thickness=4)
 
     # RGBバー(中部)領域
     bar_area2_p1 = (bar_left, bar_top2)
     bar_area2_p2 = (bar_right, bar_bottom)
-    cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, light_gray, thickness=4)
+    cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, LIGHT_GRAY, thickness=4)
 
     # バーR
     barr_p1 = (barr_x, red_p[1])
     barr_p2 = (barr_x+bar_width, bar_bottom)
-    cv2.rectangle(canvas, barr_p1, barr_p2, red, thickness=-1)
+    cv2.rectangle(canvas, barr_p1, barr_p2, RED, thickness=-1)
 
     # バーG
     barg_p1 = (barg_x, green_p[1])
     barg_p2 = (barg_x+bar_width, bar_bottom)
-    cv2.rectangle(canvas, barg_p1, barg_p2, green, thickness=-1)
+    cv2.rectangle(canvas, barg_p1, barg_p2, GREEN, thickness=-1)
 
     # バーB
     barb_p1 = (barb_x, blue_p[1])
     barb_p2 = (barb_x+bar_width, bar_bottom)
-    cv2.rectangle(canvas, barb_p1, barb_p2, blue, thickness=-1)
+    cv2.rectangle(canvas, barb_p1, barb_p2, BLUE, thickness=-1)
 
     # RGBバー３段目
     bar_area3_p1 = (bar_left, bar_top3)
     bar_area3_p2 = (bar_right, bar_bottom)
-    cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, light_gray, thickness=4)
+    cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
 
     # 色値
     valurr = 255-int((red_p[1]-bar_top1)/bar_box_height*255)
@@ -175,7 +197,7 @@ def make_canvas(base_theta, bar_rate):
                 (barr_p2[0]-bar_width, barr_p2[1]+font_height),  # x,y
                 font,
                 font_scale,
-                red,
+                RED,
                 line_type)
 
     # G値テキスト
@@ -184,7 +206,7 @@ def make_canvas(base_theta, bar_rate):
                 (barg_p2[0]-bar_width, barg_p2[1]+font_height),  # x,y
                 font,
                 font_scale,
-                green,
+                GREEN,
                 line_type)
 
     # B値テキスト
@@ -193,7 +215,7 @@ def make_canvas(base_theta, bar_rate):
                 (barb_p2[0]-bar_width, barb_p2[1]+font_height),  # x,y
                 font,
                 font_scale,
-                blue,
+                BLUE,
                 line_type)
 
     # 色円

@@ -11,7 +11,8 @@ from pygame.locals import QUIT
 pygame.init()
 
 # 画像の読み込み
-FRAME_COUNT = 72
+FRAME_COUNT = 792
+FPS = 8
 IMAGE1 = pygame.image.load('./shared/out-cstep4-0.png')
 IMAGE1_W = IMAGE1.get_width()  # 画像の横幅の取得
 IMAGE1_H = IMAGE1.get_height()  # 画像の高さの取得
@@ -32,7 +33,7 @@ for i in range(0, FRAME_COUNT):
 # メインループ
 WHITE = (255, 255, 255)
 TOP_LEFT_P = (0, 0)  # x, y
-for j in range(0, 2):  # 2ループ
+for j in range(0, 1):  # 1ループ # 2ループ
     for i in range(0, FRAME_COUNT):
         # SURFACE.fill(WHITE)  # 背景の色
         SURFACE.blit(FRAMES[i], TOP_LEFT_P)  # ボールの描画
@@ -51,6 +52,6 @@ for j in range(0, 2):  # 2ループ
             time.sleep(3)  # Seconds
 
         # フレームレートの設定
-        CLOCK.tick(4)  # fps を指定
+        CLOCK.tick(FPS)  # fps を指定
 
 time.sleep(3)  # Seconds

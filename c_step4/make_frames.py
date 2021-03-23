@@ -10,9 +10,14 @@ def main():
     """RGB値の仕組みが分かるgifアニメ画像を出力します
     """
 
-    for i in range(0, 36):
+    frame_counts = 72
+
+    for i in range(0, frame_counts):
         theta = 10*i
         canvas = make_canvas(theta)
+        # BGRをRGBにする
+        canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
+
         cv2.imwrite(f"./shared/out-cstep4-{i}.png", canvas)
 
 

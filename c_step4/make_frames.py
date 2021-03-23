@@ -1,7 +1,6 @@
 """png画像を複数枚出力します
 """
 
-from datetime import datetime
 import math
 import cv2
 import numpy as np
@@ -11,11 +10,10 @@ def main():
     """RGB値の仕組みが分かるgifアニメ画像を出力します
     """
 
-    date = datetime.now().strftime("%Y%m%d-%H%M%S")
     for i in range(0, 36):
         theta = 10*i
         canvas = make_canvas(theta)
-        cv2.imwrite(f"./shared/out-{date}-{i}.png", canvas)
+        cv2.imwrite(f"./shared/out-cstep4-{i}.png", canvas)
 
 
 def make_canvas(base_theta):

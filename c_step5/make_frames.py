@@ -218,6 +218,35 @@ def make_canvas(base_theta, bar_rate):
                 BLUE,
                 line_type)
 
+    # バー率
+    if bar_rate[0] > 0.0:
+        rate_y = int((bar_top1 + bar_top2)/2)
+        cv2.putText(canvas,
+                    f"{bar_rate[0]}",
+                    (bar_right+bar_width, rate_y),  # x,y
+                    font,
+                    font_scale,
+                    LIGHT_GRAY,
+                    line_type)
+    if bar_rate[1] > 0.0:
+        rate_y = int((bar_top2 + bar_top3)/2)
+        cv2.putText(canvas,
+                    f"{bar_rate[1]}",
+                    (bar_right+bar_width, rate_y),  # x,y
+                    font,
+                    font_scale,
+                    LIGHT_GRAY,
+                    line_type)
+    if bar_rate[2] > 0.0:
+        rate_y = int((bar_top3 + bar_bottom)/2)
+        cv2.putText(canvas,
+                    f"{bar_rate[2]}",
+                    (bar_right+bar_width, rate_y),  # x,y
+                    font,
+                    font_scale,
+                    LIGHT_GRAY,
+                    line_type)
+
     # 色円
     color = (valurr, valurg, valurb)
     # print(f"({red_p[1]},{green_p[1]},{blue_p[1]})")

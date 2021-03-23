@@ -139,9 +139,9 @@ def make_canvas(base_theta, bar_rate, tone_name):
     bar_bottom = bar_top3 + bar_box_height3
     bar_box_height = bar_box_height1 + bar_box_height2 + bar_box_height3
 
-    # 円、描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
+    # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
     cv2.circle(canvas, crail_center,
-               crail_range, BLACK, thickness=2)
+               crail_range, LIGHT_GRAY, thickness=2)
 
     # 点R
     point_range = 6
@@ -161,6 +161,14 @@ def make_canvas(base_theta, bar_rate, tone_name):
     blue_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
               int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, blue_p, point_range, BLUE, thickness=-1)
+
+    # 円に内接する線。三角形
+    cv2.line(canvas, (red_p[0], red_p[1]),
+             (green_p[0], green_p[1]), BLACK, thickness=2)
+    cv2.line(canvas, (green_p[0], green_p[1]),
+             (blue_p[0], blue_p[1]), BLACK, thickness=2)
+    cv2.line(canvas, (blue_p[0], blue_p[1]),
+             (red_p[0], red_p[1]), BLACK, thickness=2)
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ

@@ -31,17 +31,14 @@ for i in range(0, FRAME_COUNT):
 
 # メインループ
 WHITE = (255, 255, 255)
-BALLP = [0, 0]  # x, y
-DX = 3
-DY = 2  # 移動量
+TOP_LEFT_P = (0, 0)  # x, y
 for j in range(0, 2):  # 2ループ
     for i in range(0, FRAME_COUNT):
         # SURFACE.fill(WHITE)  # 背景の色
-        SURFACE.blit(FRAMES[i], (BALLP[0], BALLP[1]))  # ボールの描画
+        SURFACE.blit(FRAMES[i], TOP_LEFT_P)  # ボールの描画
 
         # イベントキューを処理するループ
         for ev in pygame.event.get():
-
             if ev.type == QUIT:  # 「終了」イベント
                 pygame.quit()
                 print('quitting...')

@@ -13,7 +13,7 @@ def main():
     frame_counts = 72
 
     for i in range(0, frame_counts):
-        theta = 10*i
+        theta = 360/frame_counts*i
         canvas = make_canvas(theta)
         # BGRをRGBにする
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)

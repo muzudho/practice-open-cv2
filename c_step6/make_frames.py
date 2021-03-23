@@ -59,7 +59,7 @@ TONE_NAME = [
     'Cosine curve',
 ]
 # 一周分のフレーム数
-FRAME_COUNTS = 36
+FRAME_COUNTS = 24
 
 
 def main():
@@ -314,7 +314,7 @@ def outer_circle(canvas, color_pallete_range, center, bar_rate):
     """外環状
     """
 
-    size = 36
+    size = 18
     circumference = 360  # 半径１の円の一周の長さ
     arc = circumference/size  # 等分割した１つの弧
 
@@ -324,9 +324,9 @@ def outer_circle(canvas, color_pallete_range, center, bar_rate):
     color_list = []
     for i in range(0, size):
         theta = i * arc
-        red_y = int(255*bar_rate[1]*math.cos(math.radians(theta)))
-        green_y = int(255*bar_rate[1]*math.cos(math.radians(theta-120)))
-        blue_y = int(255*bar_rate[1]*math.cos(math.radians(theta+120)))
+        red_y = 255*bar_rate[1]*math.cos(math.radians(theta))
+        green_y = 255*bar_rate[1]*math.cos(math.radians(theta-120))
+        blue_y = 255*bar_rate[1]*math.cos(math.radians(theta+120))
 
         red_y = int(red_y+offset)
         green_y = int(green_y+offset)
@@ -345,8 +345,12 @@ def outer_circle(canvas, color_pallete_range, center, bar_rate):
                     color_pallete_range+2*GRID_INTERVAL_H)
         cv2.ellipse(canvas,
                     center,
-                    box_size, -90, theta,
-                    theta+arc, color, thickness=int(GRID_INTERVAL_H*3/2))
+                    box_size,
+                    -90,
+                    theta,
+                    theta+arc,
+                    color,
+                    thickness=int(GRID_INTERVAL_H*3/2))
 
 
 main()

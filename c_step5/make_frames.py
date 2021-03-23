@@ -16,14 +16,14 @@ BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 560
-CANVAS_HEIGHT = 416
+CANVAS_WIDTH = 460
+CANVAS_HEIGHT = 320
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
 # 水平線グリッド
-GRID_INTERVAL_H = 16
+GRID_INTERVAL_H = 12
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -55,7 +55,7 @@ TONE_NAME = [
     'Cosine curve',
 ]
 # 一周分のフレーム数
-FRAME_COUNTS = 24
+FRAME_COUNTS = 36
 
 
 def main():

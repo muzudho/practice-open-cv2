@@ -298,7 +298,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     cv2.circle(canvas, red_p, color_pallete_circle_range, color, thickness=-1)
 
     # 外環状
-    outer_circle(canvas, color_pallete_range, crail_center)
+    outer_circle(canvas, color_pallete_range, crail_center, bar_rate)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
@@ -307,7 +307,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     return canvas
 
 
-def outer_circle(canvas, color_pallete_range, center):
+def outer_circle(canvas, color_pallete_range, center, bar_rate):
     """外環状
     """
 
@@ -315,12 +315,20 @@ def outer_circle(canvas, color_pallete_range, center):
     circumference = 360  # 半径１の円の一周の長さ
     arc = circumference/size  # 等分割した１つの弧
 
+    # 下駄
+    offset = 255*bar_rate[2]
+
     color_list = []
     for i in range(0, size):
         theta = i * arc
-        red_y = int(255*math.cos(math.radians(theta)))
-        green_y = int(255*math.cos(math.radians(theta-120)))
-        blue_y = int(255*math.cos(math.radians(theta+120)))
+        red_y = int(255*bar_rate[1]*math.cos(math.radians(theta)))
+        green_y = int(255*bar_rate[1]*math.cos(math.radians(theta-120)))
+        blue_y = int(255*bar_rate[1]*math.cos(math.radians(theta+120)))
+
+        red_y = int(red_y+offset)
+        green_y = int(green_y+offset)
+        blue_y = int(blue_y+offset)
+
         color_list.append((red_y, green_y, blue_y))
 
     # 色相環

@@ -16,28 +16,46 @@ BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 512
-CANVAS_HEIGHT = 400
+CANVAS_WIDTH = 560
+CANVAS_HEIGHT = 416
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
+# バーの筋
+BAR_LEFT = 420
+
 # とりあえず 11トーン
 BAR_RATES = [
     [0.0, 0.8, 0.2],  # Bright
-    [0.0, 0.2, 0.8],  # Strong
-    [0.0, 0.4, 0.6],  # Deep
+    [0.2, 0.8, 0.0],  # Strong
+    [0.4, 0.6, 0.0],  # Deep
     [0.0, 0.3, 0.7],  # Light
     [0.2, 0.4, 0.4],  # Soft
     [0.3, 0.5, 0.2],  # Dull
-    [0.0, 0.6, 0.4],  # Dark
+    [0.6, 0.4, 0.0],  # Dark
     [0.0, 0.2, 0.8],  # Pale
     [0.1, 0.3, 0.6],  # Light grayish
     [0.4, 0.3, 0.3],  # Grayish
     [0.6, 0.2, 0.2],  # Dark grayish
+    [0.0, 1.0, 0.0],  # Cos curve
+]
+TONE_NAME = [
+    'Bright',
+    'Strong',
+    'Deep',
+    'Light',
+    'Soft',
+    'Dull',
+    'Dark',
+    'Pale',
+    'Light grayish',
+    'Grayish',
+    'Dark grayish',
+    'Cosine curve',
 ]
 # 一周分のフレーム数
-FRAME_COUNTS = 72
+FRAME_COUNTS = 24
 
 
 def main():
@@ -48,16 +66,16 @@ def main():
     seq = 0
     size = len(BAR_RATES)
     for i in range(0, size):
-        seq = make_circle(seq, BAR_RATES[i])
+        seq = make_circle(seq, BAR_RATES[i], TONE_NAME[i])
 
 
-def make_circle(seq, bar_rate):
+def make_circle(seq, bar_rate, tone_name):
     """一周分の画像を出力
     """
 
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
-        canvas = make_canvas(theta, bar_rate)
+        canvas = make_canvas(theta, bar_rate, tone_name)
         # BGRをRGBにする
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
@@ -67,7 +85,7 @@ def make_circle(seq, bar_rate):
     return seq
 
 
-def make_canvas(base_theta, bar_rate):
+def make_canvas(base_theta, bar_rate, tone_name):
     """アニメの１コマを作成します
     """
 
@@ -83,9 +101,8 @@ def make_canvas(base_theta, bar_rate):
                  PALE_GRAY, thickness=1)
 
     # バーの筋
-    bar_left = 356
     bar_width = 24
-    barr_x = bar_left
+    barr_x = BAR_LEFT
     barg_x = barr_x + bar_width + 1
     barb_x = barg_x + bar_width + 1
     bar_right = barb_x + bar_width
@@ -107,7 +124,7 @@ def make_canvas(base_theta, bar_rate):
 
     # RGBバー２段目
     bar_top2 = crail_top
-    bar_area1_p1 = (bar_left, bar_top1)
+    bar_area1_p1 = (BAR_LEFT, bar_top1)
     bar_area1_p2 = (bar_right, bar_top2)
 
     # 色円
@@ -158,7 +175,7 @@ def make_canvas(base_theta, bar_rate):
     cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, LIGHT_GRAY, thickness=4)
 
     # RGBバー(中部)領域
-    bar_area2_p1 = (bar_left, bar_top2)
+    bar_area2_p1 = (BAR_LEFT, bar_top2)
     bar_area2_p2 = (bar_right, bar_bottom)
     cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, LIGHT_GRAY, thickness=4)
 
@@ -178,7 +195,7 @@ def make_canvas(base_theta, bar_rate):
     cv2.rectangle(canvas, barb_p1, barb_p2, BLUE, thickness=-1)
 
     # RGBバー３段目
-    bar_area3_p1 = (bar_left, bar_top3)
+    bar_area3_p1 = (BAR_LEFT, bar_top3)
     bar_area3_p2 = (bar_right, bar_bottom)
     cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
 
@@ -219,33 +236,39 @@ def make_canvas(base_theta, bar_rate):
                 line_type)
 
     # バー率
-    if bar_rate[0] > 0.0:
-        rate_y = int((bar_top1 + bar_top2)/2)
-        cv2.putText(canvas,
-                    f"{bar_rate[0]}",
-                    (bar_right+bar_width, rate_y),  # x,y
-                    font,
-                    font_scale,
-                    LIGHT_GRAY,
-                    line_type)
-    if bar_rate[1] > 0.0:
-        rate_y = int((bar_top2 + bar_top3)/2)
-        cv2.putText(canvas,
-                    f"{bar_rate[1]}",
-                    (bar_right+bar_width, rate_y),  # x,y
-                    font,
-                    font_scale,
-                    LIGHT_GRAY,
-                    line_type)
-    if bar_rate[2] > 0.0:
-        rate_y = int((bar_top3 + bar_bottom)/2)
-        cv2.putText(canvas,
-                    f"{bar_rate[2]}",
-                    (bar_right+bar_width, rate_y),  # x,y
-                    font,
-                    font_scale,
-                    LIGHT_GRAY,
-                    line_type)
+    rate_y = int((bar_top1 + bar_top2)/2)
+    cv2.putText(canvas,
+                f"{bar_rate[0]}",
+                (bar_right+bar_width, rate_y),  # x,y
+                font,
+                font_scale,
+                LIGHT_GRAY,
+                line_type)
+    rate_y = int((bar_top2 + bar_top3)/2)
+    cv2.putText(canvas,
+                f"{bar_rate[1]}",
+                (bar_right+bar_width, rate_y),  # x,y
+                font,
+                font_scale,
+                BLACK,
+                line_type)
+    rate_y = int((bar_top3 + bar_bottom)/2)
+    cv2.putText(canvas,
+                f"{bar_rate[2]}",
+                (bar_right+bar_width, rate_y),  # x,y
+                font,
+                font_scale,
+                LIGHT_GRAY,
+                line_type)
+
+    # トーン名
+    cv2.putText(canvas,
+                f"{tone_name}",
+                (BAR_LEFT, bar_top1-font_height),  # x,y
+                font,
+                font_scale,
+                BLACK,
+                line_type)
 
     # 色円
     color = (valurr, valurg, valurb)

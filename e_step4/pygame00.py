@@ -51,6 +51,6 @@ for j in range(0, 2):  # 2ループ
             time.sleep(3)  # Seconds
 
         # フレームレートの設定
-        CLOCK.tick(9)  # fps を指定
+        CLOCK.tick(4)  # fps を指定
 
 time.sleep(3)  # Seconds

@@ -16,6 +16,12 @@ y_value = math.cos(math.radians(90))
 print(f"cos(90°)={y_value}")
 # cos(90°)=6.123233995736766e-17 ... ほぼ0
 
+y_value = math.cos(math.radians(120))
+print(f"cos(120°)={y_value}")
+
+y_value = math.cos(math.radians(-120))
+print(f"cos(-120°)={y_value}")
+
 x_value = math.sin(math.radians(0))
 print(f"sin(0°)={y_value}")
 # sin(0°)=0.0

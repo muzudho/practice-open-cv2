@@ -329,6 +329,7 @@ def outer_circle(canvas, color_pallete_range, center, bar_rate):
     for i in range(0, size):
         theta = i * unit_arc
         color = color_list[i]
+        print(f"[{i}] color={color}")
 
         # 円弧
         # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)

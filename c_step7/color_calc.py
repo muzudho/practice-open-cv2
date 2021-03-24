@@ -5,6 +5,8 @@ import math
 
 
 def calc_step1(theta):
+    """色変換計算ステップ１
+    """
     red_y = (math.cos(math.radians(theta))+1)/2
     green_y = (math.cos(math.radians(theta-120))+1)/2
     blue_y = (math.cos(math.radians(theta+120))+1)/2

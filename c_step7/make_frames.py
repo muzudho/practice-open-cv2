@@ -149,21 +149,19 @@ def make_canvas(base_theta, bar_rate, tone_name):
 
     # 点R
     point_range = 6
-    theta = (0+base_theta) % 360
+    theta = base_theta % 360
     red_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
              int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, red_p, point_range, RED, thickness=-1)
 
     # 点G
-    theta = (240+base_theta) % 360  # 時計回り
-    green_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
-               int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
+    green_p = (int(crail_range * math.sin(math.radians(theta-120)) + crail_center[0]),
+               int(-crail_range * math.cos(math.radians(theta-120)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, green_p, point_range, GREEN, thickness=-1)
 
     # 点B
-    theta = (120+base_theta) % 360
-    blue_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
-              int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
+    blue_p = (int(crail_range * math.sin(math.radians(theta+120)) + crail_center[0]),
+              int(-crail_range * math.cos(math.radians(theta+120)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, blue_p, point_range, BLUE, thickness=-1)
 
     # 円に内接する線。三角形
@@ -329,7 +327,7 @@ def outer_circle(canvas, color_pallete_range, center, bar_rate):
     for i in range(0, size):
         theta = i * unit_arc
         color = color_list[i]
-        print(f"[{i}] color={color}")
+        # print(f"[{i}] color={color}")
 
         # 円弧
         # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)

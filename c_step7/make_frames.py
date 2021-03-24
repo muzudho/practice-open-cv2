@@ -5,6 +5,7 @@ import math
 import cv2
 import numpy as np
 from color_calc import calc_color
+from bar_box import BarBox
 
 # 色 BGR
 # white = (255, 255, 255)
@@ -78,22 +79,28 @@ def make_circle(seq, bar_rate, tone_name):
     """一周分の画像を出力
     """
 
+    canvas, bar_box = make_canvas_scene1(bar_rate)
+    # 書出し
+    canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
+    cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+    seq += 1
+
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
-        canvas = make_canvas(theta, bar_rate, tone_name)
-        # BGRをRGBにする
-        canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
+        canvas, bar_box = make_canvas_scene1(bar_rate)
+        canvas = draw_canvas(canvas, bar_box, theta, bar_rate, tone_name)
 
+        # 書出し
+        canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
         cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
         seq += 1
 
     return seq
 
 
-def make_canvas(base_theta, bar_rate, tone_name):
+def make_canvas_scene1(bar_rate):
     """アニメの１コマを作成します
     """
-
     # キャンバス
     canvas = np.full((CANVAS_HEIGHT, CANVAS_WIDTH, CHANNELS),
                      MONO_BACKGROUND, dtype=np.uint8)
@@ -104,13 +111,20 @@ def make_canvas(base_theta, bar_rate, tone_name):
         cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
                  PALE_GRAY, thickness=1)
 
+    bar_box = BarBox()
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
-    bar_box_height1 = int(bar_rate[0] * 20 * GRID_INTERVAL_H)
-    bar_box_height2 = int(bar_rate[1] * 20 * GRID_INTERVAL_H)
-    bar_box_height3 = int(bar_rate[2] * 20 * GRID_INTERVAL_H)
+    bar_box.height1 = int(bar_rate[0] * 20 * GRID_INTERVAL_H)
+    bar_box.height2 = int(bar_rate[1] * 20 * GRID_INTERVAL_H)
+    bar_box.height3 = int(bar_rate[2] * 20 * GRID_INTERVAL_H)
+    return canvas, bar_box
+
+
+def draw_canvas(canvas, bar_box, base_theta, bar_rate, tone_name):
+    """アニメの１コマを作成します
+    """
 
     # 円レール
-    crail_range = int(bar_box_height2 / 2)
+    crail_range = int(bar_box.height2 / 2)
     # 色円
     color_pallete_range = crail_range + 2*GRID_INTERVAL_H
     color_pallete_circle_range = GRID_INTERVAL_H
@@ -129,7 +143,7 @@ def make_canvas(base_theta, bar_rate, tone_name):
     bar_right = barb_x + bar_width
 
     # レールとなる円 circle rail
-    crail_top = BAR_TOP1 + bar_box_height1
+    crail_top = BAR_TOP1 + bar_box.height1
     crail_center = (CRAIL_LEFT+crail_range,
                     crail_top+crail_range)  # x, y
 
@@ -139,9 +153,9 @@ def make_canvas(base_theta, bar_rate, tone_name):
     bar_area1_p2 = (bar_right, bar_top2)
 
     # バー２段目（レールとなる円と水平線を合わす）
-    bar_top3 = bar_top2 + bar_box_height2
-    bar_bottom = bar_top3 + bar_box_height3
-    bar_box_height = bar_box_height1 + bar_box_height2 + bar_box_height3
+    bar_top3 = bar_top2 + bar_box.height2
+    bar_bottom = bar_top3 + bar_box.height3
+    bar_box_height = bar_box.height1 + bar_box.height2 + bar_box.height3
 
     # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
     cv2.circle(canvas, crail_center,

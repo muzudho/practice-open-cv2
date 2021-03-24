@@ -10,6 +10,7 @@ class BarBox():
         self.__height1 = 0
         self.__height2 = 0
         self.__height3 = 0
+        self.__one_width = 0
 
     @property
     def height1(self):
@@ -37,3 +38,12 @@ class BarBox():
     @height3.setter
     def height3(self, val):
         self.__height3 = val
+
+    @property
+    def one_width(self):
+        """バー１本分の幅"""
+        return self.__one_width
+
+    @one_width.setter
+    def one_width(self, val):
+        self.__one_width = val

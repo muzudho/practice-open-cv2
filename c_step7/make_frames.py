@@ -83,6 +83,7 @@ def make_circle(seq, bar_rate, tone_name):
 
     canvas, bar_box, circle_rail, brush_point = make_canvas_scene1(bar_rate)
     draw_bar_box_rank1(canvas, bar_box)
+    draw_bar_box_rank3(canvas, bar_box)
     draw_bar_box_rank2(canvas, bar_box)
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -96,6 +97,7 @@ def make_circle(seq, bar_rate, tone_name):
         draw_bar_box_rank1(canvas, bar_box)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              theta, bar_rate, tone_name)
+        draw_bar_box_rank3(canvas, bar_box)
         draw_bar_box_rank2(canvas, bar_box)
 
         # 書出し
@@ -159,7 +161,7 @@ def make_canvas_scene1(bar_rate):
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
     # RGBバー(中部)領域
     bar_box.rank2_p1 = (bar_box.left, bar_box.top2)
-    bar_box.rank2_p2 = (bar_box.right, bar_box.bottom)
+    bar_box.rank2_p2 = (bar_box.right, bar_box.top3)
     # RGBバー３段目
     bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
     bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
@@ -176,7 +178,13 @@ def draw_bar_box_rank1(canvas, bar_box):
 def draw_bar_box_rank2(canvas, bar_box):
     """バー箱の２段目の箱を描きます"""
     cv2.rectangle(canvas, bar_box.rank2_p1,
-                  bar_box.rank2_p2, LIGHT_GRAY, thickness=4)
+                  bar_box.rank2_p2, BLACK, thickness=4)
+
+
+def draw_bar_box_rank3(canvas, bar_box):
+    """バー箱の３段目の箱を描きます"""
+    cv2.rectangle(canvas, bar_box.rank3_p1,
+                  bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
 
 
 def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate, tone_name):
@@ -245,10 +253,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     # バーB
     cv2.rectangle(canvas, bar_box.blue_bar_p1,
                   bar_box.blue_bar_p2, BLUE, thickness=-1)
-
-    # RGBバー３段目
-    cv2.rectangle(canvas, bar_box.rank3_p1,
-                  bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
 
     # 色値
     valurr = 255-int((red_p[1]-BAR_TOP1)/bar_box.height*255)

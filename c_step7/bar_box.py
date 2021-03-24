@@ -24,6 +24,8 @@ class BarBox():
         self.__rank1_p2 = (0, 0)
         self.__rank2_p1 = (0, 0)
         self.__rank2_p2 = (0, 0)
+        self.__rank3_p1 = (0, 0)
+        self.__rank3_p2 = (0, 0)
         self.__red_bar_p1 = (0, 0)
         self.__red_bar_p2 = (0, 0)
         self.__green_bar_p1 = (0, 0)
@@ -183,6 +185,24 @@ class BarBox():
     @rank2_p2.setter
     def rank2_p2(self, val):
         self.__rank2_p2 = val
+
+    @property
+    def rank3_p1(self):
+        """３段目の箱の左上点"""
+        return self.__rank3_p1
+
+    @rank3_p1.setter
+    def rank3_p1(self, val):
+        self.__rank3_p1 = val
+
+    @property
+    def rank3_p2(self):
+        """３段目の箱の右下点"""
+        return self.__rank3_p2
+
+    @rank3_p2.setter
+    def rank3_p2(self, val):
+        self.__rank3_p2 = val
 
     @property
     def red_bar_p1(self):

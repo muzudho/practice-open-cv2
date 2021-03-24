@@ -82,6 +82,8 @@ def make_circle(seq, bar_rate, tone_name):
     """
 
     canvas, bar_box, circle_rail, brush_point = make_canvas_scene1(bar_rate)
+    draw_bar_box_rank1(canvas, bar_box)
+    draw_bar_box_rank2(canvas, bar_box)
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
     cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
@@ -91,8 +93,10 @@ def make_circle(seq, bar_rate, tone_name):
         theta = 360/FRAME_COUNTS*i
         canvas, bar_box, circle_rail, brush_point = make_canvas_scene1(
             bar_rate)
+        draw_bar_box_rank1(canvas, bar_box)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              theta, bar_rate, tone_name)
+        draw_bar_box_rank2(canvas, bar_box)
 
         # 書出し
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -156,8 +160,23 @@ def make_canvas_scene1(bar_rate):
     # RGBバー(中部)領域
     bar_box.rank2_p1 = (bar_box.left, bar_box.top2)
     bar_box.rank2_p2 = (bar_box.right, bar_box.bottom)
+    # RGBバー３段目
+    bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
+    bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
 
     return canvas, bar_box, circle_rail, brush_point
+
+
+def draw_bar_box_rank1(canvas, bar_box):
+    """バー箱の１段目の箱を描きます"""
+    cv2.rectangle(canvas, bar_box.rank1_p1,
+                  bar_box.rank1_p2, LIGHT_GRAY, thickness=4)
+
+
+def draw_bar_box_rank2(canvas, bar_box):
+    """バー箱の２段目の箱を描きます"""
+    cv2.rectangle(canvas, bar_box.rank2_p1,
+                  bar_box.rank2_p2, LIGHT_GRAY, thickness=4)
 
 
 def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate, tone_name):
@@ -168,18 +187,20 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     cv2.circle(canvas, circle_rail.center,
                circle_rail.range, LIGHT_GRAY, thickness=2)
 
-    # バーR
+    # 円周上の点の位置
     theta = base_theta % 360
     red_p = circle_rail.calc_red_p(theta)
+    green_p = circle_rail.calc_green_p(theta)
+    blue_p = circle_rail.calc_blue_p(theta)
+
+    # バーR
     bar_box.red_bar_p1 = (bar_box.red_left, red_p[1])
     bar_box.red_bar_p2 = (bar_box.red_left+bar_box.one_width, bar_box.bottom)
     # バーG
-    green_p = circle_rail.calc_green_p(theta)
     bar_box.green_bar_p1 = (bar_box.green_left, green_p[1])
     bar_box.green_bar_p2 = (
         bar_box.green_left+bar_box.one_width, bar_box.bottom)
     # バーB
-    blue_p = circle_rail.calc_blue_p(theta)
     bar_box.blue_bar_p1 = (bar_box.blue_left, blue_p[1])
     bar_box.blue_bar_p2 = (bar_box.blue_left+bar_box.one_width, bar_box.bottom)
 
@@ -213,13 +234,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     cv2.line(canvas, (blue_p[0], blue_p[1]),
              (bar_box.blue_left, blue_p[1]), BLUE, thickness=2)
 
-    cv2.rectangle(canvas, bar_box.rank1_p1,
-                  bar_box.rank1_p2, LIGHT_GRAY, thickness=4)
-
-    # RGBバー(中部)領域
-    cv2.rectangle(canvas, bar_box.rank2_p1,
-                  bar_box.rank2_p2, LIGHT_GRAY, thickness=4)
-
     # バーR
     cv2.rectangle(canvas, bar_box.red_bar_p1,
                   bar_box.red_bar_p2, RED, thickness=-1)
@@ -233,9 +247,8 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
                   bar_box.blue_bar_p2, BLUE, thickness=-1)
 
     # RGBバー３段目
-    bar_area3_p1 = (bar_box.left, bar_box.top3)
-    bar_area3_p2 = (bar_box.right, bar_box.bottom)
-    cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
+    cv2.rectangle(canvas, bar_box.rank3_p1,
+                  bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
 
     # 色値
     valurr = 255-int((red_p[1]-BAR_TOP1)/bar_box.height*255)

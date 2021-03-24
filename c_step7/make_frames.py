@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from color_calc import calc_color
 from bar_box import BarBox
+from circle_rail import CircleRail
 
 # 色 BGR
 # white = (255, 255, 255)
@@ -79,7 +80,7 @@ def make_circle(seq, bar_rate, tone_name):
     """一周分の画像を出力
     """
 
-    canvas, bar_box = make_canvas_scene1(bar_rate)
+    canvas, bar_box, circle_rail = make_canvas_scene1(bar_rate)
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
     cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
@@ -87,8 +88,9 @@ def make_circle(seq, bar_rate, tone_name):
 
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
-        canvas, bar_box = make_canvas_scene1(bar_rate)
-        canvas = draw_canvas(canvas, bar_box, theta, bar_rate, tone_name)
+        canvas, bar_box, circle_rail = make_canvas_scene1(bar_rate)
+        canvas = draw_canvas(canvas, bar_box, circle_rail,
+                             theta, bar_rate, tone_name)
 
         # 書出し
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -112,26 +114,29 @@ def make_canvas_scene1(bar_rate):
                  PALE_GRAY, thickness=1)
 
     bar_box = BarBox()
+    circle_rail = CircleRail()
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
     bar_box.height1 = int(bar_rate[0] * 20 * GRID_INTERVAL_H)
     bar_box.height2 = int(bar_rate[1] * 20 * GRID_INTERVAL_H)
     bar_box.height3 = int(bar_rate[2] * 20 * GRID_INTERVAL_H)
-    return canvas, bar_box
+    # 円レール
+    circle_rail.range = int(bar_box.height2 / 2)
+
+    return canvas, bar_box, circle_rail
 
 
-def draw_canvas(canvas, bar_box, base_theta, bar_rate, tone_name):
+def draw_canvas(canvas, bar_box, circle_rail, base_theta, bar_rate, tone_name):
     """アニメの１コマを作成します
     """
 
-    # 円レール
-    crail_range = int(bar_box.height2 / 2)
     # 色円
-    color_pallete_range = crail_range + 2*GRID_INTERVAL_H
+    color_pallete_range = circle_rail.range + 2*GRID_INTERVAL_H
     color_pallete_circle_range = GRID_INTERVAL_H
-    # バー箱の左
+
     range_width = 10
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
+    # バー箱の左
     bar_left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
                    2*color_pallete_circle_range)
 
@@ -144,8 +149,8 @@ def draw_canvas(canvas, bar_box, base_theta, bar_rate, tone_name):
 
     # レールとなる円 circle rail
     crail_top = BAR_TOP1 + bar_box.height1
-    crail_center = (CRAIL_LEFT+crail_range,
-                    crail_top+crail_range)  # x, y
+    crail_center = (CRAIL_LEFT+circle_rail.range,
+                    crail_top+circle_rail.range)  # x, y
 
     # RGBバー２段目
     bar_top2 = crail_top
@@ -159,23 +164,23 @@ def draw_canvas(canvas, bar_box, base_theta, bar_rate, tone_name):
 
     # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
     cv2.circle(canvas, crail_center,
-               crail_range, LIGHT_GRAY, thickness=2)
+               circle_rail.range, LIGHT_GRAY, thickness=2)
 
     # 点R
     point_range = 6
     theta = base_theta % 360
-    red_p = (int(crail_range * math.sin(math.radians(theta)) + crail_center[0]),
-             int(-crail_range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
+    red_p = (int(circle_rail.range * math.sin(math.radians(theta)) + crail_center[0]),
+             int(-circle_rail.range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, red_p, point_range, RED, thickness=-1)
 
     # 点G
-    green_p = (int(crail_range * math.sin(math.radians(theta-120)) + crail_center[0]),
-               int(-crail_range * math.cos(math.radians(theta-120)) + crail_center[1]))  # yは上下反転
+    green_p = (int(circle_rail.range * math.sin(math.radians(theta-120)) + crail_center[0]),
+               int(-circle_rail.range * math.cos(math.radians(theta-120)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, green_p, point_range, GREEN, thickness=-1)
 
     # 点B
-    blue_p = (int(crail_range * math.sin(math.radians(theta+120)) + crail_center[0]),
-              int(-crail_range * math.cos(math.radians(theta+120)) + crail_center[1]))  # yは上下反転
+    blue_p = (int(circle_rail.range * math.sin(math.radians(theta+120)) + crail_center[0]),
+              int(-circle_rail.range * math.cos(math.radians(theta+120)) + crail_center[1]))  # yは上下反転
     cv2.circle(canvas, blue_p, point_range, BLUE, thickness=-1)
 
     # 円に内接する線。三角形

@@ -81,8 +81,7 @@ def main():
         for _ in range(0, 10):  # Wait frames
             canvas, bar_box, _circle_rail, _brush_point = make_canvas_scene1(
                 bar_rate)
-            draw_bar_box_rank1(canvas, bar_box)
-            draw_bar_box_rank3(canvas, bar_box)
+            draw_bar_box_outline(canvas, bar_box)
             draw_bar_box_rank2(canvas, bar_box)
             draw_tone_name(canvas, bar_box, tone_name)
             # 書出し
@@ -101,10 +100,9 @@ def make_circle(canvas, seq, bar_rate, tone_name):
         theta = 360/FRAME_COUNTS*i
         canvas, bar_box, circle_rail, brush_point = make_canvas_scene1(
             bar_rate)
-        draw_bar_box_rank1(canvas, bar_box)
+        draw_bar_box_outline(canvas, bar_box)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              theta, bar_rate)
-        draw_bar_box_rank3(canvas, bar_box)
         draw_bar_box_rank2(canvas, bar_box)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -177,22 +175,16 @@ def make_canvas_scene1(bar_rate):
     return canvas, bar_box, circle_rail, brush_point
 
 
-def draw_bar_box_rank1(canvas, bar_box):
-    """バー箱の１段目の箱を描きます"""
+def draw_bar_box_outline(canvas, bar_box):
+    """バー箱の輪郭を描きます"""
     cv2.rectangle(canvas, bar_box.rank1_p1,
-                  bar_box.rank1_p2, LIGHT_GRAY, thickness=4)
+                  bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
 
 
 def draw_bar_box_rank2(canvas, bar_box):
     """バー箱の２段目の箱を描きます"""
     cv2.rectangle(canvas, bar_box.rank2_p1,
                   bar_box.rank2_p2, BLACK, thickness=4)
-
-
-def draw_bar_box_rank3(canvas, bar_box):
-    """バー箱の３段目の箱を描きます"""
-    cv2.rectangle(canvas, bar_box.rank3_p1,
-                  bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):

@@ -72,23 +72,30 @@ def main():
 
     # 連番
     seq = 0
+
     size = len(BAR_RATES)
     for i in range(0, size):
-        seq = make_circle(seq, BAR_RATES[i], TONE_NAME[i])
+        bar_rate = BAR_RATES[i]
+        tone_name = TONE_NAME[i]
+
+        for _ in range(0, 10):  # Wait frames
+            canvas, bar_box, _circle_rail, _brush_point = make_canvas_scene1(
+                bar_rate)
+            draw_bar_box_rank1(canvas, bar_box)
+            draw_bar_box_rank3(canvas, bar_box)
+            draw_bar_box_rank2(canvas, bar_box)
+            draw_tone_name(canvas, bar_box, tone_name)
+            # 書出し
+            canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
+            cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+            seq += 1
+
+        seq = make_circle(canvas, seq, bar_rate, tone_name)
 
 
-def make_circle(seq, bar_rate, tone_name):
+def make_circle(canvas, seq, bar_rate, tone_name):
     """一周分の画像を出力
     """
-
-    canvas, bar_box, circle_rail, brush_point = make_canvas_scene1(bar_rate)
-    draw_bar_box_rank1(canvas, bar_box)
-    draw_bar_box_rank3(canvas, bar_box)
-    draw_bar_box_rank2(canvas, bar_box)
-    # 書出し
-    canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
-    cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
-    seq += 1
 
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
@@ -96,9 +103,10 @@ def make_circle(seq, bar_rate, tone_name):
             bar_rate)
         draw_bar_box_rank1(canvas, bar_box)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             theta, bar_rate, tone_name)
+                             theta, bar_rate)
         draw_bar_box_rank3(canvas, bar_box)
         draw_bar_box_rank2(canvas, bar_box)
+        draw_tone_name(canvas, bar_box, tone_name)
 
         # 書出し
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -187,7 +195,22 @@ def draw_bar_box_rank3(canvas, bar_box):
                   bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate, tone_name):
+def draw_tone_name(canvas, bar_box, tone_name):
+    """トーン名を描きます"""
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_height = 20
+    font_scale = 0.6
+    line_type = 2
+    cv2.putText(canvas,
+                f"{tone_name}",
+                (bar_box.left, BAR_TOP1-font_height),  # x,y
+                font,
+                font_scale,
+                BLACK,
+                line_type)
+
+
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate):
     """アニメの１コマを作成します
     """
 
@@ -317,15 +340,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
                 font,
                 font_scale,
                 LIGHT_GRAY,
-                line_type)
-
-    # トーン名
-    cv2.putText(canvas,
-                f"{tone_name}",
-                (bar_box.left, BAR_TOP1-font_height),  # x,y
-                font,
-                font_scale,
-                BLACK,
                 line_type)
 
     # 色円

@@ -2,6 +2,9 @@
 
 gifアニメ作成の練習（＾～＾）
 
+* `c_step7` - ぐるぐる回るカラーパレットの連続写真を取るやつ
+* `e_step4` - 紙芝居を動画で流すやつ
+* `f_step1` - 数学ライブラリを試すやつ
 
 ## Set up
 
@@ -26,15 +29,6 @@ cd b_step1
 python make_gif.py
 ```
 
-## References
+## Document
 
-* a
-  * [【python/OpenCV/Pillow】Pillowを使ってgifアニメーションを作成してみる](https://rikoubou.hatenablog.com/entry/2020/04/03/151906) - 読んでも分からない（＾～＾）インデックス・パレット使ってる（＾～＾）
-* b
-  * [python : gifの作成（アニメーション）](https://kangkang1981.hatenablog.com/entry/2020/03/19/224219)
-* Python Library
-  * [Python3ライブラリブック](https://ktechlabo.xsrv.jp/www_python/python_modules.pdf)
-* OpenCV2
-  * [OpenCVをVisual Studio Codeで使う時にcv2モジュールのインテリセンスが表示されない問題](https://qiita.com/FXsimone/items/577e3924f40aa4a9d4ea)
-* pylint
-  * [pylintでコードチェックをしたいが，そもそも実行エラーが出てしまう．](https://teratail.com/questions/197652)
+[References](./@doc/references.md)  

@@ -126,6 +126,28 @@ def make_canvas_scene1(bar_rate):
     bar_box.one_width = 24
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
+    # 塗った円
+    brush_point.distance = circle_rail.range + 2*GRID_INTERVAL_H
+    brush_point.range = GRID_INTERVAL_H
+    # バー箱の左
+    range_width = 10
+    outer_circle_margin = 2
+    width = 2 * (range_width + outer_circle_margin)
+    bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
+                       2*brush_point.range)
+    # バーの筋
+    bar_box.red_left = bar_box.left
+    bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
+    bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
+    bar_box.right = bar_box.blue_left + bar_box.one_width
+    # レールとなる円 circle rail
+    circle_rail.top = BAR_TOP1 + bar_box.height1
+    circle_rail.center = (CRAIL_LEFT+circle_rail.range,
+                          circle_rail.top+circle_rail.range)  # x, y
+    # RGBバー２段目
+    bar_box.top2 = circle_rail.top
+    bar_box.rank1_p1 = (bar_box.left, BAR_TOP1)
+    bar_box.rank1_p2 = (bar_box.right, bar_box.top2)
 
     return canvas, bar_box, circle_rail, brush_point
 
@@ -134,57 +156,30 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     """アニメの１コマを作成します
     """
 
-    # 塗った円
-    brush_point.distance = circle_rail.range + 2*GRID_INTERVAL_H
-    brush_point.range = GRID_INTERVAL_H
-
-    range_width = 10
-    outer_circle_margin = 2
-    width = 2 * (range_width + outer_circle_margin)
-    # バー箱の左
-    bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
-                       2*brush_point.range)
-
-    # バーの筋
-    bar_box.red_left = bar_box.left
-    bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
-    bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
-    bar_right = bar_box.blue_left + bar_box.one_width
-
-    # レールとなる円 circle rail
-    crail_top = BAR_TOP1 + bar_box.height1
-    crail_center = (CRAIL_LEFT+circle_rail.range,
-                    crail_top+circle_rail.range)  # x, y
-
-    # RGBバー２段目
-    bar_top2 = crail_top
-    bar_area1_p1 = (bar_box.left, BAR_TOP1)
-    bar_area1_p2 = (bar_right, bar_top2)
-
     # バー２段目（レールとなる円と水平線を合わす）
-    bar_top3 = bar_top2 + bar_box.height2
-    bar_bottom = bar_top3 + bar_box.height3
+    bar_box.top3 = bar_box.top2 + bar_box.height2
+    bar_bottom = bar_box.top3 + bar_box.height3
     bar_box_height = bar_box.height1 + bar_box.height2 + bar_box.height3
 
     # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
-    cv2.circle(canvas, crail_center,
+    cv2.circle(canvas, circle_rail.center,
                circle_rail.range, LIGHT_GRAY, thickness=2)
 
     # 点R
     point_range = 6
     theta = base_theta % 360
-    red_p = (int(circle_rail.range * math.sin(math.radians(theta)) + crail_center[0]),
-             int(-circle_rail.range * math.cos(math.radians(theta)) + crail_center[1]))  # yは上下反転
+    red_p = (int(circle_rail.range * math.sin(math.radians(theta)) + circle_rail.center[0]),
+             int(-circle_rail.range * math.cos(math.radians(theta)) + circle_rail.center[1]))  # yは上下反転
     cv2.circle(canvas, red_p, point_range, RED, thickness=-1)
 
     # 点G
-    green_p = (int(circle_rail.range * math.sin(math.radians(theta-120)) + crail_center[0]),
-               int(-circle_rail.range * math.cos(math.radians(theta-120)) + crail_center[1]))  # yは上下反転
+    green_p = (int(circle_rail.range * math.sin(math.radians(theta-120)) + circle_rail.center[0]),
+               int(-circle_rail.range * math.cos(math.radians(theta-120)) + circle_rail.center[1]))  # yは上下反転
     cv2.circle(canvas, green_p, point_range, GREEN, thickness=-1)
 
     # 点B
-    blue_p = (int(circle_rail.range * math.sin(math.radians(theta+120)) + crail_center[0]),
-              int(-circle_rail.range * math.cos(math.radians(theta+120)) + crail_center[1]))  # yは上下反転
+    blue_p = (int(circle_rail.range * math.sin(math.radians(theta+120)) + circle_rail.center[0]),
+              int(-circle_rail.range * math.cos(math.radians(theta+120)) + circle_rail.center[1]))  # yは上下反転
     cv2.circle(canvas, blue_p, point_range, BLUE, thickness=-1)
 
     # 円に内接する線。三角形
@@ -208,11 +203,12 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     cv2.line(canvas, (blue_p[0], blue_p[1]),
              (bar_box.blue_left, blue_p[1]), BLUE, thickness=2)
 
-    cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, LIGHT_GRAY, thickness=4)
+    cv2.rectangle(canvas, bar_box.rank1_p1,
+                  bar_box.rank1_p2, LIGHT_GRAY, thickness=4)
 
     # RGBバー(中部)領域
-    bar_area2_p1 = (bar_box.left, bar_top2)
-    bar_area2_p2 = (bar_right, bar_bottom)
+    bar_area2_p1 = (bar_box.left, bar_box.top2)
+    bar_area2_p2 = (bar_box.right, bar_bottom)
     cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, LIGHT_GRAY, thickness=4)
 
     # バーR
@@ -231,8 +227,8 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     cv2.rectangle(canvas, barb_p1, barb_p2, BLUE, thickness=-1)
 
     # RGBバー３段目
-    bar_area3_p1 = (bar_box.left, bar_top3)
-    bar_area3_p2 = (bar_right, bar_bottom)
+    bar_area3_p1 = (bar_box.left, bar_box.top3)
+    bar_area3_p2 = (bar_box.right, bar_bottom)
     cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
 
     # 色値
@@ -272,26 +268,26 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
                 line_type)
 
     # バー率
-    rate_y = int((BAR_TOP1 + bar_top2)/2)
+    rate_y = int((BAR_TOP1 + bar_box.top2)/2)
     cv2.putText(canvas,
                 f"{bar_rate[0]}",
-                (bar_right+bar_box.one_width, rate_y),  # x,y
+                (bar_box.right+bar_box.one_width, rate_y),  # x,y
                 font,
                 font_scale,
                 LIGHT_GRAY,
                 line_type)
-    rate_y = int((bar_top2 + bar_top3)/2)
+    rate_y = int((bar_box.top2 + bar_box.top3)/2)
     cv2.putText(canvas,
                 f"{bar_rate[1]}",
-                (bar_right+bar_box.one_width, rate_y),  # x,y
+                (bar_box.right+bar_box.one_width, rate_y),  # x,y
                 font,
                 font_scale,
                 BLACK,
                 line_type)
-    rate_y = int((bar_top3 + bar_bottom)/2)
+    rate_y = int((bar_box.top3 + bar_bottom)/2)
     cv2.putText(canvas,
                 f"{bar_rate[2]}",
-                (bar_right+bar_box.one_width, rate_y),  # x,y
+                (bar_box.right+bar_box.one_width, rate_y),  # x,y
                 font,
                 font_scale,
                 LIGHT_GRAY,
@@ -309,7 +305,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     # 色円
     color = (valurr, valurg, valurb)
     # print(f"({red_p[1]},{green_p[1]},{blue_p[1]})")
-    # print(f"({red_p[1]-bar_top},{green_p[1]-bar_top},{blue_p[1]-bar_top})")
     # var1 = int(red_p[1]/bar_max_height*255)
     # var2 = int(green_p[1]/bar_max_height*255)
     # var3 = int(blue_p[1]/bar_max_height*255)
@@ -318,12 +313,12 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     # print(
     #    f"color={color} ({red_p[1]},{green_p[1]},{blue_p[1]}) bar_max_height={bar_max_height}")
     theta2 = base_theta
-    red_p = (int(brush_point.distance * math.sin(math.radians(theta2)) + crail_center[0]),
-             int(-brush_point.distance * math.cos(math.radians(theta2)) + crail_center[1]))  # yは上下反転
+    red_p = (int(brush_point.distance * math.sin(math.radians(theta2)) + circle_rail.center[0]),
+             int(-brush_point.distance * math.cos(math.radians(theta2)) + circle_rail.center[1]))  # yは上下反転
     cv2.circle(canvas, red_p, brush_point.range, color, thickness=-1)
 
     # 外環状
-    outer_circle(canvas, brush_point.distance, crail_center, bar_rate)
+    outer_circle(canvas, brush_point.distance, circle_rail.center, bar_rate)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

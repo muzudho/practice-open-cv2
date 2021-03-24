@@ -11,6 +11,10 @@ class BarBox():
         self.__height2 = 0
         self.__height3 = 0
         self.__one_width = 0
+        self.__left = 0
+        self.__red_left = 0
+        self.__green_left = 0
+        self.__blue_left = 0
 
     @property
     def height1(self):
@@ -47,3 +51,39 @@ class BarBox():
     @one_width.setter
     def one_width(self, val):
         self.__one_width = val
+
+    @property
+    def left(self):
+        """箱の左座標"""
+        return self.__left
+
+    @left.setter
+    def left(self, val):
+        self.__left = val
+
+    @property
+    def red_left(self):
+        """赤いバーの左座標"""
+        return self.__red_left
+
+    @red_left.setter
+    def red_left(self, val):
+        self.__red_left = val
+
+    @property
+    def green_left(self):
+        """緑のバーの左座標"""
+        return self.__green_left
+
+    @green_left.setter
+    def green_left(self, val):
+        self.__green_left = val
+
+    @property
+    def blue_left(self):
+        """青のバーの左座標"""
+        return self.__blue_left
+
+    @blue_left.setter
+    def blue_left(self, val):
+        self.__blue_left = val

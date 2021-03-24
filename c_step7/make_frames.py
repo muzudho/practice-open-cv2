@@ -142,14 +142,14 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
     # バー箱の左
-    bar_left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
-                   2*brush_point.range)
+    bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
+                       2*brush_point.range)
 
     # バーの筋
-    barr_x = bar_left
-    barg_x = barr_x + bar_box.one_width + 1
-    barb_x = barg_x + bar_box.one_width + 1
-    bar_right = barb_x + bar_box.one_width
+    bar_box.red_left = bar_box.left
+    bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
+    bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
+    bar_right = bar_box.blue_left + bar_box.one_width
 
     # レールとなる円 circle rail
     crail_top = BAR_TOP1 + bar_box.height1
@@ -158,7 +158,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
 
     # RGBバー２段目
     bar_top2 = crail_top
-    bar_area1_p1 = (bar_left, BAR_TOP1)
+    bar_area1_p1 = (bar_box.left, BAR_TOP1)
     bar_area1_p2 = (bar_right, bar_top2)
 
     # バー２段目（レールとなる円と水平線を合わす）
@@ -198,40 +198,40 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, (red_p[0], red_p[1]),
-             (barr_x, red_p[1]), RED, thickness=2)
+             (bar_box.red_left, red_p[1]), RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, (green_p[0], green_p[1]),
-             (barg_x, green_p[1]), GREEN, thickness=2)
+             (bar_box.green_left, green_p[1]), GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, (blue_p[0], blue_p[1]),
-             (barb_x, blue_p[1]), BLUE, thickness=2)
+             (bar_box.blue_left, blue_p[1]), BLUE, thickness=2)
 
     cv2.rectangle(canvas, bar_area1_p1, bar_area1_p2, LIGHT_GRAY, thickness=4)
 
     # RGBバー(中部)領域
-    bar_area2_p1 = (bar_left, bar_top2)
+    bar_area2_p1 = (bar_box.left, bar_top2)
     bar_area2_p2 = (bar_right, bar_bottom)
     cv2.rectangle(canvas, bar_area2_p1, bar_area2_p2, LIGHT_GRAY, thickness=4)
 
     # バーR
-    barr_p1 = (barr_x, red_p[1])
-    barr_p2 = (barr_x+bar_box.one_width, bar_bottom)
+    barr_p1 = (bar_box.red_left, red_p[1])
+    barr_p2 = (bar_box.red_left+bar_box.one_width, bar_bottom)
     cv2.rectangle(canvas, barr_p1, barr_p2, RED, thickness=-1)
 
     # バーG
-    barg_p1 = (barg_x, green_p[1])
-    barg_p2 = (barg_x+bar_box.one_width, bar_bottom)
+    barg_p1 = (bar_box.green_left, green_p[1])
+    barg_p2 = (bar_box.green_left+bar_box.one_width, bar_bottom)
     cv2.rectangle(canvas, barg_p1, barg_p2, GREEN, thickness=-1)
 
     # バーB
-    barb_p1 = (barb_x, blue_p[1])
-    barb_p2 = (barb_x+bar_box.one_width, bar_bottom)
+    barb_p1 = (bar_box.blue_left, blue_p[1])
+    barb_p2 = (bar_box.blue_left+bar_box.one_width, bar_bottom)
     cv2.rectangle(canvas, barb_p1, barb_p2, BLUE, thickness=-1)
 
     # RGBバー３段目
-    bar_area3_p1 = (bar_left, bar_top3)
+    bar_area3_p1 = (bar_box.left, bar_top3)
     bar_area3_p2 = (bar_right, bar_bottom)
     cv2.rectangle(canvas, bar_area3_p1, bar_area3_p2, LIGHT_GRAY, thickness=4)
 
@@ -300,7 +300,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     # トーン名
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_left, BAR_TOP1-font_height),  # x,y
+                (bar_box.left, BAR_TOP1-font_height),  # x,y
                 font,
                 font_scale,
                 BLACK,

@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from color_calc import calc_color
 from bar_box import BarBox
+from bar_window import BarWindow
 from circle_rail import CircleRail
 from brush_point import BrushPoint
 
@@ -20,14 +21,14 @@ BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 440
-CANVAS_HEIGHT = 300
+CANVAS_WIDTH = 450
+CANVAS_HEIGHT = 250
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
 # 水平線グリッド
-GRID_INTERVAL_H = 10
+GRID_INTERVAL_H = 7  # 7とか割り算しにくい数だが面積、ファイル容量削減のため仕方ない（＾～＾）
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 5 * GRID_INTERVAL_H
 # 円レール circle rail left
@@ -78,9 +79,10 @@ def main():
         bar_rate = BAR_RATES[i]
         tone_name = TONE_NAME[i]
 
+        # 描画：トーン名と バー箱 の紹介
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _brush_point = make_scene1(
+            bar_box, _circle_rail, _brush_point, _bar_window = make_scene1(
                 bar_rate)
             draw_grid(canvas)
             draw_bar_box_outline(canvas, bar_box)
@@ -91,19 +93,21 @@ def main():
             cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
             seq += 1
 
+        # 描画：色相環のアニメーション表示
         seq = make_circle(canvas, seq, bar_rate, tone_name)
 
 
 def make_circle(canvas, seq, bar_rate, tone_name):
-    """一周分の画像を出力
+    """色相環一周分の画像を出力
     """
 
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
         canvas = make_canvas()
-        bar_box, circle_rail, brush_point = make_scene1(
+        bar_box, circle_rail, brush_point, bar_window = make_scene1(
             bar_rate)
         draw_grid(canvas)
+        draw_bar_window_outline(canvas, bar_window)
         draw_bar_box_outline(canvas, bar_box)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              theta, bar_rate)
@@ -129,8 +133,10 @@ def make_scene1(bar_rate):
     """
 
     bar_box = BarBox()
+    bar_window = BarWindow()
     circle_rail = CircleRail()
     brush_point = BrushPoint()
+
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
     bar_box.height1 = int(bar_rate[0] * 20 * GRID_INTERVAL_H)
@@ -142,12 +148,16 @@ def make_scene1(bar_rate):
     # 塗った円
     brush_point.distance = circle_rail.range + 2*GRID_INTERVAL_H
     brush_point.range = GRID_INTERVAL_H
+
     # バー箱の左
+    bar_width = 24
+    interval = 1
+    bar_window_space = 3*bar_width+2*interval+4*GRID_INTERVAL_H
     range_width = 10
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
-                       2*brush_point.range)
+                       2*brush_point.range+bar_window_space)
     # バーの筋
     bar_box.red_left = bar_box.left
     bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
@@ -166,14 +176,22 @@ def make_scene1(bar_rate):
     bar_box.top3 = bar_box.top2 + bar_box.height2
     bar_box.bottom = bar_box.top3 + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
-    # RGBバー(中部)領域
+    # RGBバー２段目領域
     bar_box.rank2_p1 = (bar_box.left, bar_box.top2)
     bar_box.rank2_p2 = (bar_box.right, bar_box.top3)
     # RGBバー３段目
     bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
     bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
 
-    return bar_box, circle_rail, brush_point
+    # バー窓の左（円レールが決まった後）
+    bar_window.left_top = (
+        int(CRAIL_LEFT + width*GRID_INTERVAL_H + 2*brush_point.range),
+        circle_rail.top)
+    bar_window.right_bottom = (
+        bar_window.left_top[0] + 3*bar_width+2*interval,
+        circle_rail.top+2*circle_rail.range)
+
+    return bar_box, circle_rail, brush_point, bar_window
 
 
 def draw_grid(canvas):
@@ -183,6 +201,12 @@ def draw_grid(canvas):
         y_num = GRID_INTERVAL_H*i
         cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
                  PALE_GRAY, thickness=1)
+
+
+def draw_bar_window_outline(canvas, bar_window):
+    """シンプルなRGBバー箱を描きます"""
+    cv2.rectangle(canvas, bar_window.left_top,
+                  bar_window.right_bottom, LIGHT_GRAY, thickness=4)
 
 
 def draw_bar_box_outline(canvas, bar_box):
@@ -318,11 +342,12 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate)
                 BLUE,
                 line_type)
 
-    # バー率
+    # バー率テキスト
     rate_y = int((BAR_TOP1 + bar_box.top2)/2)
+    gap = int(bar_box.one_width/2)
     cv2.putText(canvas,
                 f"{bar_rate[0]}",
-                (bar_box.right+bar_box.one_width, rate_y),  # x,y
+                (bar_box.right+gap, rate_y),  # x,y
                 font,
                 font_scale,
                 LIGHT_GRAY,
@@ -330,7 +355,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate)
     rate_y = int((bar_box.top2 + bar_box.top3)/2)
     cv2.putText(canvas,
                 f"{bar_rate[1]}",
-                (bar_box.right+bar_box.one_width, rate_y),  # x,y
+                (bar_box.right+gap, rate_y),  # x,y
                 font,
                 font_scale,
                 BLACK,
@@ -338,7 +363,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate)
     rate_y = int((bar_box.top3 + bar_box.bottom)/2)
     cv2.putText(canvas,
                 f"{bar_rate[2]}",
-                (bar_box.right+bar_box.one_width, rate_y),  # x,y
+                (bar_box.right+gap, rate_y),  # x,y
                 font,
                 font_scale,
                 LIGHT_GRAY,

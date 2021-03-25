@@ -2,7 +2,7 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY
+from colors import LIGHT_GRAY, RED, GREEN, BLUE
 
 
 class BarWindow():
@@ -14,6 +14,12 @@ class BarWindow():
         self.__right_bottom = (0, 0)
         self.__one_width = 0
         self.__interval = 0
+        self.__red_bar_p1 = (0, 0)
+        self.__red_bar_p2 = (0, 0)
+        self.__green_bar_p1 = (0, 0)
+        self.__green_bar_p2 = (0, 0)
+        self.__blue_bar_p1 = (0, 0)
+        self.__blue_bar_p2 = (0, 0)
 
     @property
     def left_top(self):
@@ -55,3 +61,71 @@ class BarWindow():
         """輪郭を描きます"""
         cv2.rectangle(canvas, self.left_top,
                       self.right_bottom, LIGHT_GRAY, thickness=4)
+
+    @property
+    def red_bar_p1(self):
+        """赤バーの左上点"""
+        return self.__red_bar_p1
+
+    @red_bar_p1.setter
+    def red_bar_p1(self, val):
+        self.__red_bar_p1 = val
+
+    @property
+    def red_bar_p2(self):
+        """赤バーの右下点"""
+        return self.__red_bar_p2
+
+    @red_bar_p2.setter
+    def red_bar_p2(self, val):
+        self.__red_bar_p2 = val
+
+    @property
+    def green_bar_p1(self):
+        """緑バーの左上点"""
+        return self.__green_bar_p1
+
+    @green_bar_p1.setter
+    def green_bar_p1(self, val):
+        self.__green_bar_p1 = val
+
+    @property
+    def green_bar_p2(self):
+        """緑バーの右下点"""
+        return self.__green_bar_p2
+
+    @green_bar_p2.setter
+    def green_bar_p2(self, val):
+        self.__green_bar_p2 = val
+
+    @property
+    def blue_bar_p1(self):
+        """青バーの左上点"""
+        return self.__blue_bar_p1
+
+    @blue_bar_p1.setter
+    def blue_bar_p1(self, val):
+        self.__blue_bar_p1 = val
+
+    @property
+    def blue_bar_p2(self):
+        """青バーの右下点"""
+        return self.__blue_bar_p2
+
+    @blue_bar_p2.setter
+    def blue_bar_p2(self, val):
+        self.__blue_bar_p2 = val
+
+    def draw_bars(self, canvas):
+        """バーを描きます"""
+        # バーR
+        cv2.rectangle(canvas, self.red_bar_p1,
+                      self.red_bar_p2, RED, thickness=-1)
+
+        # バーG
+        cv2.rectangle(canvas, self.green_bar_p1,
+                      self.green_bar_p2, GREEN, thickness=-1)
+
+        # バーB
+        cv2.rectangle(canvas, self.blue_bar_p1,
+                      self.blue_bar_p2, BLUE, thickness=-1)

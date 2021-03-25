@@ -73,7 +73,7 @@ def main():
         # 描画：トーン名と バー箱 の紹介
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _brush_point, _bar_window, outer_circle = make_scene1(
+            bar_box, _circle_rail, _brush_point, _bar_window, _outer_circle = make_scene1(
                 bar_rates)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
@@ -234,6 +234,23 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
                circle_rail.range, LIGHT_GRAY, thickness=2)
 
     # バーR
+    bar_window.red_bar_p1 = (bar_window.left_top[0], circle_rail.red_p[1])
+    bar_window.red_bar_p2 = (
+        bar_window.red_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
+    # バーG
+    bar_window.green_bar_p1 = (
+        bar_window.left_top[0]+bar_window.one_width+bar_window.interval,
+        circle_rail.green_p[1])
+    bar_window.green_bar_p2 = (
+        bar_window.green_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
+    # バーB
+    bar_window.blue_bar_p1 = (
+        bar_window.left_top[0]+2*(bar_window.one_width+bar_window.interval),
+        circle_rail.blue_p[1])
+    bar_window.blue_bar_p2 = (
+        bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
+
+    # バーR
     bar_box.red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
     bar_box.red_bar_p2 = (bar_box.red_left+bar_box.one_width, bar_box.bottom)
     # バーG
@@ -269,6 +286,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     cv2.line(canvas, circle_rail.blue_p,
              (bar_box.blue_left, circle_rail.blue_p[1]), BLUE, thickness=2)
 
+    bar_window.draw_bars(canvas)
     bar_box.draw_bars(canvas)  # RGBバー
 
     # 色値
@@ -279,12 +297,8 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
 
     bar_box.draw_rgb_number(canvas, color)  # R値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
-
-    # 色円
-    brush_point.draw_me(canvas, color)
-
-    # 外環状
-    outer_circle.draw_me(canvas, bar_box.rates)
+    brush_point.draw_me(canvas, color)  # 塗り円
+    outer_circle.draw_me(canvas, bar_box.rates)  # 外環状
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

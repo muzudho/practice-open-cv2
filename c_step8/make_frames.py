@@ -5,19 +5,12 @@ import math
 import cv2
 import numpy as np
 from color_calc import calc_color
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK, RED, GREEN, BLUE
 from bar_box import BarBox
 from bar_window import BarWindow
 from circle_rail import CircleRail
 from brush_point import BrushPoint
 
-# 色 BGR
-# white = (255, 255, 255)
-PALE_GRAY = (235, 235, 235)
-LIGHT_GRAY = (200, 200, 200)
-BLACK = (16, 16, 16)
-RED = (250, 100, 100)
-GREEN = (100, 250, 100)
-BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -106,10 +99,10 @@ def make_circle(canvas, seq, bar_rate, tone_name):
         bar_box, circle_rail, brush_point, bar_window = make_scene1(
             bar_rate)
         draw_grid(canvas)
-        draw_bar_window_outline(canvas, bar_window)
+        bar_window.draw_outline(canvas)
         draw_bar_box_outline(canvas, bar_box)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             theta, bar_rate)
+                             theta, bar_rate, bar_window)
         draw_bar_box_rank2(canvas, bar_box)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -149,9 +142,10 @@ def make_scene1(bar_rate):
     brush_point.range = GRID_INTERVAL_H
 
     # バー箱の左
-    bar_width = 24
-    interval = 1
-    bar_window_space = 3*bar_width+2*interval+4*GRID_INTERVAL_H
+    bar_window.one_width = 24
+    bar_window.interval = 1
+    bar_window_space = 3*bar_window.one_width + \
+        2*bar_window.interval+4*GRID_INTERVAL_H
     range_width = 10
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
@@ -187,7 +181,7 @@ def make_scene1(bar_rate):
         int(CRAIL_LEFT + width*GRID_INTERVAL_H + 2*brush_point.range),
         circle_rail.top)
     bar_window.right_bottom = (
-        bar_window.left_top[0] + 3*bar_width+2*interval,
+        bar_window.left_top[0] + 3*bar_window.one_width+2*bar_window.interval,
         circle_rail.top+2*circle_rail.range)
 
     return bar_box, circle_rail, brush_point, bar_window
@@ -200,12 +194,6 @@ def draw_grid(canvas):
         y_num = GRID_INTERVAL_H*i
         cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
                  PALE_GRAY, thickness=1)
-
-
-def draw_bar_window_outline(canvas, bar_window):
-    """シンプルなRGBバー箱を描きます"""
-    cv2.rectangle(canvas, bar_window.left_top,
-                  bar_window.right_bottom, LIGHT_GRAY, thickness=4)
 
 
 def draw_bar_box_outline(canvas, bar_box):
@@ -235,7 +223,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate):
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate, bar_window):
     """アニメの１コマを作成します
     """
 

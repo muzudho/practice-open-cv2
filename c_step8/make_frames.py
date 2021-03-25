@@ -78,8 +78,8 @@ def main():
             bar_box, _circle_rail, _brush_point, _bar_window = make_scene1(
                 bar_rate)
             draw_grid(canvas)
-            draw_bar_box_outline(canvas, bar_box)
-            draw_bar_box_rank2(canvas, bar_box)
+            bar_box.draw_outline(canvas)
+            bar_box.draw_rank2_box(canvas)
             draw_tone_name(canvas, bar_box, tone_name)
             # 書出し
             canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -100,10 +100,10 @@ def make_circle(canvas, seq, bar_rate, tone_name):
             bar_rate)
         draw_grid(canvas)
         bar_window.draw_outline(canvas)
-        draw_bar_box_outline(canvas, bar_box)
+        bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              theta, bar_rate, bar_window)
-        draw_bar_box_rank2(canvas, bar_box)
+        bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
         # 書出し
@@ -152,6 +152,10 @@ def make_scene1(bar_rate):
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
                        2*brush_point.range+bar_window_space)
     # バーの筋
+    bar_box.font_height = 20
+    bar_box.font_scale = 0.6
+    bar_box.line_type = 2
+    bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
     bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
     bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
@@ -194,18 +198,6 @@ def draw_grid(canvas):
         y_num = GRID_INTERVAL_H*i
         cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
                  PALE_GRAY, thickness=1)
-
-
-def draw_bar_box_outline(canvas, bar_box):
-    """バー箱の輪郭を描きます"""
-    cv2.rectangle(canvas, bar_box.rank1_p1,
-                  bar_box.rank3_p2, LIGHT_GRAY, thickness=4)
-
-
-def draw_bar_box_rank2(canvas, bar_box):
-    """バー箱の２段目の箱を描きます"""
-    cv2.rectangle(canvas, bar_box.rank2_p1,
-                  bar_box.rank2_p2, BLACK, thickness=4)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):
@@ -291,43 +283,13 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
                   bar_box.blue_bar_p2, BLUE, thickness=-1)
 
     # 色値
-    valurr = 255-int((red_p[1]-BAR_TOP1)/bar_box.height*255)
-    valurg = 255-int((green_p[1]-BAR_TOP1)/bar_box.height*255)
-    valurb = 255-int((blue_p[1]-BAR_TOP1)/bar_box.height*255)
+    color = (
+        255-int((red_p[1]-BAR_TOP1)/bar_box.height*255),
+        255-int((green_p[1]-BAR_TOP1)/bar_box.height*255),
+        255-int((blue_p[1]-BAR_TOP1)/bar_box.height*255))
 
     # R値テキスト
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    font_height = 20
-    font_scale = 0.6
-    line_type = 2
-    cv2.putText(canvas,
-                f"{valurr:02x}",
-                (bar_box.red_bar_p2[0]-bar_box.one_width,
-                 bar_box.red_bar_p2[1]+font_height),  # x,y
-                font,
-                font_scale,
-                RED,
-                line_type)
-
-    # G値テキスト
-    cv2.putText(canvas,
-                f"{valurg:02x}",
-                (bar_box.green_bar_p2[0]-bar_box.one_width,
-                 bar_box.green_bar_p2[1]+font_height),  # x,y
-                font,
-                font_scale,
-                GREEN,
-                line_type)
-
-    # B値テキスト
-    cv2.putText(canvas,
-                f"{valurb:02x}",
-                (bar_box.blue_bar_p2[0]-bar_box.one_width,
-                 bar_box.blue_bar_p2[1]+font_height),  # x,y
-                font,
-                font_scale,
-                BLUE,
-                line_type)
+    bar_box.draw_rgb_number(canvas, color)
 
     # バー率テキスト
     rate_y = int((BAR_TOP1 + bar_box.top2)/2)
@@ -335,29 +297,28 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     cv2.putText(canvas,
                 f"{bar_rate[0]}",
                 (bar_box.right+gap, rate_y),  # x,y
-                font,
-                font_scale,
+                bar_box.font,
+                bar_box.font_scale,
                 LIGHT_GRAY,
-                line_type)
+                bar_box.line_type)
     rate_y = int((bar_box.top2 + bar_box.top3)/2)
     cv2.putText(canvas,
                 f"{bar_rate[1]}",
                 (bar_box.right+gap, rate_y),  # x,y
-                font,
-                font_scale,
+                bar_box.font,
+                bar_box.font_scale,
                 BLACK,
-                line_type)
+                bar_box.line_type)
     rate_y = int((bar_box.top3 + bar_box.bottom)/2)
     cv2.putText(canvas,
                 f"{bar_rate[2]}",
                 (bar_box.right+gap, rate_y),  # x,y
-                font,
-                font_scale,
+                bar_box.font,
+                bar_box.font_scale,
                 LIGHT_GRAY,
-                line_type)
+                bar_box.line_type)
 
     # 色円
-    color = (valurr, valurg, valurb)
     # print(f"({red_p[1]},{green_p[1]},{blue_p[1]})")
     # var1 = int(red_p[1]/bar_max_height*255)
     # var2 = int(green_p[1]/bar_max_height*255)

@@ -1,6 +1,9 @@
 """RGBバーの箱
 """
 
+import cv2
+from colors import LIGHT_GRAY, BLACK, RED, GREEN, BLUE
+
 
 class BarBox():
     """RGBバーの箱
@@ -32,6 +35,10 @@ class BarBox():
         self.__green_bar_p2 = (0, 0)
         self.__blue_bar_p1 = (0, 0)
         self.__blue_bar_p2 = (0, 0)
+        self.__font_height = 0
+        self.__font_scale = 0
+        self.__line_type = 0
+        self.__font = None
 
     @property
     def top2(self):
@@ -257,3 +264,82 @@ class BarBox():
     @blue_bar_p2.setter
     def blue_bar_p2(self, val):
         self.__blue_bar_p2 = val
+
+    @property
+    def font_height(self):
+        """フォントの縦幅"""
+        return self.__font_height
+
+    @font_height.setter
+    def font_height(self, val):
+        self.__font_height = val
+
+    @property
+    def font_scale(self):
+        """フォント・サイズの倍率"""
+        return self.__font_scale
+
+    @font_scale.setter
+    def font_scale(self, val):
+        self.__font_scale = val
+
+    @property
+    def line_type(self):
+        """ラインタイプ"""
+        return self.__line_type
+
+    @line_type.setter
+    def line_type(self, val):
+        self.__line_type = val
+
+    @property
+    def font(self):
+        """フォント"""
+        return self.__font
+
+    @font.setter
+    def font(self, val):
+        self.__font = val
+
+    def draw_outline(self, canvas):
+        """輪郭を描きます"""
+        cv2.rectangle(canvas, self.rank1_p1,
+                      self.rank3_p2, LIGHT_GRAY, thickness=4)
+
+    def draw_rank2_box(self, canvas):
+        """２段目の箱を描きます"""
+        cv2.rectangle(canvas, self.rank2_p1,
+                      self.rank2_p2, BLACK, thickness=4)
+
+    def draw_rgb_number(self, canvas, color):
+        """RGB値テキストを描きます"""
+
+        # R値テキスト
+        cv2.putText(canvas,
+                    f"{color[0]:02x}",
+                    (self.red_bar_p2[0]-self.one_width,
+                     self.red_bar_p2[1]+self.font_height),  # x,y
+                    self.font,
+                    self.font_scale,
+                    RED,
+                    self.line_type)
+
+        # G値テキスト
+        cv2.putText(canvas,
+                    f"{color[1]:02x}",
+                    (self.green_bar_p2[0]-self.one_width,
+                     self.green_bar_p2[1]+self.font_height),  # x,y
+                    self.font,
+                    self.font_scale,
+                    GREEN,
+                    self.line_type)
+
+        # B値テキスト
+        cv2.putText(canvas,
+                    f"{color[2]:02x}",
+                    (self.blue_bar_p2[0]-self.one_width,
+                     self.blue_bar_p2[1]+self.font_height),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLUE,
+                    self.line_type)

@@ -1,7 +1,6 @@
 """png画像を複数枚出力します
 """
 
-import math
 import cv2
 import numpy as np
 from color_calc import calc_color
@@ -98,11 +97,15 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         canvas = make_canvas()
         bar_box, circle_rail, brush_point, bar_window = make_scene1(
             bar_rates)
+        # 円周上の点の位置
+        circle_rail.set_theta(theta)
+        brush_point.set_theta(theta)
+
         draw_grid(canvas)
         bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             theta, bar_window)
+                             bar_window)
         bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -166,6 +169,7 @@ def make_scene1(bar_rates):
     circle_rail.top = BAR_TOP1 + bar_box.height1
     circle_rail.center = (CRAIL_LEFT+circle_rail.range,
                           circle_rail.top+circle_rail.range)  # x, y
+    brush_point.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 6
     # RGBバー２段目
     bar_box.top2 = circle_rail.top
@@ -217,7 +221,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_window):
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window):
     """アニメの１コマを作成します
     """
 
@@ -225,77 +229,55 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_windo
     cv2.circle(canvas, circle_rail.center,
                circle_rail.range, LIGHT_GRAY, thickness=2)
 
-    # 円周上の点の位置
-    theta = base_theta % 360
-    red_p = circle_rail.calc_red_p(theta)
-    green_p = circle_rail.calc_green_p(theta)
-    blue_p = circle_rail.calc_blue_p(theta)
-
     # バーR
-    bar_box.red_bar_p1 = (bar_box.red_left, red_p[1])
+    bar_box.red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
     bar_box.red_bar_p2 = (bar_box.red_left+bar_box.one_width, bar_box.bottom)
     # バーG
-    bar_box.green_bar_p1 = (bar_box.green_left, green_p[1])
+    bar_box.green_bar_p1 = (bar_box.green_left, circle_rail.green_p[1])
     bar_box.green_bar_p2 = (
         bar_box.green_left+bar_box.one_width, bar_box.bottom)
     # バーB
-    bar_box.blue_bar_p1 = (bar_box.blue_left, blue_p[1])
+    bar_box.blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
     bar_box.blue_bar_p2 = (bar_box.blue_left+bar_box.one_width, bar_box.bottom)
 
-    # 点R
-    cv2.circle(canvas, red_p, circle_rail.point_range, RED, thickness=-1)
-
-    # 点G
-    cv2.circle(canvas, green_p, circle_rail.point_range, GREEN, thickness=-1)
-
-    # 点B
-    cv2.circle(canvas, blue_p, circle_rail.point_range, BLUE, thickness=-1)
+    circle_rail.draw_red_p(canvas)  # 円周上の点R
+    circle_rail.draw_green_p(canvas)  # 円周上の点G
+    circle_rail.draw_blue_p(canvas)  # 円周上の点B
 
     # 円に内接する線。三角形
-    cv2.line(canvas, (red_p[0], red_p[1]),
-             (green_p[0], green_p[1]), BLACK, thickness=2)
-    cv2.line(canvas, (green_p[0], green_p[1]),
-             (blue_p[0], blue_p[1]), BLACK, thickness=2)
-    cv2.line(canvas, (blue_p[0], blue_p[1]),
-             (red_p[0], red_p[1]), BLACK, thickness=2)
+    cv2.line(canvas, circle_rail.red_p,
+             circle_rail.green_p, BLACK, thickness=2)
+    cv2.line(canvas, circle_rail.green_p,
+             circle_rail.blue_p, BLACK, thickness=2)
+    cv2.line(canvas, circle_rail.blue_p,
+             circle_rail.red_p, BLACK, thickness=2)
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-    cv2.line(canvas, (red_p[0], red_p[1]),
-             (bar_box.red_left, red_p[1]), RED, thickness=2)
+    cv2.line(canvas, circle_rail.red_p,
+             (bar_box.red_left, circle_rail.red_p[1]), RED, thickness=2)
 
     # 水平線G
-    cv2.line(canvas, (green_p[0], green_p[1]),
-             (bar_box.green_left, green_p[1]), GREEN, thickness=2)
+    cv2.line(canvas, circle_rail.green_p,
+             (bar_box.green_left, circle_rail.green_p[1]), GREEN, thickness=2)
 
     # 水平線B
-    cv2.line(canvas, (blue_p[0], blue_p[1]),
-             (bar_box.blue_left, blue_p[1]), BLUE, thickness=2)
+    cv2.line(canvas, circle_rail.blue_p,
+             (bar_box.blue_left, circle_rail.blue_p[1]), BLUE, thickness=2)
 
     bar_box.draw_bars(canvas)  # RGBバー
 
     # 色値
     color = bar_box.create_color(
-        red_p[1]-bar_box.top1,
-        green_p[1]-bar_box.top1,
-        blue_p[1]-bar_box.top1)
+        circle_rail.red_p[1]-bar_box.top1,
+        circle_rail.green_p[1]-bar_box.top1,
+        circle_rail.blue_p[1]-bar_box.top1)
 
     bar_box.draw_rgb_number(canvas, color)  # R値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
 
     # 色円
-    # print(f"({red_p[1]},{green_p[1]},{blue_p[1]})")
-    # var1 = int(red_p[1]/bar_max_height*255)
-    # var2 = int(green_p[1]/bar_max_height*255)
-    # var3 = int(blue_p[1]/bar_max_height*255)
-    # print(
-    #    f"color={color} ({var1},{var2},{var3})")
-    # print(
-    #    f"color={color} ({red_p[1]},{green_p[1]},{blue_p[1]}) bar_max_height={bar_max_height}")
-    theta2 = base_theta
-    red_p = (int(brush_point.distance * math.sin(math.radians(theta2)) + circle_rail.center[0]),
-             int(-brush_point.distance * math.cos(math.radians(theta2)) + circle_rail.center[1]))  # yは上下反転
-    cv2.circle(canvas, red_p, brush_point.range, color, thickness=-1)
+    brush_point.draw_me(canvas, color)
 
     # 外環状
     outer_circle(canvas, brush_point.distance, circle_rail.center, bar_box)

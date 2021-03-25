@@ -3,6 +3,9 @@
 
 import math
 
+import cv2
+from colors import RED, GREEN, BLUE
+
 
 class CircleRail():
     """円レール
@@ -13,6 +16,9 @@ class CircleRail():
         self.__top = 0
         self.__center = (0, 0)
         self.__point_range = 0
+        self.__red_p = (0, 0)
+        self.__green_p = (0, 0)
+        self.__blue_p = (0, 0)
 
     @property
     def range(self):
@@ -50,17 +56,59 @@ class CircleRail():
     def point_range(self, val):
         self.__point_range = val
 
-    def calc_red_p(self, theta):
-        """円周上の赤い点の位置"""
-        return (int(self.range * math.sin(math.radians(theta)) + self.center[0]),
-                int(-self.range * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
+    def set_theta(self, theta):
+        """円周上の赤の点の角度を設定"""
 
-    def calc_green_p(self, theta):
+        # 円周上の赤い点の位置
+        self.red_p = (int(self.range * math.sin(math.radians(theta)) + self.center[0]),
+                      int(-self.range * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
+
+        # 円周上の緑の点の位置
+        self.green_p = (int(self.range * math.sin(math.radians(theta-120)) + self.center[0]),
+                        int(-self.range * math.cos(math.radians(theta-120)) + self.center[1]))  # yは上下反転
+
+        # 円周上の青の点の位置
+        self.blue_p = (int(self.range * math.sin(math.radians(theta+120)) + self.center[0]),
+                       int(-self.range * math.cos(math.radians(theta+120)) + self.center[1]))  # yは上下反転
+
+    @property
+    def red_p(self):
+        """円周上の赤の点の位置"""
+        return self.__red_p
+
+    @red_p.setter
+    def red_p(self, val):
+        self.__red_p = val
+
+    @property
+    def green_p(self):
         """円周上の緑の点の位置"""
-        return (int(self.range * math.sin(math.radians(theta-120)) + self.center[0]),
-                int(-self.range * math.cos(math.radians(theta-120)) + self.center[1]))  # yは上下反転
+        return self.__green_p
 
-    def calc_blue_p(self, theta):
+    @green_p.setter
+    def green_p(self, val):
+        self.__green_p = val
+
+    @property
+    def blue_p(self):
         """円周上の青の点の位置"""
-        return (int(self.range * math.sin(math.radians(theta+120)) + self.center[0]),
-                int(-self.range * math.cos(math.radians(theta+120)) + self.center[1]))  # yは上下反転
+        return self.__blue_p
+
+    @blue_p.setter
+    def blue_p(self, val):
+        self.__blue_p = val
+
+    def draw_red_p(self, canvas):
+        """円周上の点Rを描きます"""
+        cv2.circle(canvas, self.red_p,
+                   self.point_range, RED, thickness=-1)
+
+    def draw_green_p(self, canvas):
+        """円周上の点Gを描きます"""
+        cv2.circle(canvas, self.green_p,
+                   self.point_range, GREEN, thickness=-1)
+
+    def draw_blue_p(self, canvas):
+        """円周上の点Bを描きます"""
+        cv2.circle(canvas, self.blue_p,
+                   self.point_range, BLUE, thickness=-1)

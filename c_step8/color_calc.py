@@ -20,8 +20,8 @@ def calc_step2(color, upper_bound, height, ceil_height, base_line):
         int((color[0]-base_line)/zoom+base_line),
         int((color[1]-base_line)/zoom+base_line),
         int((color[2]-base_line)/zoom+base_line))
-    print(
-        f"color={color} upper_bound={upper_bound} height={height} base_line={base_line} zoom={zoom} new_color={new_color}")
+    # print(
+    #    f"color={color} upper_bound={upper_bound} height={height} base_line={base_line} zoom={zoom} new_color={new_color}")
     return new_color
 
 

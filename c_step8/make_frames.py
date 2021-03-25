@@ -4,6 +4,7 @@
 import cv2
 import numpy as np
 from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE
+from color_calc import calc_step2
 from bar_box import BarBox
 from bar_window import BarWindow
 from circle_rail import CircleRail
@@ -288,16 +289,16 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
              (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), BLUE, thickness=2)
 
     bar_window.draw_bars(canvas)
-    upper_bound = bar_window.get_upper_bound_y()
-    bar_window.draw_horizontal_line(canvas, upper_bound-4)  # 線を引くのは少し上
+    upper_bound_px = bar_window.get_upper_bound_y()
+    bar_window.draw_horizontal_line(canvas, upper_bound_px-4)  # 線を引くのは少し上
 
     # 斜線
-    cv2.line(canvas, (bar_window.blue_bar_p2[0], upper_bound-4),  # 線を引くのは少し上
+    cv2.line(canvas, (bar_window.blue_bar_p2[0], upper_bound_px-4),  # 線を引くのは少し上
              (bar_box.left, bar_box.top2), BLACK, thickness=2)
     cv2.line(canvas, (bar_window.blue_bar_p2[0], bar_box.top3),
              (bar_box.left, bar_box.top3), BLACK, thickness=2)
 
-    longest_bar_height = bar_window.right_bottom[1] - upper_bound
+    longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
     # print(
     #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
     zoom = longest_bar_height / bar_window.height
@@ -317,9 +318,13 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
 
     bar_box.draw_rgb_number(canvas, color)  # R値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
-    brush_point.draw_me(canvas, color)  # 塗り円
+
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value
+    upper_bound_value = max(color[0], color[1], color[2])
+    modified_color = calc_step2(
+        color, upper_bound_value, 255, ceil_height, base_line)
+    brush_point.draw_me(canvas, modified_color)  # 塗り円
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状
 
     # cv2.imshow('Title', canvas)

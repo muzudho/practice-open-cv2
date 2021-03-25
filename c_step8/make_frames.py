@@ -28,18 +28,22 @@ CRAIL_LEFT = 6 * GRID_INTERVAL_H
 
 # とりあえず 11トーン
 BAR_RATES = [
-    [0.0, 0.8, 0.2],  # Bright
-    [0.2, 0.8, 0.0],  # Strong
-    [0.4, 0.6, 0.0],  # Deep
-    [0.0, 0.3, 0.7],  # Light
-    [0.2, 0.4, 0.4],  # Soft
-    [0.3, 0.5, 0.2],  # Dull
-    [0.6, 0.4, 0.0],  # Dark
-    [0.0, 0.2, 0.8],  # Pale
-    [0.1, 0.3, 0.6],  # Light grayish
+    # 鮮やかさ2番
+    [0.1, 0.7, 0.2],  # Bright
+    [0.2, 0.7, 0.1],  # Strong
+    [0.3, 0.7, 0.0],  # Deep
+    # 鮮やかさ3番
+    [0.0, 0.4, 0.6],  # Light
+    [0.1, 0.4, 0.5],  # Soft
+    [0.2, 0.4, 0.4],  # Dull
+    [0.3, 0.4, 0.3],  # Dark
+    # 鮮やかさ4番
+    [0.0, 0.3, 0.7],  # Pale
+    [0.2, 0.3, 0.5],  # Light grayish
     [0.4, 0.3, 0.3],  # Grayish
-    [0.6, 0.2, 0.2],  # Dark grayish
-    [0.0, 1.0, 0.0],  # Cos curve
+    [0.6, 0.3, 0.1],  # Dark grayish
+    # 鮮やかさ1番
+    [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
     'Bright',
@@ -53,7 +57,7 @@ TONE_NAME = [
     'Light grayish',
     'Grayish',
     'Dark grayish',
-    'Cosine curve',
+    'Vivid',  # Cosine curve
 ]
 # 一周分のフレーム数
 FRAME_COUNTS = 24

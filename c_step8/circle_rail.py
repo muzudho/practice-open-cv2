@@ -4,7 +4,7 @@
 import math
 
 import cv2
-from colors import RED, GREEN, BLUE
+from colors import RED, GREEN, BLUE, LIGHT_GRAY
 
 
 class CircleRail():
@@ -112,3 +112,9 @@ class CircleRail():
         """円周上の点Bを描きます"""
         cv2.circle(canvas, self.blue_p,
                    self.point_range, BLUE, thickness=-1)
+
+    def draw_me(self, canvas):
+        """描きます"""
+        # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
+        cv2.circle(canvas, self.center,
+                   self.range, LIGHT_GRAY, thickness=2)

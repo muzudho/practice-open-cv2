@@ -100,6 +100,37 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         circle_rail.set_theta(theta)
         brush_point.set_theta(theta)
 
+        # バーR
+        bar_window.red_bar_p1 = (bar_window.left_top[0], circle_rail.red_p[1])
+        bar_window.red_bar_p2 = (
+            bar_window.red_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
+        # バーG
+        bar_window.green_bar_p1 = (
+            bar_window.left_top[0]+bar_window.one_width+bar_window.interval,
+            circle_rail.green_p[1])
+        bar_window.green_bar_p2 = (
+            bar_window.green_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
+        # バーB
+        bar_window.blue_bar_p1 = (
+            bar_window.left_top[0]+2 *
+            (bar_window.one_width+bar_window.interval),
+            circle_rail.blue_p[1])
+        bar_window.blue_bar_p2 = (
+            bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
+
+        # バーR
+        bar_box.red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
+        bar_box.red_bar_p2 = (
+            bar_box.red_left+bar_box.one_width, bar_box.bottom)
+        # バーG
+        bar_box.green_bar_p1 = (bar_box.green_left, circle_rail.green_p[1])
+        bar_box.green_bar_p2 = (
+            bar_box.green_left+bar_box.one_width, bar_box.bottom)
+        # バーB
+        bar_box.blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
+        bar_box.blue_bar_p2 = (
+            bar_box.blue_left+bar_box.one_width, bar_box.bottom)
+
         draw_grid(canvas)
         bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
@@ -229,37 +260,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     """アニメの１コマを作成します
     """
 
-    # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
-    cv2.circle(canvas, circle_rail.center,
-               circle_rail.range, LIGHT_GRAY, thickness=2)
-
-    # バーR
-    bar_window.red_bar_p1 = (bar_window.left_top[0], circle_rail.red_p[1])
-    bar_window.red_bar_p2 = (
-        bar_window.red_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
-    # バーG
-    bar_window.green_bar_p1 = (
-        bar_window.left_top[0]+bar_window.one_width+bar_window.interval,
-        circle_rail.green_p[1])
-    bar_window.green_bar_p2 = (
-        bar_window.green_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
-    # バーB
-    bar_window.blue_bar_p1 = (
-        bar_window.left_top[0]+2*(bar_window.one_width+bar_window.interval),
-        circle_rail.blue_p[1])
-    bar_window.blue_bar_p2 = (
-        bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
-
-    # バーR
-    bar_box.red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
-    bar_box.red_bar_p2 = (bar_box.red_left+bar_box.one_width, bar_box.bottom)
-    # バーG
-    bar_box.green_bar_p1 = (bar_box.green_left, circle_rail.green_p[1])
-    bar_box.green_bar_p2 = (
-        bar_box.green_left+bar_box.one_width, bar_box.bottom)
-    # バーB
-    bar_box.blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
-    bar_box.blue_bar_p2 = (bar_box.blue_left+bar_box.one_width, bar_box.bottom)
+    circle_rail.draw_me(canvas)  # 円レール
 
     circle_rail.draw_red_p(canvas)  # 円周上の点R
     circle_rail.draw_green_p(canvas)  # 円周上の点G

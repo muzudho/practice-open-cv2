@@ -3,12 +3,13 @@
 
 import cv2
 import numpy as np
-from color_calc import calc_color
 from colors import PALE_GRAY, LIGHT_GRAY, BLACK, RED, GREEN, BLUE
 from bar_box import BarBox
 from bar_window import BarWindow
 from circle_rail import CircleRail
 from brush_point import BrushPoint
+from outer_circle import OuterCircle
+from conf import GRID_INTERVAL_H
 
 
 # 描画する画像を作る
@@ -19,8 +20,6 @@ CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
-# 水平線グリッド
-GRID_INTERVAL_H = 7  # 7とか割り算しにくい数だが面積、ファイル容量削減のため仕方ない（＾～＾）
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 6 * GRID_INTERVAL_H
 # 円レール circle rail left
@@ -74,7 +73,7 @@ def main():
         # 描画：トーン名と バー箱 の紹介
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _brush_point, _bar_window = make_scene1(
+            bar_box, _circle_rail, _brush_point, _bar_window, outer_circle = make_scene1(
                 bar_rates)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
@@ -95,7 +94,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
         canvas = make_canvas()
-        bar_box, circle_rail, brush_point, bar_window = make_scene1(
+        bar_box, circle_rail, brush_point, bar_window, outer_circle = make_scene1(
             bar_rates)
         # 円周上の点の位置
         circle_rail.set_theta(theta)
@@ -105,7 +104,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             bar_window)
+                             bar_window, outer_circle)
         bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -131,6 +130,7 @@ def make_scene1(bar_rates):
     bar_window = BarWindow()
     circle_rail = CircleRail()
     brush_point = BrushPoint()
+    outer_circle = OuterCircle()
 
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
@@ -170,6 +170,7 @@ def make_scene1(bar_rates):
     circle_rail.center = (CRAIL_LEFT+circle_rail.range,
                           circle_rail.top+circle_rail.range)  # x, y
     brush_point.origin = (circle_rail.center[0], circle_rail.center[1])
+    outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 6
     # RGBバー２段目
     bar_box.top2 = circle_rail.top
@@ -194,7 +195,10 @@ def make_scene1(bar_rates):
         bar_window.left_top[0] + 3*bar_window.one_width+2*bar_window.interval,
         circle_rail.top+2*circle_rail.range)
 
-    return bar_box, circle_rail, brush_point, bar_window
+    outer_circle.area_size = (brush_point.distance+2*GRID_INTERVAL_H,
+                              brush_point.distance+2*GRID_INTERVAL_H)
+
+    return bar_box, circle_rail, brush_point, bar_window, outer_circle
 
 
 def draw_grid(canvas):
@@ -221,7 +225,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window):
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_circle):
     """アニメの１コマを作成します
     """
 
@@ -280,47 +284,13 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window):
     brush_point.draw_me(canvas, color)
 
     # 外環状
-    outer_circle(canvas, brush_point.distance, circle_rail.center, bar_box)
+    outer_circle.draw_me(canvas, bar_box.rates)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     return canvas
-
-
-def outer_circle(canvas, color_pallete_range, center, bar_box):
-    """外環状
-    """
-
-    size = 18
-    circumference = 360  # 半径１の円の一周の長さ
-    unit_arc = circumference/size  # 等分割した１つの弧
-
-    color_list = []
-    for i in range(0, size):
-        theta = i * unit_arc
-        color = calc_color(theta, bar_box.rates)
-        color_list.append(color)
-
-    # 色相環
-    for i in range(0, size):
-        theta = i * unit_arc
-        color = color_list[i]
-        # print(f"[{i}] color={color}")
-
-        # 円弧
-        # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-        box_size = (color_pallete_range+2*GRID_INTERVAL_H,
-                    color_pallete_range+2*GRID_INTERVAL_H)
-        cv2.ellipse(canvas,
-                    center,
-                    box_size,
-                    -90,
-                    theta,
-                    theta+unit_arc,
-                    color,
-                    thickness=int(GRID_INTERVAL_H*3/2))
 
 
 main()

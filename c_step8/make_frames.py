@@ -69,14 +69,14 @@ def main():
 
     size = len(BAR_RATES)
     for i in range(0, size):
-        bar_rate = BAR_RATES[i]
+        bar_rates = BAR_RATES[i]
         tone_name = TONE_NAME[i]
 
         # 描画：トーン名と バー箱 の紹介
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
             bar_box, _circle_rail, _brush_point, _bar_window = make_scene1(
-                bar_rate)
+                bar_rates)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
@@ -87,22 +87,22 @@ def main():
             seq += 1
 
         # 描画：色相環のアニメーション表示
-        seq = make_circle(canvas, seq, bar_rate, tone_name)
+        seq = make_circle(canvas, seq, bar_rates, tone_name)
 
 
-def make_circle(canvas, seq, bar_rate, tone_name):
+def make_circle(canvas, seq, bar_rates, tone_name):
     """色相環一周分の画像を出力"""
 
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
         canvas = make_canvas()
         bar_box, circle_rail, brush_point, bar_window = make_scene1(
-            bar_rate)
+            bar_rates)
         draw_grid(canvas)
         bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             theta, bar_rate, bar_window)
+                             theta, bar_window)
         bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -120,7 +120,7 @@ def make_canvas():
                    MONO_BACKGROUND, dtype=np.uint8)
 
 
-def make_scene1(bar_rate):
+def make_scene1(bar_rates):
     """オブジェクトの位置とキャンバスを返します
     """
 
@@ -131,9 +131,11 @@ def make_scene1(bar_rate):
 
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
-    bar_box.height1 = int(bar_rate[0] * 20 * GRID_INTERVAL_H)
-    bar_box.height2 = int(bar_rate[1] * 20 * GRID_INTERVAL_H)
-    bar_box.height3 = int(bar_rate[2] * 20 * GRID_INTERVAL_H)
+    bar_box.top1 = BAR_TOP1
+    bar_box.rates = bar_rates
+    bar_box.height1 = int(bar_box.rates[0] * 20 * GRID_INTERVAL_H)
+    bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
+    bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
     bar_box.one_width = 24
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
@@ -215,7 +217,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate, bar_window):
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_window):
     """アニメの１コマを作成します
     """
 
@@ -292,31 +294,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     bar_box.draw_rgb_number(canvas, color)
 
     # バー率テキスト
-    rate_y = int((BAR_TOP1 + bar_box.top2)/2)
-    gap = int(bar_box.one_width/2)
-    cv2.putText(canvas,
-                f"{bar_rate[0]}",
-                (bar_box.right+gap, rate_y),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_GRAY,
-                bar_box.line_type)
-    rate_y = int((bar_box.top2 + bar_box.top3)/2)
-    cv2.putText(canvas,
-                f"{bar_rate[1]}",
-                (bar_box.right+gap, rate_y),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                BLACK,
-                bar_box.line_type)
-    rate_y = int((bar_box.top3 + bar_box.bottom)/2)
-    cv2.putText(canvas,
-                f"{bar_rate[2]}",
-                (bar_box.right+gap, rate_y),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_GRAY,
-                bar_box.line_type)
+    bar_box.draw_bar_rate(canvas)
 
     # 色円
     # print(f"({red_p[1]},{green_p[1]},{blue_p[1]})")
@@ -333,7 +311,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     cv2.circle(canvas, red_p, brush_point.range, color, thickness=-1)
 
     # 外環状
-    outer_circle(canvas, brush_point.distance, circle_rail.center, bar_rate)
+    outer_circle(canvas, brush_point.distance, circle_rail.center, bar_box)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
@@ -342,7 +320,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_rate,
     return canvas
 
 
-def outer_circle(canvas, color_pallete_range, center, bar_rate):
+def outer_circle(canvas, color_pallete_range, center, bar_box):
     """外環状
     """
 
@@ -353,7 +331,7 @@ def outer_circle(canvas, color_pallete_range, center, bar_rate):
     color_list = []
     for i in range(0, size):
         theta = i * unit_arc
-        color = calc_color(theta, bar_rate)
+        color = calc_color(theta, bar_box.rates)
         color_list.append(color)
 
     # 色相環

@@ -41,6 +41,7 @@ class BarWindow():
 
     @property
     def height(self):
+        """縦幅"""
         return self.__right_bottom[1] - self.__left_top[1]
 
     @property

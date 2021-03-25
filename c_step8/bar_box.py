@@ -41,6 +41,9 @@ class BarBox():
         self.__font_scale = 0
         self.__line_type = 0
         self.__font = None
+        self.__red_addition = 0
+        self.__green_addition = 0
+        self.__blue_addition = 0
 
     @property
     def rates(self):
@@ -321,6 +324,48 @@ class BarBox():
     def font(self, val):
         self.__font = val
 
+    @property
+    def red_addition(self):
+        """R値に加算"""
+        return self.__red_addition
+
+    @red_addition.setter
+    def red_addition(self, val):
+        self.__red_addition = val
+
+    @property
+    def green_addition(self):
+        """G値に加算"""
+        return self.__green_addition
+
+    @green_addition.setter
+    def green_addition(self, val):
+        self.__green_addition = val
+
+    @property
+    def blue_addition(self):
+        """B値に加算"""
+        return self.__blue_addition
+
+    @blue_addition.setter
+    def blue_addition(self, val):
+        self.__blue_addition = val
+
+    @property
+    def red_height(self):
+        """Rバーの縦幅"""
+        return self.__red_bar_p2[1] - self.__red_bar_p1[1] + self.__red_addition
+
+    @property
+    def green_height(self):
+        """Gバーの縦幅"""
+        return self.__green_bar_p2[1] - self.__green_bar_p1[1] + self.__green_addition
+
+    @property
+    def blue_height(self):
+        """Bバーの縦幅"""
+        return self.__blue_bar_p2[1] - self.__blue_bar_p1[1] + self.__blue_addition
+
     def draw_outline(self, canvas):
         """輪郭を描きます"""
         cv2.rectangle(canvas, self.rank1_p1,
@@ -392,23 +437,23 @@ class BarBox():
                     LIGHT_GRAY,
                     self.line_type)
 
-    def draw_bars(self, canvas, red_add, green_add, blue_add):
+    def draw_bars(self, canvas):
         """バーを描きます"""
         # バーR
-        cv2.rectangle(canvas, (self.red_bar_p1[0], self.red_bar_p1[1]-red_add),
+        cv2.rectangle(canvas, (self.red_bar_p1[0], self.red_bar_p1[1]-self.red_addition),  # yは逆さ
                       self.red_bar_p2, RED, thickness=-1)
 
         # バーG
-        cv2.rectangle(canvas, (self.green_bar_p1[0], self.green_bar_p1[1]-green_add),
+        cv2.rectangle(canvas, (self.green_bar_p1[0], self.green_bar_p1[1]-self.green_addition),
                       self.green_bar_p2, GREEN, thickness=-1)
 
         # バーB
-        cv2.rectangle(canvas, (self.blue_bar_p1[0], self.blue_bar_p1[1]-blue_add),
+        cv2.rectangle(canvas, (self.blue_bar_p1[0], self.blue_bar_p1[1]-self.blue_addition),
                       self.blue_bar_p2, BLUE, thickness=-1)
 
-    def create_color(self, red_height, green_height, blue_height):
+    def create_color(self):
         """色を作成"""
         return (
-            255-int(red_height/self.height*255),
-            255-int(green_height/self.height*255),
-            255-int(blue_height/self.height*255))
+            int(self.red_height/self.height*255),
+            int(self.green_height/self.height*255),
+            int(self.blue_height/self.height*255))

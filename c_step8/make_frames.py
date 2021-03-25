@@ -305,15 +305,15 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     red_add = int(bar_window.red_height / zoom) - bar_window.red_height
     green_add = int(bar_window.green_height / zoom) - bar_window.green_height
     blue_add = int(bar_window.blue_height / zoom) - bar_window.blue_height
-    print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
+    #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
 
-    bar_box.draw_bars(canvas, red_add, green_add, blue_add)  # RGBバー
+    bar_box.red_addition = red_add
+    bar_box.green_addition = green_add
+    bar_box.blue_addition = blue_add
+    bar_box.draw_bars(canvas)  # RGBバー
 
     # 色値
-    color = bar_box.create_color(
-        circle_rail.red_p[1]-bar_box.top1,
-        circle_rail.green_p[1]-bar_box.top1,
-        circle_rail.blue_p[1]-bar_box.top1)
+    color = bar_box.create_color()
 
     bar_box.draw_rgb_number(canvas, color)  # R値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト

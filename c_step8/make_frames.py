@@ -22,7 +22,7 @@ BLUE = (100, 100, 250)
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
 CANVAS_WIDTH = 450
-CANVAS_HEIGHT = 250
+CANVAS_HEIGHT = 230
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -30,9 +30,9 @@ MONO_BACKGROUND = 255
 # 水平線グリッド
 GRID_INTERVAL_H = 7  # 7とか割り算しにくい数だが面積、ファイル容量削減のため仕方ない（＾～＾）
 # RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 5 * GRID_INTERVAL_H
+BAR_TOP1 = 6 * GRID_INTERVAL_H
 # 円レール circle rail left
-CRAIL_LEFT = 5 * GRID_INTERVAL_H
+CRAIL_LEFT = 6 * GRID_INTERVAL_H
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -98,8 +98,7 @@ def main():
 
 
 def make_circle(canvas, seq, bar_rate, tone_name):
-    """色相環一周分の画像を出力
-    """
+    """色相環一周分の画像を出力"""
 
     for i in range(0, FRAME_COUNTS):
         theta = 360/FRAME_COUNTS*i
@@ -197,7 +196,7 @@ def make_scene1(bar_rate):
 def draw_grid(canvas):
     """背景に罫線を引きます"""
     # 水平線グリッド
-    for i in range(0, int(CANVAS_HEIGHT/GRID_INTERVAL_H)):
+    for i in range(0, int(CANVAS_HEIGHT/GRID_INTERVAL_H)+1):
         y_num = GRID_INTERVAL_H*i
         cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
                  PALE_GRAY, thickness=1)

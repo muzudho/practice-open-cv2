@@ -3,7 +3,7 @@
 
 import cv2
 import numpy as np
-from colors import PALE_GRAY, LIGHT_GRAY, BLACK, RED, GREEN, BLUE
+from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE
 from bar_box import BarBox
 from bar_window import BarWindow
 from circle_rail import CircleRail
@@ -318,7 +318,9 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     bar_box.draw_rgb_number(canvas, color)  # R値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
     brush_point.draw_me(canvas, color)  # 塗り円
-    outer_circle.draw_me(canvas, bar_box.rates)  # 外環状
+    ceil_height = bar_box.ceil_height_rgb_value
+    base_line = bar_box.base_line_rgb_value
+    outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

@@ -457,3 +457,13 @@ class BarBox():
             int(self.red_height/self.height*255),
             int(self.green_height/self.height*255),
             int(self.blue_height/self.height*255))
+
+    @property
+    def ceil_height_rgb_value(self):
+        """１段目が colorの成分値として いくつか"""
+        return int(255 * (self.height1 / self.height))
+
+    @property
+    def base_line_rgb_value(self):
+        """３段目が colorの成分値として いくつか"""
+        return int(255 * (self.height3 / self.height))

@@ -288,16 +288,26 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
              (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), BLUE, thickness=2)
 
     bar_window.draw_bars(canvas)
-    upper_bound = bar_window.get_upper_bound_y()-4  # 少し上
-    bar_window.draw_horizontal_line(canvas, upper_bound)
+    upper_bound = bar_window.get_upper_bound_y()
+    bar_window.draw_horizontal_line(canvas, upper_bound-4)  # 線を引くのは少し上
 
     # 斜線
-    cv2.line(canvas, (bar_window.blue_bar_p2[0], upper_bound),
+    cv2.line(canvas, (bar_window.blue_bar_p2[0], upper_bound-4),  # 線を引くのは少し上
              (bar_box.left, bar_box.top2), BLACK, thickness=2)
     cv2.line(canvas, (bar_window.blue_bar_p2[0], bar_box.top3),
              (bar_box.left, bar_box.top3), BLACK, thickness=2)
 
-    bar_box.draw_bars(canvas)  # RGBバー
+    longest_bar_height = bar_window.right_bottom[1] - upper_bound
+    # print(
+    #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
+    zoom = longest_bar_height / bar_window.height
+    # print(f"zoom={zoom}")
+    red_add = int(bar_window.red_height / zoom) - bar_window.red_height
+    green_add = int(bar_window.green_height / zoom) - bar_window.green_height
+    blue_add = int(bar_window.blue_height / zoom) - bar_window.blue_height
+    print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
+
+    bar_box.draw_bars(canvas, red_add, green_add, blue_add)  # RGBバー
 
     # 色値
     color = bar_box.create_color(

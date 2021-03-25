@@ -392,18 +392,18 @@ class BarBox():
                     LIGHT_GRAY,
                     self.line_type)
 
-    def draw_bars(self, canvas):
+    def draw_bars(self, canvas, red_add, green_add, blue_add):
         """バーを描きます"""
         # バーR
-        cv2.rectangle(canvas, self.red_bar_p1,
+        cv2.rectangle(canvas, (self.red_bar_p1[0], self.red_bar_p1[1]-red_add),
                       self.red_bar_p2, RED, thickness=-1)
 
         # バーG
-        cv2.rectangle(canvas, self.green_bar_p1,
+        cv2.rectangle(canvas, (self.green_bar_p1[0], self.green_bar_p1[1]-green_add),
                       self.green_bar_p2, GREEN, thickness=-1)
 
         # バーB
-        cv2.rectangle(canvas, self.blue_bar_p1,
+        cv2.rectangle(canvas, (self.blue_bar_p1[0], self.blue_bar_p1[1]-blue_add),
                       self.blue_bar_p2, BLUE, thickness=-1)
 
     def create_color(self, red_height, green_height, blue_height):

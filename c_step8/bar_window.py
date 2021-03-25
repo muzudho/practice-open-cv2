@@ -40,6 +40,10 @@ class BarWindow():
         self.__right_bottom = val
 
     @property
+    def height(self):
+        return self.__right_bottom[1] - self.__left_top[1]
+
+    @property
     def one_width(self):
         """バー１本分の幅"""
         return self.__one_width
@@ -134,7 +138,22 @@ class BarWindow():
         """上限の座標"""
         return min(self.red_bar_p1[1], self.green_bar_p1[1], self.blue_bar_p1[1])
 
-    def draw_horizontal_line(self, canvas, y):
+    def draw_horizontal_line(self, canvas, y_num):
         """水平線を描きます"""
-        cv2.line(canvas, (self.red_bar_p1[0], y),
-                 (self.blue_bar_p2[0], y), BLACK, thickness=2)
+        cv2.line(canvas, (self.red_bar_p1[0], y_num),
+                 (self.blue_bar_p2[0], y_num), BLACK, thickness=2)
+
+    @property
+    def red_height(self):
+        """赤バーの縦幅"""
+        return self.red_bar_p2[1] - self.red_bar_p1[1]
+
+    @property
+    def green_height(self):
+        """緑バーの縦幅"""
+        return self.green_bar_p2[1] - self.green_bar_p1[1]
+
+    @property
+    def blue_height(self):
+        """青バーの縦幅"""
+        return self.blue_bar_p2[1] - self.blue_bar_p1[1]

@@ -277,15 +277,15 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, circle_rail.red_p,
-             (bar_box.red_left, circle_rail.red_p[1]), RED, thickness=2)
+             (bar_window.red_bar_p1[0], circle_rail.red_p[1]), RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, circle_rail.green_p,
-             (bar_box.green_left, circle_rail.green_p[1]), GREEN, thickness=2)
+             (bar_window.green_bar_p1[0], circle_rail.green_p[1]), GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, circle_rail.blue_p,
-             (bar_box.blue_left, circle_rail.blue_p[1]), BLUE, thickness=2)
+             (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), BLUE, thickness=2)
 
     bar_window.draw_bars(canvas)
     bar_box.draw_bars(canvas)  # RGBバー

@@ -292,6 +292,10 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     bar_window.draw_horizontal_line(canvas, upper_bound)
 
     # 斜線
+    cv2.line(canvas, (bar_window.blue_bar_p2[0], upper_bound),
+             (bar_box.left, bar_box.top2), BLACK, thickness=2)
+    cv2.line(canvas, (bar_window.blue_bar_p2[0], bar_box.top3),
+             (bar_box.left, bar_box.top3), BLACK, thickness=2)
 
     bar_box.draw_bars(canvas)  # RGBバー
 

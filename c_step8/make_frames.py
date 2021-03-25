@@ -272,29 +272,16 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, base_theta, bar_windo
     cv2.line(canvas, (blue_p[0], blue_p[1]),
              (bar_box.blue_left, blue_p[1]), BLUE, thickness=2)
 
-    # バーR
-    cv2.rectangle(canvas, bar_box.red_bar_p1,
-                  bar_box.red_bar_p2, RED, thickness=-1)
-
-    # バーG
-    cv2.rectangle(canvas, bar_box.green_bar_p1,
-                  bar_box.green_bar_p2, GREEN, thickness=-1)
-
-    # バーB
-    cv2.rectangle(canvas, bar_box.blue_bar_p1,
-                  bar_box.blue_bar_p2, BLUE, thickness=-1)
+    bar_box.draw_bars(canvas)  # RGBバー
 
     # 色値
-    color = (
-        255-int((red_p[1]-BAR_TOP1)/bar_box.height*255),
-        255-int((green_p[1]-BAR_TOP1)/bar_box.height*255),
-        255-int((blue_p[1]-BAR_TOP1)/bar_box.height*255))
+    color = bar_box.create_color(
+        red_p[1]-bar_box.top1,
+        green_p[1]-bar_box.top1,
+        blue_p[1]-bar_box.top1)
 
-    # R値テキスト
-    bar_box.draw_rgb_number(canvas, color)
-
-    # バー率テキスト
-    bar_box.draw_bar_rate(canvas)
+    bar_box.draw_rgb_number(canvas, color)  # R値テキスト
+    bar_box.draw_bar_rate(canvas)  # バー率テキスト
 
     # 色円
     # print(f"({red_p[1]},{green_p[1]},{blue_p[1]})")

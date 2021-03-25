@@ -391,3 +391,24 @@ class BarBox():
                     self.font_scale,
                     LIGHT_GRAY,
                     self.line_type)
+
+    def draw_bars(self, canvas):
+        """バーを描きます"""
+        # バーR
+        cv2.rectangle(canvas, self.red_bar_p1,
+                      self.red_bar_p2, RED, thickness=-1)
+
+        # バーG
+        cv2.rectangle(canvas, self.green_bar_p1,
+                      self.green_bar_p2, GREEN, thickness=-1)
+
+        # バーB
+        cv2.rectangle(canvas, self.blue_bar_p1,
+                      self.blue_bar_p2, BLUE, thickness=-1)
+
+    def create_color(self, red_height, green_height, blue_height):
+        """色を作成"""
+        return (
+            255-int(red_height/self.height*255),
+            255-int(green_height/self.height*255),
+            255-int(blue_height/self.height*255))

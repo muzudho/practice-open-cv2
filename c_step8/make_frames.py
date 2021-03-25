@@ -176,7 +176,7 @@ def make_scene1(bar_rates):
     circle_rail.range = int(bar_box.height2 / 2)
     # 塗った円
     brush_point.distance = circle_rail.range + 2*GRID_INTERVAL_H
-    brush_point.range = GRID_INTERVAL_H
+    brush_point.range = int(1.5*GRID_INTERVAL_H)
 
     # バー箱の左
     bar_window.one_width = 24
@@ -203,7 +203,7 @@ def make_scene1(bar_rates):
                           circle_rail.top+circle_rail.range)  # x, y
     brush_point.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
-    circle_rail.point_range = 6
+    circle_rail.point_range = 4
     # RGBバー２段目
     bar_box.top2 = circle_rail.top
     bar_box.rank1_p1 = (bar_box.left, BAR_TOP1)

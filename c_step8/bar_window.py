@@ -2,7 +2,7 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, RED, GREEN, BLUE
+from colors import LIGHT_GRAY, RED, GREEN, BLUE, BLACK
 
 
 class BarWindow():
@@ -129,3 +129,12 @@ class BarWindow():
         # バーB
         cv2.rectangle(canvas, self.blue_bar_p1,
                       self.blue_bar_p2, BLUE, thickness=-1)
+
+    def get_upper_bound_y(self):
+        """上限の座標"""
+        return min(self.red_bar_p1[1], self.green_bar_p1[1], self.blue_bar_p1[1])
+
+    def draw_horizontal_line(self, canvas, y):
+        """水平線を描きます"""
+        cv2.line(canvas, (self.red_bar_p1[0], y),
+                 (self.blue_bar_p2[0], y), BLACK, thickness=2)

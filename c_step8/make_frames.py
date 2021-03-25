@@ -288,6 +288,11 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
              (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), BLUE, thickness=2)
 
     bar_window.draw_bars(canvas)
+    upper_bound = bar_window.get_upper_bound_y()-4  # 少し上
+    bar_window.draw_horizontal_line(canvas, upper_bound)
+
+    # 斜線
+
     bar_box.draw_bars(canvas)  # RGBバー
 
     # 色値

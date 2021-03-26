@@ -609,3 +609,7 @@ class BarBox():
     def base_line_rgb_value(self):
         """３段目が colorの成分値として いくつか"""
         return int(255 * (self.height3 / self.height))
+
+    def get_step1_upper_bound_y(self):
+        """step1の上限の座標"""
+        return min(self.step1_red_bar_p1[1], self.step1_green_bar_p1[1], self.step1_blue_bar_p1[1])

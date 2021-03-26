@@ -126,7 +126,21 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_window.blue_bar_p2 = (
             bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
 
-        upper_bound_px = bar_window.get_upper_bound_y()
+        # バーR
+        bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
+        bar_box.step1_red_bar_p2 = (
+            bar_box.red_left+bar_box.one_width, bar_box.bottom)
+        # バーG
+        bar_box.step1_green_bar_p1 = (
+            bar_box.green_left, circle_rail.green_p[1])
+        bar_box.step1_green_bar_p2 = (
+            bar_box.green_left+bar_box.one_width, bar_box.bottom)
+        # バーB
+        bar_box.step1_blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
+        bar_box.step1_blue_bar_p2 = (
+            bar_box.blue_left+bar_box.one_width, bar_box.bottom)
+
+        upper_bound_px = bar_box.get_step1_upper_bound_y()
         longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
         # print(
         #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
@@ -144,27 +158,17 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_box.green_addition = green_add
         bar_box.blue_addition = blue_add
 
-        # バーR
-        bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
-        bar_box.step1_red_bar_p2 = (
-            bar_box.red_left+bar_box.one_width, bar_box.bottom)
+        # バーR追加部分
         bar_box.addition_red_bar_p1 = (
             bar_box.red_left, bar_box.step1_red_bar_p1[1]-bar_box.red_addition)  # yは逆さ
         bar_box.addition_red_bar_p2 = (
             bar_box.red_left+bar_box.one_width, circle_rail.red_p[1])
-        # バーG
-        bar_box.step1_green_bar_p1 = (
-            bar_box.green_left, circle_rail.green_p[1])
-        bar_box.step1_green_bar_p2 = (
-            bar_box.green_left+bar_box.one_width, bar_box.bottom)
+        # バーG追加部分
         bar_box.addition_green_bar_p1 = (
             bar_box.green_left, bar_box.step1_green_bar_p1[1]-bar_box.green_addition)
         bar_box.addition_green_bar_p2 = (
             bar_box.green_left+bar_box.one_width, circle_rail.green_p[1])
-        # バーB
-        bar_box.step1_blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
-        bar_box.step1_blue_bar_p2 = (
-            bar_box.blue_left+bar_box.one_width, bar_box.bottom)
+        # バーB追加部分
         bar_box.addition_blue_bar_p1 = (
             bar_box.blue_left, bar_box.step1_blue_bar_p1[1]-bar_box.blue_addition)
         bar_box.addition_blue_bar_p2 = (
@@ -189,7 +193,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         # bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             bar_window, outer_circle)
+                             outer_circle)
         bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -309,7 +313,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_circle):
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, outer_circle):
     """アニメの１コマを作成します
     """
 

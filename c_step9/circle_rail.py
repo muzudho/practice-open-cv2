@@ -19,6 +19,7 @@ class CircleRail():
         self.__red_p = (0, 0)
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
+        self.__theta = 0
 
     @property
     def range(self):
@@ -56,9 +57,15 @@ class CircleRail():
     def point_range(self, val):
         self.__point_range = val
 
-    def set_theta(self, theta):
+    @property
+    def theta(self):
+        return self.__theta
+
+    @theta.setter
+    def theta(self, theta):
         """円周上の赤の点の角度を設定"""
 
+        self.__theta = theta
         # 円周上の赤い点の位置
         self.red_p = (int(self.range * math.sin(math.radians(theta)) + self.center[0]),
                       int(-self.range * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転

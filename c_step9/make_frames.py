@@ -1,6 +1,7 @@
 """png画像を複数枚出力します
 """
 
+import math
 import cv2
 import numpy as np
 from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
@@ -21,9 +22,9 @@ CHANNELS = 3
 MONO_BACKGROUND = 255
 
 # RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 6 * GRID_INTERVAL_H
+BAR_TOP1 = 8 * GRID_INTERVAL_H
 # 円レール circle rail left
-CRAIL_LEFT = 6 * GRID_INTERVAL_H
+CRAIL_LEFT = 8 * GRID_INTERVAL_H
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -107,7 +108,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         outer_circle.phase = phase
 
         # 円周上の点の位置
-        circle_rail.set_theta(theta)
+        circle_rail.theta = theta
         brush_point.set_theta(theta)
 
         # バーR
@@ -177,8 +178,8 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         outer_circle.color_list.append(outer_color)
         #
 
-        draw_grid(canvas)
-        bar_box.draw_outline(canvas)
+        draw_grid(canvas)  # 罫線
+        bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              inner_circle, outer_circle)
         bar_box.draw_rank2_box(canvas)
@@ -223,7 +224,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
 
     # バー箱の左
     range_width = 10
-    outer_circle_margin = 2
+    outer_circle_margin = 3
     width = 2 * (range_width + outer_circle_margin)
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
                        2*brush_point.range)
@@ -338,7 +339,19 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, inner_circle, outer_c
     upper_bound_value = max(step2_color[0], step2_color[1], step2_color[2])
     step2_color = calc_step2(
         step2_color, upper_bound_value, 255, ceil_height, base_line)
-    brush_point.draw_me(canvas, step1_color)  # 塗り円
+    brush_point.draw_me(canvas, BLACK)  # 塗り円
+
+    # 時計の針
+    clock_hand_len = 7*GRID_INTERVAL_H
+    inner_p = (
+        int(circle_rail.range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(circle_rail.range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int((circle_rail.range+clock_hand_len) *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, BLACK, thickness=2)
 
     inner_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 内環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状

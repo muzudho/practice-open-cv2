@@ -129,16 +129,16 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         # バーR
         bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
         bar_box.step1_red_bar_p2 = (
-            bar_box.red_left+bar_box.one_width, bar_box.bottom)
+            bar_box.red_left+bar_box.one_width, bar_box.top3)
         # バーG
         bar_box.step1_green_bar_p1 = (
             bar_box.green_left, circle_rail.green_p[1])
         bar_box.step1_green_bar_p2 = (
-            bar_box.green_left+bar_box.one_width, bar_box.bottom)
+            bar_box.green_left+bar_box.one_width, bar_box.top3)
         # バーB
         bar_box.step1_blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
         bar_box.step1_blue_bar_p2 = (
-            bar_box.blue_left+bar_box.one_width, bar_box.bottom)
+            bar_box.blue_left+bar_box.one_width, bar_box.top3)
 
         upper_bound_px = bar_box.get_step1_upper_bound_y()
         longest_rank2_bar_height = bar_box.top3 - upper_bound_px
@@ -146,12 +146,12 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         #    f"longest_rank2_bar_height={longest_rank2_bar_height} bar_box.height={bar_box.height}")
         zoom = longest_rank2_bar_height / bar_box.height2
         # print(f"zoom={zoom}")
-        red_add = int(bar_window.red_height / zoom) - \
-            bar_window.red_height
-        green_add = int(bar_window.green_height / zoom) - \
-            bar_window.green_height
-        blue_add = int(bar_window.blue_height / zoom) - \
-            bar_window.blue_height
+        red_add = int(bar_box.red_step1_height / zoom) - \
+            bar_box.red_step1_height
+        green_add = int(bar_box.green_step1_height / zoom) - \
+            bar_box.green_step1_height
+        blue_add = int(bar_box.blue_step1_height / zoom) - \
+            bar_box.blue_step1_height
         #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
 
         bar_box.red_addition = red_add
@@ -190,7 +190,6 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         #
 
         draw_grid(canvas)
-        # bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              outer_circle)
@@ -380,7 +379,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[0]:02x}",
                 (bar_box.step1_red_bar_p1[0]+feeling,
-                    bar_box.step1_red_bar_p2[1]+3*bar_box.font_height),  # x,y
+                    bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -389,7 +388,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[0]:03}",
                 (bar_box.step1_red_bar_p1[0],
-                    bar_box.step1_red_bar_p2[1]+4*bar_box.font_height),  # x,y
+                    bar_box.bottom+4*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -399,7 +398,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[1]:02x}",
                 (bar_box.step1_green_bar_p1[0]+feeling,
-                    bar_box.step1_green_bar_p2[1]+3*bar_box.font_height),  # x,y
+                    bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -408,7 +407,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[1]:03}",
                 (bar_box.step1_green_bar_p1[0],
-                    bar_box.step1_green_bar_p2[1]+4*bar_box.font_height),  # x,y
+                    bar_box.bottom+4*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -418,7 +417,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[2]:02x}",
                 (bar_box.step1_blue_bar_p1[0]+feeling,
-                    bar_box.step1_blue_bar_p2[1]+3*bar_box.font_height),  # x,y
+                    bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,
@@ -427,7 +426,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[2]:03}",
                 (bar_box.step1_blue_bar_p1[0],
-                    bar_box.step1_blue_bar_p2[1]+4*bar_box.font_height),  # x,y
+                    bar_box.bottom+4*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,

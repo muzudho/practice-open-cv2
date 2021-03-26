@@ -16,10 +16,16 @@ def calc_step2(color, upper_bound, height, ceil_height, base_line):
     """色変換計算ステップ２"""
     expected_height = height - ceil_height - base_line
     zoom = (upper_bound-base_line) / expected_height
-    new_color = (
-        int((color[0]-base_line)/zoom+base_line),
-        int((color[1]-base_line)/zoom+base_line),
-        int((color[2]-base_line)/zoom+base_line))
+    if zoom == 0:
+        new_color = (
+            int(base_line),
+            int(base_line),
+            int(base_line))
+    else:
+        new_color = (
+            int((color[0]-base_line)/zoom+base_line),
+            int((color[1]-base_line)/zoom+base_line),
+            int((color[2]-base_line)/zoom+base_line))
     # print(
     #    f"color={color} upper_bound={upper_bound} height={height} base_line={base_line} zoom={zoom} new_color={new_color}")
     return new_color

@@ -480,7 +480,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[0]:02x}",
                     (self.step1_red_bar_p1[0]+feeling,
-                     self.step1_red_bar_p2[1]+self.font_height),  # x,y
+                     self.bottom+self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     RED,
@@ -489,7 +489,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[0]:03}",
                     (self.step1_red_bar_p1[0],
-                     self.step1_red_bar_p2[1]+2*self.font_height),  # x,y
+                     self.bottom+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     RED,
@@ -499,7 +499,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[1]:02x}",
                     (self.step1_green_bar_p1[0]+feeling,
-                     self.step1_green_bar_p2[1]+self.font_height),  # x,y
+                     self.bottom+self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     GREEN,
@@ -508,7 +508,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[1]:03}",
                     (self.step1_green_bar_p1[0],
-                     self.step1_green_bar_p2[1]+2*self.font_height),  # x,y
+                     self.bottom+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     GREEN,
@@ -518,7 +518,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[2]:02x}",
                     (self.step1_blue_bar_p1[0]+feeling,
-                     self.step1_blue_bar_p2[1]+self.font_height),  # x,y
+                     self.bottom+self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     BLUE,
@@ -527,7 +527,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[2]:03}",
                     (self.step1_blue_bar_p1[0],
-                     self.step1_blue_bar_p2[1]+2*self.font_height),  # x,y
+                     self.bottom+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     BLUE,

@@ -328,7 +328,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
-                  right_bottom, step1_color, thickness=-1)  # 色見本
+                  right_bottom, rank23_color, thickness=-1)  # 色見本
 
     rank23a_color = bar_box.create_rank23a_color()  # step2 色値
     bar_box.draw_rgb_number(canvas, rank23a_color)  # step2 RGB値テキスト
@@ -347,7 +347,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     upper_bound_value = max(
         rank23a_color[0], rank23a_color[1], rank23a_color[2])
     step2_color = calc_step2(
-        step2_color, upper_bound_value, 255, ceil_height, base_line)
+        rank23a_color, upper_bound_value, 255, ceil_height, base_line)
 
     # 時計の針
     clock_hand_len = 7*GRID_INTERVAL_H

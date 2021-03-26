@@ -321,9 +321,23 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     step1_color = bar_box.create_step1_color()  # step1 色値
     draw_step1_rgb_number(canvas, step1_color, bar_box)  # step1 RGB値テキスト
+    color_example_width = 4*GRID_INTERVAL_H
+    color_example_left = int(bar_box.left - 1.5 * color_example_width)
+    left_top = (color_example_left, int(
+        bar_box.bottom+6*GRID_INTERVAL_H))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, step1_color, thickness=-1)  # 色見本
 
     step2_color = bar_box.create_step2_color()  # step2 色値
     bar_box.draw_rgb_number(canvas, step2_color)  # step2 RGB値テキスト
+    left_top = (color_example_left, int(
+        bar_box.bottom+2*GRID_INTERVAL_H))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, step2_color, thickness=-1)  # 色見本
 
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
 

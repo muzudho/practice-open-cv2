@@ -311,8 +311,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     bar_box.draw_bars(canvas)  # RGBバー
 
-    step1_color = bar_box.create_step1_color()  # step1 色値
-    draw_step1_rgb_number(canvas, step1_color, bar_box)  # step1 RGB値テキスト
+    rank23_color = bar_box.create_rank23_color()  # step1 色値
+    draw_rank23_rgb_number(canvas, rank23_color, bar_box)  # step1 RGB値テキスト
 
     # 色見本
     color_example_width = 4*GRID_INTERVAL_H
@@ -330,21 +330,22 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.rectangle(canvas, left_top,
                   right_bottom, step1_color, thickness=-1)  # 色見本
 
-    step2_color = bar_box.create_step2_color()  # step2 色値
-    bar_box.draw_rgb_number(canvas, step2_color)  # step2 RGB値テキスト
+    rank23a_color = bar_box.create_rank23a_color()  # step2 色値
+    bar_box.draw_rgb_number(canvas, rank23a_color)  # step2 RGB値テキスト
     left_top = (color_example_left, int(
         bar_box.bottom+2*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
-                  right_bottom, step2_color, thickness=-1)  # 色見本
+                  right_bottom, rank23a_color, thickness=-1)  # 色見本
 
     bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
     bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
 
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value
-    upper_bound_value = max(step2_color[0], step2_color[1], step2_color[2])
+    upper_bound_value = max(
+        rank23a_color[0], rank23a_color[1], rank23a_color[2])
     step2_color = calc_step2(
         step2_color, upper_bound_value, 255, ceil_height, base_line)
 
@@ -383,7 +384,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     return canvas
 
 
-def draw_step1_rgb_number(canvas, color, bar_box):
+def draw_rank23_rgb_number(canvas, color, bar_box):
     """RGB値テキストを描きます"""
 
     feeling = 13

@@ -435,19 +435,34 @@ class BarBox():
         return self.__step1_blue_bar_p2[1] - self.__step1_blue_bar_p1[1]
 
     @property
-    def red_step2_height(self):
+    def red_rank23a_height(self):
         """Rバーの縦幅"""
         return self.bottom - self.__addition_red_bar_p1[1]
 
     @property
-    def green_step2_height(self):
+    def green_rank23a_height(self):
         """Gバーの縦幅"""
         return self.bottom - self.__addition_green_bar_p1[1]
 
     @property
-    def blue_step2_height(self):
+    def blue_rank23a_height(self):
         """Bバーの縦幅"""
         return self.bottom - self.__addition_blue_bar_p1[1]
+
+    @property
+    def red_rank23_height(self):
+        """Rバーの縦幅"""
+        return self.bottom - self.__step1_red_bar_p1[1]
+
+    @property
+    def green_rank23_height(self):
+        """Gバーの縦幅"""
+        return self.bottom - self.__step1_green_bar_p1[1]
+
+    @property
+    def blue_rank23_height(self):
+        """Bバーの縦幅"""
+        return self.bottom - self.__step1_blue_bar_p1[1]
 
     @property
     def thickness(self):
@@ -599,19 +614,19 @@ class BarBox():
         cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.top3),
                       (self.step1_blue_bar_p2[0], self.bottom), LIGHT_BLUE, thickness=-1)
 
-    def create_step1_color(self):
+    def create_rank23_color(self):
         """色を作成"""
         return (
-            int(self.red_step1_height/self.height*255),
-            int(self.green_step1_height/self.height*255),
-            int(self.blue_step1_height/self.height*255))
+            int(self.red_rank23_height/self.height*255),
+            int(self.green_rank23_height/self.height*255),
+            int(self.blue_rank23_height/self.height*255))
 
-    def create_step2_color(self):
+    def create_rank23a_color(self):
         """色を作成"""
         return (
-            int(self.red_step2_height/self.height*255),
-            int(self.green_step2_height/self.height*255),
-            int(self.blue_step2_height/self.height*255))
+            int(self.red_rank23a_height/self.height*255),
+            int(self.green_rank23a_height/self.height*255),
+            int(self.blue_rank23a_height/self.height*255))
 
     @property
     def ceil_height_rgb_value(self):

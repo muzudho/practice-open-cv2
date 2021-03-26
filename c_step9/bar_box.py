@@ -479,12 +479,13 @@ class BarBox():
         """RGB値テキストを描きます"""
 
         feeling = 13
+        top = self.bottom+int(1.6*self.font_height)
 
         # 16進R値テキスト
         cv2.putText(canvas,
                     f"{color[0]:02x}",
                     (self.step1_red_bar_p1[0]+self.width+feeling,
-                     self.bottom+2*self.font_height),  # x,y
+                     top),  # x,y
                     self.font,
                     self.font_scale,
                     RED,
@@ -493,7 +494,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[0]:03}",
                     (self.step1_red_bar_p1[0],
-                     self.bottom+2*self.font_height),  # x,y
+                     top),  # x,y
                     self.font,
                     self.font_scale,
                     RED,
@@ -503,7 +504,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[1]:02x}",
                     (self.step1_red_bar_p1[0]+self.width+feeling+int(self.one_width*2/3),
-                     self.bottom+2*self.font_height),  # x,y
+                     top),  # x,y
                     self.font,
                     self.font_scale,
                     GREEN,
@@ -512,7 +513,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[1]:03}",
                     (self.step1_green_bar_p1[0],
-                     self.bottom+2*self.font_height),  # x,y
+                     top),  # x,y
                     self.font,
                     self.font_scale,
                     GREEN,
@@ -522,7 +523,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[2]:02x}",
                     (self.step1_red_bar_p1[0]+self.width+feeling+int(2*self.one_width*2/3),
-                     self.bottom+2*self.font_height),  # x,y
+                     top),  # x,y
                     self.font,
                     self.font_scale,
                     BLUE,
@@ -531,7 +532,7 @@ class BarBox():
         cv2.putText(canvas,
                     f"{color[2]:03}",
                     (self.step1_blue_bar_p1[0],
-                     self.bottom+2*self.font_height),  # x,y
+                     top),  # x,y
                     self.font,
                     self.font_scale,
                     BLUE,

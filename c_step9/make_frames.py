@@ -14,8 +14,8 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 460
-CANVAS_HEIGHT = 280
+CANVAS_WIDTH = 430  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_HEIGHT = 240
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -398,12 +398,13 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     """RGB値テキストを描きます"""
 
     feeling = 13
+    top = bar_box.bottom+int(2.6*bar_box.font_height)
 
     # 16進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:02x}",
                 (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling,
-                 bar_box.bottom+3*bar_box.font_height),  # x,y
+                 top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -412,7 +413,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[0]:03}",
                 (bar_box.step1_red_bar_p1[0],
-                    bar_box.bottom+3*bar_box.font_height),  # x,y
+                    top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -422,7 +423,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[1]:02x}",
                 (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling+int(bar_box.one_width*2/3),
-                 bar_box.bottom+3*bar_box.font_height),  # x,y
+                 top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -431,7 +432,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[1]:03}",
                 (bar_box.step1_green_bar_p1[0],
-                    bar_box.bottom+3*bar_box.font_height),  # x,y
+                    top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -441,7 +442,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[2]:02x}",
                 (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling+int(2*bar_box.one_width*2/3),
-                 bar_box.bottom+3*bar_box.font_height),  # x,y
+                 top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,
@@ -450,7 +451,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[2]:03}",
                 (bar_box.step1_blue_bar_p1[0],
-                    bar_box.bottom+3*bar_box.font_height),  # x,y
+                    top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,

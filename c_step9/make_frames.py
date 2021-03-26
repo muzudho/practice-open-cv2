@@ -126,18 +126,49 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_window.blue_bar_p2 = (
             bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
 
+        upper_bound_px = bar_window.get_upper_bound_y()
+        longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
+        # print(
+        #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
+        zoom = longest_bar_height / bar_window.height
+        # print(f"zoom={zoom}")
+        red_add = int(bar_window.red_height / zoom) - \
+            bar_window.red_height
+        green_add = int(bar_window.green_height / zoom) - \
+            bar_window.green_height
+        blue_add = int(bar_window.blue_height / zoom) - \
+            bar_window.blue_height
+        #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
+
+        bar_box.red_addition = red_add
+        bar_box.green_addition = green_add
+        bar_box.blue_addition = blue_add
+
         # バーR
-        bar_box.red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
-        bar_box.red_bar_p2 = (
+        bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
+        bar_box.step1_red_bar_p2 = (
             bar_box.red_left+bar_box.one_width, bar_box.bottom)
+        bar_box.addition_red_bar_p1 = (
+            bar_box.red_left, bar_box.step1_red_bar_p1[1]-bar_box.red_addition)  # yは逆さ
+        bar_box.addition_red_bar_p2 = (
+            bar_box.red_left+bar_box.one_width, circle_rail.red_p[1])
         # バーG
-        bar_box.green_bar_p1 = (bar_box.green_left, circle_rail.green_p[1])
-        bar_box.green_bar_p2 = (
+        bar_box.step1_green_bar_p1 = (
+            bar_box.green_left, circle_rail.green_p[1])
+        bar_box.step1_green_bar_p2 = (
             bar_box.green_left+bar_box.one_width, bar_box.bottom)
+        bar_box.addition_green_bar_p1 = (
+            bar_box.green_left, bar_box.step1_green_bar_p1[1]-bar_box.green_addition)
+        bar_box.addition_green_bar_p2 = (
+            bar_box.green_left+bar_box.one_width, circle_rail.green_p[1])
         # バーB
-        bar_box.blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
-        bar_box.blue_bar_p2 = (
+        bar_box.step1_blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
+        bar_box.step1_blue_bar_p2 = (
             bar_box.blue_left+bar_box.one_width, bar_box.bottom)
+        bar_box.addition_blue_bar_p1 = (
+            bar_box.blue_left, bar_box.step1_blue_bar_p1[1]-bar_box.blue_addition)
+        bar_box.addition_blue_bar_p2 = (
+            bar_box.blue_left+bar_box.one_width, circle_rail.blue_p[1])
 
         # 外環状
         ceil_height = bar_box.ceil_height_rgb_value
@@ -309,24 +340,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     cv2.line(canvas, circle_rail.blue_p,
              (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
 
-    upper_bound_px = bar_window.get_upper_bound_y()
-
-    longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
-    # print(
-    #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
-    zoom = longest_bar_height / bar_window.height
-    # print(f"zoom={zoom}")
-    red_add = int(bar_window.red_height / zoom) - \
-        bar_window.red_height
-    green_add = int(bar_window.green_height / zoom) - \
-        bar_window.green_height
-    blue_add = int(bar_window.blue_height / zoom) - \
-        bar_window.blue_height
-    #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
-
-    bar_box.red_addition = red_add
-    bar_box.green_addition = green_add
-    bar_box.blue_addition = blue_add
     bar_box.draw_bars(canvas)  # RGBバー
 
     step1_color = bar_box.create_step1_color()  # step1 色値
@@ -364,8 +377,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 16進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:02x}",
-                (bar_box.red_bar_p1[0]+feeling,
-                    bar_box.red_bar_p2[1]+3*bar_box.font_height),  # x,y
+                (bar_box.step1_red_bar_p1[0]+feeling,
+                    bar_box.step1_red_bar_p2[1]+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -373,8 +386,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 10進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:03}",
-                (bar_box.red_bar_p1[0],
-                    bar_box.red_bar_p2[1]+4*bar_box.font_height),  # x,y
+                (bar_box.step1_red_bar_p1[0],
+                    bar_box.step1_red_bar_p2[1]+4*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -383,8 +396,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 16進G値テキスト
     cv2.putText(canvas,
                 f"{color[1]:02x}",
-                (bar_box.green_bar_p1[0]+feeling,
-                    bar_box.green_bar_p2[1]+3*bar_box.font_height),  # x,y
+                (bar_box.step1_green_bar_p1[0]+feeling,
+                    bar_box.step1_green_bar_p2[1]+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -392,8 +405,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 10進G値テキスト
     cv2.putText(canvas,
                 f"{color[1]:03}",
-                (bar_box.green_bar_p1[0],
-                    bar_box.green_bar_p2[1]+4*bar_box.font_height),  # x,y
+                (bar_box.step1_green_bar_p1[0],
+                    bar_box.step1_green_bar_p2[1]+4*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -402,8 +415,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 16進B値テキスト
     cv2.putText(canvas,
                 f"{color[2]:02x}",
-                (bar_box.blue_bar_p1[0]+feeling,
-                    bar_box.blue_bar_p2[1]+3*bar_box.font_height),  # x,y
+                (bar_box.step1_blue_bar_p1[0]+feeling,
+                    bar_box.step1_blue_bar_p2[1]+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,
@@ -411,8 +424,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 10進B値テキスト
     cv2.putText(canvas,
                 f"{color[2]:03}",
-                (bar_box.blue_bar_p1[0],
-                    bar_box.blue_bar_p2[1]+4*bar_box.font_height),  # x,y
+                (bar_box.step1_blue_bar_p1[0],
+                    bar_box.step1_blue_bar_p2[1]+4*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,

@@ -330,15 +330,15 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, circle_rail.red_p,
-             (bar_window.red_bar_p1[0], circle_rail.red_p[1]), LIGHT_RED, thickness=2)
+             (bar_box.step1_red_bar_p1[0], circle_rail.red_p[1]), LIGHT_RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, circle_rail.green_p,
-             (bar_window.green_bar_p1[0], circle_rail.green_p[1]), LIGHT_GREEN, thickness=2)
+             (bar_box.step1_green_bar_p1[0], circle_rail.green_p[1]), LIGHT_GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, circle_rail.blue_p,
-             (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
+             (bar_box.step1_blue_bar_p1[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
 
     bar_box.draw_bars(canvas)  # RGBバー
 
@@ -349,8 +349,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     bar_box.draw_rgb_number(canvas, step2_color)  # step2 RGB値テキスト
 
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
-
-    bar_window.draw_bars(canvas)  # 調整前のバー描画
 
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value

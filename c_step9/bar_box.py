@@ -582,7 +582,7 @@ class BarBox():
         cv2.rectangle(canvas, self.addition_blue_bar_p1,
                       self.addition_blue_bar_p2, BLUE, thickness=-1)
         cv2.rectangle(canvas, self.step1_blue_bar_p1,
-                      self.step1_blue_bar_p2, BLUE, thickness=-1)
+                      self.step1_blue_bar_p2, LIGHT_BLUE, thickness=-1)
         cv2.rectangle(canvas, (self.step1_blue_bar_p1[0], self.top3),
                       (self.step1_blue_bar_p2[0], self.bottom), LIGHT_BLUE, thickness=-1)
 

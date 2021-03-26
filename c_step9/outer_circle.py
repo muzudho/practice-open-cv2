@@ -15,6 +15,7 @@ class OuterCircle():
         self.__phases = 1  # 位相の段階数
         self.__circumference = 360  # 半径１の円の一周の長さ
         self.__unit_arc = self.__circumference/self.__phases  # 等分割した１つの弧
+        self.__color_list = []
 
     @property
     def origin(self):
@@ -62,26 +63,23 @@ class OuterCircle():
     def unit_arc(self, val):
         self.__unit_arc = val
 
+    @property
+    def color_list(self):
+        """色のリスト"""
+        return self.__color_list
+
+    @color_list.setter
+    def color_list(self, val):
+        self.__color_list = val
+
     def draw_me(self, canvas, bar_rates, ceil_height, base_line):
         """描きます"""
-
-        color_list = []
-        for i in range(0, self.phases):
-            if self.phase < i:
-                break
-            theta = i * self.unit_arc
-            color = calc_color(theta, bar_rates)
-            upper_bound = max(color[0], color[1], color[2])
-            # print(f"upper_bound={upper_bound}")
-            color = calc_step2(color, upper_bound, 255, ceil_height, base_line)
-            color_list.append(color)
-
         # 色相環
-        for i in range(0, self.phases):
-            if self.phase < i:
-                break
+        color_count = len(self.color_list)
+        for i in range(0, color_count):
             theta = i * self.unit_arc
-            color = color_list[i]
+            print(f"i={i} color_count={color_count}")
+            color = self.color_list[i]
             # print(f"[{i}] color={color}")
 
             # 円弧

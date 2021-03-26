@@ -4,7 +4,7 @@
 import cv2
 import numpy as np
 from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE
-from color_calc import calc_step2
+from color_calc import calc_step2, calc_color
 from bar_box import BarBox
 from bar_window import BarWindow
 from circle_rail import CircleRail
@@ -74,10 +74,11 @@ def main():
         tone_name = TONE_NAME[i]
 
         # 描画：トーン名と バー箱 の紹介
+        outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
             bar_box, _circle_rail, _brush_point, _bar_window, _outer_circle = make_scene1(
-                bar_rates)
+                bar_rates, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
@@ -94,11 +95,13 @@ def main():
 def make_circle(canvas, seq, bar_rates, tone_name):
     """色相環一周分の画像を出力"""
 
+    outer_circle = OuterCircle()
+
     for phase in range(0, PHASE_COUNTS):
         theta = 360/PHASE_COUNTS*phase
         canvas = make_canvas()
         bar_box, circle_rail, brush_point, bar_window, outer_circle = make_scene1(
-            bar_rates)
+            bar_rates, outer_circle)
         outer_circle.phase = phase
 
         # 円周上の点の位置
@@ -136,6 +139,21 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_box.blue_bar_p2 = (
             bar_box.blue_left+bar_box.one_width, bar_box.bottom)
 
+        # 外環状
+        ceil_height = bar_box.ceil_height_rgb_value
+        base_line = bar_box.base_line_rgb_value
+        # upper_bound_value = max(color[0], color[1], color[2])
+        # modified_color = calc_step2(
+        #    color, upper_bound_value, 255, ceil_height, base_line)
+        theta = outer_circle.phase * outer_circle.unit_arc
+        out_color = calc_color(theta, bar_box.rates)
+        upper_bound = max(out_color[0], out_color[1], out_color[2])
+        # print(f"upper_bound={upper_bound}")
+        out_color = calc_step2(out_color, upper_bound,
+                               255, ceil_height, base_line)
+        outer_circle.color_list.append(out_color)
+        #
+
         draw_grid(canvas)
         bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
@@ -158,7 +176,7 @@ def make_canvas():
                    MONO_BACKGROUND, dtype=np.uint8)
 
 
-def make_scene1(bar_rates):
+def make_scene1(bar_rates, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
@@ -166,7 +184,6 @@ def make_scene1(bar_rates):
     bar_window = BarWindow()
     circle_rail = CircleRail()
     brush_point = BrushPoint()
-    outer_circle = OuterCircle()
 
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
@@ -330,6 +347,8 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     modified_color = calc_step2(
         color, upper_bound_value, 255, ceil_height, base_line)
     brush_point.draw_me(canvas, modified_color)  # 塗り円
+
+    # 外環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状
 
     # cv2.imshow('Title', canvas)

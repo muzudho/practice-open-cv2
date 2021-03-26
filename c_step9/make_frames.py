@@ -14,8 +14,8 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE, FONT_HEIGHT
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 390  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 200
+CANVAS_WIDTH = 340  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_HEIGHT = 155
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -272,9 +272,10 @@ def draw_grid(canvas):
     """背景に罫線を引きます"""
     # 水平線グリッド
     for i in range(0, int(CANVAS_HEIGHT/GRID_INTERVAL_H)+1):
-        y_num = GRID_INTERVAL_H*i
-        cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
-                 PALE_GRAY, thickness=1)
+        if i % 2 == 0:  # ファイルサイズ削減のため間引き
+            y_num = GRID_INTERVAL_H*i
+            cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
+                     PALE_GRAY, thickness=1)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):
@@ -387,7 +388,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 def draw_rank23_rgb_number(canvas, color, bar_box):
     """RGB値テキストを描きます"""
 
-    feeling = 13
+    feeling = 2*GRID_INTERVAL_H
     top = bar_box.bottom+int(10*GRID_INTERVAL_H)
 
     # 16進R値テキスト

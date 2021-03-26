@@ -4,7 +4,7 @@
 import cv2
 import numpy as np
 from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
-from color_calc import calc_step2, calc_color
+from color_calc import calc_step1, calc_step2, append_rank3_to_color
 from bar_box import BarBox
 from circle_rail import CircleRail
 from brush_point import BrushPoint
@@ -73,11 +73,12 @@ def main():
         tone_name = TONE_NAME[i]
 
         # 描画：トーン名と バー箱 の紹介
+        inner_circle = OuterCircle()
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _brush_point, _outer_circle = make_scene1(
-                bar_rates, outer_circle)
+            bar_box, _circle_rail, _brush_point, _inner_circle, _outer_circle = make_scene1(
+                bar_rates, inner_circle, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
@@ -94,13 +95,15 @@ def main():
 def make_circle(canvas, seq, bar_rates, tone_name):
     """色相環一周分の画像を出力"""
 
+    inner_circle = OuterCircle()
     outer_circle = OuterCircle()
 
     for phase in range(0, PHASE_COUNTS):
         theta = 360/PHASE_COUNTS*phase
         canvas = make_canvas()
-        bar_box, circle_rail, brush_point, outer_circle = make_scene1(
-            bar_rates, outer_circle)
+        bar_box, circle_rail, brush_point, inner_circle, outer_circle = make_scene1(
+            bar_rates, inner_circle, outer_circle)
+        inner_circle.phase = phase
         outer_circle.phase = phase
 
         # 円周上の点の位置
@@ -158,22 +161,28 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         # 外環状
         ceil_height = bar_box.ceil_height_rgb_value
         base_line = bar_box.base_line_rgb_value
-        # upper_bound_value = max(color[0], color[1], color[2])
-        # step2_color = calc_step2(
-        #    color, upper_bound_value, 255, ceil_height, base_line)
+
+        theta = inner_circle.phase * inner_circle.unit_arc
+        color = calc_step1(theta)
+        inner_color = append_rank3_to_color(color, bar_box.rates)
+        inner_upper_bound = inner_circle.get_upper_bound_value(bar_box.rates)
+        inner_color = calc_step2(inner_color, inner_upper_bound,
+                                 255, ceil_height, base_line)
+        inner_circle.color_list.append(inner_color)
+
         theta = outer_circle.phase * outer_circle.unit_arc
-        out_color = calc_color(theta, bar_box.rates)
-        upper_bound = max(out_color[0], out_color[1], out_color[2])
-        # print(f"upper_bound={upper_bound}")
-        out_color = calc_step2(out_color, upper_bound,
-                               255, ceil_height, base_line)
-        outer_circle.color_list.append(out_color)
+        color = calc_step1(theta)
+        outer_color = append_rank3_to_color(color, bar_box.rates)
+        outer_upper_bound = outer_circle.get_upper_bound_value(bar_box.rates)
+        outer_color = calc_step2(outer_color, outer_upper_bound,
+                                 255, ceil_height, base_line)
+        outer_circle.color_list.append(outer_color)
         #
 
         draw_grid(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
-                             outer_circle)
+                             inner_circle, outer_circle)
         bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
@@ -191,7 +200,7 @@ def make_canvas():
                    MONO_BACKGROUND, dtype=np.uint8)
 
 
-def make_scene1(bar_rates, outer_circle):
+def make_scene1(bar_rates, inner_circle, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
@@ -234,6 +243,7 @@ def make_scene1(bar_rates, outer_circle):
     circle_rail.center = (CRAIL_LEFT+circle_rail.range,
                           circle_rail.top+circle_rail.range)  # x, y
     brush_point.origin = (circle_rail.center[0], circle_rail.center[1])
+    inner_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
     # RGBバー２段目
@@ -251,11 +261,14 @@ def make_scene1(bar_rates, outer_circle):
     bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
     bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
 
-    outer_circle.area_size = (brush_point.distance+2*GRID_INTERVAL_H,
+    inner_circle.area_size = (brush_point.distance+2*GRID_INTERVAL_H,
                               brush_point.distance+2*GRID_INTERVAL_H)
+    inner_circle.phases = PHASE_COUNTS
+    outer_circle.area_size = (brush_point.distance+3*GRID_INTERVAL_H,
+                              brush_point.distance+3*GRID_INTERVAL_H)
     outer_circle.phases = PHASE_COUNTS
 
-    return bar_box, circle_rail, brush_point, outer_circle
+    return bar_box, circle_rail, brush_point, inner_circle, outer_circle
 
 
 def draw_grid(canvas):
@@ -282,9 +295,8 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, outer_circle):
-    """アニメの１コマを作成します
-    """
+def draw_canvas(canvas, bar_box, circle_rail, brush_point, inner_circle, outer_circle):
+    """アニメの１コマを作成します"""
 
     circle_rail.draw_me(canvas)  # 円レール
 
@@ -330,7 +342,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, outer_circle):
         step2_color, upper_bound_value, 255, ceil_height, base_line)
     brush_point.draw_me(canvas, step1_color)  # 塗り円
 
-    # 外環状
+    inner_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 内環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状
 
     # cv2.imshow('Title', canvas)

@@ -31,20 +31,18 @@ def calc_step2(color, upper_bound, height, ceil_height, base_line):
     return new_color
 
 
-def calc_color(theta, bar_rate):
-    """(r,g,b)を返します
+def append_rank3_to_color(color, bar_rate):
+    """(red_height_px, green_height_px, blue_height_px)を返します
     """
+
+    rank2_red_px = 255*bar_rate[1]*color[0]
+    rank2_green_px = 255*bar_rate[1]*color[1]
+    rank2_blue_px = 255*bar_rate[1]*color[2]
 
     # 下駄
     offset = 255*bar_rate[2]
+    rank23_red_px = int(rank2_red_px+offset)
+    rank23_green_px = int(rank2_green_px+offset)
+    rank23_blue_px = int(rank2_blue_px+offset)
 
-    color = calc_step1(theta)
-    red_y = 255*bar_rate[1]*color[0]
-    green_y = 255*bar_rate[1]*color[1]
-    blue_y = 255*bar_rate[1]*color[2]
-
-    red_y = int(red_y+offset)
-    green_y = int(green_y+offset)
-    blue_y = int(blue_y+offset)
-
-    return (red_y, green_y, blue_y)
+    return (rank23_red_px, rank23_green_px, rank23_blue_px)

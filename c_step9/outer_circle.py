@@ -1,7 +1,7 @@
 """外環状"""
 
 import cv2
-from color_calc import calc_color, calc_step2
+from color_calc import append_rank3_to_color, calc_step1, calc_step2
 from conf import GRID_INTERVAL_H
 
 
@@ -92,3 +92,9 @@ class OuterCircle():
                         theta+self.unit_arc,
                         color,
                         thickness=int(GRID_INTERVAL_H*3/2))
+
+    def get_upper_bound_value(self, bar_rates):
+        theta = self.phase * self.unit_arc
+        color = calc_step1(theta)
+        color = append_rank3_to_color(color, bar_rates)
+        return max(color[0], color[1], color[2])

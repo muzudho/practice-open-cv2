@@ -14,7 +14,7 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 450
+CANVAS_WIDTH = 460
 CANVAS_HEIGHT = 280
 CHANNELS = 3
 # モノクロ背景 0黒→255白
@@ -89,7 +89,11 @@ def main():
             seq += 1
 
         # 描画：色相環のアニメーション表示
-        seq = make_circle(canvas, seq, bar_rates, tone_name)
+        seq, canvas = make_circle(canvas, seq, bar_rates, tone_name)
+
+        for _ in range(0, 10):  # Wait frames
+            cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+            seq += 1
 
 
 def make_circle(canvas, seq, bar_rates, tone_name):
@@ -188,7 +192,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
         seq += 1
 
-    return seq
+    return seq, canvas
 
 
 def make_canvas():
@@ -347,18 +351,18 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.rectangle(canvas, left_top,
                   right_bottom, step2_color, thickness=-1)  # 色見本
     # Stretch
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    font_height = 20
-    font_scale = 0.6
-    line_type = 2
-    cv2.putText(canvas,
-                f"Stretch",
-                (bar_box.right+GRID_INTERVAL_H,
-                 int(bar_box.bottom+4*GRID_INTERVAL_H)),  # x,y
-                font,
-                font_scale,
-                LIGHT_GRAY,
-                line_type)
+    #font = cv2.FONT_HERSHEY_SIMPLEX
+    #font_height = 20
+    #font_scale = 0.6
+    #line_type = 2
+    # cv2.putText(canvas,
+    #            f"Stretch",
+    #            (bar_box.right+GRID_INTERVAL_H,
+    #             int(bar_box.bottom+3*GRID_INTERVAL_H)),  # x,y
+    #            font,
+    #            font_scale,
+    #            LIGHT_GRAY,
+    #            line_type)
 
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
 
@@ -398,8 +402,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 16進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:02x}",
-                (bar_box.step1_red_bar_p1[0]+feeling,
-                    bar_box.bottom+3*bar_box.font_height),  # x,y
+                (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling,
+                 bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -408,7 +412,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[0]:03}",
                 (bar_box.step1_red_bar_p1[0],
-                    bar_box.bottom+4*bar_box.font_height),  # x,y
+                    bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -417,8 +421,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 16進G値テキスト
     cv2.putText(canvas,
                 f"{color[1]:02x}",
-                (bar_box.step1_green_bar_p1[0]+feeling,
-                    bar_box.bottom+3*bar_box.font_height),  # x,y
+                (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling+int(bar_box.one_width*2/3),
+                 bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -427,7 +431,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[1]:03}",
                 (bar_box.step1_green_bar_p1[0],
-                    bar_box.bottom+4*bar_box.font_height),  # x,y
+                    bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -436,8 +440,8 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     # 16進B値テキスト
     cv2.putText(canvas,
                 f"{color[2]:02x}",
-                (bar_box.step1_blue_bar_p1[0]+feeling,
-                    bar_box.bottom+3*bar_box.font_height),  # x,y
+                (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling+int(2*bar_box.one_width*2/3),
+                 bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,
@@ -446,7 +450,7 @@ def draw_step1_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[2]:03}",
                 (bar_box.step1_blue_bar_p1[0],
-                    bar_box.bottom+4*bar_box.font_height),  # x,y
+                    bar_box.bottom+3*bar_box.font_height),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,

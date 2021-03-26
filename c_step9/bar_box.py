@@ -91,6 +91,10 @@ class BarBox():
         self.__top3 = val
 
     @property
+    def width(self):
+        return self.__right - self.__left
+
+    @property
     def height(self):
         """箱の縦幅"""
         return self.__height
@@ -479,8 +483,8 @@ class BarBox():
         # 16進R値テキスト
         cv2.putText(canvas,
                     f"{color[0]:02x}",
-                    (self.step1_red_bar_p1[0]+feeling,
-                     self.bottom+self.font_height),  # x,y
+                    (self.step1_red_bar_p1[0]+self.width+feeling,
+                     self.bottom+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     RED,
@@ -498,8 +502,8 @@ class BarBox():
         # 16進G値テキスト
         cv2.putText(canvas,
                     f"{color[1]:02x}",
-                    (self.step1_green_bar_p1[0]+feeling,
-                     self.bottom+self.font_height),  # x,y
+                    (self.step1_red_bar_p1[0]+self.width+feeling+int(self.one_width*2/3),
+                     self.bottom+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     GREEN,
@@ -517,8 +521,8 @@ class BarBox():
         # 16進B値テキスト
         cv2.putText(canvas,
                     f"{color[2]:02x}",
-                    (self.step1_blue_bar_p1[0]+feeling,
-                     self.bottom+self.font_height),  # x,y
+                    (self.step1_red_bar_p1[0]+self.width+feeling+int(2*self.one_width*2/3),
+                     self.bottom+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     BLUE,

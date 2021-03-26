@@ -3,6 +3,7 @@
 
 import cv2
 from colors import LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, BLACK, RED, GREEN, BLUE
+from conf import GRID_INTERVAL_H
 
 
 class BarBox():
@@ -490,7 +491,7 @@ class BarBox():
         """RGB値テキストを描きます"""
 
         feeling = 13
-        top = self.bottom+int(1.6*self.font_height)
+        top = self.bottom+int(5*GRID_INTERVAL_H)
 
         # 16進R値テキスト
         cv2.putText(canvas,

@@ -9,7 +9,7 @@ from color_calc import calc_step1, calc_step2, append_rank3_to_color
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
-from conf import GRID_INTERVAL_H, PHASE_COUNTS
+from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE, FONT_HEIGHT
 
 
 # 描画する画像を作る
@@ -228,8 +228,8 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
                        2*int(1.5*GRID_INTERVAL_H))
     # バーの筋
-    bar_box.font_height = 20
-    bar_box.font_scale = 0.6
+    bar_box.font_height = FONT_HEIGHT
+    bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
@@ -281,11 +281,11 @@ def draw_tone_name(canvas, bar_box, tone_name):
     """トーン名を描きます"""
     font = cv2.FONT_HERSHEY_SIMPLEX
     font_height = 20
-    font_scale = 0.6
+    font_scale = FONT_SCALE
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, BAR_TOP1-font_height),  # x,y
+                (bar_box.left, BAR_TOP1-3*GRID_INTERVAL_H),  # x,y
                 font,
                 font_scale,
                 BLACK,
@@ -388,7 +388,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     """RGB値テキストを描きます"""
 
     feeling = 13
-    top = bar_box.bottom+int(2.6*bar_box.font_height)
+    top = bar_box.bottom+int(10*GRID_INTERVAL_H)
 
     # 16進R値テキスト
     cv2.putText(canvas,

@@ -19,6 +19,7 @@ class BarBox():
         self.__height2 = 0
         self.__height3 = 0
         self.__one_width = 0
+        self.__gap = 0
         self.__left = 0
         self.__right = 0
         self.__bottom = 0
@@ -125,6 +126,15 @@ class BarBox():
     @one_width.setter
     def one_width(self, val):
         self.__one_width = val
+
+    @property
+    def gap(self):
+        """バーの間隔"""
+        return self.__gap
+
+    @gap.setter
+    def gap(self, val):
+        self.__gap = val
 
     @property
     def left(self):
@@ -412,10 +422,9 @@ class BarBox():
     def draw_bar_rate(self, canvas):
         """バー率を描きます"""
         rate_y = int((self.top1 + self.top2)/2)
-        gap = int(self.one_width/2)
         cv2.putText(canvas,
                     f"{self.rates[0]}",
-                    (self.right+gap, rate_y),  # x,y
+                    (self.right+self.gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     LIGHT_GRAY,
@@ -423,7 +432,7 @@ class BarBox():
         rate_y = int((self.top2 + self.top3)/2)
         cv2.putText(canvas,
                     f"{self.rates[1]}",
-                    (self.right+gap, rate_y),  # x,y
+                    (self.right+self.gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     BLACK,
@@ -431,7 +440,7 @@ class BarBox():
         rate_y = int((self.top3 + self.bottom)/2)
         cv2.putText(canvas,
                     f"{self.rates[2]}",
-                    (self.right+gap, rate_y),  # x,y
+                    (self.right+self.gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     LIGHT_GRAY,

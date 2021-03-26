@@ -114,14 +114,14 @@ def make_circle(canvas, seq, bar_rates, tone_name):
             bar_window.red_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
         # バーG
         bar_window.green_bar_p1 = (
-            bar_window.left_top[0]+bar_window.one_width+bar_window.interval,
+            bar_window.left_top[0]+bar_window.one_width+bar_window.gap,
             circle_rail.green_p[1])
         bar_window.green_bar_p2 = (
             bar_window.green_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
         # バーB
         bar_window.blue_bar_p1 = (
             bar_window.left_top[0]+2 *
-            (bar_window.one_width+bar_window.interval),
+            (bar_window.one_width+bar_window.gap),
             circle_rail.blue_p[1])
         bar_window.blue_bar_p2 = (
             bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
@@ -193,6 +193,9 @@ def make_scene1(bar_rates, outer_circle):
     bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
     bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
     bar_box.one_width = 24
+    bar_box.gap = 1
+    bar_window.one_width = 24
+    bar_window.gap = 1
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
     # 塗った円
@@ -200,10 +203,8 @@ def make_scene1(bar_rates, outer_circle):
     brush_point.range = int(1.5*GRID_INTERVAL_H)
 
     # バー箱の左
-    bar_window.one_width = 24
-    bar_window.interval = 1
     bar_window_space = 3*bar_window.one_width + \
-        2*bar_window.interval+4*GRID_INTERVAL_H
+        2*bar_window.gap+4*GRID_INTERVAL_H
     range_width = 10
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
@@ -245,7 +246,7 @@ def make_scene1(bar_rates, outer_circle):
         int(CRAIL_LEFT + width*GRID_INTERVAL_H + 2*brush_point.range),
         circle_rail.top)
     bar_window.right_bottom = (
-        bar_window.left_top[0] + 3*bar_window.one_width+2*bar_window.interval,
+        bar_window.left_top[0] + 3*bar_window.one_width+2*bar_window.gap,
         circle_rail.top+2*circle_rail.range)
 
     outer_circle.area_size = (brush_point.distance+2*GRID_INTERVAL_H,
@@ -331,7 +332,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     # 色値
     color = bar_box.create_color()
 
-    bar_box.draw_rgb_number(canvas, color)  # R値テキスト
+    bar_box.draw_rgb_number(canvas, color)  # RGB値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
 
     ceil_height = bar_box.ceil_height_rgb_value

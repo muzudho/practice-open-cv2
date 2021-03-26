@@ -13,7 +13,7 @@ class BarWindow():
         self.__left_top = (0, 0)
         self.__right_bottom = (0, 0)
         self.__one_width = 0
-        self.__interval = 0
+        self.__gap = 0
         self.__red_bar_p1 = (0, 0)
         self.__red_bar_p2 = (0, 0)
         self.__green_bar_p1 = (0, 0)
@@ -54,13 +54,13 @@ class BarWindow():
         self.__one_width = val
 
     @property
-    def interval(self):
+    def gap(self):
         """バーの間隔"""
-        return self.__interval
+        return self.__gap
 
-    @interval.setter
-    def interval(self, val):
-        self.__interval = val
+    @gap.setter
+    def gap(self, val):
+        self.__gap = val
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""

@@ -8,7 +8,6 @@ from colors import PALE_GRAY, LIGHT_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LI
 from color_calc import calc_step1, calc_step2, append_rank3_to_color
 from bar_box import BarBox
 from circle_rail import CircleRail
-from brush_point import BrushPoint
 from outer_circle import OuterCircle
 from conf import GRID_INTERVAL_H, PHASE_COUNTS
 
@@ -78,7 +77,7 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _brush_point, _inner_circle, _outer_circle = make_scene1(
+            bar_box, _circle_rail, _inner_circle, _outer_circle = make_scene1(
                 bar_rates, inner_circle, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
@@ -102,14 +101,13 @@ def make_circle(canvas, seq, bar_rates, tone_name):
     for phase in range(0, PHASE_COUNTS):
         theta = 360/PHASE_COUNTS*phase
         canvas = make_canvas()
-        bar_box, circle_rail, brush_point, inner_circle, outer_circle = make_scene1(
+        bar_box, circle_rail, inner_circle, outer_circle = make_scene1(
             bar_rates, inner_circle, outer_circle)
         inner_circle.phase = phase
         outer_circle.phase = phase
 
         # 円周上の点の位置
         circle_rail.theta = theta
-        brush_point.set_theta(theta)
 
         # バーR
         bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
@@ -180,7 +178,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
-        canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
+        canvas = draw_canvas(canvas, bar_box, circle_rail,
                              inner_circle, outer_circle)
         bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
@@ -205,7 +203,6 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
 
     bar_box = BarBox()
     circle_rail = CircleRail()
-    brush_point = BrushPoint()
 
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
@@ -218,16 +215,13 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.rate_text_gap = int(bar_box.one_width/2)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
-    # 塗った円
-    brush_point.distance = circle_rail.range + 2*GRID_INTERVAL_H
-    brush_point.range = int(1.5*GRID_INTERVAL_H)
 
     # バー箱の左
     range_width = 10
     outer_circle_margin = 3
     width = 2 * (range_width + outer_circle_margin)
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
-                       2*brush_point.range)
+                       2*int(1.5*GRID_INTERVAL_H))
     # バーの筋
     bar_box.font_height = 20
     bar_box.font_scale = 0.6
@@ -241,7 +235,6 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     circle_rail.top = BAR_TOP1 + bar_box.height1
     circle_rail.center = (CRAIL_LEFT+circle_rail.range,
                           circle_rail.top+circle_rail.range)  # x, y
-    brush_point.origin = (circle_rail.center[0], circle_rail.center[1])
     inner_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
@@ -260,14 +253,14 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
     bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
 
-    inner_circle.area_size = (brush_point.distance+int(1.6*GRID_INTERVAL_H),
-                              brush_point.distance+int(1.6*GRID_INTERVAL_H))
+    inner_circle.area_size = (circle_rail.range + 2*GRID_INTERVAL_H+int(1.6*GRID_INTERVAL_H),
+                              circle_rail.range + 2*GRID_INTERVAL_H+int(1.6*GRID_INTERVAL_H))
     inner_circle.phases = PHASE_COUNTS
-    outer_circle.area_size = (brush_point.distance+3*GRID_INTERVAL_H,
-                              brush_point.distance+3*GRID_INTERVAL_H)
+    outer_circle.area_size = (circle_rail.range + 2*GRID_INTERVAL_H+3*GRID_INTERVAL_H,
+                              circle_rail.range + 2*GRID_INTERVAL_H+3*GRID_INTERVAL_H)
     outer_circle.phases = PHASE_COUNTS
 
-    return bar_box, circle_rail, brush_point, inner_circle, outer_circle
+    return bar_box, circle_rail, inner_circle, outer_circle
 
 
 def draw_grid(canvas):
@@ -294,7 +287,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, brush_point, inner_circle, outer_circle):
+def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_me(canvas)  # 円レール
@@ -339,7 +332,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, inner_circle, outer_c
     upper_bound_value = max(step2_color[0], step2_color[1], step2_color[2])
     step2_color = calc_step2(
         step2_color, upper_bound_value, 255, ceil_height, base_line)
-    # brush_point.draw_me(canvas, BLACK)  # 塗り円
 
     # 時計の針
     clock_hand_len = 7*GRID_INTERVAL_H

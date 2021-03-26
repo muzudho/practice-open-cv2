@@ -384,42 +384,73 @@ class BarBox():
     def draw_rank2_box(self, canvas):
         """２段目の箱を描きます"""
         # 線の太さを考慮
-        thickness = 4
+        thickness_minus1 = 3
         cv2.rectangle(
             canvas,
-            (self.rank2_p1[0]-thickness, self.rank2_p1[1]-thickness),
-            (self.rank2_p2[0]+thickness, self.rank2_p2[1]+thickness),
+            (self.rank2_p1[0]-thickness_minus1,
+             self.rank2_p1[1]-thickness_minus1),
+            (self.rank2_p2[0]+thickness_minus1,
+             self.rank2_p2[1]+thickness_minus1),
             BLACK,
-            thickness=thickness)
+            thickness=thickness_minus1+1)
 
     def draw_rgb_number(self, canvas, color):
         """RGB値テキストを描きます"""
 
-        # R値テキスト
+        feeling = 13
+
+        # 16進R値テキスト
         cv2.putText(canvas,
                     f"{color[0]:02x}",
-                    (self.red_bar_p2[0]-self.one_width,
+                    (self.red_bar_p1[0]+feeling,
                      self.red_bar_p2[1]+self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     RED,
                     self.line_type)
+        # 10進R値テキスト
+        cv2.putText(canvas,
+                    f"{color[0]:03}",
+                    (self.red_bar_p1[0],
+                     self.red_bar_p2[1]+2*self.font_height),  # x,y
+                    self.font,
+                    self.font_scale,
+                    RED,
+                    self.line_type)
 
-        # G値テキスト
+        # 16進G値テキスト
         cv2.putText(canvas,
                     f"{color[1]:02x}",
-                    (self.green_bar_p2[0]-self.one_width,
+                    (self.green_bar_p1[0]+feeling,
                      self.green_bar_p2[1]+self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     GREEN,
                     self.line_type)
+        # 10進G値テキスト
+        cv2.putText(canvas,
+                    f"{color[1]:03}",
+                    (self.green_bar_p1[0],
+                     self.green_bar_p2[1]+2*self.font_height),  # x,y
+                    self.font,
+                    self.font_scale,
+                    GREEN,
+                    self.line_type)
 
-        # B値テキスト
+        # 16進B値テキスト
         cv2.putText(canvas,
                     f"{color[2]:02x}",
-                    (self.blue_bar_p2[0]-self.one_width,
+                    (self.blue_bar_p1[0]+feeling,
                      self.blue_bar_p2[1]+self.font_height),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLUE,
+                    self.line_type)
+        # 10進B値テキスト
+        cv2.putText(canvas,
+                    f"{color[2]:03}",
+                    (self.blue_bar_p1[0],
+                     self.blue_bar_p2[1]+2*self.font_height),  # x,y
                     self.font,
                     self.font_scale,
                     BLUE,

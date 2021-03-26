@@ -141,10 +141,10 @@ def make_circle(canvas, seq, bar_rates, tone_name):
             bar_box.blue_left+bar_box.one_width, bar_box.bottom)
 
         upper_bound_px = bar_box.get_step1_upper_bound_y()
-        longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
+        longest_rank2_bar_height = bar_box.top3 - upper_bound_px
         # print(
-        #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
-        zoom = longest_bar_height / bar_window.height
+        #    f"longest_rank2_bar_height={longest_rank2_bar_height} bar_box.height={bar_box.height}")
+        zoom = longest_rank2_bar_height / bar_box.height2
         # print(f"zoom={zoom}")
         red_add = int(bar_window.red_height / zoom) - \
             bar_window.red_height

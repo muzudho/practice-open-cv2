@@ -383,8 +383,14 @@ class BarBox():
 
     def draw_rank2_box(self, canvas):
         """２段目の箱を描きます"""
-        cv2.rectangle(canvas, self.rank2_p1,
-                      self.rank2_p2, BLACK, thickness=4)
+        # 線の太さを考慮
+        thickness = 4
+        cv2.rectangle(
+            canvas,
+            (self.rank2_p1[0]-thickness, self.rank2_p1[1]-thickness),
+            (self.rank2_p2[0]+thickness, self.rank2_p2[1]+thickness),
+            BLACK,
+            thickness=thickness)
 
     def draw_rgb_number(self, canvas, color):
         """RGB値テキストを描きます"""

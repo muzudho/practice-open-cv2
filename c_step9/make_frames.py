@@ -6,7 +6,6 @@ import numpy as np
 from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import calc_step2, calc_color
 from bar_box import BarBox
-from bar_window import BarWindow
 from circle_rail import CircleRail
 from brush_point import BrushPoint
 from outer_circle import OuterCircle
@@ -77,7 +76,7 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _brush_point, _bar_window, _outer_circle = make_scene1(
+            bar_box, _circle_rail, _brush_point, _outer_circle = make_scene1(
                 bar_rates, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
@@ -100,31 +99,13 @@ def make_circle(canvas, seq, bar_rates, tone_name):
     for phase in range(0, PHASE_COUNTS):
         theta = 360/PHASE_COUNTS*phase
         canvas = make_canvas()
-        bar_box, circle_rail, brush_point, bar_window, outer_circle = make_scene1(
+        bar_box, circle_rail, brush_point, outer_circle = make_scene1(
             bar_rates, outer_circle)
         outer_circle.phase = phase
 
         # 円周上の点の位置
         circle_rail.set_theta(theta)
         brush_point.set_theta(theta)
-
-        # バーR
-        bar_window.red_bar_p1 = (bar_window.left_top[0], circle_rail.red_p[1])
-        bar_window.red_bar_p2 = (
-            bar_window.red_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
-        # バーG
-        bar_window.green_bar_p1 = (
-            bar_window.left_top[0]+bar_window.one_width+bar_window.gap,
-            circle_rail.green_p[1])
-        bar_window.green_bar_p2 = (
-            bar_window.green_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
-        # バーB
-        bar_window.blue_bar_p1 = (
-            bar_window.left_top[0]+2 *
-            (bar_window.one_width+bar_window.gap),
-            circle_rail.blue_p[1])
-        bar_window.blue_bar_p2 = (
-            bar_window.blue_bar_p1[0]+bar_box.one_width, bar_window.right_bottom[1])
 
         # バーR
         bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
@@ -215,7 +196,6 @@ def make_scene1(bar_rates, outer_circle):
     """
 
     bar_box = BarBox()
-    bar_window = BarWindow()
     circle_rail = CircleRail()
     brush_point = BrushPoint()
 
@@ -228,8 +208,6 @@ def make_scene1(bar_rates, outer_circle):
     bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
     bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
     bar_box.rate_text_gap = int(bar_box.one_width/2)
-    bar_window.one_width = 36
-    bar_window.gap = 1
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
     # 塗った円
@@ -273,19 +251,11 @@ def make_scene1(bar_rates, outer_circle):
     bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
     bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
 
-    # バー窓の左（円レールが決まった後）
-    bar_window.left_top = (
-        int(CRAIL_LEFT + width*GRID_INTERVAL_H + 2*brush_point.range),
-        circle_rail.top)
-    bar_window.right_bottom = (
-        bar_window.left_top[0] + 3*bar_window.one_width+2*bar_window.gap,
-        circle_rail.top+2*circle_rail.range)
-
     outer_circle.area_size = (brush_point.distance+2*GRID_INTERVAL_H,
                               brush_point.distance+2*GRID_INTERVAL_H)
     outer_circle.phases = PHASE_COUNTS
 
-    return bar_box, circle_rail, brush_point, bar_window, outer_circle
+    return bar_box, circle_rail, brush_point, outer_circle
 
 
 def draw_grid(canvas):
@@ -358,7 +328,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, outer_circle):
     upper_bound_value = max(step2_color[0], step2_color[1], step2_color[2])
     step2_color = calc_step2(
         step2_color, upper_bound_value, 255, ceil_height, base_line)
-    brush_point.draw_me(canvas, step2_color)  # 塗り円
+    brush_point.draw_me(canvas, step1_color)  # 塗り円
 
     # 外環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状

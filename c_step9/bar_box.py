@@ -53,6 +53,7 @@ class BarBox():
         self.__red_addition = 0
         self.__green_addition = 0
         self.__blue_addition = 0
+        self.__thickness = 2
 
     @property
     def rates(self):
@@ -457,15 +458,19 @@ class BarBox():
         """Bバーの縦幅"""
         return self.blue_step1_height + + self.__addition_blue_bar_p2[1] - self.__addition_blue_bar_p1[1]
 
+    @property
+    def thickness(self):
+        return self.__thickness
+
     def draw_outline(self, canvas):
         """輪郭を描きます"""
         cv2.rectangle(canvas, self.rank1_p1,
-                      self.rank3_p2, LIGHT_GRAY, thickness=4)
+                      self.rank3_p2, LIGHT_GRAY, thickness=self.thickness)
 
     def draw_rank2_box(self, canvas):
         """２段目の箱を描きます"""
         # 線の太さを考慮
-        thickness_minus1 = 3
+        thickness_minus1 = self.thickness-1
         cv2.rectangle(
             canvas,
             (self.rank2_p1[0]-thickness_minus1,
@@ -570,28 +575,31 @@ class BarBox():
 
     def draw_bars(self, canvas):
         """バーを描きます"""
+
+        gap = int(self.one_width * 1/4)
+
         # バーR
         cv2.rectangle(canvas, self.addition_red_bar_p1,
-                      self.addition_red_bar_p2, RED, thickness=-1)
-        cv2.rectangle(canvas, self.step1_red_bar_p1,
+                      (self.step1_red_bar_p2[0], self.bottom), RED, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_red_bar_p1[0]+gap, self.step1_red_bar_p1[1]),
                       self.step1_red_bar_p2, LIGHT_RED, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_red_bar_p1[0], self.top3),  # yは逆さ
+        cv2.rectangle(canvas, (self.step1_red_bar_p1[0]+gap, self.top3),  # yは逆さ
                       (self.step1_red_bar_p2[0], self.bottom), LIGHT_RED, thickness=-1)
 
         # バーG
         cv2.rectangle(canvas, self.addition_green_bar_p1,
-                      self.addition_green_bar_p2, GREEN, thickness=-1)
-        cv2.rectangle(canvas, self.step1_green_bar_p1,
+                      (self.step1_green_bar_p2[0], self.bottom), GREEN, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_green_bar_p1[0]+gap, self.step1_green_bar_p1[1]),
                       self.step1_green_bar_p2, LIGHT_GREEN, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_p1[0], self.top3),
+        cv2.rectangle(canvas, (self.step1_green_bar_p1[0]+gap, self.top3),
                       (self.step1_green_bar_p2[0], self.bottom), LIGHT_GREEN, thickness=-1)
 
         # バーB
         cv2.rectangle(canvas, self.addition_blue_bar_p1,
-                      self.addition_blue_bar_p2, BLUE, thickness=-1)
-        cv2.rectangle(canvas, self.step1_blue_bar_p1,
+                      (self.step1_blue_bar_p2[0], self.bottom), BLUE, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.step1_blue_bar_p1[1]),
                       self.step1_blue_bar_p2, LIGHT_BLUE, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_p1[0], self.top3),
+        cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.top3),
                       (self.step1_blue_bar_p2[0], self.bottom), LIGHT_BLUE, thickness=-1)
 
     def create_step1_color(self):

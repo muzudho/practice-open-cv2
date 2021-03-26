@@ -14,8 +14,8 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 430  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 240
+CANVAS_WIDTH = 390  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_HEIGHT = 200
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -309,19 +309,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.line(canvas, circle_rail.blue_p,
              circle_rail.red_p, BLACK, thickness=2)
 
-    # 水平線R
-    # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-    cv2.line(canvas, circle_rail.red_p,
-             (bar_box.step1_red_bar_p1[0], circle_rail.red_p[1]), LIGHT_RED, thickness=2)
-
-    # 水平線G
-    cv2.line(canvas, circle_rail.green_p,
-             (bar_box.step1_green_bar_p1[0], circle_rail.green_p[1]), LIGHT_GREEN, thickness=2)
-
-    # 水平線B
-    cv2.line(canvas, circle_rail.blue_p,
-             (bar_box.step1_blue_bar_p1[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
-
     bar_box.draw_bars(canvas)  # RGBバー
 
     step1_color = bar_box.create_step1_color()  # step1 色値
@@ -385,6 +372,19 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
         int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
+
+    # 水平線R
+    # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
+    cv2.line(canvas, circle_rail.red_p,
+             (bar_box.step1_red_bar_p2[0], circle_rail.red_p[1]), LIGHT_RED, thickness=2)
+
+    # 水平線G
+    cv2.line(canvas, circle_rail.green_p,
+             (bar_box.step1_green_bar_p2[0], circle_rail.green_p[1]), LIGHT_GREEN, thickness=2)
+
+    # 水平線B
+    cv2.line(canvas, circle_rail.blue_p,
+             (bar_box.step1_blue_bar_p2[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
 
     inner_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 内環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状

@@ -155,7 +155,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         #
 
         draw_grid(canvas)
-        bar_window.draw_outline(canvas)
+        # bar_window.draw_outline(canvas)
         bar_box.draw_outline(canvas)
         canvas = draw_canvas(canvas, bar_box, circle_rail, brush_point,
                              bar_window, outer_circle)
@@ -193,7 +193,7 @@ def make_scene1(bar_rates, outer_circle):
     bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
     bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
     bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
-    bar_box.gap = 1
+    bar_box.rate_text_gap = int(bar_box.one_width/2)
     bar_window.one_width = 36
     bar_window.gap = 1
     # 円レール
@@ -203,14 +203,11 @@ def make_scene1(bar_rates, outer_circle):
     brush_point.range = int(1.5*GRID_INTERVAL_H)
 
     # バー箱の左
-    bar_window_space = 3*bar_window.one_width + \
-        2*bar_window.gap+4*GRID_INTERVAL_H
     range_width = 10
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
-    feeling = -36
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
-                       2*brush_point.range+bar_window_space + feeling)
+                       2*brush_point.range)
     # バーの筋
     bar_box.font_height = 20
     bar_box.font_scale = 0.6

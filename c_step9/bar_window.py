@@ -62,11 +62,6 @@ class BarWindow():
     def gap(self, val):
         self.__gap = val
 
-    def draw_outline(self, canvas):
-        """輪郭を描きます"""
-        cv2.rectangle(canvas, self.left_top,
-                      self.right_bottom, LIGHT_GRAY, thickness=4)
-
     @property
     def red_bar_p1(self):
         """赤バーの左上点"""
@@ -120,6 +115,11 @@ class BarWindow():
     @blue_bar_p2.setter
     def blue_bar_p2(self, val):
         self.__blue_bar_p2 = val
+
+    def draw_outline(self, canvas):
+        """輪郭を描きます"""
+        cv2.rectangle(canvas, self.left_top,
+                      self.right_bottom, LIGHT_GRAY, thickness=4)
 
     def draw_bars(self, canvas):
         """バーを描きます"""

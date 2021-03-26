@@ -14,7 +14,7 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE, FONT_HEIGHT
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 340  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_WIDTH = 310  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
 CANVAS_HEIGHT = 155
 CHANNELS = 3
 # モノクロ背景 0黒→255白
@@ -216,7 +216,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height1 = int(bar_box.rates[0] * 20 * GRID_INTERVAL_H)
     bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
     bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
-    bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
+    bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
     bar_box.rate_text_gap = int(bar_box.one_width/2)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)

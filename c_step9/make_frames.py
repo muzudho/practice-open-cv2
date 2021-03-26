@@ -192,9 +192,9 @@ def make_scene1(bar_rates, outer_circle):
     bar_box.height1 = int(bar_box.rates[0] * 20 * GRID_INTERVAL_H)
     bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
     bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
-    bar_box.one_width = 24
+    bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
     bar_box.gap = 1
-    bar_window.one_width = 24
+    bar_window.one_width = 36
     bar_window.gap = 1
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
@@ -208,8 +208,9 @@ def make_scene1(bar_rates, outer_circle):
     range_width = 10
     outer_circle_margin = 2
     width = 2 * (range_width + outer_circle_margin)
+    feeling = -36
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
-                       2*brush_point.range+bar_window_space)
+                       2*brush_point.range+bar_window_space + feeling)
     # バーの筋
     bar_box.font_height = 20
     bar_box.font_scale = 0.6
@@ -311,7 +312,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     cv2.line(canvas, circle_rail.blue_p,
              (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), BLUE, thickness=2)
 
-    bar_window.draw_bars(canvas)
     upper_bound_px = bar_window.get_upper_bound_y()
 
     longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
@@ -329,11 +329,12 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     bar_box.blue_addition = blue_add
     bar_box.draw_bars(canvas)  # RGBバー
 
-    # 色値
-    color = bar_box.create_color()
+    color = bar_box.create_color()  # 色値
 
     bar_box.draw_rgb_number(canvas, color)  # RGB値テキスト
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
+
+    bar_window.draw_bars(canvas)  # 調整前のバー描画
 
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value

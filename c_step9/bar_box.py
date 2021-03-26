@@ -2,7 +2,7 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, BLACK, RED, GREEN, BLUE
+from colors import LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, BLACK, RED, GREEN, BLUE
 
 
 class BarBox():
@@ -450,15 +450,21 @@ class BarBox():
         """バーを描きます"""
         # バーR
         cv2.rectangle(canvas, (self.red_bar_p1[0], self.red_bar_p1[1]-self.red_addition),  # yは逆さ
-                      self.red_bar_p2, RED, thickness=-1)
+                      self.red_bar_p2, LIGHT_RED, thickness=-1)
+        cv2.rectangle(canvas, (self.red_bar_p1[0], self.top3),  # yは逆さ
+                      (self.red_bar_p2[0], self.bottom), RED, thickness=-1)
 
         # バーG
         cv2.rectangle(canvas, (self.green_bar_p1[0], self.green_bar_p1[1]-self.green_addition),
-                      self.green_bar_p2, GREEN, thickness=-1)
+                      self.green_bar_p2, LIGHT_GREEN, thickness=-1)
+        cv2.rectangle(canvas, (self.green_bar_p1[0], self.top3),
+                      (self.green_bar_p2[0], self.bottom), GREEN, thickness=-1)
 
         # バーB
         cv2.rectangle(canvas, (self.blue_bar_p1[0], self.blue_bar_p1[1]-self.blue_addition),
-                      self.blue_bar_p2, BLUE, thickness=-1)
+                      self.blue_bar_p2, LIGHT_BLUE, thickness=-1)
+        cv2.rectangle(canvas, (self.blue_bar_p1[0], self.top3),
+                      (self.blue_bar_p2[0], self.bottom), BLUE, thickness=-1)
 
     def create_color(self):
         """色を作成"""

@@ -158,18 +158,16 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_box.addition_blue_bar_p2 = (
             bar_box.blue_left+bar_box.one_width, circle_rail.blue_p[1])
 
-        # 外環状
         ceil_height = bar_box.ceil_height_rgb_value
         base_line = bar_box.base_line_rgb_value
 
+        # 内環状
         theta = inner_circle.phase * inner_circle.unit_arc
         color = calc_step1(theta)
         inner_color = append_rank3_to_color(color, bar_box.rates)
-        inner_upper_bound = inner_circle.get_upper_bound_value(bar_box.rates)
-        inner_color = calc_step2(inner_color, inner_upper_bound,
-                                 255, ceil_height, base_line)
         inner_circle.color_list.append(inner_color)
 
+        # 外環状
         theta = outer_circle.phase * outer_circle.unit_arc
         color = calc_step1(theta)
         outer_color = append_rank3_to_color(color, bar_box.rates)

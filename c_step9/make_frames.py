@@ -321,8 +321,16 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     step1_color = bar_box.create_step1_color()  # step1 色値
     draw_step1_rgb_number(canvas, step1_color, bar_box)  # step1 RGB値テキスト
+
+    # 色見本
     color_example_width = 4*GRID_INTERVAL_H
     color_example_left = int(bar_box.left - 1.5 * color_example_width)
+    left_top = (
+        color_example_left+int(color_example_width/2),
+        int(bar_box.bottom+1*GRID_INTERVAL_H))
+    right_bottom = (left_top[0],
+                    int(bar_box.bottom+11*GRID_INTERVAL_H))
+    cv2.line(canvas, left_top, right_bottom, LIGHT_GRAY, thickness=2)
     left_top = (color_example_left, int(
         bar_box.bottom+6*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,

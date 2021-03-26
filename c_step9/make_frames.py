@@ -312,13 +312,6 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
 
     bar_window.draw_bars(canvas)
     upper_bound_px = bar_window.get_upper_bound_y()
-    bar_window.draw_horizontal_line(canvas, upper_bound_px-4)  # 線を引くのは少し上
-
-    # 斜線
-    cv2.line(canvas, (bar_window.blue_bar_p2[0], upper_bound_px-4),  # 線を引くのは少し上
-             (bar_box.left, bar_box.top2), BLACK, thickness=2)
-    cv2.line(canvas, (bar_window.blue_bar_p2[0], bar_box.top3),
-             (bar_box.left, bar_box.top3), BLACK, thickness=2)
 
     longest_bar_height = bar_window.right_bottom[1] - upper_bound_px
     # print(

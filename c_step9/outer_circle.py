@@ -78,7 +78,7 @@ class OuterCircle():
         color_count = len(self.color_list)
         for i in range(0, color_count):
             theta = i * self.unit_arc
-            print(f"i={i} color_count={color_count}")
+            # print(f"i={i} color_count={color_count}")
             color = self.color_list[i]
             # print(f"[{i}] color={color}")
 

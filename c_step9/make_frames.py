@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import calc_step1, calc_step2, append_rank3_to_color
 from bar_box import BarBox
 from circle_rail import CircleRail
@@ -260,8 +260,8 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
     bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
 
-    inner_circle.area_size = (brush_point.distance+2*GRID_INTERVAL_H,
-                              brush_point.distance+2*GRID_INTERVAL_H)
+    inner_circle.area_size = (brush_point.distance+int(1.6*GRID_INTERVAL_H),
+                              brush_point.distance+int(1.6*GRID_INTERVAL_H))
     inner_circle.phases = PHASE_COUNTS
     outer_circle.area_size = (brush_point.distance+3*GRID_INTERVAL_H,
                               brush_point.distance+3*GRID_INTERVAL_H)
@@ -339,7 +339,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, inner_circle, outer_c
     upper_bound_value = max(step2_color[0], step2_color[1], step2_color[2])
     step2_color = calc_step2(
         step2_color, upper_bound_value, 255, ceil_height, base_line)
-    brush_point.draw_me(canvas, BLACK)  # 塗り円
+    # brush_point.draw_me(canvas, BLACK)  # 塗り円
 
     # 時計の針
     clock_hand_len = 7*GRID_INTERVAL_H
@@ -351,7 +351,7 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, inner_circle, outer_c
         int((circle_rail.range+clock_hand_len) *
             math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
         int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, BLACK, thickness=2)
+    cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
 
     inner_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 内環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状

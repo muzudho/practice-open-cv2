@@ -580,7 +580,9 @@ class BarBox():
 
         # バーR
         cv2.rectangle(canvas, self.addition_red_bar_p1,
-                      (self.step1_red_bar_p2[0], self.bottom), RED, thickness=-1)
+                      (self.step1_red_bar_p2[0], self.step1_red_bar_p1[1]), RED, thickness=-1)
+        cv2.rectangle(canvas, self.step1_red_bar_p1,
+                      (self.step1_red_bar_p1[0]+gap, self.step1_red_bar_p2[1]), RED, thickness=-1)
         cv2.rectangle(canvas, (self.step1_red_bar_p1[0]+gap, self.step1_red_bar_p1[1]),
                       self.step1_red_bar_p2, LIGHT_RED, thickness=-1)
         cv2.rectangle(canvas, (self.step1_red_bar_p1[0]+gap, self.top3),  # yは逆さ
@@ -588,7 +590,9 @@ class BarBox():
 
         # バーG
         cv2.rectangle(canvas, self.addition_green_bar_p1,
-                      (self.step1_green_bar_p2[0], self.bottom), GREEN, thickness=-1)
+                      (self.step1_green_bar_p2[0], self.step1_green_bar_p1[1]), GREEN, thickness=-1)
+        cv2.rectangle(canvas, self.step1_green_bar_p1,
+                      (self.step1_green_bar_p1[0]+gap, self.step1_green_bar_p2[1]), GREEN, thickness=-1)
         cv2.rectangle(canvas, (self.step1_green_bar_p1[0]+gap, self.step1_green_bar_p1[1]),
                       self.step1_green_bar_p2, LIGHT_GREEN, thickness=-1)
         cv2.rectangle(canvas, (self.step1_green_bar_p1[0]+gap, self.top3),
@@ -596,7 +600,9 @@ class BarBox():
 
         # バーB
         cv2.rectangle(canvas, self.addition_blue_bar_p1,
-                      (self.step1_blue_bar_p2[0], self.bottom), BLUE, thickness=-1)
+                      (self.step1_blue_bar_p2[0], self.step1_blue_bar_p1[1]), BLUE, thickness=-1)
+        cv2.rectangle(canvas, self.step1_blue_bar_p1,
+                      (self.step1_blue_bar_p1[0]+gap, self.step1_blue_bar_p2[1]), BLUE, thickness=-1)
         cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.step1_blue_bar_p1[1]),
                       self.step1_blue_bar_p2, LIGHT_BLUE, thickness=-1)
         cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.top3),

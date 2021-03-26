@@ -338,19 +338,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, step2_color, thickness=-1)  # 色見本
-    # Stretch
-    #font = cv2.FONT_HERSHEY_SIMPLEX
-    #font_height = 20
-    #font_scale = 0.6
-    #line_type = 2
-    # cv2.putText(canvas,
-    #            f"Stretch",
-    #            (bar_box.right+GRID_INTERVAL_H,
-    #             int(bar_box.bottom+3*GRID_INTERVAL_H)),  # x,y
-    #            font,
-    #            font_scale,
-    #            LIGHT_GRAY,
-    #            line_type)
 
     bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
     bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト

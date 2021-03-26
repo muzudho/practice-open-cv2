@@ -437,17 +437,17 @@ class BarBox():
     @property
     def red_step2_height(self):
         """Rバーの縦幅"""
-        return self.red_step1_height + self.__step1_red_bar_p1[1] - self.__addition_red_bar_p1[1]
+        return self.bottom - self.__addition_red_bar_p1[1]
 
     @property
     def green_step2_height(self):
         """Gバーの縦幅"""
-        return self.green_step1_height + self.__step1_green_bar_p1[1] - self.__addition_green_bar_p1[1]
+        return self.bottom - self.__addition_green_bar_p1[1]
 
     @property
     def blue_step2_height(self):
         """Bバーの縦幅"""
-        return self.blue_step1_height + + self.__step1_blue_bar_p1[1] - self.__addition_blue_bar_p1[1]
+        return self.bottom - self.__addition_blue_bar_p1[1]
 
     @property
     def thickness(self):

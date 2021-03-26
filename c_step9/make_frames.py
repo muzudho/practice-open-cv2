@@ -3,7 +3,7 @@
 
 import cv2
 import numpy as np
-from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE
+from colors import PALE_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import calc_step2, calc_color
 from bar_box import BarBox
 from bar_window import BarWindow
@@ -16,7 +16,7 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
 CANVAS_WIDTH = 450
-CANVAS_HEIGHT = 230
+CANVAS_HEIGHT = 280
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -143,7 +143,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         ceil_height = bar_box.ceil_height_rgb_value
         base_line = bar_box.base_line_rgb_value
         # upper_bound_value = max(color[0], color[1], color[2])
-        # modified_color = calc_step2(
+        # step2_color = calc_step2(
         #    color, upper_bound_value, 255, ceil_height, base_line)
         theta = outer_circle.phase * outer_circle.unit_arc
         out_color = calc_color(theta, bar_box.rates)
@@ -299,15 +299,15 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, circle_rail.red_p,
-             (bar_window.red_bar_p1[0], circle_rail.red_p[1]), RED, thickness=2)
+             (bar_window.red_bar_p1[0], circle_rail.red_p[1]), LIGHT_RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, circle_rail.green_p,
-             (bar_window.green_bar_p1[0], circle_rail.green_p[1]), GREEN, thickness=2)
+             (bar_window.green_bar_p1[0], circle_rail.green_p[1]), LIGHT_GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, circle_rail.blue_p,
-             (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), BLUE, thickness=2)
+             (bar_window.blue_bar_p1[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
 
     upper_bound_px = bar_window.get_upper_bound_y()
 
@@ -316,9 +316,12 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     #    f"longest_bar_height={longest_bar_height} bar_box.height={bar_box.height}")
     zoom = longest_bar_height / bar_window.height
     # print(f"zoom={zoom}")
-    red_add = int(bar_window.red_height / zoom) - bar_window.red_height
-    green_add = int(bar_window.green_height / zoom) - bar_window.green_height
-    blue_add = int(bar_window.blue_height / zoom) - bar_window.blue_height
+    red_add = int(bar_window.red_height / zoom) - \
+        bar_window.red_height
+    green_add = int(bar_window.green_height / zoom) - \
+        bar_window.green_height
+    blue_add = int(bar_window.blue_height / zoom) - \
+        bar_window.blue_height
     #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
 
     bar_box.red_addition = red_add
@@ -326,19 +329,22 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     bar_box.blue_addition = blue_add
     bar_box.draw_bars(canvas)  # RGBバー
 
-    color = bar_box.create_color()  # 色値
+    step1_color = bar_box.create_step1_color()  # step1 色値
+    draw_step1_rgb_number(canvas, step1_color, bar_box)  # step1 RGB値テキスト
 
-    bar_box.draw_rgb_number(canvas, color)  # RGB値テキスト
+    step2_color = bar_box.create_step2_color()  # step2 色値
+    bar_box.draw_rgb_number(canvas, step2_color)  # step2 RGB値テキスト
+
     bar_box.draw_bar_rate(canvas)  # バー率テキスト
 
     bar_window.draw_bars(canvas)  # 調整前のバー描画
 
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value
-    upper_bound_value = max(color[0], color[1], color[2])
-    modified_color = calc_step2(
-        color, upper_bound_value, 255, ceil_height, base_line)
-    brush_point.draw_me(canvas, modified_color)  # 塗り円
+    upper_bound_value = max(step2_color[0], step2_color[1], step2_color[2])
+    step2_color = calc_step2(
+        step2_color, upper_bound_value, 255, ceil_height, base_line)
+    brush_point.draw_me(canvas, step2_color)  # 塗り円
 
     # 外環状
     outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状
@@ -348,6 +354,69 @@ def draw_canvas(canvas, bar_box, circle_rail, brush_point, bar_window, outer_cir
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     return canvas
+
+
+def draw_step1_rgb_number(canvas, color, bar_box):
+    """RGB値テキストを描きます"""
+
+    feeling = 13
+
+    # 16進R値テキスト
+    cv2.putText(canvas,
+                f"{color[0]:02x}",
+                (bar_box.red_bar_p1[0]+feeling,
+                    bar_box.red_bar_p2[1]+3*bar_box.font_height),  # x,y
+                bar_box.font,
+                bar_box.font_scale,
+                LIGHT_RED,
+                bar_box.line_type)
+    # 10進R値テキスト
+    cv2.putText(canvas,
+                f"{color[0]:03}",
+                (bar_box.red_bar_p1[0],
+                    bar_box.red_bar_p2[1]+4*bar_box.font_height),  # x,y
+                bar_box.font,
+                bar_box.font_scale,
+                LIGHT_RED,
+                bar_box.line_type)
+
+    # 16進G値テキスト
+    cv2.putText(canvas,
+                f"{color[1]:02x}",
+                (bar_box.green_bar_p1[0]+feeling,
+                    bar_box.green_bar_p2[1]+3*bar_box.font_height),  # x,y
+                bar_box.font,
+                bar_box.font_scale,
+                LIGHT_GREEN,
+                bar_box.line_type)
+    # 10進G値テキスト
+    cv2.putText(canvas,
+                f"{color[1]:03}",
+                (bar_box.green_bar_p1[0],
+                    bar_box.green_bar_p2[1]+4*bar_box.font_height),  # x,y
+                bar_box.font,
+                bar_box.font_scale,
+                LIGHT_GREEN,
+                bar_box.line_type)
+
+    # 16進B値テキスト
+    cv2.putText(canvas,
+                f"{color[2]:02x}",
+                (bar_box.blue_bar_p1[0]+feeling,
+                    bar_box.blue_bar_p2[1]+3*bar_box.font_height),  # x,y
+                bar_box.font,
+                bar_box.font_scale,
+                LIGHT_BLUE,
+                bar_box.line_type)
+    # 10進B値テキスト
+    cv2.putText(canvas,
+                f"{color[2]:03}",
+                (bar_box.blue_bar_p1[0],
+                    bar_box.blue_bar_p2[1]+4*bar_box.font_height),  # x,y
+                bar_box.font,
+                bar_box.font_scale,
+                LIGHT_BLUE,
+                bar_box.line_type)
 
 
 main()

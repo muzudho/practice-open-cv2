@@ -2,7 +2,7 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, RED, GREEN, BLUE, BLACK
+from colors import LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, BLACK
 
 
 class BarWindow():
@@ -121,29 +121,6 @@ class BarWindow():
         cv2.rectangle(canvas, self.left_top,
                       self.right_bottom, LIGHT_GRAY, thickness=4)
 
-    def draw_bars(self, canvas):
-        """バーを描きます"""
-        # バーR
-        cv2.rectangle(canvas, self.red_bar_p1,
-                      self.red_bar_p2, RED, thickness=-1)
-
-        # バーG
-        cv2.rectangle(canvas, self.green_bar_p1,
-                      self.green_bar_p2, GREEN, thickness=-1)
-
-        # バーB
-        cv2.rectangle(canvas, self.blue_bar_p1,
-                      self.blue_bar_p2, BLUE, thickness=-1)
-
-    def get_upper_bound_y(self):
-        """上限の座標"""
-        return min(self.red_bar_p1[1], self.green_bar_p1[1], self.blue_bar_p1[1])
-
-    def draw_horizontal_line(self, canvas, y_num):
-        """水平線を描きます"""
-        cv2.line(canvas, (self.red_bar_p1[0], y_num),
-                 (self.blue_bar_p2[0], y_num), BLACK, thickness=2)
-
     @property
     def red_height(self):
         """赤バーの縦幅"""
@@ -158,3 +135,26 @@ class BarWindow():
     def blue_height(self):
         """青バーの縦幅"""
         return self.blue_bar_p2[1] - self.blue_bar_p1[1]
+
+    def draw_bars(self, canvas):
+        """バーを描きます"""
+        # バーR
+        cv2.rectangle(canvas, self.red_bar_p1,
+                      self.red_bar_p2, LIGHT_RED, thickness=-1)
+
+        # バーG
+        cv2.rectangle(canvas, self.green_bar_p1,
+                      self.green_bar_p2, LIGHT_GREEN, thickness=-1)
+
+        # バーB
+        cv2.rectangle(canvas, self.blue_bar_p1,
+                      self.blue_bar_p2, LIGHT_BLUE, thickness=-1)
+
+    def get_upper_bound_y(self):
+        """上限の座標"""
+        return min(self.red_bar_p1[1], self.green_bar_p1[1], self.blue_bar_p1[1])
+
+    def draw_horizontal_line(self, canvas, y_num):
+        """水平線を描きます"""
+        cv2.line(canvas, (self.red_bar_p1[0], y_num),
+                 (self.blue_bar_p2[0], y_num), BLACK, thickness=2)

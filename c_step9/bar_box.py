@@ -362,17 +362,32 @@ class BarBox():
         self.__blue_addition = val
 
     @property
-    def red_height(self):
+    def red_step1_height(self):
+        """Rバーの縦幅"""
+        return self.__red_bar_p2[1] - self.__red_bar_p1[1]
+
+    @property
+    def green_step1_height(self):
+        """Gバーの縦幅"""
+        return self.__green_bar_p2[1] - self.__green_bar_p1[1]
+
+    @property
+    def blue_step1_height(self):
+        """Bバーの縦幅"""
+        return self.__blue_bar_p2[1] - self.__blue_bar_p1[1]
+
+    @property
+    def red_step2_height(self):
         """Rバーの縦幅"""
         return self.__red_bar_p2[1] - self.__red_bar_p1[1] + self.__red_addition
 
     @property
-    def green_height(self):
+    def green_step2_height(self):
         """Gバーの縦幅"""
         return self.__green_bar_p2[1] - self.__green_bar_p1[1] + self.__green_addition
 
     @property
-    def blue_height(self):
+    def blue_step2_height(self):
         """Bバーの縦幅"""
         return self.__blue_bar_p2[1] - self.__blue_bar_p1[1] + self.__blue_addition
 
@@ -487,28 +502,35 @@ class BarBox():
         """バーを描きます"""
         # バーR
         cv2.rectangle(canvas, (self.red_bar_p1[0], self.red_bar_p1[1]-self.red_addition),  # yは逆さ
-                      self.red_bar_p2, LIGHT_RED, thickness=-1)
+                      self.red_bar_p2, RED, thickness=-1)
         cv2.rectangle(canvas, (self.red_bar_p1[0], self.top3),  # yは逆さ
-                      (self.red_bar_p2[0], self.bottom), RED, thickness=-1)
+                      (self.red_bar_p2[0], self.bottom), LIGHT_RED, thickness=-1)
 
         # バーG
         cv2.rectangle(canvas, (self.green_bar_p1[0], self.green_bar_p1[1]-self.green_addition),
-                      self.green_bar_p2, LIGHT_GREEN, thickness=-1)
+                      self.green_bar_p2, GREEN, thickness=-1)
         cv2.rectangle(canvas, (self.green_bar_p1[0], self.top3),
-                      (self.green_bar_p2[0], self.bottom), GREEN, thickness=-1)
+                      (self.green_bar_p2[0], self.bottom), LIGHT_GREEN, thickness=-1)
 
         # バーB
         cv2.rectangle(canvas, (self.blue_bar_p1[0], self.blue_bar_p1[1]-self.blue_addition),
-                      self.blue_bar_p2, LIGHT_BLUE, thickness=-1)
+                      self.blue_bar_p2, BLUE, thickness=-1)
         cv2.rectangle(canvas, (self.blue_bar_p1[0], self.top3),
-                      (self.blue_bar_p2[0], self.bottom), BLUE, thickness=-1)
+                      (self.blue_bar_p2[0], self.bottom), LIGHT_BLUE, thickness=-1)
 
-    def create_color(self):
+    def create_step1_color(self):
         """色を作成"""
         return (
-            int(self.red_height/self.height*255),
-            int(self.green_height/self.height*255),
-            int(self.blue_height/self.height*255))
+            int(self.red_step1_height/self.height*255),
+            int(self.green_step1_height/self.height*255),
+            int(self.blue_step1_height/self.height*255))
+
+    def create_step2_color(self):
+        """色を作成"""
+        return (
+            int(self.red_step2_height/self.height*255),
+            int(self.green_step2_height/self.height*255),
+            int(self.blue_step2_height/self.height*255))
 
     @property
     def ceil_height_rgb_value(self):

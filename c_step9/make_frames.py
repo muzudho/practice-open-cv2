@@ -82,6 +82,7 @@ def main():
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
+            bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
             draw_tone_name(canvas, bar_box, tone_name)
             # 書出し
             canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -364,7 +365,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     #            LIGHT_GRAY,
     #            line_type)
 
-    bar_box.draw_bar_rate(canvas)  # バー率テキスト
+    bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
+    bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
 
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value

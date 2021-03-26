@@ -538,8 +538,8 @@ class BarBox():
                     BLUE,
                     self.line_type)
 
-    def draw_bar_rate(self, canvas):
-        """バー率を描きます"""
+    def draw_bar_rate_rank13(self, canvas):
+        """１段目、３段目のバー率を描きます"""
         rate_y = int((self.top1 + self.top2)/2)
         cv2.putText(canvas,
                     f"{self.rates[0]}",
@@ -548,14 +548,6 @@ class BarBox():
                     self.font_scale,
                     LIGHT_GRAY,
                     self.line_type)
-        rate_y = int((self.top2 + self.top3)/2)
-        cv2.putText(canvas,
-                    f"{self.rates[1]}",
-                    (self.right+self.rate_text_gap, rate_y),  # x,y
-                    self.font,
-                    self.font_scale,
-                    BLACK,
-                    self.line_type)
         rate_y = int((self.top3 + self.bottom)/2)
         cv2.putText(canvas,
                     f"{self.rates[2]}",
@@ -563,6 +555,17 @@ class BarBox():
                     self.font,
                     self.font_scale,
                     LIGHT_GRAY,
+                    self.line_type)
+
+    def draw_bar_rate_rank2(self, canvas):
+        """２段目のバー率を描きます"""
+        rate_y = int((self.top2 + self.top3)/2)
+        cv2.putText(canvas,
+                    f"{self.rates[1]}",
+                    (self.right+self.rate_text_gap, rate_y),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLACK,
                     self.line_type)
 
     def draw_bars(self, canvas):

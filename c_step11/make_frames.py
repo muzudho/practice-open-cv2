@@ -21,7 +21,7 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
 CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 400
+CANVAS_HEIGHT = 368
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -29,7 +29,7 @@ MONO_BACKGROUND = 255
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 7 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = 18 * GRID_UNIT
+BAR_BOX_LEFT = int(18.5 * GRID_UNIT)
 # 円の中心と、箱の左との距離
 CIRCLE_DISTANCE = 10 * GRID_UNIT
 
@@ -211,7 +211,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
     bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
-    bar_box.rate_text_gap = int(0.5*GRID_UNIT)
+    bar_box.rate_text_gap = int(0.2*GRID_UNIT)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
 
@@ -348,7 +348,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
     # 時計の針
-    clock_hand_len = 4*GRID_UNIT
+    clock_hand_len = int(4.5*GRID_UNIT)
     inner_p = (
         int(circle_rail.range * math.cos(math.radians(circle_rail.theta-90)) +
             circle_rail.center[0]),

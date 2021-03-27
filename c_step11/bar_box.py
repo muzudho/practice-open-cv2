@@ -362,7 +362,7 @@ class BarBox():
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
-        top = int(self.top2-GRID_UNIT*3/4)
+        top = int(self.top2-GRID_UNIT/2)
 
         # 追加値 10進R値テキスト
         if a_color[0] != 0:
@@ -447,42 +447,19 @@ class BarBox():
         rank3_byte = convert_height_to_byte(
             self.height3, self.height)
 
+        left = self.right+self.y_axis_label_gap
         # 255
-        rate_y = int(self.top1+GRID_UNIT/2)
-        cv2.putText(canvas,
-                    f"255",
-                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
-                    self.font,
-                    self.font_scale,
-                    BLACK,
-                    self.line_type)
+        self.draw_3figures(
+            canvas, 255, left, int(self.top1+GRID_UNIT/2), BLACK)
         # ceil
-        rate_y = int(self.top2+GRID_UNIT/2)
-        cv2.putText(canvas,
-                    f"{rank23_byte}",
-                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
-                    self.font,
-                    self.font_scale,
-                    BLACK,
-                    self.line_type)
+        self.draw_3figures(
+            canvas, rank23_byte, left, int(self.top2+GRID_UNIT/2), BLACK)
         # base_line
-        rate_y = int(self.top3+GRID_UNIT/2)
-        cv2.putText(canvas,
-                    f"{rank3_byte}",
-                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
-                    self.font,
-                    self.font_scale,
-                    BLACK,
-                    self.line_type)
+        self.draw_3figures(
+            canvas, rank3_byte, left, int(self.top3+GRID_UNIT/2), BLACK)
         # 0
-        rate_y = int(self.bottom+GRID_UNIT/2)
-        cv2.putText(canvas,
-                    f"  0",
-                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
-                    self.font,
-                    self.font_scale,
-                    BLACK,
-                    self.line_type)
+        self.draw_3figures(
+            canvas, 0, left, int(self.bottom+GRID_UNIT/2), BLACK)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""

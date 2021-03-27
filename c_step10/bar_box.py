@@ -314,12 +314,10 @@ class BarBox():
         rank23_height = self.create_rank23_3bars_height()
         return max(rank23_height[0], rank23_height[1], rank23_height[2])
 
-    def get_step1_upper_bound_y(self):
-        """step1の上限の座標"""
-        return min(
-            self.step1_rect[0].left_top[1],
-            self.step1_rect[1].left_top[1],
-            self.step1_rect[2].left_top[1])
+    def get_max_step1_height(self):
+        """追加部分と、３段目を含まない、最長のバーの縦幅"""
+        step1_height = self.create_step1_3bars_height()
+        return max(step1_height[0], step1_height[1], step1_height[2])
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""

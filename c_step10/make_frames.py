@@ -15,7 +15,7 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
 CANVAS_WIDTH = 285  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 170
+CANVAS_HEIGHT = 186
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -318,7 +318,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 色見本 筆算の線
     line_left = bar_box.left - 12*GRID_INTERVAL_H
     line_right = bar_box.right + 4*GRID_INTERVAL_H
-    line_top = bar_box.bottom+int(9*GRID_INTERVAL_H)
+    line_top = bar_box.bottom+int(13*GRID_INTERVAL_H)
     cv2.line(canvas, (line_left, line_top),
              (line_right, line_top), LIGHT_GRAY, thickness=2)
 
@@ -355,12 +355,26 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23_color, thickness=-1)  # 色見本
 
+    # 色見本 3
+    rank23a_color = bar_box.create_rank23a_color()  # 3 色値
+    bar_box.draw_rgb_number(canvas, rank23_color,
+                            rank23a_color)  # 23a RGB値テキスト
+    left_top = (color_example_left, int(
+        bar_box.bottom+9*GRID_INTERVAL_H))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, rank23a_color, thickness=-1)  # 色見本
+
+    bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
+    bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
+
     # 色見本 23a
     rank23a_color = bar_box.create_rank23a_color()  # 23a 色値
     bar_box.draw_rgb_number(canvas, rank23_color,
                             rank23a_color)  # 23a RGB値テキスト
     left_top = (color_example_left, int(
-        bar_box.bottom+10*GRID_INTERVAL_H))
+        bar_box.bottom+int(14.5*GRID_INTERVAL_H)))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,

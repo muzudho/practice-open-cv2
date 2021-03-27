@@ -470,7 +470,7 @@ class BarBox():
                     LIGHT_BLUE,
                     self.line_type)
 
-        top = self.bottom+int(13*GRID_INTERVAL_H)
+        top = self.bottom+int(12*GRID_INTERVAL_H)
 
         # 3段目 10進R値テキスト
         cv2.putText(canvas,
@@ -493,6 +493,38 @@ class BarBox():
                     self.line_type)
 
         # 3段目 10進B値テキスト
+        cv2.putText(canvas,
+                    f"{rank23_color[2]:03}",
+                    (self.step1_blue_bar_rect.left_top[0],
+                     top),  # x,y
+                    self.font,
+                    self.font_scale,
+                    LIGHT_BLUE,
+                    self.line_type)
+
+        top = self.bottom+int(17*GRID_INTERVAL_H)
+
+        # 4段目 10進R値テキスト
+        cv2.putText(canvas,
+                    f"{rank23_color[0]:03}",
+                    (self.step1_red_bar_rect.left_top[0],
+                     top),  # x,y
+                    self.font,
+                    self.font_scale,
+                    LIGHT_RED,
+                    self.line_type)
+
+        # 4段目 10進G値テキスト
+        cv2.putText(canvas,
+                    f"{rank23_color[1]:03}",
+                    (self.step1_green_bar_rect.left_top[0],
+                     top),  # x,y
+                    self.font,
+                    self.font_scale,
+                    LIGHT_GREEN,
+                    self.line_type)
+
+        # 4段目 10進B値テキスト
         cv2.putText(canvas,
                     f"{rank23_color[2]:03}",
                     (self.step1_blue_bar_rect.left_top[0],

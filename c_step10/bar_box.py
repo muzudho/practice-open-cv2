@@ -42,9 +42,7 @@ class BarBox():
         self.__font_scale = 0
         self.__line_type = 0
         self.__font = None
-        self.__red_addition = 0
-        self.__green_addition = 0
-        self.__blue_addition = 0
+        self.__addition_color = (0, 0, 0)
         self.__thickness = 2
 
     @property
@@ -305,31 +303,13 @@ class BarBox():
         self.__font = val
 
     @property
-    def red_addition(self):
-        """R値に加算"""
-        return self.__red_addition
+    def addition_color(self):
+        """色の追加値"""
+        return self.__addition_color
 
-    @red_addition.setter
-    def red_addition(self, val):
-        self.__red_addition = val
-
-    @property
-    def green_addition(self):
-        """G値に加算"""
-        return self.__green_addition
-
-    @green_addition.setter
-    def green_addition(self, val):
-        self.__green_addition = val
-
-    @property
-    def blue_addition(self):
-        """B値に加算"""
-        return self.__blue_addition
-
-    @blue_addition.setter
-    def blue_addition(self, val):
-        self.__blue_addition = val
+    @addition_color.setter
+    def addition_color(self, val):
+        self.__addition_color = val
 
     @property
     def red_step1_height(self):
@@ -380,6 +360,37 @@ class BarBox():
     def thickness(self):
         """線の太さ"""
         return self.__thickness
+
+    def create_rank23_color(self):
+        """色を作成"""
+        return (
+            int(self.red_rank23_height/self.height*255),
+            int(self.green_rank23_height/self.height*255),
+            int(self.blue_rank23_height/self.height*255))
+
+    def create_rank23a_color(self):
+        """色を作成"""
+        return (
+            int(self.red_rank23a_height/self.height*255),
+            int(self.green_rank23a_height/self.height*255),
+            int(self.blue_rank23a_height/self.height*255))
+
+    @property
+    def ceil_height_rgb_value(self):
+        """１段目が colorの成分値として いくつか"""
+        return int(255 * (self.height1 / self.height))
+
+    @property
+    def base_line_rgb_value(self):
+        """３段目が colorの成分値として いくつか"""
+        return int(255 * (self.height3 / self.height))
+
+    def get_step1_upper_bound_y(self):
+        """step1の上限の座標"""
+        return min(
+            self.step1_red_bar_rect.left_top[1],
+            self.step1_green_bar_rect.left_top[1],
+            self.step1_blue_bar_rect.left_top[1])
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""
@@ -599,34 +610,3 @@ class BarBox():
         cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0], self.top3),
                       (self.step1_blue_bar_rect.right_bottom[0],
                        self.bottom), LIGHT_BLUE, thickness=-1)
-
-    def create_rank23_color(self):
-        """色を作成"""
-        return (
-            int(self.red_rank23_height/self.height*255),
-            int(self.green_rank23_height/self.height*255),
-            int(self.blue_rank23_height/self.height*255))
-
-    def create_rank23a_color(self):
-        """色を作成"""
-        return (
-            int(self.red_rank23a_height/self.height*255),
-            int(self.green_rank23a_height/self.height*255),
-            int(self.blue_rank23a_height/self.height*255))
-
-    @property
-    def ceil_height_rgb_value(self):
-        """１段目が colorの成分値として いくつか"""
-        return int(255 * (self.height1 / self.height))
-
-    @property
-    def base_line_rgb_value(self):
-        """３段目が colorの成分値として いくつか"""
-        return int(255 * (self.height3 / self.height))
-
-    def get_step1_upper_bound_y(self):
-        """step1の上限の座標"""
-        return min(
-            self.step1_red_bar_rect.left_top[1],
-            self.step1_green_bar_rect.left_top[1],
-            self.step1_blue_bar_rect.left_top[1])

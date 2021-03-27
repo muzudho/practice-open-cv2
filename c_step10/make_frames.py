@@ -129,9 +129,9 @@ def make_circle(canvas, seq, bar_rates, tone_name):
             bar_box.blue_left, circle_rail.blue_p[1])
         bar_box.step1_blue_bar_rect.right_bottom = (
             bar_box.blue_left+bar_box.one_width, bar_box.top3)
-        print(
-            f"red={bar_box.step1_red_bar_rect.debug_string} \
-green={bar_box.step1_green_bar_rect.debug_string} blue={bar_box.step1_blue_bar_rect.debug_string}")
+#        print(
+#            f"red={bar_box.step1_red_bar_rect.debug_string} \
+# green={bar_box.step1_green_bar_rect.debug_string} blue={bar_box.step1_blue_bar_rect.debug_string}")
 
         upper_bound_px = bar_box.get_step1_upper_bound_y()
         longest_rank2_bar_height = bar_box.top3 - upper_bound_px
@@ -147,23 +147,21 @@ green={bar_box.step1_green_bar_rect.debug_string} blue={bar_box.step1_blue_bar_r
             bar_box.blue_step1_height
         #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
 
-        bar_box.red_addition = red_add
-        bar_box.green_addition = green_add
-        bar_box.blue_addition = blue_add
+        bar_box.addition_color = (red_add, green_add, blue_add)
 
         # バーR追加部分
         bar_box.addition_red_bar_rect.left_top = (
-            bar_box.red_left, bar_box.step1_red_bar_rect.left_top[1]-bar_box.red_addition)  # yは逆さ
+            bar_box.red_left, bar_box.step1_red_bar_rect.left_top[1]-bar_box.addition_color[0])  # yは逆さ
         bar_box.addition_red_bar_rect.right_bottom = (
             bar_box.red_left+bar_box.one_width, circle_rail.red_p[1])
         # バーG追加部分
         bar_box.addition_green_bar_rect.left_top = (
-            bar_box.green_left, bar_box.step1_green_bar_rect.left_top[1]-bar_box.green_addition)
+            bar_box.green_left, bar_box.step1_green_bar_rect.left_top[1]-bar_box.addition_color[1])
         bar_box.addition_green_bar_rect.right_bottom = (
             bar_box.green_left+bar_box.one_width, circle_rail.green_p[1])
         # バーB追加部分
         bar_box.addition_blue_bar_rect.left_top = (
-            bar_box.blue_left, bar_box.step1_blue_bar_rect.left_top[1]-bar_box.blue_addition)
+            bar_box.blue_left, bar_box.step1_blue_bar_rect.left_top[1]-bar_box.addition_color[2])
         bar_box.addition_blue_bar_rect.right_bottom = (
             bar_box.blue_left+bar_box.one_width, circle_rail.blue_p[1])
 

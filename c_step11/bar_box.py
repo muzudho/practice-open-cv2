@@ -509,11 +509,13 @@ class BarBox():
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""
+        rank23_byte = convert_height_to_byte(
+            self.height2+self.height3, self.height)
         rank3_byte = convert_height_to_byte(
             self.height3, self.height)
 
         # 255
-        rate_y = self.top1
+        rate_y = int(self.top1+GRID_UNIT/2)
         cv2.putText(canvas,
                     f"255",
                     (self.right+self.y_axis_label_gap, rate_y),  # x,y
@@ -522,16 +524,16 @@ class BarBox():
                     BLACK,
                     self.line_type)
         # ceil
-        rate_y = self.top2
+        rate_y = int(self.top2+GRID_UNIT/2)
         cv2.putText(canvas,
-                    f"ceil",
+                    f"{rank23_byte}",
                     (self.right+self.y_axis_label_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     BLACK,
                     self.line_type)
         # base_line
-        rate_y = self.top3
+        rate_y = int(self.top3+GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{rank3_byte}",
                     (self.right+self.y_axis_label_gap, rate_y),  # x,y
@@ -540,7 +542,7 @@ class BarBox():
                     BLACK,
                     self.line_type)
         # 0
-        rate_y = self.bottom
+        rate_y = int(self.bottom+GRID_UNIT/2)
         cv2.putText(canvas,
                     f"  0",
                     (self.right+self.y_axis_label_gap, rate_y),  # x,y

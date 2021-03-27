@@ -314,17 +314,17 @@ class BarBox():
     @property
     def red_rank23a_height(self):
         """Rバーの縦幅"""
-        return self.bottom - self.__step1_red_bar_rect.left_top[1] - self.addition_3bars_height[0]
+        return self.bottom - self.__step1_red_bar_rect.left_top[1] + self.addition_3bars_height[0]
 
     @property
     def green_rank23a_height(self):
         """Gバーの縦幅"""
-        return self.bottom - self.__step1_green_bar_rect.left_top[1] - self.addition_3bars_height[1]
+        return self.bottom - self.__step1_green_bar_rect.left_top[1] + self.addition_3bars_height[1]
 
     @property
     def blue_rank23a_height(self):
         """Bバーの縦幅"""
-        return self.bottom - self.__step1_blue_bar_rect.left_top[1] - self.addition_3bars_height[2]
+        return self.bottom - self.__step1_blue_bar_rect.left_top[1] + self.addition_3bars_height[2]
 
     @property
     def red_rank23_height(self):
@@ -592,20 +592,22 @@ class BarBox():
                     BLACK,
                     self.line_type)
 
-    def draw_bars(self, canvas, a_color, step1_color, rank3_color):
+    def draw_3bars(self, canvas, a_color, step1_color, rank3_color):
         """バーを描きます"""
+
+        # yは逆さ
 
         # バーR
         cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
                                self.step1_red_bar_rect.left_top[1]-self.addition_3bars_height[0]),
                       (self.step1_red_bar_rect.right_bottom[0],
-                       self.step1_red_bar_rect.left_top[1]), a_color[0], thickness=-1)
+                       self.step1_red_bar_rect.left_top[1]), a_color[0], thickness=-1)  # a
         cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
                                self.step1_red_bar_rect.left_top[1]),
-                      self.step1_red_bar_rect.right_bottom, step1_color[0], thickness=-1)
-        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0], self.top3),  # yは逆さ
+                      self.step1_red_bar_rect.right_bottom, step1_color[0], thickness=-1)  # step1
+        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0], self.top3),
                       (self.step1_red_bar_rect.right_bottom[0], self.bottom),
-                      rank3_color[0], thickness=-1)
+                      rank3_color[0], thickness=-1)  # rank3
 
         # バーG
         cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0],

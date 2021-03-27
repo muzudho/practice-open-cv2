@@ -5,7 +5,8 @@ import math
 import cv2
 import numpy as np
 from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, \
-    LIGHT_BLUE, RED, GREEN, BLUE
+    LIGHT_BLUE, RED, GREEN, BLUE, SOFT_RED, SOFT_GREEN, SOFT_BLUE, \
+    DARK_RED, DARK_GREEN, DARK_BLUE
 from color_calc import calc_step1, calc_step2, append_rank3_to_color, \
     convert_3heights_to_3bytes, to_be_red, to_be_green, to_be_blue, \
     calc_color_element_rates
@@ -311,22 +312,23 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     rank23a_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
     # 3色成分
-    a_3colors = (to_be_red(a_color), to_be_green(a_color), to_be_blue(a_color))
-    step1_3colors = (to_be_red(step1_color), to_be_green(
-        step1_color), to_be_blue(step1_color))
-    rank3_3colors = (to_be_red(rank3_color), to_be_green(
-        rank3_color), to_be_blue(rank3_color))
-    rank23a_3colors = (to_be_red(rank23a_color), to_be_green(
-        rank23a_color), to_be_blue(rank23a_color))
-    # 成分から角度を逆算
+    a_3colors = (LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE)
+    step1_3colors = (SOFT_RED, SOFT_GREEN, SOFT_BLUE)
+    rank3_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
+    rank23a_3colors = (RED, GREEN, BLUE)
+
+    '''
+    # (WIP) 成分から角度を逆算
     element_rates, expected_theta = calc_color_element_rates(rank23_color)
     if circle_rail.theta != expected_theta:
         print(
-            f"theta={circle_rail.theta:>6.2f}~{expected_theta:>6.2f} \
-color_element(rank23_color)=({element_rates[0]:>6.2f}, \
-{element_rates[1]:>6.2f}, \
-{element_rates[2]:>6.2f})")
-    bar_box.draw_bars(canvas, a_3colors, step1_3colors, rank3_3colors)  # RGBバー
+            f"theta={circle_rail.theta:>7.3f}~{expected_theta:>7.3f} \
+color_element(rank23_color)=({element_rates[0]:>7.3f}, \
+{element_rates[1]:>7.3f}, \
+{element_rates[2]:>7.3f})")
+    '''
+    bar_box.draw_3bars(canvas, a_3colors, step1_3colors,
+                       rank3_3colors)  # RGBバー
 
     # 色見本 筆算の線
     line_left = bar_box.left - 12*GRID_INTERVAL_H
@@ -350,6 +352,7 @@ color_element(rank23_color)=({element_rates[0]:>6.2f}, \
                 BLACK,
                 line_type)
 
+    """
     # 色見本 a
     left_top = (color_example_left, int(
         bar_box.bottom+1*GRID_INTERVAL_H))
@@ -357,7 +360,6 @@ color_element(rank23_color)=({element_rates[0]:>6.2f}, \
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, a_color, thickness=-1)  # 色見本
-
     # 色見本 step1
     left_top = (color_example_left, int(
         bar_box.bottom+5*GRID_INTERVAL_H))
@@ -365,7 +367,28 @@ color_element(rank23_color)=({element_rates[0]:>6.2f}, \
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, step1_color, thickness=-1)  # 色見本
+    """
 
+    # 括線
+    cv2.ellipse(canvas,
+                (bar_box.left-GRID_INTERVAL_H,
+                 bar_box.bottom+int(8.5*GRID_INTERVAL_H)),
+                (3*GRID_INTERVAL_H, 3*GRID_INTERVAL_H),
+                90,
+                0,
+                180,
+                PALE_GRAY,
+                thickness=2)
+
+    # 色見本 rank23
+    left_top = (color_example_left, int(
+        bar_box.bottom+int(7.5*GRID_INTERVAL_H)))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, rank23_color, thickness=-1)  # 色見本
+
+    """
     # 色見本 3
     left_top = (color_example_left, int(
         bar_box.bottom+9*GRID_INTERVAL_H))
@@ -373,6 +396,7 @@ color_element(rank23_color)=({element_rates[0]:>6.2f}, \
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank3_color, thickness=-1)  # 色見本
+    """
 
     # 色見本 23a
     left_top = (color_example_left, int(
@@ -410,19 +434,19 @@ color_element(rank23_color)=({element_rates[0]:>6.2f}, \
     cv2.line(canvas, circle_rail.red_p,
              (bar_box.step1_red_bar_rect.right_bottom[0],
               circle_rail.red_p[1]),
-             LIGHT_RED, thickness=2)
+             SOFT_RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, circle_rail.green_p,
              (bar_box.step1_green_bar_rect.right_bottom[0],
               circle_rail.green_p[1]),
-             LIGHT_GREEN, thickness=2)
+             SOFT_GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, circle_rail.blue_p,
              (bar_box.step1_blue_bar_rect.right_bottom[0],
               circle_rail.blue_p[1]),
-             LIGHT_BLUE, thickness=2)
+             SOFT_BLUE, thickness=2)
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状

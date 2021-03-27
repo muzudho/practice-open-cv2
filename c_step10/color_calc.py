@@ -1,4 +1,4 @@
-"""RGB値を計算します
+"""(WIP) RGB値を計算します
 """
 
 import math
@@ -53,54 +53,56 @@ def calc_color_element_rates(color):
         rank2_color[1] / variable_height,
         rank2_color[2] / variable_height)
     # 弧度法に変換
-    color_rates = (
+    color_degrees = (
         color_rates[0] * 360,
         color_rates[1] * 360,
         color_rates[2] * 360)
     # その結果、 0, x, 360 に分別できる３値が返ってくる。ここで x は 0 <= x <= 360。
     # まず 360 が 2つあるものを除外します。
-    if color_rates[0] == 360 and color_rates[1] == 360:
+    if color_degrees[0] == 360 and color_degrees[1] == 360:
         # イエロー
         return color_rates, 60  # 12時が0°の時計回り
-    if color_rates[1] == 360 and color_rates[2] == 360:
+    if color_degrees[1] == 360 and color_degrees[2] == 360:
         # シアン
         return color_rates, 180
-    if color_rates[0] == 360 and color_rates[2] == 360:
+    if color_degrees[0] == 360 and color_degrees[2] == 360:
         # マゼンタ
         return color_rates, 300
     # 0 が２つあるものを除外します。
-    if color_rates[1] == 0 and color_rates[2] == 0:
+    if color_degrees[1] == 0 and color_degrees[2] == 0:
         # 赤
         return color_rates, 0
-    if color_rates[0] == 0 and color_rates[2] == 0:
+    if color_degrees[0] == 0 and color_degrees[2] == 0:
         # 緑
         return color_rates, 120
-    if color_rates[0] == 0 and color_rates[1] == 0:
+    if color_degrees[0] == 0 and color_degrees[1] == 0:
         # 青
         return color_rates, 240
     # これで、 0, x, 360 に分別できる３値が返ってくる。ここで x は 0 < x < 360。
+    x_rate = sorted(color_rates)[1]
+    # print(f"x_rate={x_rate}")
     # 0 と 360 がどこにあるかで、オレンジ相、黄緑相、エメラルドグリーン相、
     # ドジャースブルー相、インディゴ相、クリムゾン相 の６つに分けれる。
-    if color_rates[0] == 360 and color_rates[2] == 0:
-        # オレンジ相 (0°～60°)
-        return color_rates, 400
-    if color_rates[1] == 360 and color_rates[2] == 0:
-        # 黄緑相 (60°～120°)
-        return color_rates, 500
-    if color_rates[0] == 0 and color_rates[1] == 360:
-        # エメラルドグリーン相 (120°～180°)
-        return color_rates, 600
-    if color_rates[0] == 0 and color_rates[2] == 360:
-        # ドジャースブルー相 (180°～240°)
-        return color_rates, 700
-    if color_rates[1] == 0 and color_rates[2] == 360:
-        # インディゴ相 (240°～300°)
-        return color_rates, 800
-    if color_rates[0] == 360 and color_rates[1] == 0:
-        # クリムゾン相 (300°～360°)
-        return color_rates, 900
-    three_nums = sorted(color_rates)
-    expected_theta = three_nums[1]
+    # また、 x は、 オレンジ相では昇順、黄緑相では降順になるなど、交互になる。
+    if color_degrees[0] == 360 and color_degrees[2] == 0:
+        # オレンジ相 (0°～60°) では、 x は上昇緑
+        return color_rates, math.asin(x_rate)
+    if color_degrees[1] == 360 and color_degrees[2] == 0:
+        # 黄緑相 (60°～120°) では、 x は下降赤
+        return color_rates, math.asin(x_rate)
+    if color_degrees[0] == 0 and color_degrees[1] == 360:
+        # エメラルドグリーン相 (120°～180°) では、 x は上昇青
+        return color_rates, math.asin(x_rate)
+    if color_degrees[0] == 0 and color_degrees[2] == 360:
+        # ドジャースブルー相 (180°～240°) では、 x は下降緑
+        return color_rates, math.asin(x_rate)
+    if color_degrees[1] == 0 and color_degrees[2] == 360:
+        # インディゴ相 (240°～300°) では、 x は上昇赤
+        return color_rates, math.asin(x_rate)
+    if color_degrees[0] == 360 and color_degrees[1] == 0:
+        # クリムゾン相 (300°～360°) では、 x は下降青
+        return color_rates, math.asin(x_rate)
+    expected_theta = sorted(color_rates)[1]
 
     """
     # 元が cos(theta) だったので、acos(theta) したらどうか？

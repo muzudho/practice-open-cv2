@@ -316,7 +316,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     bar_box.draw_bars(canvas)  # RGBバー
 
     rank23_color = bar_box.create_rank23_color()  # step1 色値
-    draw_rank23_rgb_number(canvas, rank23_color, bar_box)  # step1 RGB値テキスト
 
     # 色見本
     color_example_width = 4*GRID_INTERVAL_H
@@ -335,7 +334,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                   right_bottom, rank23_color, thickness=-1)  # 色見本
 
     rank23a_color = bar_box.create_rank23a_color()  # step2 色値
-    bar_box.draw_rgb_number(canvas, rank23a_color)  # step2 RGB値テキスト
+    bar_box.draw_rgb_number(canvas, rank23_color,
+                            rank23a_color)  # step2 RGB値テキスト
     left_top = (color_example_left, int(
         bar_box.bottom+2*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
@@ -386,42 +386,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     return canvas
-
-
-def draw_rank23_rgb_number(canvas, color, bar_box):
-    """RGB値テキストを描きます"""
-
-    top = bar_box.bottom+int(9*GRID_INTERVAL_H)
-
-    # 10進R値テキスト
-    cv2.putText(canvas,
-                f"{color[0]:03}",
-                (bar_box.step1_red_bar_rect.left_top[0],
-                 top),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_RED,
-                bar_box.line_type)
-
-    # 10進G値テキスト
-    cv2.putText(canvas,
-                f"{color[1]:03}",
-                (bar_box.step1_green_bar_rect.left_top[0],
-                 top),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_GREEN,
-                bar_box.line_type)
-
-    # 10進B値テキスト
-    cv2.putText(canvas,
-                f"{color[2]:03}",
-                (bar_box.step1_blue_bar_rect.left_top[0],
-                 top),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_BLUE,
-                bar_box.line_type)
 
 
 main()

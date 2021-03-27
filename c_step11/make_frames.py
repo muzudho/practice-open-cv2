@@ -20,8 +20,8 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 368
+CANVAS_WIDTH = 375  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_HEIGHT = 270
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255

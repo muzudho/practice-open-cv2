@@ -334,6 +334,23 @@ class BarBox():
             BLACK,
             thickness=thickness_minus1+1)
 
+    def draw_3figures(self, canvas, num, left, top, color):
+        def parse_figures(num):
+            if num > 99:
+                return [f"{int(num/100)}", f"{int(num/10) % 10}", f"{num % 10}"]
+            if num > 10:
+                return ["", f"{int(num/10) % 10}", f"{num % 10}"]
+            return ["", "", f"{num % 10}"]
+        figures = parse_figures(num)
+        for i, figure in enumerate(figures):
+            cv2.putText(canvas,
+                        f"{figure}",
+                        (left+i*GRID_UNIT, top),  # x,y
+                        self.font,
+                        self.font_scale,
+                        color,
+                        self.line_type)
+
     def draw_rgb_number(self, canvas,
                         a_color, a_3colors,
                         step1_color, step1_3colors,
@@ -352,160 +369,64 @@ class BarBox():
 
             # 1段目 10進R値テキスト
         if a_color[0] != 0:
-            figures = parse_figures(a_color[0])
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            a_3colors[0],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, a_color[0], self.step1_rect[0].left_top[0], top, a_3colors[0])
 
         # 1段目 10進G値テキスト
         if a_color[1] != 0:
-            figures = parse_figures(a_color[1])
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            a_3colors[1],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, a_color[1], self.step1_rect[1].left_top[0], top, a_3colors[1])
 
         # 1段目 10進B値テキスト
         if a_color[2] != 0:
-            figures = parse_figures(a_color[2])
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            a_3colors[2],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, a_color[2], self.step1_rect[2].left_top[0], top, a_3colors[2])
 
         top = self.bottom+int(4*GRID_UNIT)
 
         # 2段目 10進R値テキスト
         if step1_color[0] != 0:
-            figures = parse_figures(step1_color[0])
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            step1_3colors[0],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, step1_color[0], self.step1_rect[0].left_top[0], top, step1_3colors[0])
 
         # 2段目 10進G値テキスト
         if step1_color[1] != 0:
-            figures = parse_figures(step1_color[1])
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            step1_3colors[1],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, step1_color[1], self.step1_rect[1].left_top[0], top, step1_3colors[1])
 
         # 2段目 10進B値テキスト
         if step1_color[2] != 0:
-            figures = parse_figures(step1_color[2])
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            step1_3colors[2],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, step1_color[2], self.step1_rect[2].left_top[0], top, step1_3colors[2])
 
         top = self.bottom+int(6*GRID_UNIT)
 
         if rank3_byte != 0:
             # 3段目 10進R値テキスト
-            figures = parse_figures(rank3_byte)
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            rank3_3colors[0],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, rank3_byte, self.step1_rect[0].left_top[0], top, rank3_3colors[0])
 
             # 3段目 10進G値テキスト
-            figures = parse_figures(rank3_byte)
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            rank3_3colors[1],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, rank3_byte, self.step1_rect[1].left_top[0], top, rank3_3colors[1])
 
             # 3段目 10進B値テキスト
-            figures = parse_figures(rank3_byte)
-            for i, figure in enumerate(figures):
-                cv2.putText(canvas,
-                            f"{figure}",
-                            (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
-                             top),  # x,y
-                            self.font,
-                            self.font_scale,
-                            rank3_3colors[2],
-                            self.line_type)
+            self.draw_3figures(
+                canvas, rank3_byte, self.step1_rect[2].left_top[0], top, rank3_3colors[2])
 
         top = self.bottom+int(8.5*GRID_UNIT)
 
         # 4段目 10進R値テキスト
-        figures = parse_figures(rank23a_color[0])
-        for i, figure in enumerate(figures):
-            cv2.putText(canvas,
-                        f"{figure}",
-                        (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
-                         top),  # x,y
-                        self.font,
-                        self.font_scale,
-                        rank23a_3colors[0],
-                        self.line_type)
+        self.draw_3figures(
+            canvas, rank23a_color[0], self.step1_rect[0].left_top[0], top, rank23a_3colors[0])
 
         # 4段目 10進G値テキスト
-        figures = parse_figures(rank23a_color[1])
-        for i, figure in enumerate(figures):
-            cv2.putText(canvas,
-                        f"{figure}",
-                        (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
-                         top),  # x,y
-                        self.font,
-                        self.font_scale,
-                        rank23a_3colors[1],
-                        self.line_type)
+        self.draw_3figures(
+            canvas, rank23a_color[1], self.step1_rect[1].left_top[0], top, rank23a_3colors[1])
 
         # 4段目 10進B値テキスト
-        figures = parse_figures(rank23a_color[2])
-        for i, figure in enumerate(figures):
-            cv2.putText(canvas,
-                        f"{figure}",
-                        (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
-                         top),  # x,y
-                        self.font,
-                        self.font_scale,
-                        rank23a_3colors[2],
-                        self.line_type)
+        self.draw_3figures(
+            canvas, rank23a_color[2], self.step1_rect[2].left_top[0], top, rank23a_3colors[2])
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""

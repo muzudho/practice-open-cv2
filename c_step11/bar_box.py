@@ -3,7 +3,7 @@
 
 import cv2
 from colors import LIGHT_GRAY, BLACK
-from conf import GRID_INTERVAL_H
+from conf import GRID_UNIT
 from rectangle import Rectangle
 
 
@@ -338,7 +338,7 @@ class BarBox():
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
-        top = self.bottom+int(4*GRID_INTERVAL_H)
+        top = self.bottom+int(2*GRID_UNIT)
 
         def parse_figures(num):
             if num > 99:
@@ -353,7 +353,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -366,7 +366,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -379,14 +379,14 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
                             a_3colors[2],
                             self.line_type)
 
-        top = self.bottom+int(8*GRID_INTERVAL_H)
+        top = self.bottom+int(4*GRID_UNIT)
 
         # 2段目 10進R値テキスト
         if step1_color[0] != 0:
@@ -394,7 +394,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -407,7 +407,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -420,14 +420,14 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
                             step1_3colors[2],
                             self.line_type)
 
-        top = self.bottom+int(12*GRID_INTERVAL_H)
+        top = self.bottom+int(6*GRID_UNIT)
 
         # 3段目 10進R値テキスト
         if rank3_color[0] != 0:
@@ -435,7 +435,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -448,7 +448,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -461,21 +461,21 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
                              top),  # x,y
                             self.font,
                             self.font_scale,
                             rank3_3colors[2],
                             self.line_type)
 
-        top = self.bottom+int(17*GRID_INTERVAL_H)
+        top = self.bottom+int(8.5*GRID_UNIT)
 
         # 4段目 10進R値テキスト
         figures = parse_figures(rank23a_color[0])
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
+                        (self.step1_rect[0].left_top[0]+i*GRID_UNIT,
                          top),  # x,y
                         self.font,
                         self.font_scale,
@@ -487,7 +487,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
+                        (self.step1_rect[1].left_top[0]+i*GRID_UNIT,
                          top),  # x,y
                         self.font,
                         self.font_scale,
@@ -499,7 +499,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
+                        (self.step1_rect[2].left_top[0]+i*GRID_UNIT,
                          top),  # x,y
                         self.font,
                         self.font_scale,
@@ -508,7 +508,7 @@ class BarBox():
 
     def draw_bar_rate_rank13(self, canvas):
         """１段目、３段目のバー率を描きます"""
-        rate_y = int((self.top1 + self.top2)/2) - GRID_INTERVAL_H
+        rate_y = int((self.top1 + self.top2)/2 - GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
@@ -516,7 +516,7 @@ class BarBox():
                     self.font_scale,
                     LIGHT_GRAY,
                     self.line_type)
-        rate_y = int((self.top3 + self.bottom)/2) + GRID_INTERVAL_H
+        rate_y = int((self.top3 + self.bottom)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
@@ -527,7 +527,7 @@ class BarBox():
 
     def draw_bar_rate_rank2(self, canvas):
         """２段目のバー率を描きます"""
-        rate_y = int((self.top2 + self.top3)/2) + GRID_INTERVAL_H
+        rate_y = int((self.top2 + self.top3)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y

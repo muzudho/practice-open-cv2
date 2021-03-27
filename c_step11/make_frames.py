@@ -15,7 +15,7 @@ from color_calc import calc_step1, calc_step2, \
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
-from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE
+from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 
 # 描画する画像を作る
@@ -27,7 +27,7 @@ CHANNELS = 3
 MONO_BACKGROUND = 255
 
 # RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 8 * GRID_INTERVAL_H
+BAR_TOP1 = 4 * GRID_UNIT
 # 箱の左
 BAR_BOX_LEFT = 300
 
@@ -205,11 +205,11 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
     bar_box.top1 = BAR_TOP1
     bar_box.rates = bar_rates
-    bar_box.height1 = int(bar_box.rates[0] * 20 * GRID_INTERVAL_H)
-    bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
-    bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
+    bar_box.height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
+    bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
+    bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
     bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
-    bar_box.rate_text_gap = int(0.5*GRID_INTERVAL_H)
+    bar_box.rate_text_gap = int(0.25*GRID_UNIT)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
 
@@ -226,12 +226,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
 
-    range_width = 10
-    outer_circle_margin = 3
-    distance = 8 * GRID_INTERVAL_H + 2 * \
-        (range_width + outer_circle_margin) * \
-        GRID_INTERVAL_H + 2*int(1.5*GRID_INTERVAL_H)
-    circle_rail.center = (bar_box.left-distance,
+    circle_rail.center = (bar_box.left-7 * GRID_UNIT,
                           circle_rail.top+circle_rail.range)  # x, y
     inner_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
@@ -244,6 +239,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.top3 = bar_box.top2 + bar_box.height2
     bar_box.bottom = bar_box.top3 + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
+    # print(f"bar_box.height={bar_box.height}")
     # RGBバー２段目領域
     bar_box.rank2_rect.left_top = (bar_box.left, bar_box.top2)
     bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.top3)
@@ -251,11 +247,11 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.rank3_rect.left_top = (bar_box.left, bar_box.top3)
     bar_box.rank3_rect.right_bottom = (bar_box.right, bar_box.bottom)
 
-    inner_circle.area_size = (int(circle_rail.range + 2*GRID_INTERVAL_H+1.6*GRID_INTERVAL_H),
-                              int(circle_rail.range + 2*GRID_INTERVAL_H+1.6*GRID_INTERVAL_H))
+    inner_circle.area_size = (int(6*GRID_UNIT),
+                              int(6*GRID_UNIT))
     inner_circle.phases = PHASE_COUNTS
-    outer_circle.area_size = (int(circle_rail.range + 3*GRID_INTERVAL_H+3*GRID_INTERVAL_H),
-                              int(circle_rail.range + 3*GRID_INTERVAL_H+3*GRID_INTERVAL_H))
+    outer_circle.area_size = (int(7*GRID_UNIT),
+                              int(7*GRID_UNIT))
     outer_circle.phases = PHASE_COUNTS
 
     return bar_box, circle_rail, inner_circle, outer_circle
@@ -264,11 +260,10 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
 def draw_grid(canvas):
     """背景に罫線を引きます"""
     # 水平線グリッド
-    for i in range(0, int(CANVAS_HEIGHT/GRID_INTERVAL_H)+1):
-        if i % 2 == 0:  # ファイルサイズ削減のため間引き
-            y_num = GRID_INTERVAL_H*i
-            cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
-                     PALE_GRAY, thickness=1)
+    for i in range(0, int(CANVAS_HEIGHT/(GRID_UNIT/2))+1):
+        y_num = GRID_UNIT*i
+        cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
+                 PALE_GRAY, thickness=1)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):
@@ -278,7 +273,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, BAR_TOP1-3*GRID_INTERVAL_H),  # x,y
+                (bar_box.left, int(BAR_TOP1-1.5*GRID_UNIT)),  # x,y
                 font,
                 font_scale,
                 BLACK,
@@ -331,21 +326,21 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                        rank3_3colors)  # RGBバー
 
     # 色見本 筆算の線
-    line_left = bar_box.left - 14*GRID_INTERVAL_H
-    line_right = bar_box.right + 4*GRID_INTERVAL_H
-    line_top = bar_box.bottom+int(13*GRID_INTERVAL_H)
+    line_left = bar_box.left - 7*GRID_UNIT
+    line_right = bar_box.right + 2*GRID_UNIT
+    line_top = bar_box.bottom+int(6.5*GRID_UNIT)
     cv2.line(canvas, (line_left, line_top),
              (line_right, line_top), LIGHT_GRAY, thickness=2)
 
     # プラス記号
-    color_example_width = 3*GRID_INTERVAL_H
+    color_example_width = int(1.5*GRID_UNIT)
     font = cv2.FONT_HERSHEY_SIMPLEX
     font_scale = FONT_SCALE
     line_type = 2
     cv2.putText(canvas,
                 "+",
                 (int(bar_box.left - 4.5 * color_example_width),
-                 int(bar_box.bottom+11.5*GRID_INTERVAL_H)),  # x,y
+                 int(bar_box.bottom+5.75*GRID_UNIT)),  # x,y
                 font,
                 font_scale,
                 BLACK,
@@ -354,9 +349,9 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 括線
     cv2.ellipse(canvas,
-                (bar_box.left-GRID_INTERVAL_H,
-                 bar_box.bottom+int(8.5*GRID_INTERVAL_H)),
-                (3*GRID_INTERVAL_H, 3*GRID_INTERVAL_H),
+                (int(bar_box.left-GRID_UNIT/2),
+                 bar_box.bottom+int(4.25*GRID_UNIT)),
+                (int(1.5*GRID_UNIT), int(1.5*GRID_UNIT)),
                 90,
                 0,
                 180,
@@ -364,8 +359,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                 thickness=2)
 
     # 色見本 rank23
-    left_top = (int(color_example_left-3.5*GRID_INTERVAL_H), int(
-        bar_box.bottom+int(7.5*GRID_INTERVAL_H)))
+    left_top = (int(color_example_left-1.75*GRID_UNIT), int(
+        bar_box.bottom+int(3.75*GRID_UNIT)))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
@@ -373,7 +368,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 色見本 23a
     left_top = (color_example_left, int(
-        bar_box.bottom+int(14.5*GRID_INTERVAL_H)))
+        bar_box.bottom+int(7.25*GRID_UNIT)))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
@@ -390,7 +385,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                             rank23a_color, rank23a_3colors)
 
     # 時計の針
-    clock_hand_len = 8*GRID_INTERVAL_H
+    clock_hand_len = 4*GRID_UNIT
     inner_p = (
         int(circle_rail.range * math.cos(math.radians(circle_rail.theta-90)) +
             circle_rail.center[0]),

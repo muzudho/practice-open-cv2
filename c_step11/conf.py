@@ -5,8 +5,8 @@
   * crieitブログの画像貼付け制限
 """
 
-# 水平線グリッド（半分に間引きしてある）
-GRID_INTERVAL_H = 4
+# グリッド間隔
+GRID_UNIT = 12
 
 # 色相環一周分のコマ数
 PHASE_COUNTS = 24

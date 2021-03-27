@@ -1,7 +1,7 @@
 """外環状"""
 
 import cv2
-from conf import GRID_INTERVAL_H
+from conf import GRID_UNIT
 
 
 class OuterCircle():
@@ -90,4 +90,4 @@ class OuterCircle():
                         theta,
                         theta+self.unit_arc,
                         color,
-                        thickness=int(2.5*GRID_INTERVAL_H))
+                        thickness=int(1.25*GRID_UNIT))

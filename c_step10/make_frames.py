@@ -6,7 +6,8 @@ import cv2
 import numpy as np
 from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, \
     LIGHT_BLUE, RED, GREEN, BLUE, SOFT_RED, SOFT_GREEN, SOFT_BLUE, \
-    DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE
+    DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
+    VIVID_RED, VIVID_GREEN, VIVID_BLUE
 from color_calc import calc_step1, calc_step2, append_rank3_to_color, \
     convert_3heights_to_3bytes, to_be_red, to_be_green, to_be_blue, \
     calc_color_element_rates
@@ -249,11 +250,11 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.rank3_rect.left_top = (bar_box.left, bar_box.top3)
     bar_box.rank3_rect.right_bottom = (bar_box.right, bar_box.bottom)
 
-    inner_circle.area_size = (circle_rail.range + 2*GRID_INTERVAL_H+int(1.6*GRID_INTERVAL_H),
-                              circle_rail.range + 2*GRID_INTERVAL_H+int(1.6*GRID_INTERVAL_H))
+    inner_circle.area_size = (int(circle_rail.range + 2*GRID_INTERVAL_H+1.6*GRID_INTERVAL_H),
+                              int(circle_rail.range + 2*GRID_INTERVAL_H+1.6*GRID_INTERVAL_H))
     inner_circle.phases = PHASE_COUNTS
-    outer_circle.area_size = (circle_rail.range + 2*GRID_INTERVAL_H+3*GRID_INTERVAL_H,
-                              circle_rail.range + 2*GRID_INTERVAL_H+3*GRID_INTERVAL_H)
+    outer_circle.area_size = (int(circle_rail.range + 3*GRID_INTERVAL_H+3*GRID_INTERVAL_H),
+                              int(circle_rail.range + 3*GRID_INTERVAL_H+3*GRID_INTERVAL_H))
     outer_circle.phases = PHASE_COUNTS
 
     return bar_box, circle_rail, inner_circle, outer_circle
@@ -311,10 +312,11 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
         bar_box.create_rank23_3bars_height(), bar_box.height)
     rank23a_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
-    # 3色成分
-    a_3colors = (BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE)
-    step1_3colors = (SOFT_RED, SOFT_GREEN, SOFT_BLUE)
-    rank3_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
+    # 3色成分（配色）
+    # (SOFT_RED, SOFT_GREEN, SOFT_BLUE)
+    a_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
+    step1_3colors = (VIVID_RED, VIVID_GREEN, VIVID_BLUE)
+    rank3_3colors = (BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE)
     rank23a_3colors = (RED, GREEN, BLUE)
 
 #    # (WIP) 成分から角度を逆算
@@ -411,7 +413,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                             rank23a_color, rank23a_3colors)
 
     # 時計の針
-    clock_hand_len = 7*GRID_INTERVAL_H
+    clock_hand_len = 8*GRID_INTERVAL_H
     inner_p = (
         int(circle_rail.range * math.cos(math.radians(circle_rail.theta-90)) +
             circle_rail.center[0]),

@@ -10,7 +10,8 @@ from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, \
     VIVID_RED, VIVID_GREEN, VIVID_BLUE
 from color_calc import calc_step1, calc_step2, append_rank3_to_color, \
     convert_3heights_to_3bytes, to_be_red, to_be_green, to_be_blue, \
-    calc_color_element_rates
+    calc_color_element_rates, append_rank3_to_color_rate, \
+    convert_3rates_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -141,28 +142,29 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 
         longest_step1_bar_height = bar_box.get_max_step1_height()
         zoom = longest_step1_bar_height / bar_box.height2
-        # print(f"zoom={zoom}")
         step1_3bars_height = bar_box.create_step1_3bars_height()
-        red_add = int(step1_3bars_height[0] / zoom) - \
+        red_add_px = int(step1_3bars_height[0] / zoom) - \
             step1_3bars_height[0]
-        green_add = int(step1_3bars_height[1] / zoom) - \
+        green_add_px = int(step1_3bars_height[1] / zoom) - \
             step1_3bars_height[1]
-        blue_add = int(step1_3bars_height[2] / zoom) - \
+        blue_add_px = int(step1_3bars_height[2] / zoom) - \
             step1_3bars_height[2]
-        #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
-
-        bar_box.addition_3bars_height = (red_add, green_add, blue_add)
+        bar_box.addition_3bars_height = (red_add_px, green_add_px, blue_add_px)
 
         # 内環状
         theta = inner_circle.phase * inner_circle.unit_arc
-        color = calc_step1(theta)
-        inner_color = append_rank3_to_color(color, bar_box.rates)
+        color_rate = calc_step1(theta)
+        inner_step1_color_rate = append_rank3_to_color_rate(
+            color_rate, bar_box.rates)
+        inner_color = convert_3rates_to_3bytes(inner_step1_color_rate)
         inner_circle.color_list.append(inner_color)
 
         # 外環状
         theta = outer_circle.phase * outer_circle.unit_arc
-        color = calc_step1(theta)
-        outer_color = append_rank3_to_color(color, bar_box.rates)
+        color_rate = calc_step1(theta)
+        outer_step1_color_rate = append_rank3_to_color_rate(
+            color_rate, bar_box.rates)
+        outer_color = convert_3rates_to_3bytes(outer_step1_color_rate)
         outer_color = calc_step2(outer_color,
                                  bar_box.get_max_rank23_height(),
                                  bar_box.height,
@@ -298,7 +300,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.line(canvas, circle_rail.blue_p,
              circle_rail.red_p, BLACK, thickness=2)
 
-    # 1色成分
+    # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     a_color = convert_3heights_to_3bytes(
         bar_box.addition_3bars_height, bar_box.height)
     step1_color = convert_3heights_to_3bytes(
@@ -310,7 +312,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     rank23a_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
     # 3色成分（配色）
-    # (SOFT_RED, SOFT_GREEN, SOFT_BLUE)
     a_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
     step1_3colors = (VIVID_RED, VIVID_GREEN, VIVID_BLUE)
     rank3_3colors = (BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE)
@@ -349,21 +350,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                 line_type)
     color_example_left = int(bar_box.left - 1.5 * color_example_width)
 
-#    # 色見本 a
-#    left_top = (color_example_left, int(
-#        bar_box.bottom+1*GRID_INTERVAL_H))
-#    right_bottom = (left_top[0]+color_example_width,
-#                    left_top[1]+color_example_width)
-#    cv2.rectangle(canvas, left_top,
-#                  right_bottom, a_color, thickness=-1)  # 色見本
-#    # 色見本 step1
-#    left_top = (color_example_left, int(
-#        bar_box.bottom+5*GRID_INTERVAL_H))
-#    right_bottom = (left_top[0]+color_example_width,
-#                    left_top[1]+color_example_width)
-#    cv2.rectangle(canvas, left_top,
-#                  right_bottom, step1_color, thickness=-1)  # 色見本
-
     # 括線
     cv2.ellipse(canvas,
                 (bar_box.left-GRID_INTERVAL_H,
@@ -382,14 +368,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23_color, thickness=-1)  # 色見本
-
-#    # 色見本 3
-#    left_top = (color_example_left, int(
-#        bar_box.bottom+9*GRID_INTERVAL_H))
-#    right_bottom = (left_top[0]+color_example_width,
-#                    left_top[1]+color_example_width)
-#    cv2.rectangle(canvas, left_top,
-#                  right_bottom, rank3_color, thickness=-1)  # 色見本
 
     # 色見本 23a
     left_top = (color_example_left, int(

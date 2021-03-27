@@ -6,10 +6,10 @@ import math
 
 def calc_step1(theta):
     """色変換計算ステップ１"""
-    red_y = (math.cos(math.radians(theta))+1)/2
-    green_y = (math.cos(math.radians(theta-120))+1)/2
-    blue_y = (math.cos(math.radians(theta+120))+1)/2
-    return (red_y, green_y, blue_y)
+    red_rate = (math.cos(math.radians(theta))+1)/2
+    green_rate = (math.cos(math.radians(theta-120))+1)/2
+    blue_rate = (math.cos(math.radians(theta+120))+1)/2
+    return (red_rate, green_rate, blue_rate)
 
 
 def calc_step2(color, upper_bound, height, ceil_height, base_line):
@@ -31,15 +31,25 @@ def calc_step2(color, upper_bound, height, ceil_height, base_line):
 
 def convert_3heights_to_3bytes(n3bars_height, box_height):
     """３本のバーの縦幅ピクセルを、色に変えます"""
+    n3rates = (
+        n3bars_height[0]/box_height,
+        n3bars_height[1]/box_height,
+        n3bars_height[2]/box_height,
+    )
+    return convert_3rates_to_3bytes(n3rates)
+
+
+def convert_3rates_to_3bytes(n3rates):
+    """３本のバーの縦幅ピクセルを、色に変えます"""
     return (
-        int(n3bars_height[0]/box_height*255),
-        int(n3bars_height[1]/box_height*255),
-        int(n3bars_height[2]/box_height*255),
+        int(n3rates[0]*255),
+        int(n3rates[1]*255),
+        int(n3rates[2]*255),
     )
 
 
 def calc_color_element_rates(color):
-    """色成分比を求めます"""
+    """(WIP) 色成分比を求めます"""
     upper_bound = max(color[0], color[1], color[2])
     lower_bound = min(color[0], color[1], color[2])
     variable_height = upper_bound - lower_bound
@@ -139,13 +149,21 @@ def to_be_blue(color):
     return (new_color[2], new_color[1], new_color[0])
 
 
-def append_rank3_to_color(color, bar_rate):
+def append_rank3_to_color_rate(step1_color_rate, bar_rate):
+    """追加分のないバーが全体に対してどれぐらいの割合かを返します"""
+    return (
+        bar_rate[1] * step1_color_rate[0] + bar_rate[2],
+        bar_rate[1] * step1_color_rate[1] + bar_rate[2],
+        bar_rate[1] * step1_color_rate[2] + bar_rate[2])
+
+
+def append_rank3_to_color(color_rate, bar_rate):
     """(red_height_px, green_height_px, blue_height_px)を返します
     """
 
-    rank2_red_px = 255*bar_rate[1]*color[0]
-    rank2_green_px = 255*bar_rate[1]*color[1]
-    rank2_blue_px = 255*bar_rate[1]*color[2]
+    rank2_red_px = 255*bar_rate[1]*color_rate[0]
+    rank2_green_px = 255*bar_rate[1]*color_rate[1]
+    rank2_blue_px = 255*bar_rate[1]*color_rate[2]
 
     # 下駄
     offset = 255*bar_rate[2]

@@ -299,16 +299,6 @@ class BarBox():
             rank23_height[1] + self.addition_3bars_height[1],
             rank23_height[2] + self.addition_3bars_height[2])
 
-    @property
-    def rank1_height_as_byte(self):
-        """１段目が colorの成分値として いくつか"""
-        return int(255 * (self.height1 / self.height))
-
-    @property
-    def rank3_height_as_byte(self):
-        """３段目が colorの成分値として いくつか"""
-        return int(255 * (self.height3 / self.height))
-
     def get_max_rank23_height(self):
         """追加部分を含まない、最長のバーの縦幅"""
         rank23_height = self.create_rank23_3bars_height()

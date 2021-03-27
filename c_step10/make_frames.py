@@ -147,23 +147,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
             bar_box.blue_step1_height
         #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
 
-        bar_box.addition_color = (red_add, green_add, blue_add)
-
-        # バーR追加部分
-        bar_box.addition_red_bar_rect.left_top = (
-            bar_box.red_left, bar_box.step1_red_bar_rect.left_top[1]-bar_box.addition_color[0])  # yは逆さ
-        bar_box.addition_red_bar_rect.right_bottom = (
-            bar_box.red_left+bar_box.one_width, circle_rail.red_p[1])
-        # バーG追加部分
-        bar_box.addition_green_bar_rect.left_top = (
-            bar_box.green_left, bar_box.step1_green_bar_rect.left_top[1]-bar_box.addition_color[1])
-        bar_box.addition_green_bar_rect.right_bottom = (
-            bar_box.green_left+bar_box.one_width, circle_rail.green_p[1])
-        # バーB追加部分
-        bar_box.addition_blue_bar_rect.left_top = (
-            bar_box.blue_left, bar_box.step1_blue_bar_rect.left_top[1]-bar_box.addition_color[2])
-        bar_box.addition_blue_bar_rect.right_bottom = (
-            bar_box.blue_left+bar_box.one_width, circle_rail.blue_p[1])
+        bar_box.addition_3bars_height = (red_add, green_add, blue_add)
 
         ceil_height = bar_box.ceil_height_rgb_value
         base_line = bar_box.base_line_rgb_value

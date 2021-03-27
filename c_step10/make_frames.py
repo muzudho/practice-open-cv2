@@ -115,18 +115,23 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         circle_rail.theta = theta
 
         # バーR
-        bar_box.step1_red_bar_p1 = (bar_box.red_left, circle_rail.red_p[1])
-        bar_box.step1_red_bar_p2 = (
+        bar_box.step1_red_bar_rect.left_top = (
+            bar_box.red_left, circle_rail.red_p[1])
+        bar_box.step1_red_bar_rect.right_bottom = (
             bar_box.red_left+bar_box.one_width, bar_box.top3)
         # バーG
-        bar_box.step1_green_bar_p1 = (
+        bar_box.step1_green_bar_rect.left_top = (
             bar_box.green_left, circle_rail.green_p[1])
-        bar_box.step1_green_bar_p2 = (
+        bar_box.step1_green_bar_rect.right_bottom = (
             bar_box.green_left+bar_box.one_width, bar_box.top3)
         # バーB
-        bar_box.step1_blue_bar_p1 = (bar_box.blue_left, circle_rail.blue_p[1])
-        bar_box.step1_blue_bar_p2 = (
+        bar_box.step1_blue_bar_rect.left_top = (
+            bar_box.blue_left, circle_rail.blue_p[1])
+        bar_box.step1_blue_bar_rect.right_bottom = (
             bar_box.blue_left+bar_box.one_width, bar_box.top3)
+        print(
+            f"red={bar_box.step1_red_bar_rect.debug_string} \
+green={bar_box.step1_green_bar_rect.debug_string} blue={bar_box.step1_blue_bar_rect.debug_string}")
 
         upper_bound_px = bar_box.get_step1_upper_bound_y()
         longest_rank2_bar_height = bar_box.top3 - upper_bound_px
@@ -147,19 +152,19 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_box.blue_addition = blue_add
 
         # バーR追加部分
-        bar_box.addition_red_bar_p1 = (
-            bar_box.red_left, bar_box.step1_red_bar_p1[1]-bar_box.red_addition)  # yは逆さ
-        bar_box.addition_red_bar_p2 = (
+        bar_box.addition_red_bar_rect.left_top = (
+            bar_box.red_left, bar_box.step1_red_bar_rect.left_top[1]-bar_box.red_addition)  # yは逆さ
+        bar_box.addition_red_bar_rect.right_bottom = (
             bar_box.red_left+bar_box.one_width, circle_rail.red_p[1])
         # バーG追加部分
-        bar_box.addition_green_bar_p1 = (
-            bar_box.green_left, bar_box.step1_green_bar_p1[1]-bar_box.green_addition)
-        bar_box.addition_green_bar_p2 = (
+        bar_box.addition_green_bar_rect.left_top = (
+            bar_box.green_left, bar_box.step1_green_bar_rect.left_top[1]-bar_box.green_addition)
+        bar_box.addition_green_bar_rect.right_bottom = (
             bar_box.green_left+bar_box.one_width, circle_rail.green_p[1])
         # バーB追加部分
-        bar_box.addition_blue_bar_p1 = (
-            bar_box.blue_left, bar_box.step1_blue_bar_p1[1]-bar_box.blue_addition)
-        bar_box.addition_blue_bar_p2 = (
+        bar_box.addition_blue_bar_rect.left_top = (
+            bar_box.blue_left, bar_box.step1_blue_bar_rect.left_top[1]-bar_box.blue_addition)
+        bar_box.addition_blue_bar_rect.right_bottom = (
             bar_box.blue_left+bar_box.one_width, circle_rail.blue_p[1])
 
         ceil_height = bar_box.ceil_height_rgb_value
@@ -244,18 +249,18 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     circle_rail.point_range = 4
     # RGBバー２段目
     bar_box.top2 = circle_rail.top
-    bar_box.rank1_p1 = (bar_box.left, BAR_TOP1)
-    bar_box.rank1_p2 = (bar_box.right, bar_box.top2)
+    bar_box.rank1_rect.left_top = (bar_box.left, BAR_TOP1)
+    bar_box.rank1_rect.right_bottom = (bar_box.right, bar_box.top2)
     # バー２段目（レールとなる円と水平線を合わす）
     bar_box.top3 = bar_box.top2 + bar_box.height2
     bar_box.bottom = bar_box.top3 + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
     # RGBバー２段目領域
-    bar_box.rank2_p1 = (bar_box.left, bar_box.top2)
-    bar_box.rank2_p2 = (bar_box.right, bar_box.top3)
+    bar_box.rank2_rect.left_top = (bar_box.left, bar_box.top2)
+    bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.top3)
     # RGBバー３段目
-    bar_box.rank3_p1 = (bar_box.left, bar_box.top3)
-    bar_box.rank3_p2 = (bar_box.right, bar_box.bottom)
+    bar_box.rank3_rect.left_top = (bar_box.left, bar_box.top3)
+    bar_box.rank3_rect.right_bottom = (bar_box.right, bar_box.bottom)
 
     inner_circle.area_size = (circle_rail.range + 2*GRID_INTERVAL_H+int(1.6*GRID_INTERVAL_H),
                               circle_rail.range + 2*GRID_INTERVAL_H+int(1.6*GRID_INTERVAL_H))
@@ -341,9 +346,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
     bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
 
-    ceil_height = bar_box.ceil_height_rgb_value
-    base_line = bar_box.base_line_rgb_value
-
     # 時計の針
     clock_hand_len = 7*GRID_INTERVAL_H
     inner_p = (
@@ -360,15 +362,21 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, circle_rail.red_p,
-             (bar_box.step1_red_bar_p2[0], circle_rail.red_p[1]), LIGHT_RED, thickness=2)
+             (bar_box.step1_red_bar_rect.right_bottom[0],
+              circle_rail.red_p[1]),
+             LIGHT_RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas, circle_rail.green_p,
-             (bar_box.step1_green_bar_p2[0], circle_rail.green_p[1]), LIGHT_GREEN, thickness=2)
+             (bar_box.step1_green_bar_rect.right_bottom[0],
+              circle_rail.green_p[1]),
+             LIGHT_GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas, circle_rail.blue_p,
-             (bar_box.step1_blue_bar_p2[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
+             (bar_box.step1_blue_bar_rect.right_bottom[0],
+              circle_rail.blue_p[1]),
+             LIGHT_BLUE, thickness=2)
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状
@@ -389,7 +397,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     # 16進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:02x}",
-                (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling,
+                (bar_box.step1_red_bar_rect.left_top[0]+bar_box.width+feeling,
                  top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
@@ -398,7 +406,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     # 10進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:03}",
-                (bar_box.step1_red_bar_p1[0],
+                (bar_box.step1_red_bar_rect.left_top[0],
                  top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
@@ -408,7 +416,8 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     # 16進G値テキスト
     cv2.putText(canvas,
                 f"{color[1]:02x}",
-                (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling+int(bar_box.one_width*2/3),
+                (bar_box.step1_red_bar_rect.left_top[0] +
+                 bar_box.width+feeling+int(bar_box.one_width*2/3),
                  top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
@@ -417,7 +426,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     # 10進G値テキスト
     cv2.putText(canvas,
                 f"{color[1]:03}",
-                (bar_box.step1_green_bar_p1[0],
+                (bar_box.step1_green_bar_rect.left_top[0],
                  top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
@@ -427,7 +436,8 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     # 16進B値テキスト
     cv2.putText(canvas,
                 f"{color[2]:02x}",
-                (bar_box.step1_red_bar_p1[0]+bar_box.width+feeling+int(2*bar_box.one_width*2/3),
+                (bar_box.step1_red_bar_rect.left_top[0] +
+                 bar_box.width+feeling+int(2*bar_box.one_width*2/3),
                  top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
@@ -436,7 +446,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     # 10進B値テキスト
     cv2.putText(canvas,
                 f"{color[2]:03}",
-                (bar_box.step1_blue_bar_p1[0],
+                (bar_box.step1_blue_bar_rect.left_top[0],
                  top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,

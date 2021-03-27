@@ -321,11 +321,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 成分から角度を逆算
     element_rates, expected_theta = calc_color_element_rates(rank23_color)
     if circle_rail.theta != expected_theta:
-        check = "x"
-    else:
-        check = " "
-    print(
-        f"{check} theta={circle_rail.theta:>6.2f}~{expected_theta:>6.2f} \
+        print(
+            f"theta={circle_rail.theta:>6.2f}~{expected_theta:>6.2f} \
 color_element(rank23_color)=({element_rates[0]:>6.2f}, \
 {element_rates[1]:>6.2f}, \
 {element_rates[2]:>6.2f})")

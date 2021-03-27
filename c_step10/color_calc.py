@@ -58,7 +58,6 @@ def calc_color_element_rates(color):
         color_rates[1] * 360,
         color_rates[2] * 360)
     # その結果、 0, x, 360 に分別できる３値が返ってくる。ここで x は 0 <= x <= 360。
-    expected_theta = 0
     # まず 360 が 2つあるものを除外します。
     if color_rates[0] == 360 and color_rates[1] == 360:
         # イエロー
@@ -69,6 +68,39 @@ def calc_color_element_rates(color):
     if color_rates[0] == 360 and color_rates[2] == 360:
         # マゼンタ
         return color_rates, 300
+    # 0 が２つあるものを除外します。
+    if color_rates[1] == 0 and color_rates[2] == 0:
+        # 赤
+        return color_rates, 0
+    if color_rates[0] == 0 and color_rates[2] == 0:
+        # 緑
+        return color_rates, 120
+    if color_rates[0] == 0 and color_rates[1] == 0:
+        # 青
+        return color_rates, 240
+    # これで、 0, x, 360 に分別できる３値が返ってくる。ここで x は 0 < x < 360。
+    # 0 と 360 がどこにあるかで、オレンジ相、黄緑相、エメラルドグリーン相、
+    # ドジャースブルー相、インディゴ相、クリムゾン相 の６つに分けれる。
+    if color_rates[0] == 360 and color_rates[2] == 0:
+        # オレンジ相 (0°～60°)
+        return color_rates, 400
+    if color_rates[1] == 360 and color_rates[2] == 0:
+        # 黄緑相 (60°～120°)
+        return color_rates, 500
+    if color_rates[0] == 0 and color_rates[1] == 360:
+        # エメラルドグリーン相 (120°～180°)
+        return color_rates, 600
+    if color_rates[0] == 0 and color_rates[2] == 360:
+        # ドジャースブルー相 (180°～240°)
+        return color_rates, 700
+    if color_rates[1] == 0 and color_rates[2] == 360:
+        # インディゴ相 (240°～300°)
+        return color_rates, 800
+    if color_rates[0] == 360 and color_rates[1] == 0:
+        # クリムゾン相 (300°～360°)
+        return color_rates, 900
+    three_nums = sorted(color_rates)
+    expected_theta = three_nums[1]
 
     """
     # 元が cos(theta) だったので、acos(theta) したらどうか？

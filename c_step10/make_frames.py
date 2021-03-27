@@ -331,7 +331,7 @@ color_element(rank23_color)=({element_rates[0]:>7.3f}, \
                        rank3_3colors)  # RGBバー
 
     # 色見本 筆算の線
-    line_left = bar_box.left - 12*GRID_INTERVAL_H
+    line_left = bar_box.left - 14*GRID_INTERVAL_H
     line_right = bar_box.right + 4*GRID_INTERVAL_H
     line_top = bar_box.bottom+int(13*GRID_INTERVAL_H)
     cv2.line(canvas, (line_left, line_top),
@@ -339,18 +339,18 @@ color_element(rank23_color)=({element_rates[0]:>7.3f}, \
 
     # プラス記号
     color_example_width = 3*GRID_INTERVAL_H
-    color_example_left = int(bar_box.left - 1.5 * color_example_width)
     font = cv2.FONT_HERSHEY_SIMPLEX
     font_scale = FONT_SCALE
     line_type = 2
     cv2.putText(canvas,
                 "+",
-                (int(bar_box.left - 3.5 * color_example_width),
+                (int(bar_box.left - 4.5 * color_example_width),
                  int(bar_box.bottom+11.5*GRID_INTERVAL_H)),  # x,y
                 font,
                 font_scale,
                 BLACK,
                 line_type)
+    color_example_left = int(bar_box.left - 1.5 * color_example_width)
 
     """
     # 色見本 a
@@ -381,7 +381,7 @@ color_element(rank23_color)=({element_rates[0]:>7.3f}, \
                 thickness=2)
 
     # 色見本 rank23
-    left_top = (color_example_left, int(
+    left_top = (int(color_example_left-3.5*GRID_INTERVAL_H), int(
         bar_box.bottom+int(7.5*GRID_INTERVAL_H)))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)

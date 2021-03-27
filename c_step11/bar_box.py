@@ -338,6 +338,7 @@ class BarBox():
             thickness=thickness_minus1+1)
 
     def draw_3figures(self, canvas, num, left, top, color):
+        """３桁の数字の描画"""
         def parse_figures(num):
             if num > 99:
                 return [f"{int(num/100)}", f"{int(num/10) % 10}", f"{num % 10}"]
@@ -361,19 +362,19 @@ class BarBox():
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
-        top = self.bottom+int(2*GRID_UNIT)
+        top = int(self.top2-GRID_UNIT*3/4)
 
-        # 1段目 10進R値テキスト
+        # 追加値 10進R値テキスト
         if a_color[0] != 0:
             self.draw_3figures(
                 canvas, a_color[0], self.step1_rect[0].left_top[0], top, a_3colors[0])
 
-        # 1段目 10進G値テキスト
+        # 追加値 10進G値テキスト
         if a_color[1] != 0:
             self.draw_3figures(
                 canvas, a_color[1], self.step1_rect[1].left_top[0], top, a_3colors[1])
 
-        # 1段目 10進B値テキスト
+        # 追加値 10進B値テキスト
         if a_color[2] != 0:
             self.draw_3figures(
                 canvas, a_color[2], self.step1_rect[2].left_top[0], top, a_3colors[2])
@@ -399,7 +400,7 @@ class BarBox():
                 rank3_byte, self.step1_rect[2].left_top[0],
                 int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4), WHITE)
 
-        top = self.bottom+int(6*GRID_UNIT)
+        top = int(self.bottom+6*GRID_UNIT)
 
         if rank3_byte != 0:
             # 3段目 10進R値テキスト
@@ -414,7 +415,7 @@ class BarBox():
             self.draw_3figures(
                 canvas, rank3_byte, self.step1_rect[2].left_top[0], top, rank3_3colors[2])
 
-        top = self.bottom+int(8.5*GRID_UNIT)
+        top = int(self.bottom+8.5*GRID_UNIT)
 
         # 4段目 10進R値テキスト
         self.draw_3figures(

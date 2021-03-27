@@ -179,7 +179,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
                              inner_circle, outer_circle)
-        draw_tone_name(canvas, bar_box, tone_name)
+        draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -270,14 +270,12 @@ def draw_grid(canvas):
 
 def draw_tone_name(canvas, bar_box, tone_name):
     """トーン名を描きます"""
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = FONT_SCALE
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, int(BAR_TOP1-1.5*GRID_UNIT)),  # x,y
-                font,
-                font_scale,
+                (bar_box.left, int(BAR_TOP1-2.5*GRID_UNIT)),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
                 BLACK,
                 line_type)
 

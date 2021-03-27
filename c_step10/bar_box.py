@@ -284,21 +284,20 @@ class BarBox():
 
     def create_rank23_3bars_height(self):
         """色を作成"""
+        rank2_height = self.create_step1_3bars_height()
+        rank3_height = self.create_rank3_3bars_height()
         return (
-            self.bottom - self.__step1_rect[0].left_top[1],
-            self.bottom - self.__step1_rect[1].left_top[1],
-            self.bottom - self.__step1_rect[2].left_top[1])
+            rank2_height[0] + rank3_height[0],
+            rank2_height[1] + rank3_height[1],
+            rank2_height[2] + rank3_height[2])
 
     def create_rank23a_3bars_height(self):
         """色を作成"""
+        rank23_height = self.create_rank23_3bars_height()
         return (
-            self.bottom -
-            self.__step1_rect[0].left_top[1] +
-            self.addition_3bars_height[0],
-            self.bottom -
-            self.__step1_rect[1].left_top[1] +
-            self.addition_3bars_height[1],
-            self.bottom - self.__step1_rect[2].left_top[1] + self.addition_3bars_height[2])
+            rank23_height[0] + self.addition_3bars_height[0],
+            rank23_height[1] + self.addition_3bars_height[1],
+            rank23_height[2] + self.addition_3bars_height[2])
 
     @property
     def rank1_height_as_byte(self):

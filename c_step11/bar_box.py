@@ -3,6 +3,7 @@
 
 import cv2
 from colors import LIGHT_GRAY, BLACK
+from color_calc import convert_3heights_to_3bytes, convert_height_to_byte
 from conf import GRID_UNIT
 from rectangle import Rectangle
 
@@ -21,6 +22,7 @@ class BarBox():
         self.__height2 = 0
         self.__height3 = 0
         self.__one_width = 0
+        self.__y_axis_label_gap = 0
         self.__rate_text_gap = 0
         self.__left = 0
         self.__right = 0
@@ -125,6 +127,15 @@ class BarBox():
     @one_width.setter
     def one_width(self, val):
         self.__one_width = val
+
+    @property
+    def y_axis_label_gap(self):
+        """箱の右と、Y軸ラベルの間隔"""
+        return self.__y_axis_label_gap
+
+    @y_axis_label_gap.setter
+    def y_axis_label_gap(self, val):
+        self.__y_axis_label_gap = val
 
     @property
     def rate_text_gap(self):
@@ -275,21 +286,13 @@ class BarBox():
             self.__step1_rect[1].left_top[1],
             self.__step1_rect[2].right_bottom[1] - self.__step1_rect[2].left_top[1])
 
-    def create_rank3_3bars_height(self):
-        """色を作成"""
-        return (
-            self.bottom - self.__rank3_rect.left_top[1],
-            self.bottom - self.__rank3_rect.left_top[1],
-            self.bottom - self.__rank3_rect.left_top[1])
-
     def create_rank23_3bars_height(self):
         """色を作成"""
         rank2_height = self.create_step1_3bars_height()
-        rank3_height = self.create_rank3_3bars_height()
         return (
-            rank2_height[0] + rank3_height[0],
-            rank2_height[1] + rank3_height[1],
-            rank2_height[2] + rank3_height[2])
+            rank2_height[0] + self.height3,
+            rank2_height[1] + self.height3,
+            rank2_height[2] + self.height3)
 
     def create_rank23a_3bars_height(self):
         """色を作成"""
@@ -334,7 +337,7 @@ class BarBox():
     def draw_rgb_number(self, canvas,
                         a_color, a_3colors,
                         step1_color, step1_3colors,
-                        rank3_color, rank3_3colors,
+                        rank3_byte, rank3_3colors,
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
@@ -429,9 +432,9 @@ class BarBox():
 
         top = self.bottom+int(6*GRID_UNIT)
 
-        # 3段目 10進R値テキスト
-        if rank3_color[0] != 0:
-            figures = parse_figures(rank3_color[0])
+        if rank3_byte != 0:
+            # 3段目 10進R値テキスト
+            figures = parse_figures(rank3_byte)
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
@@ -442,9 +445,8 @@ class BarBox():
                             rank3_3colors[0],
                             self.line_type)
 
-        # 3段目 10進G値テキスト
-        if rank3_color[1] != 0:
-            figures = parse_figures(rank3_color[1])
+            # 3段目 10進G値テキスト
+            figures = parse_figures(rank3_byte)
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
@@ -455,9 +457,8 @@ class BarBox():
                             rank3_3colors[1],
                             self.line_type)
 
-        # 3段目 10進B値テキスト
-        if rank3_color[2] != 0:
-            figures = parse_figures(rank3_color[2])
+            # 3段目 10進B値テキスト
+            figures = parse_figures(rank3_byte)
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
@@ -506,8 +507,51 @@ class BarBox():
                         rank23a_3colors[2],
                         self.line_type)
 
-    def draw_bar_rate_rank13(self, canvas):
-        """１段目、３段目のバー率を描きます"""
+    def draw_y_axis_label(self, canvas):
+        """Y軸のラベルを描きます"""
+        rank3_byte = convert_height_to_byte(
+            self.height3, self.height)
+
+        # 255
+        rate_y = self.top1
+        cv2.putText(canvas,
+                    f"255",
+                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLACK,
+                    self.line_type)
+        # ceil
+        rate_y = self.top2
+        cv2.putText(canvas,
+                    f"ceil",
+                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLACK,
+                    self.line_type)
+        # base_line
+        rate_y = self.top3
+        cv2.putText(canvas,
+                    f"{rank3_byte}",
+                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLACK,
+                    self.line_type)
+        # 0
+        rate_y = self.bottom
+        cv2.putText(canvas,
+                    f"  0",
+                    (self.right+self.y_axis_label_gap, rate_y),  # x,y
+                    self.font,
+                    self.font_scale,
+                    BLACK,
+                    self.line_type)
+
+    def draw_bars_rate(self, canvas):
+        """バー率を描きます"""
+        # １段目のバー率
         rate_y = int((self.top1 + self.top2)/2 - GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
@@ -516,17 +560,7 @@ class BarBox():
                     self.font_scale,
                     LIGHT_GRAY,
                     self.line_type)
-        rate_y = int((self.top3 + self.bottom)/2 + GRID_UNIT/2)
-        cv2.putText(canvas,
-                    f"{int(self.rates[2]*100):3}%",
-                    (self.right+self.rate_text_gap, rate_y),  # x,y
-                    self.font,
-                    self.font_scale,
-                    LIGHT_GRAY,
-                    self.line_type)
-
-    def draw_bar_rate_rank2(self, canvas):
-        """２段目のバー率を描きます"""
+        # ２段目のバー率
         rate_y = int((self.top2 + self.top3)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
@@ -534,6 +568,15 @@ class BarBox():
                     self.font,
                     self.font_scale,
                     BLACK,
+                    self.line_type)
+        # ３段目のバー率
+        rate_y = int((self.top3 + self.bottom)/2 + GRID_UNIT/2)
+        cv2.putText(canvas,
+                    f"{int(self.rates[2]*100):3}%",
+                    (self.right+self.rate_text_gap, rate_y),  # x,y
+                    self.font,
+                    self.font_scale,
+                    LIGHT_GRAY,
                     self.line_type)
 
     def draw_3bars(self, canvas, a_color, step1_color, rank3_color):

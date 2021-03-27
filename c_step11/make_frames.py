@@ -11,7 +11,7 @@ from colors import PALE_GRAY, LIGHT_GRAY, BLACK,  \
 from color_calc import calc_step1, calc_step2, \
     convert_3heights_to_3bytes,  \
     append_rank3_to_color_rate, \
-    convert_3rates_to_3bytes
+    convert_3rates_to_3bytes, convert_height_to_byte
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -90,7 +90,7 @@ def main():
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
-            bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
+            bar_box.draw_bars_rate(canvas)  # バー率テキスト
             draw_tone_name(canvas, bar_box, tone_name)
             # 書出し
             canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -211,7 +211,8 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
     bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
-    bar_box.rate_text_gap = int(0.25*GRID_UNIT)
+    bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
+    bar_box.rate_text_gap = int(0.8*GRID_UNIT)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
 
@@ -241,7 +242,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.top3 = bar_box.top2 + bar_box.height2
     bar_box.bottom = bar_box.top3 + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
-    print(f"bar_box.height={bar_box.height}")
+    # print(f"bar_box.height={bar_box.height}")
     # RGBバー２段目領域
     bar_box.rank2_rect.left_top = (bar_box.left, bar_box.top2)
     bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.top3)
@@ -304,8 +305,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
         bar_box.addition_3bars_height, bar_box.height)
     step1_color = convert_3heights_to_3bytes(
         bar_box.create_step1_3bars_height(), bar_box.height)
-    rank3_color = convert_3heights_to_3bytes(
-        bar_box.create_rank3_3bars_height(), bar_box.height)
+    rank3_byte = convert_height_to_byte(
+        bar_box.height3, bar_box.height)
     rank23_color = convert_3heights_to_3bytes(
         bar_box.create_rank23_3bars_height(), bar_box.height)
     rank23a_color = convert_3heights_to_3bytes(
@@ -376,14 +377,13 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23a_color, thickness=-1)  # 色見本
 
-    bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
-    bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
+    bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
     # 色成分数
     bar_box.draw_rgb_number(canvas,
                             a_color, a_3colors,
                             step1_color, step1_3colors,
-                            rank3_color, rank3_3colors,
+                            rank3_byte, rank3_3colors,
                             rank23a_color, rank23a_3colors)
 
     # 時計の針

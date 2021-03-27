@@ -357,8 +357,8 @@ class BarBox():
 
     def draw_rgb_number(self, canvas,
                         a_color, a_3colors,
-                        step1_color,
-                        rank3_byte, rank3_3colors,
+                        step1_color, step1_3colors,
+                        rank3_byte, rank23_color,
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
@@ -400,34 +400,28 @@ class BarBox():
                 rank3_byte, self.step1_rect[2].left_top[0],
                 int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4), WHITE)
 
-        top = int(self.bottom+6*GRID_UNIT)
+        top = int(self.bottom+4*GRID_UNIT)
 
-        if rank3_byte != 0:
-            # 3段目 10進R値テキスト
-            self.draw_3figures(
-                canvas, rank3_byte, self.step1_rect[0].left_top[0], top, rank3_3colors[0])
-
-            # 3段目 10進G値テキスト
-            self.draw_3figures(
-                canvas, rank3_byte, self.step1_rect[1].left_top[0], top, rank3_3colors[1])
-
-            # 3段目 10進B値テキスト
-            self.draw_3figures(
-                canvas, rank3_byte, self.step1_rect[2].left_top[0], top, rank3_3colors[2])
-
-        top = int(self.bottom+8.5*GRID_UNIT)
-
-        # 4段目 10進R値テキスト
+        # rank23 10進R値テキスト
+        left = self.step1_rect[0].left_top[0]
+        cv2.rectangle(canvas, (left, top),
+                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT), step1_3colors[0], thickness=-1)  # 色見本
         self.draw_3figures(
-            canvas, rank23a_color[0], self.step1_rect[0].left_top[0], top, rank23a_3colors[0])
+            canvas, rank23_color[0], left, int(top+GRID_UNIT*3/4), WHITE)
 
-        # 4段目 10進G値テキスト
+        # rank23 10進G値テキスト
+        left = self.step1_rect[1].left_top[0]
+        cv2.rectangle(canvas, (left, top),
+                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT), step1_3colors[1], thickness=-1)  # 色見本
         self.draw_3figures(
-            canvas, rank23a_color[1], self.step1_rect[1].left_top[0], top, rank23a_3colors[1])
+            canvas, rank23_color[1], left, int(top+GRID_UNIT*3/4), WHITE)
 
-        # 4段目 10進B値テキスト
+        # rank23 10進B値テキスト
+        left = self.step1_rect[2].left_top[0]
+        cv2.rectangle(canvas, (left, top),
+                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT), step1_3colors[2], thickness=-1)  # 色見本
         self.draw_3figures(
-            canvas, rank23a_color[2], self.step1_rect[2].left_top[0], top, rank23a_3colors[2])
+            canvas, rank23_color[2], left, int(top+GRID_UNIT*3/4), WHITE)
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""

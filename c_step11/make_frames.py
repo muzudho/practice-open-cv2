@@ -211,7 +211,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
     bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
-    bar_box.rate_text_gap = int(0.8*GRID_UNIT)
+    bar_box.rate_text_gap = int(0.5*GRID_UNIT)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
 
@@ -325,42 +325,13 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     bar_box.draw_3bars(canvas, a_3colors, step1_3colors,
                        rank3_3colors)  # RGBバー
 
-    # 色見本 筆算の線
-    line_left = bar_box.left - 7*GRID_UNIT
-    line_right = bar_box.right + 2*GRID_UNIT
-    line_top = bar_box.bottom+int(6.5*GRID_UNIT)
-    cv2.line(canvas, (line_left, line_top),
-             (line_right, line_top), LIGHT_GRAY, thickness=2)
-
     # プラス記号
     color_example_width = int(1.5*GRID_UNIT)
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = FONT_SCALE
-    line_type = 2
-    cv2.putText(canvas,
-                "+",
-                (int(bar_box.left - 4.5 * color_example_width),
-                 int(bar_box.bottom+5.75*GRID_UNIT)),  # x,y
-                font,
-                font_scale,
-                BLACK,
-                line_type)
     color_example_left = int(bar_box.left - 1.5 * color_example_width)
 
-    # 括線
-    cv2.ellipse(canvas,
-                (int(bar_box.left-GRID_UNIT/2),
-                 bar_box.bottom+int(4.25*GRID_UNIT)),
-                (int(1.5*GRID_UNIT), int(1.5*GRID_UNIT)),
-                90,
-                0,
-                180,
-                PALE_GRAY,
-                thickness=2)
-
     # 色見本 rank23
-    left_top = (int(color_example_left-1.75*GRID_UNIT), int(
-        bar_box.bottom+int(3.75*GRID_UNIT)))
+    left_top = (color_example_left,
+                int(bar_box.bottom+3.75*GRID_UNIT))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
@@ -417,8 +388,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 色成分数
     bar_box.draw_rgb_number(canvas,
                             a_color, a_3colors,
-                            step1_color,
-                            rank3_byte, rank3_3colors,
+                            step1_color, step1_3colors,
+                            rank3_byte, rank23_color,
                             rank23a_color, rank23a_3colors)
 
     # cv2.imshow('Title', canvas)

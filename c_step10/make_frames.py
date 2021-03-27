@@ -4,13 +4,13 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, \
-    LIGHT_BLUE, RED, GREEN, BLUE, SOFT_RED, SOFT_GREEN, SOFT_BLUE, \
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK,  \
+    RED, GREEN, BLUE,  \
     DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     VIVID_RED, VIVID_GREEN, VIVID_BLUE
-from color_calc import calc_step1, calc_step2, append_rank3_to_color, \
-    convert_3heights_to_3bytes, to_be_red, to_be_green, to_be_blue, \
-    calc_color_element_rates, append_rank3_to_color_rate, \
+from color_calc import calc_step1, calc_step2, \
+    convert_3heights_to_3bytes,  \
+    append_rank3_to_color_rate, \
     convert_3rates_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail

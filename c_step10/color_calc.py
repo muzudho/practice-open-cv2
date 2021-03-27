@@ -114,37 +114,35 @@ def calc_color_element_rates(color):
         return color_rates, math.asin(x_rate)
     expected_theta = sorted(color_rates)[1]
 
-    """
-    # 元が cos(theta) だったので、acos(theta) したらどうか？
-    colors_theta = (
-        math.acos(color_rates[0]),
-        math.acos(color_rates[1]),
-        math.acos(color_rates[2]))
-    # 緑は -120°、 青は 120° 足しているから、逆に引いたらどうか
-    colors_theta = (
-        colors_theta[0],
-        colors_theta[1] + math.radians(120),
-        colors_theta[2] - math.radians(120),
-    )
-    """
+#    # 元が cos(theta) だったので、acos(theta) したらどうか？
+#    colors_theta = (
+#        math.acos(color_rates[0]),
+#        math.acos(color_rates[1]),
+#        math.acos(color_rates[2]))
+#    # 緑は -120°、 青は 120° 足しているから、逆に引いたらどうか
+#    colors_theta = (
+#        colors_theta[0],
+#        colors_theta[1] + math.radians(120),
+#        colors_theta[2] - math.radians(120),
+#    )
 
     return color_rates, expected_theta
 
 
 def to_be_red(color):
-    """赤色にする"""
+    """(WIP) 赤色にする"""
     new_color = sorted(color)
     return (new_color[0], new_color[2], new_color[1])
 
 
 def to_be_green(color):
-    """緑色にする"""
+    """(WIP) 緑色にする"""
     new_color = sorted(color)
     return (new_color[1], new_color[0], new_color[2])
 
 
 def to_be_blue(color):
-    """青くする"""
+    """(WIP) 青くする"""
     new_color = sorted(color)
     return (new_color[2], new_color[1], new_color[0])
 
@@ -155,20 +153,3 @@ def append_rank3_to_color_rate(step1_color_rate, bar_rate):
         bar_rate[1] * step1_color_rate[0] + bar_rate[2],
         bar_rate[1] * step1_color_rate[1] + bar_rate[2],
         bar_rate[1] * step1_color_rate[2] + bar_rate[2])
-
-
-def append_rank3_to_color(color_rate, bar_rate):
-    """(red_height_px, green_height_px, blue_height_px)を返します
-    """
-
-    rank2_red_px = 255*bar_rate[1]*color_rate[0]
-    rank2_green_px = 255*bar_rate[1]*color_rate[1]
-    rank2_blue_px = 255*bar_rate[1]*color_rate[2]
-
-    # 下駄
-    offset = 255*bar_rate[2]
-    rank23_red_px = int(rank2_red_px+offset)
-    rank23_green_px = int(rank2_green_px+offset)
-    rank23_blue_px = int(rank2_blue_px+offset)
-
-    return (rank23_red_px, rank23_green_px, rank23_blue_px)

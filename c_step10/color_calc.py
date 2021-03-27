@@ -57,6 +57,19 @@ def calc_color_element_rates(color):
         color_rates[0] * 360,
         color_rates[1] * 360,
         color_rates[2] * 360)
+    # その結果、 0, x, 360 に分別できる３値が返ってくる。ここで x は 0 <= x <= 360。
+    expected_theta = 0
+    # まず 360 が 2つあるものを除外します。
+    if color_rates[0] == 360 and color_rates[1] == 360:
+        # イエロー
+        return color_rates, 60  # 12時が0°の時計回り
+    if color_rates[1] == 360 and color_rates[2] == 360:
+        # シアン
+        return color_rates, 180
+    if color_rates[0] == 360 and color_rates[2] == 360:
+        # マゼンタ
+        return color_rates, 300
+
     """
     # 元が cos(theta) だったので、acos(theta) したらどうか？
     colors_theta = (
@@ -70,7 +83,8 @@ def calc_color_element_rates(color):
         colors_theta[2] - math.radians(120),
     )
     """
-    return color_rates
+
+    return color_rates, expected_theta
 
 
 def to_be_red(color):

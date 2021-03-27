@@ -3,7 +3,7 @@
 
 import cv2
 from colors import LIGHT_GRAY, BLACK, WHITE
-from color_calc import convert_3heights_to_3bytes, convert_height_to_byte
+from color_calc import convert_height_to_byte
 from conf import GRID_UNIT
 from rectangle import Rectangle
 
@@ -322,7 +322,8 @@ class BarBox():
             thickness=self.thickness)
         # バーの下の黒い所
         cv2.rectangle(canvas, (int(self.left-self.thickness/2), self.bottom),
-                      (int(self.right+self.thickness/2), self.bottom+GRID_UNIT), LIGHT_GRAY, thickness=-1)
+                      (int(self.right+self.thickness/2), self.bottom+GRID_UNIT),
+                      LIGHT_GRAY, thickness=-1)
 
     def draw_rank2_box(self, canvas):
         """２段目の箱を描きます"""
@@ -422,21 +423,24 @@ class BarBox():
         # rank23 10進R値テキスト
         left = self.step1_rect[0].left_top[0]
         cv2.rectangle(canvas, (left, top),
-                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT), step1_3colors[0], thickness=-1)  # 色見本
+                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT),
+                      step1_3colors[0], thickness=-1)  # 色見本
         self.draw_3figures(
             canvas, rank23_color[0], left, int(top+GRID_UNIT*3/4), WHITE)
 
         # rank23 10進G値テキスト
         left = self.step1_rect[1].left_top[0]
         cv2.rectangle(canvas, (left, top),
-                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT), step1_3colors[1], thickness=-1)  # 色見本
+                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT),
+                      step1_3colors[1], thickness=-1)  # 色見本
         self.draw_3figures(
             canvas, rank23_color[1], left, int(top+GRID_UNIT*3/4), WHITE)
 
         # rank23 10進B値テキスト
         left = self.step1_rect[2].left_top[0]
         cv2.rectangle(canvas, (left, top),
-                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT), step1_3colors[2], thickness=-1)  # 色見本
+                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT),
+                      step1_3colors[2], thickness=-1)  # 色見本
         self.draw_3figures(
             canvas, rank23_color[2], left, int(top+GRID_UNIT*3/4), WHITE)
 

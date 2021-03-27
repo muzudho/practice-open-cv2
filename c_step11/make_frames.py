@@ -179,7 +179,6 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
                              inner_circle, outer_circle)
-        bar_box.draw_rank2_box(canvas)
         draw_tone_name(canvas, bar_box, tone_name)
 
         # 書出し
@@ -210,7 +209,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
     bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-    bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
+    bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
     bar_box.rate_text_gap = int(0.8*GRID_UNIT)
     # 円レール
@@ -413,6 +412,9 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状
+
+    # バー箱の２段目の黒枠
+    bar_box.draw_rank2_box(canvas)
 
     # 色成分数
     bar_box.draw_rgb_number(canvas,

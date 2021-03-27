@@ -378,22 +378,25 @@ class BarBox():
             self.draw_3figures(
                 canvas, a_color[2], self.step1_rect[2].left_top[0], top, a_3colors[2])
 
-        # step1 10進R値テキスト
+        # step1+rank3 10進R値テキスト
         if step1_color[0] != 0:
             self.draw_3figures(
-                canvas, step1_color[0], self.step1_rect[0].left_top[0],
+                canvas, step1_color[0] +
+                rank3_byte, self.step1_rect[0].left_top[0],
                 int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4), WHITE)
 
-        # step1 10進G値テキスト
+        # step1+rank3 10進G値テキスト
         if step1_color[1] != 0:
             self.draw_3figures(
-                canvas, step1_color[1], self.step1_rect[1].left_top[0],
+                canvas, step1_color[1] +
+                rank3_byte, self.step1_rect[1].left_top[0],
                 int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4), WHITE)
 
-        # step1 10進B値テキスト
+        # step1+rank3 10進B値テキスト
         if step1_color[2] != 0:
             self.draw_3figures(
-                canvas, step1_color[2], self.step1_rect[2].left_top[0],
+                canvas, step1_color[2] +
+                rank3_byte, self.step1_rect[2].left_top[0],
                 int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4), WHITE)
 
         top = self.bottom+int(6*GRID_UNIT)

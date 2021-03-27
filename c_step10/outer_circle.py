@@ -1,7 +1,6 @@
 """外環状"""
 
 import cv2
-from color_calc import append_rank3_to_color, calc_step1
 from conf import GRID_INTERVAL_H
 
 

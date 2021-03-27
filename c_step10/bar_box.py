@@ -4,6 +4,7 @@
 import cv2
 from colors import LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, BLACK, RED, GREEN, BLUE
 from conf import GRID_INTERVAL_H
+from rectangle import Rectangle
 
 
 class BarBox():
@@ -34,18 +35,12 @@ class BarBox():
         self.__rank3_p1 = (0, 0)
         self.__rank3_p2 = (0, 0)
 
-        self.__step1_red_bar_p1 = (0, 0)
-        self.__step1_red_bar_p2 = (0, 0)
-        self.__addition_red_bar_p1 = (0, 0)
-        self.__addition_red_bar_p2 = (0, 0)
-        self.__step1_green_bar_p1 = (0, 0)
-        self.__step1_green_bar_p2 = (0, 0)
-        self.__addition_green_bar_p1 = (0, 0)
-        self.__addition_green_bar_p2 = (0, 0)
-        self.__step1_blue_bar_p1 = (0, 0)
-        self.__step1_blue_bar_p2 = (0, 0)
-        self.__addition_blue_bar_p1 = (0, 0)
-        self.__addition_blue_bar_p2 = (0, 0)
+        self.__step1_red_bar_rect = Rectangle
+        self.__addition_red_bar_rect = Rectangle
+        self.__step1_green_bar_rect = Rectangle
+        self.__addition_green_bar_rect = Rectangle
+        self.__step1_blue_bar_rect = Rectangle
+        self.__addition_blue_bar_rect = Rectangle
 
         self.__font_scale = 0
         self.__line_type = 0
@@ -258,103 +253,58 @@ class BarBox():
         self.__rank3_p2 = val
 
     @property
-    def step1_red_bar_p1(self):
-        """step1赤バーの左上点"""
-        return self.__step1_red_bar_p1
+    def step1_red_bar_rect(self):
+        """step1赤バーの矩形"""
+        return self.__step1_red_bar_rect
 
-    @step1_red_bar_p1.setter
-    def step1_red_bar_p1(self, val):
-        self.__step1_red_bar_p1 = val
-
-    @property
-    def step1_red_bar_p2(self):
-        """step1赤バーの右下点"""
-        return self.__step1_red_bar_p2
-
-    @step1_red_bar_p2.setter
-    def step1_red_bar_p2(self, val):
-        self.__step1_red_bar_p2 = val
+    @step1_red_bar_rect.setter
+    def step1_red_bar_rect(self, val):
+        self.__step1_red_bar_rect = val
 
     @property
-    def addition_red_bar_p1(self):
-        """addition赤バーの左上点"""
-        return self.__addition_red_bar_p1
+    def addition_red_bar_rect(self):
+        """addition赤バーの矩形"""
+        return self.__addition_red_bar_rect
 
-    @addition_red_bar_p1.setter
-    def addition_red_bar_p1(self, val):
-        self.__addition_red_bar_p1 = val
-
-    @property
-    def step1_green_bar_p1(self):
-        """step1緑バーの左上点"""
-        return self.__step1_green_bar_p1
-
-    @step1_green_bar_p1.setter
-    def step1_green_bar_p1(self, val):
-        self.__step1_green_bar_p1 = val
+    @addition_red_bar_rect.setter
+    def addition_red_bar_rect(self, val):
+        self.__addition_red_bar_rect = val
 
     @property
-    def step1_green_bar_p2(self):
-        """step1_緑バーの右下点"""
-        return self.__step1_green_bar_p2
+    def step1_green_bar_rect(self):
+        """step1緑バーの矩形"""
+        return self.__step1_green_bar_rect
 
-    @step1_green_bar_p2.setter
-    def step1_green_bar_p2(self, val):
-        self.__step1_green_bar_p2 = val
-
-    @property
-    def addition_green_bar_p1(self):
-        """addition_緑バーの左上点"""
-        return self.__addition_green_bar_p1
-
-    @addition_green_bar_p1.setter
-    def addition_green_bar_p1(self, val):
-        self.__addition_green_bar_p1 = val
+    @step1_green_bar_rect.setter
+    def step1_green_bar_rect(self, val):
+        self.__step1_green_bar_rect = val
 
     @property
-    def addition_green_bar_p2(self):
-        """addition緑バーの右下点"""
-        return self.__addition_green_bar_p2
+    def addition_green_bar_rect(self):
+        """addition_緑バーの矩形"""
+        return self.__addition_green_bar_rect
 
-    @addition_green_bar_p2.setter
-    def addition_green_bar_p2(self, val):
-        self.__addition_green_bar_p2 = val
-
-    @property
-    def step1_blue_bar_p1(self):
-        """step1青バーの左上点"""
-        return self.__step1_blue_bar_p1
-
-    @step1_blue_bar_p1.setter
-    def step1_blue_bar_p1(self, val):
-        self.__step1_blue_bar_p1 = val
+    @addition_green_bar_rect.setter
+    def addition_green_bar_rect(self, val):
+        self.__addition_green_bar_rect = val
 
     @property
-    def step1_blue_bar_p2(self):
-        """step1青バーの右下点"""
-        return self.__step1_blue_bar_p2
+    def step1_blue_bar_rect(self):
+        """step1青バーの矩形"""
+        return self.__step1_blue_bar_rect
 
-    @step1_blue_bar_p2.setter
-    def step1_blue_bar_p2(self, val):
-        self.__step1_blue_bar_p2 = val
-
-    @property
-    def addition_blue_bar_p1(self):
-        """addition青バーの左上点"""
-        return self.__addition_blue_bar_p1
-
-    @addition_blue_bar_p1.setter
-    def addition_blue_bar_p1(self, val):
-        self.__addition_blue_bar_p1 = val
+    @step1_blue_bar_rect.setter
+    def step1_blue_bar_rect(self, val):
+        self.__step1_blue_bar_rect = val
 
     @property
-    def addition_blue_bar_p2(self):
-        """addition青バーの右下点"""
-        return self.__addition_blue_bar_p2
+    def addition_blue_bar_rect(self):
+        """addition青バーの矩形"""
+        return self.__addition_blue_bar_rect
 
-    @addition_blue_bar_p2.setter
-    def addition_blue_bar_p2(self, val):
-        self.__addition_blue_bar_p2 = val
+    @addition_blue_bar_rect.setter
+    def addition_blue_bar_rect(self, val):
+        self.__addition_blue_bar_rect = val
 
     @property
     def font_scale(self):
@@ -413,47 +363,47 @@ class BarBox():
     @property
     def red_step1_height(self):
         """Rバーの縦幅"""
-        return self.__step1_red_bar_p2[1] - self.__step1_red_bar_p1[1]
+        return self.__step1_red_bar_rect.right_bottom[1] - self.__step1_red_bar_rect.left_top[1]
 
     @property
     def green_step1_height(self):
         """Gバーの縦幅"""
-        return self.__step1_green_bar_p2[1] - self.__step1_green_bar_p1[1]
+        return self.__step1_green_bar_rect.right_top[1] - self.__step1_green_bar_rect.left_top[1]
 
     @property
     def blue_step1_height(self):
         """Bバーの縦幅"""
-        return self.__step1_blue_bar_p2[1] - self.__step1_blue_bar_p1[1]
+        return self.__step1_blue_bar_rect.right_top[1] - self.__step1_blue_bar_rect.left_top[1]
 
     @property
     def red_rank23a_height(self):
         """Rバーの縦幅"""
-        return self.bottom - self.__addition_red_bar_p1[1]
+        return self.bottom - self.__addition_red_bar_rect.left_top[1]
 
     @property
     def green_rank23a_height(self):
         """Gバーの縦幅"""
-        return self.bottom - self.__addition_green_bar_p1[1]
+        return self.bottom - self.__addition_green_bar_rect.left_top[1]
 
     @property
     def blue_rank23a_height(self):
         """Bバーの縦幅"""
-        return self.bottom - self.__addition_blue_bar_p1[1]
+        return self.bottom - self.__addition_blue_bar_rect.left_top[1]
 
     @property
     def red_rank23_height(self):
         """Rバーの縦幅"""
-        return self.bottom - self.__step1_red_bar_p1[1]
+        return self.bottom - self.__step1_red_bar_rect.left_top[1]
 
     @property
     def green_rank23_height(self):
         """Gバーの縦幅"""
-        return self.bottom - self.__step1_green_bar_p1[1]
+        return self.bottom - self.__step1_green_bar_rect.left_top[1]
 
     @property
     def blue_rank23_height(self):
         """Bバーの縦幅"""
-        return self.bottom - self.__step1_blue_bar_p1[1]
+        return self.bottom - self.__step1_blue_bar_rect.left_top[1]
 
     @property
     def thickness(self):
@@ -486,7 +436,7 @@ class BarBox():
         # 16進R値テキスト
         cv2.putText(canvas,
                     f"{color[0]:02x}",
-                    (self.step1_red_bar_p1[0]+self.width+feeling,
+                    (self.step1_red_bar_rect.left_top[0]+self.width+feeling,
                      top),  # x,y
                     self.font,
                     self.font_scale,
@@ -495,7 +445,7 @@ class BarBox():
         # 10進R値テキスト
         cv2.putText(canvas,
                     f"{color[0]:03}",
-                    (self.step1_red_bar_p1[0],
+                    (self.step1_red_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
@@ -505,7 +455,7 @@ class BarBox():
         # 16進G値テキスト
         cv2.putText(canvas,
                     f"{color[1]:02x}",
-                    (self.step1_red_bar_p1[0]+self.width+feeling+int(self.one_width*2/3),
+                    (self.step1_red_bar_rect.left_top[0]+self.width+feeling+int(self.one_width*2/3),
                      top),  # x,y
                     self.font,
                     self.font_scale,
@@ -514,7 +464,7 @@ class BarBox():
         # 10進G値テキスト
         cv2.putText(canvas,
                     f"{color[1]:03}",
-                    (self.step1_green_bar_p1[0],
+                    (self.step1_green_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
@@ -524,7 +474,7 @@ class BarBox():
         # 16進B値テキスト
         cv2.putText(canvas,
                     f"{color[2]:02x}",
-                    (self.step1_red_bar_p1[0]+self.width+feeling+int(2*self.one_width*2/3),
+                    (self.step1_red_bar_rect.left_top[0]+self.width+feeling+int(2*self.one_width*2/3),
                      top),  # x,y
                     self.font,
                     self.font_scale,
@@ -533,7 +483,7 @@ class BarBox():
         # 10進B値テキスト
         cv2.putText(canvas,
                     f"{color[2]:03}",
-                    (self.step1_blue_bar_p1[0],
+                    (self.step1_blue_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
@@ -576,34 +526,34 @@ class BarBox():
         gap = int(self.one_width * 1/4)
 
         # バーR
-        cv2.rectangle(canvas, self.addition_red_bar_p1,
-                      (self.step1_red_bar_p2[0], self.step1_red_bar_p1[1]), RED, thickness=-1)
-        cv2.rectangle(canvas, self.step1_red_bar_p1,
-                      (self.step1_red_bar_p1[0]+gap, self.bottom), RED, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_red_bar_p1[0]+gap, self.step1_red_bar_p1[1]),
-                      self.step1_red_bar_p2, LIGHT_RED, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_red_bar_p1[0]+gap, self.top3),  # yは逆さ
-                      (self.step1_red_bar_p2[0], self.bottom), LIGHT_RED, thickness=-1)
+        cv2.rectangle(canvas, self.addition_red_bar_rect.left_top,
+                      (self.step1_red_bar_rect.right_bottom[0], self.step1_red_bar_rect.left_top[1]), RED, thickness=-1)
+        cv2.rectangle(canvas, self.step1_red_bar_rect.left_top,
+                      (self.step1_red_bar_rect.left_top[0]+gap, self.bottom), RED, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0]+gap, self.step1_red_bar_rect.left_top[1]),
+                      self.step1_red_bar_rect.right_bottom, LIGHT_RED, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0]+gap, self.top3),  # yは逆さ
+                      (self.step1_red_bar_rect.right_bottom[0], self.bottom), LIGHT_RED, thickness=-1)
 
         # バーG
-        cv2.rectangle(canvas, self.addition_green_bar_p1,
-                      (self.step1_green_bar_p2[0], self.step1_green_bar_p1[1]), GREEN, thickness=-1)
-        cv2.rectangle(canvas, self.step1_green_bar_p1,
-                      (self.step1_green_bar_p1[0]+gap, self.bottom), GREEN, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_p1[0]+gap, self.step1_green_bar_p1[1]),
-                      self.step1_green_bar_p2, LIGHT_GREEN, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_p1[0]+gap, self.top3),
-                      (self.step1_green_bar_p2[0], self.bottom), LIGHT_GREEN, thickness=-1)
+        cv2.rectangle(canvas, self.addition_green_bar_rect.left_top,
+                      (self.step1_green_bar_rect.right_bottom[0], self.step1_green_bar_rect.left_top[1]), GREEN, thickness=-1)
+        cv2.rectangle(canvas, self.step1_green_bar_rect.left_top,
+                      (self.step1_green_bar_rect.left_top[0]+gap, self.bottom), GREEN, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0]+gap, self.step1_green_bar_rect.left_top[1]),
+                      self.step1_green_bar_rect.right_bottom, LIGHT_GREEN, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0]+gap, self.top3),
+                      (self.step1_green_bar_rect.right_bottom[0], self.bottom), LIGHT_GREEN, thickness=-1)
 
         # バーB
-        cv2.rectangle(canvas, self.addition_blue_bar_p1,
-                      (self.step1_blue_bar_p2[0], self.step1_blue_bar_p1[1]), BLUE, thickness=-1)
-        cv2.rectangle(canvas, self.step1_blue_bar_p1,
-                      (self.step1_blue_bar_p1[0]+gap, self.bottom), BLUE, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.step1_blue_bar_p1[1]),
-                      self.step1_blue_bar_p2, LIGHT_BLUE, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_p1[0]+gap, self.top3),
-                      (self.step1_blue_bar_p2[0], self.bottom), LIGHT_BLUE, thickness=-1)
+        cv2.rectangle(canvas, self.addition_blue_bar_rect.left_top,
+                      (self.step1_blue_bar_rect.right_bottom[0], self.step1_blue_bar_rect.left_top[1]), BLUE, thickness=-1)
+        cv2.rectangle(canvas, self.step1_blue_bar_rect.left_top,
+                      (self.step1_blue_bar_rect.left_top[0]+gap, self.bottom), BLUE, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0]+gap, self.step1_blue_bar_rect.left_top[1]),
+                      self.step1_blue_bar_rect.right_bottom, LIGHT_BLUE, thickness=-1)
+        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0]+gap, self.top3),
+                      (self.step1_blue_bar_rect.right_bottom[0], self.bottom), LIGHT_BLUE, thickness=-1)
 
     def create_rank23_color(self):
         """色を作成"""
@@ -631,4 +581,7 @@ class BarBox():
 
     def get_step1_upper_bound_y(self):
         """step1の上限の座標"""
-        return min(self.step1_red_bar_p1[1], self.step1_green_bar_p1[1], self.step1_blue_bar_p1[1])
+        return min(
+            (self.step1_red_bar_rect.left_top)[1],
+            (self.step1_green_bar_rect.left_top)[1],
+            (self.step1_blue_bar_rect.left_top)[1])

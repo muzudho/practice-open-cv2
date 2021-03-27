@@ -406,18 +406,8 @@ class BarBox():
     def draw_rgb_number(self, canvas, color):
         """RGB値テキストを描きます"""
 
-        feeling = 2*GRID_INTERVAL_H
         top = self.bottom+int(5*GRID_INTERVAL_H)
 
-        # 16進R値テキスト
-        cv2.putText(canvas,
-                    f"{color[0]:02x}",
-                    (self.step1_red_bar_rect.left_top[0]+self.width+feeling,
-                     top),  # x,y
-                    self.font,
-                    self.font_scale,
-                    RED,
-                    self.line_type)
         # 10進R値テキスト
         cv2.putText(canvas,
                     f"{color[0]:03}",
@@ -428,16 +418,6 @@ class BarBox():
                     RED,
                     self.line_type)
 
-        # 16進G値テキスト
-        cv2.putText(canvas,
-                    f"{color[1]:02x}",
-                    (self.step1_red_bar_rect.left_top[0] +
-                     self.width+feeling+int(self.one_width*2/3),
-                     top),  # x,y
-                    self.font,
-                    self.font_scale,
-                    GREEN,
-                    self.line_type)
         # 10進G値テキスト
         cv2.putText(canvas,
                     f"{color[1]:03}",
@@ -448,16 +428,6 @@ class BarBox():
                     GREEN,
                     self.line_type)
 
-        # 16進B値テキスト
-        cv2.putText(canvas,
-                    f"{color[2]:02x}",
-                    (self.step1_red_bar_rect.left_top[0] +
-                     self.width+feeling+int(2*self.one_width*2/3),
-                     top),  # x,y
-                    self.font,
-                    self.font_scale,
-                    BLUE,
-                    self.line_type)
         # 10進B値テキスト
         cv2.putText(canvas,
                     f"{color[2]:03}",

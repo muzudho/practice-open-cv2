@@ -14,8 +14,8 @@ from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 310  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 155
+CANVAS_WIDTH = 285  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_HEIGHT = 170
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
@@ -391,18 +391,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 def draw_rank23_rgb_number(canvas, color, bar_box):
     """RGB値テキストを描きます"""
 
-    feeling = 2*GRID_INTERVAL_H
-    top = bar_box.bottom+int(10*GRID_INTERVAL_H)
+    top = bar_box.bottom+int(9*GRID_INTERVAL_H)
 
-    # 16進R値テキスト
-    cv2.putText(canvas,
-                f"{color[0]:02x}",
-                (bar_box.step1_red_bar_rect.left_top[0]+bar_box.width+feeling,
-                 top),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_RED,
-                bar_box.line_type)
     # 10進R値テキスト
     cv2.putText(canvas,
                 f"{color[0]:03}",
@@ -413,16 +403,6 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
                 LIGHT_RED,
                 bar_box.line_type)
 
-    # 16進G値テキスト
-    cv2.putText(canvas,
-                f"{color[1]:02x}",
-                (bar_box.step1_red_bar_rect.left_top[0] +
-                 bar_box.width+feeling+int(bar_box.one_width*2/3),
-                 top),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_GREEN,
-                bar_box.line_type)
     # 10進G値テキスト
     cv2.putText(canvas,
                 f"{color[1]:03}",
@@ -433,16 +413,6 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
                 LIGHT_GREEN,
                 bar_box.line_type)
 
-    # 16進B値テキスト
-    cv2.putText(canvas,
-                f"{color[2]:02x}",
-                (bar_box.step1_red_bar_rect.left_top[0] +
-                 bar_box.width+feeling+int(2*bar_box.one_width*2/3),
-                 top),  # x,y
-                bar_box.font,
-                bar_box.font_scale,
-                LIGHT_BLUE,
-                bar_box.line_type)
     # 10進B値テキスト
     cv2.putText(canvas,
                 f"{color[2]:03}",

@@ -544,7 +544,7 @@ class BarBox():
         """１段目、３段目のバー率を描きます"""
         rate_y = int((self.top1 + self.top2)/2) - GRID_INTERVAL_H
         cv2.putText(canvas,
-                    f"{self.rates[0]*100:3}%",
+                    f"{int(self.rates[0]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
@@ -552,7 +552,7 @@ class BarBox():
                     self.line_type)
         rate_y = int((self.top3 + self.bottom)/2) + GRID_INTERVAL_H
         cv2.putText(canvas,
-                    f"{self.rates[2]*100:3}%",
+                    f"{int(self.rates[2]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
@@ -563,7 +563,7 @@ class BarBox():
         """２段目のバー率を描きます"""
         rate_y = int((self.top2 + self.top3)/2) + GRID_INTERVAL_H
         cv2.putText(canvas,
-                    f"{self.rates[1]*100:3}%",
+                    f"{int(self.rates[1]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,

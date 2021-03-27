@@ -9,7 +9,7 @@ from color_calc import calc_step1, calc_step2, append_rank3_to_color
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
-from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE, FONT_HEIGHT
+from conf import GRID_INTERVAL_H, PHASE_COUNTS, FONT_SCALE
 
 
 # 描画する画像を作る
@@ -217,7 +217,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height2 = int(bar_box.rates[1] * 20 * GRID_INTERVAL_H)
     bar_box.height3 = int(bar_box.rates[2] * 20 * GRID_INTERVAL_H)
     bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
-    bar_box.rate_text_gap = int(bar_box.one_width/2)
+    bar_box.rate_text_gap = int(0.5*GRID_INTERVAL_H)
     # 円レール
     circle_rail.range = int(bar_box.height2 / 2)
 

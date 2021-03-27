@@ -329,6 +329,14 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     color_example_width = int(1.5*GRID_UNIT)
     color_example_left = int(bar_box.left - 1.5 * color_example_width)
 
+    # 色見本 23a
+    left_top = (color_example_left, int(
+        bar_box.bottom+int(2.5*GRID_UNIT)))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, rank23a_color, thickness=-1)  # 色見本
+
     # 色見本 rank23
     left_top = (color_example_left,
                 int(bar_box.bottom+3.75*GRID_UNIT))
@@ -336,14 +344,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23_color, thickness=-1)  # 色見本
-
-    # 色見本 23a
-    left_top = (color_example_left, int(
-        bar_box.bottom+int(7.25*GRID_UNIT)))
-    right_bottom = (left_top[0]+color_example_width,
-                    left_top[1]+color_example_width)
-    cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23a_color, thickness=-1)  # 色見本
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 

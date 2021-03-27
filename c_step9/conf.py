@@ -8,6 +8,3 @@ PHASE_COUNTS = 24
 
 # フォント倍率
 FONT_SCALE = 0.5
-
-# 指定のフォントの高さに近いフォントが選ばれる？
-FONT_HEIGHT = 20

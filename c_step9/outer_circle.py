@@ -1,7 +1,7 @@
 """外環状"""
 
 import cv2
-from color_calc import append_rank3_to_color, calc_step1, calc_step2
+from color_calc import append_rank3_to_color, calc_step1
 from conf import GRID_INTERVAL_H
 
 
@@ -72,7 +72,7 @@ class OuterCircle():
     def color_list(self, val):
         self.__color_list = val
 
-    def draw_me(self, canvas, bar_rates, ceil_height, base_line):
+    def draw_me(self, canvas):
         """描きます"""
         # 色相環
         color_count = len(self.color_list)
@@ -94,6 +94,7 @@ class OuterCircle():
                         thickness=int(GRID_INTERVAL_H*3/2))
 
     def get_upper_bound_value(self, bar_rates):
+        """最大値"""
         theta = self.phase * self.unit_arc
         color = calc_step1(theta)
         color = append_rank3_to_color(color, bar_rates)

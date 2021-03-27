@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, LIGHT_GRAY, BLACK, RED, GREEN, BLUE, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import calc_step1, calc_step2, append_rank3_to_color
 from bar_box import BarBox
 from circle_rail import CircleRail
@@ -228,7 +228,6 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.left = int(CRAIL_LEFT + width*GRID_INTERVAL_H +
                        2*int(1.5*GRID_INTERVAL_H))
     # バーの筋
-    bar_box.font_height = FONT_HEIGHT
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
@@ -281,7 +280,6 @@ def draw_grid(canvas):
 def draw_tone_name(canvas, bar_box, tone_name):
     """トーン名を描きます"""
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_height = 20
     font_scale = FONT_SCALE
     line_type = 2
     cv2.putText(canvas,
@@ -345,10 +343,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     ceil_height = bar_box.ceil_height_rgb_value
     base_line = bar_box.base_line_rgb_value
-    upper_bound_value = max(
-        rank23a_color[0], rank23a_color[1], rank23a_color[2])
-    step2_color = calc_step2(
-        rank23a_color, upper_bound_value, 255, ceil_height, base_line)
 
     # 時計の針
     clock_hand_len = 7*GRID_INTERVAL_H
@@ -359,7 +353,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     outer_p = (
         int((circle_rail.range+clock_hand_len) *
             math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+        int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
 
     # 水平線R
@@ -375,8 +370,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.line(canvas, circle_rail.blue_p,
              (bar_box.step1_blue_bar_p2[0], circle_rail.blue_p[1]), LIGHT_BLUE, thickness=2)
 
-    inner_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 内環状
-    outer_circle.draw_me(canvas, bar_box.rates, ceil_height, base_line)  # 外環状
+    inner_circle.draw_me(canvas)  # 内環状
+    outer_circle.draw_me(canvas)  # 外環状
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
@@ -404,7 +399,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[0]:03}",
                 (bar_box.step1_red_bar_p1[0],
-                    top),  # x,y
+                 top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_RED,
@@ -423,7 +418,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[1]:03}",
                 (bar_box.step1_green_bar_p1[0],
-                    top),  # x,y
+                 top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_GREEN,
@@ -442,7 +437,7 @@ def draw_rank23_rgb_number(canvas, color, bar_box):
     cv2.putText(canvas,
                 f"{color[2]:03}",
                 (bar_box.step1_blue_bar_p1[0],
-                    top),  # x,y
+                 top),  # x,y
                 bar_box.font,
                 bar_box.font_scale,
                 LIGHT_BLUE,

@@ -47,7 +47,6 @@ class BarBox():
         self.__addition_blue_bar_p1 = (0, 0)
         self.__addition_blue_bar_p2 = (0, 0)
 
-        self.__font_height = 0
         self.__font_scale = 0
         self.__line_type = 0
         self.__font = None
@@ -358,15 +357,6 @@ class BarBox():
         self.__addition_blue_bar_p2 = val
 
     @property
-    def font_height(self):
-        """フォントの縦幅"""
-        return self.__font_height
-
-    @font_height.setter
-    def font_height(self, val):
-        self.__font_height = val
-
-    @property
     def font_scale(self):
         """フォント・サイズの倍率"""
         return self.__font_scale
@@ -554,7 +544,7 @@ class BarBox():
         """１段目、３段目のバー率を描きます"""
         rate_y = int((self.top1 + self.top2)/2) - GRID_INTERVAL_H
         cv2.putText(canvas,
-                    f"{self.rates[0]}",
+                    f"{self.rates[0]*100:3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
@@ -562,7 +552,7 @@ class BarBox():
                     self.line_type)
         rate_y = int((self.top3 + self.bottom)/2) + GRID_INTERVAL_H
         cv2.putText(canvas,
-                    f"{self.rates[2]}",
+                    f"{self.rates[2]*100:3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
@@ -573,7 +563,7 @@ class BarBox():
         """２段目のバー率を描きます"""
         rate_y = int((self.top2 + self.top3)/2) + GRID_INTERVAL_H
         cv2.putText(canvas,
-                    f"{self.rates[1]}",
+                    f"{self.rates[1]*100:3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,

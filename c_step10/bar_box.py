@@ -297,36 +297,6 @@ class BarBox():
         return self.__step1_blue_bar_rect.right_bottom[1] - self.__step1_blue_bar_rect.left_top[1]
 
     @property
-    def red_rank3_height(self):
-        """Rバーの縦幅"""
-        return self.bottom - self.__rank3_rect.left_top[1]
-
-    @property
-    def green_rank3_height(self):
-        """Gバーの縦幅"""
-        return self.bottom - self.__rank3_rect.left_top[1]
-
-    @property
-    def blue_rank3_height(self):
-        """Bバーの縦幅"""
-        return self.bottom - self.__rank3_rect.left_top[1]
-
-    @property
-    def red_rank23a_height(self):
-        """Rバーの縦幅"""
-        return self.bottom - self.__step1_red_bar_rect.left_top[1] + self.addition_3bars_height[0]
-
-    @property
-    def green_rank23a_height(self):
-        """Gバーの縦幅"""
-        return self.bottom - self.__step1_green_bar_rect.left_top[1] + self.addition_3bars_height[1]
-
-    @property
-    def blue_rank23a_height(self):
-        """Bバーの縦幅"""
-        return self.bottom - self.__step1_blue_bar_rect.left_top[1] + self.addition_3bars_height[2]
-
-    @property
     def thickness(self):
         """線の太さ"""
         return self.__thickness
@@ -341,9 +311,9 @@ class BarBox():
     def create_rank3_3bars_height(self):
         """色を作成"""
         return (
-            self.red_rank3_height,
-            self.green_rank3_height,
-            self.blue_rank3_height)
+            self.bottom - self.__rank3_rect.left_top[1],
+            self.bottom - self.__rank3_rect.left_top[1],
+            self.bottom - self.__rank3_rect.left_top[1])
 
     def create_rank23_3bars_height(self):
         """色を作成"""
@@ -355,16 +325,13 @@ class BarBox():
     def create_rank23a_3bars_height(self):
         """色を作成"""
         return (
-            self.red_rank23a_height,
-            self.green_rank23a_height,
-            self.blue_rank23a_height)
-
-#    def create_rank23a_color(self):
-#        """色を作成"""
-#        return (
-#            int(self.red_rank23a_height/self.height*255),
-#            int(self.green_rank23a_height/self.height*255),
-#            int(self.blue_rank23a_height/self.height*255))
+            self.bottom -
+            self.__step1_red_bar_rect.left_top[1] +
+            self.addition_3bars_height[0],
+            self.bottom -
+            self.__step1_green_bar_rect.left_top[1] +
+            self.addition_3bars_height[1],
+            self.bottom - self.__step1_blue_bar_rect.left_top[1] + self.addition_3bars_height[2])
 
     @property
     def rank1_height_as_byte(self):

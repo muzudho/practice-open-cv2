@@ -29,6 +29,14 @@ def calc_step2(color, upper_bound, height, ceil_height, base_line):
     return new_color
 
 
+def convert_3heights_to_3bytes(n3bars_height, box_height):
+    return (
+        int(n3bars_height[0]/box_height*255),
+        int(n3bars_height[1]/box_height*255),
+        int(n3bars_height[2]/box_height*255),
+    )
+
+
 def append_rank3_to_color(color, bar_rate):
     """(red_height_px, green_height_px, blue_height_px)を返します
     """

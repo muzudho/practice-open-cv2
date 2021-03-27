@@ -246,15 +246,6 @@ class BarBox():
         self.__step1_blue_bar_rect = val
 
     @property
-    def addition_blue_bar_rect(self):
-        """addition青バーの矩形"""
-        return self.__addition_blue_bar_rect
-
-    @addition_blue_bar_rect.setter
-    def addition_blue_bar_rect(self, val):
-        self.__addition_blue_bar_rect = val
-
-    @property
     def font_scale(self):
         """フォント・サイズの倍率"""
         return self.__font_scale
@@ -306,6 +297,21 @@ class BarBox():
         return self.__step1_blue_bar_rect.right_bottom[1] - self.__step1_blue_bar_rect.left_top[1]
 
     @property
+    def red_rank3_height(self):
+        """Rバーの縦幅"""
+        return self.bottom - self.__rank3_rect.left_top[1]
+
+    @property
+    def green_rank3_height(self):
+        """Gバーの縦幅"""
+        return self.bottom - self.__rank3_rect.left_top[1]
+
+    @property
+    def blue_rank3_height(self):
+        """Bバーの縦幅"""
+        return self.bottom - self.__rank3_rect.left_top[1]
+
+    @property
     def red_rank23a_height(self):
         """Rバーの縦幅"""
         return self.bottom - self.__step1_red_bar_rect.left_top[1] - self.addition_3bars_height[0]
@@ -340,12 +346,33 @@ class BarBox():
         """線の太さ"""
         return self.__thickness
 
+    def create_step1_3bars_height(self):
+        """色を作成"""
+        return (
+            self.red_step1_height,
+            self.green_step1_height,
+            self.blue_step1_height)
+
+    def create_rank3_3bars_height(self):
+        """色を作成"""
+        return (
+            self.red_rank3_height,
+            self.green_rank3_height,
+            self.blue_rank3_height)
+
     def create_rank23_color(self):
         """色を作成"""
         return (
             int(self.red_rank23_height/self.height*255),
             int(self.green_rank23_height/self.height*255),
             int(self.blue_rank23_height/self.height*255))
+
+    def create_rank23a_3bars_height(self):
+        """色を作成"""
+        return (
+            self.red_rank23a_height,
+            self.green_rank23a_height,
+            self.blue_rank23a_height)
 
     def create_rank23a_color(self):
         """色を作成"""
@@ -393,135 +420,139 @@ class BarBox():
             BLACK,
             thickness=thickness_minus1+1)
 
-    def draw_rgb_number(self, canvas, rank23_color, rank23a_color):
+    def draw_rgb_number(self, canvas,
+                        a_color, a_3colors,
+                        step1_color, step1_3colors,
+                        rank3_color, rank3_3colors,
+                        rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
         top = self.bottom+int(4*GRID_INTERVAL_H)
 
         # 1段目 10進R値テキスト
         cv2.putText(canvas,
-                    f"{rank23a_color[0]:03}",
+                    f"{a_color[0]:03}",
                     (self.step1_red_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    RED,
+                    a_3colors[0],
                     self.line_type)
 
         # 1段目 10進G値テキスト
         cv2.putText(canvas,
-                    f"{rank23a_color[1]:03}",
+                    f"{a_color[1]:03}",
                     (self.step1_green_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    GREEN,
+                    a_3colors[1],
                     self.line_type)
 
         # 1段目 10進B値テキスト
         cv2.putText(canvas,
-                    f"{rank23a_color[2]:03}",
+                    f"{a_color[2]:03}",
                     (self.step1_blue_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    BLUE,
+                    a_3colors[2],
                     self.line_type)
 
         top = self.bottom+int(8*GRID_INTERVAL_H)
 
         # 2段目 10進R値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[0]:03}",
+                    f"{step1_color[0]:03}",
                     (self.step1_red_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_RED,
+                    step1_3colors[0],
                     self.line_type)
 
         # 2段目 10進G値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[1]:03}",
+                    f"{step1_color[1]:03}",
                     (self.step1_green_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_GREEN,
+                    step1_3colors[1],
                     self.line_type)
 
         # 2段目 10進B値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[2]:03}",
+                    f"{step1_color[2]:03}",
                     (self.step1_blue_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_BLUE,
+                    step1_3colors[2],
                     self.line_type)
 
         top = self.bottom+int(12*GRID_INTERVAL_H)
 
         # 3段目 10進R値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[0]:03}",
+                    f"{rank3_color[0]:03}",
                     (self.step1_red_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_RED,
+                    rank3_3colors[0],
                     self.line_type)
 
         # 3段目 10進G値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[1]:03}",
+                    f"{rank3_color[1]:03}",
                     (self.step1_green_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_GREEN,
+                    rank3_3colors[1],
                     self.line_type)
 
         # 3段目 10進B値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[2]:03}",
+                    f"{rank3_color[2]:03}",
                     (self.step1_blue_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_BLUE,
+                    rank3_3colors[2],
                     self.line_type)
 
         top = self.bottom+int(17*GRID_INTERVAL_H)
 
         # 4段目 10進R値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[0]:03}",
+                    f"{rank23a_color[0]:03}",
                     (self.step1_red_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_RED,
+                    rank23a_3colors[0],
                     self.line_type)
 
         # 4段目 10進G値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[1]:03}",
+                    f"{rank23a_color[1]:03}",
                     (self.step1_green_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_GREEN,
+                    rank23a_3colors[1],
                     self.line_type)
 
         # 4段目 10進B値テキスト
         cv2.putText(canvas,
-                    f"{rank23_color[2]:03}",
+                    f"{rank23a_color[2]:03}",
                     (self.step1_blue_bar_rect.left_top[0],
                      top),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_BLUE,
+                    rank23a_3colors[2],
                     self.line_type)
 
     def draw_bar_rate_rank13(self, canvas):
@@ -554,41 +585,41 @@ class BarBox():
                     BLACK,
                     self.line_type)
 
-    def draw_bars(self, canvas):
+    def draw_bars(self, canvas, a_color, step1_color, rank3_color):
         """バーを描きます"""
 
         # バーR
         cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
                                self.step1_red_bar_rect.left_top[1]-self.addition_3bars_height[0]),
                       (self.step1_red_bar_rect.right_bottom[0],
-                       self.step1_red_bar_rect.left_top[1]), RED, thickness=-1)
+                       self.step1_red_bar_rect.left_top[1]), a_color[0], thickness=-1)
         cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
                                self.step1_red_bar_rect.left_top[1]),
-                      self.step1_red_bar_rect.right_bottom, LIGHT_RED, thickness=-1)
+                      self.step1_red_bar_rect.right_bottom, step1_color[0], thickness=-1)
         cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0], self.top3),  # yは逆さ
                       (self.step1_red_bar_rect.right_bottom[0], self.bottom),
-                      LIGHT_RED, thickness=-1)
+                      rank3_color[0], thickness=-1)
 
         # バーG
         cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0],
                                self.step1_green_bar_rect.left_top[1]-self.addition_3bars_height[1]),
                       (self.step1_green_bar_rect.right_bottom[0],
-                       self.step1_green_bar_rect.left_top[1]), GREEN, thickness=-1)
+                       self.step1_green_bar_rect.left_top[1]), a_color[1], thickness=-1)
         cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0],
                                self.step1_green_bar_rect.left_top[1]),
-                      self.step1_green_bar_rect.right_bottom, LIGHT_GREEN, thickness=-1)
+                      self.step1_green_bar_rect.right_bottom, step1_color[1], thickness=-1)
         cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0], self.top3),
                       (self.step1_green_bar_rect.right_bottom[0],
-                       self.bottom), LIGHT_GREEN, thickness=-1)
+                       self.bottom), rank3_color[1], thickness=-1)
 
         # バーB
         cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0],
                                self.step1_blue_bar_rect.left_top[1]-self.addition_3bars_height[2]),
                       (self.step1_blue_bar_rect.right_bottom[0],
-                       self.step1_blue_bar_rect.left_top[1]), BLUE, thickness=-1)
+                       self.step1_blue_bar_rect.left_top[1]), a_color[2], thickness=-1)
         cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0],
                                self.step1_blue_bar_rect.left_top[1]),
-                      self.step1_blue_bar_rect.right_bottom, LIGHT_BLUE, thickness=-1)
+                      self.step1_blue_bar_rect.right_bottom, step1_color[2], thickness=-1)
         cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0], self.top3),
                       (self.step1_blue_bar_rect.right_bottom[0],
-                       self.bottom), LIGHT_BLUE, thickness=-1)
+                       self.bottom), rank3_color[2], thickness=-1)

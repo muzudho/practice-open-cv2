@@ -4,8 +4,8 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
-from color_calc import calc_step1, calc_step2, append_rank3_to_color
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, RED, GREEN, BLUE
+from color_calc import calc_step1, calc_step2, append_rank3_to_color, convert_3heights_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -295,7 +295,21 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.line(canvas, circle_rail.blue_p,
              circle_rail.red_p, BLACK, thickness=2)
 
-    bar_box.draw_bars(canvas)  # RGBバー
+    # 3色成分
+    a_3colors = (RED, GREEN, BLUE)
+    step1_3colors = (LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE)
+    rank3_3colors = (RED, GREEN, BLUE)
+    rank23a_3colors = (LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE)
+    # 1色成分
+    a_color = convert_3heights_to_3bytes(
+        bar_box.addition_3bars_height, bar_box.height)
+    step1_color = convert_3heights_to_3bytes(
+        bar_box.create_step1_3bars_height(), bar_box.height)
+    rank3_color = convert_3heights_to_3bytes(
+        bar_box.create_rank3_3bars_height(), bar_box.height)
+    rank23a_color = convert_3heights_to_3bytes(
+        bar_box.create_rank23a_3bars_height(), bar_box.height)
+    bar_box.draw_bars(canvas, a_3colors, step1_3colors, rank3_3colors)  # RGBバー
 
     # 色見本 筆算の線
     line_left = bar_box.left - 12*GRID_INTERVAL_H
@@ -313,48 +327,37 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.putText(canvas,
                 "+",
                 (int(bar_box.left - 3.5 * color_example_width),
-                 int(bar_box.bottom+7.5*GRID_INTERVAL_H)),  # x,y
+                 int(bar_box.bottom+11.5*GRID_INTERVAL_H)),  # x,y
                 font,
                 font_scale,
                 BLACK,
                 line_type)
 
     # 色見本 a
-    rank23_color = bar_box.create_rank23_color()  # step1 色値
     left_top = (color_example_left, int(
         bar_box.bottom+1*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23_color, thickness=-1)  # 色見本
+                  right_bottom, a_color, thickness=-1)  # 色見本
 
-    # 色見本 23
-    rank23_color = bar_box.create_rank23_color()  # step1 色値
+    # 色見本 step1
     left_top = (color_example_left, int(
         bar_box.bottom+5*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23_color, thickness=-1)  # 色見本
+                  right_bottom, step1_color, thickness=-1)  # 色見本
 
     # 色見本 3
-    rank23a_color = bar_box.create_rank23a_color()  # 3 色値
-    bar_box.draw_rgb_number(canvas, rank23_color,
-                            rank23a_color)  # 23a RGB値テキスト
     left_top = (color_example_left, int(
         bar_box.bottom+9*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23a_color, thickness=-1)  # 色見本
-
-    bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
-    bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
+                  right_bottom, rank3_color, thickness=-1)  # 色見本
 
     # 色見本 23a
-    rank23a_color = bar_box.create_rank23a_color()  # 23a 色値
-    bar_box.draw_rgb_number(canvas, rank23_color,
-                            rank23a_color)  # 23a RGB値テキスト
     left_top = (color_example_left, int(
         bar_box.bottom+int(14.5*GRID_INTERVAL_H)))
     right_bottom = (left_top[0]+color_example_width,
@@ -364,6 +367,13 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     bar_box.draw_bar_rate_rank13(canvas)  # バー率テキスト
     bar_box.draw_bar_rate_rank2(canvas)  # バー率テキスト
+
+    # 色成分数
+    bar_box.draw_rgb_number(canvas,
+                            a_color, a_3colors,
+                            step1_color, step1_3colors,
+                            rank3_color, rank3_3colors,
+                            rank23a_color, rank23a_3colors)
 
     # 時計の針
     clock_hand_len = 7*GRID_INTERVAL_H

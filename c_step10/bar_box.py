@@ -32,9 +32,7 @@ class BarBox():
         self.__rank2_rect = Rectangle()
         self.__rank3_rect = Rectangle()
 
-        self.__step1_red_bar_rect = Rectangle()
-        self.__step1_green_bar_rect = Rectangle()
-        self.__step1_blue_bar_rect = Rectangle()
+        self.__step1_rect = (Rectangle(), Rectangle(), Rectangle())
 
         self.__font_scale = 0
         self.__line_type = 0
@@ -219,31 +217,13 @@ class BarBox():
         self.__rank3_rect = val
 
     @property
-    def step1_red_bar_rect(self):
-        """step1赤バーの矩形"""
-        return self.__step1_red_bar_rect
+    def step1_rect(self):
+        """step1の３本のバーの矩形"""
+        return self.__step1_rect
 
-    @step1_red_bar_rect.setter
-    def step1_red_bar_rect(self, val):
-        self.__step1_red_bar_rect = val
-
-    @property
-    def step1_green_bar_rect(self):
-        """step1緑バーの矩形"""
-        return self.__step1_green_bar_rect
-
-    @step1_green_bar_rect.setter
-    def step1_green_bar_rect(self, val):
-        self.__step1_green_bar_rect = val
-
-    @property
-    def step1_blue_bar_rect(self):
-        """step1青バーの矩形"""
-        return self.__step1_blue_bar_rect
-
-    @step1_blue_bar_rect.setter
-    def step1_blue_bar_rect(self, val):
-        self.__step1_blue_bar_rect = val
+    @step1_rect.setter
+    def step1_rect(self, val):
+        self.__step1_rect = val
 
     @property
     def font_scale(self):
@@ -289,11 +269,11 @@ class BarBox():
     def create_step1_3bars_height(self):
         """色を作成"""
         return (
-            self.__step1_red_bar_rect.right_bottom[1] -
-            self.__step1_red_bar_rect.left_top[1],
-            self.__step1_green_bar_rect.right_bottom[1] -
-            self.__step1_green_bar_rect.left_top[1],
-            self.__step1_blue_bar_rect.right_bottom[1] - self.__step1_blue_bar_rect.left_top[1])
+            self.__step1_rect[0].right_bottom[1] -
+            self.__step1_rect[0].left_top[1],
+            self.__step1_rect[1].right_bottom[1] -
+            self.__step1_rect[1].left_top[1],
+            self.__step1_rect[2].right_bottom[1] - self.__step1_rect[2].left_top[1])
 
     def create_rank3_3bars_height(self):
         """色を作成"""
@@ -305,20 +285,20 @@ class BarBox():
     def create_rank23_3bars_height(self):
         """色を作成"""
         return (
-            self.bottom - self.__step1_red_bar_rect.left_top[1],
-            self.bottom - self.__step1_green_bar_rect.left_top[1],
-            self.bottom - self.__step1_blue_bar_rect.left_top[1])
+            self.bottom - self.__step1_rect[0].left_top[1],
+            self.bottom - self.__step1_rect[1].left_top[1],
+            self.bottom - self.__step1_rect[2].left_top[1])
 
     def create_rank23a_3bars_height(self):
         """色を作成"""
         return (
             self.bottom -
-            self.__step1_red_bar_rect.left_top[1] +
+            self.__step1_rect[0].left_top[1] +
             self.addition_3bars_height[0],
             self.bottom -
-            self.__step1_green_bar_rect.left_top[1] +
+            self.__step1_rect[1].left_top[1] +
             self.addition_3bars_height[1],
-            self.bottom - self.__step1_blue_bar_rect.left_top[1] + self.addition_3bars_height[2])
+            self.bottom - self.__step1_rect[2].left_top[1] + self.addition_3bars_height[2])
 
     @property
     def rank1_height_as_byte(self):
@@ -333,9 +313,9 @@ class BarBox():
     def get_step1_upper_bound_y(self):
         """step1の上限の座標"""
         return min(
-            self.step1_red_bar_rect.left_top[1],
-            self.step1_green_bar_rect.left_top[1],
-            self.step1_blue_bar_rect.left_top[1])
+            self.step1_rect[0].left_top[1],
+            self.step1_rect[1].left_top[1],
+            self.step1_rect[2].left_top[1])
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""
@@ -381,7 +361,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_red_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -394,7 +374,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_green_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -407,7 +387,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_blue_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -422,7 +402,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_red_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -435,7 +415,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_green_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -448,7 +428,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_blue_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -463,7 +443,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_red_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -476,7 +456,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_green_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -489,7 +469,7 @@ class BarBox():
             for i, figure in enumerate(figures):
                 cv2.putText(canvas,
                             f"{figure}",
-                            (self.step1_blue_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                            (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
                              top),  # x,y
                             self.font,
                             self.font_scale,
@@ -503,7 +483,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (self.step1_red_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                        (self.step1_rect[0].left_top[0]+i*2*GRID_INTERVAL_H,
                          top),  # x,y
                         self.font,
                         self.font_scale,
@@ -515,7 +495,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (self.step1_green_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                        (self.step1_rect[1].left_top[0]+i*2*GRID_INTERVAL_H,
                          top),  # x,y
                         self.font,
                         self.font_scale,
@@ -527,7 +507,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (self.step1_blue_bar_rect.left_top[0]+i*2*GRID_INTERVAL_H,
+                        (self.step1_rect[2].left_top[0]+i*2*GRID_INTERVAL_H,
                          top),  # x,y
                         self.font,
                         self.font_scale,
@@ -570,37 +550,37 @@ class BarBox():
         # yは逆さ
 
         # バーR
-        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
-                               self.step1_red_bar_rect.left_top[1]-self.addition_3bars_height[0]),
-                      (self.step1_red_bar_rect.right_bottom[0],
-                       self.step1_red_bar_rect.left_top[1]), a_color[0], thickness=-1)  # a
-        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
-                               self.step1_red_bar_rect.left_top[1]),
-                      self.step1_red_bar_rect.right_bottom, step1_color[0], thickness=-1)  # step1
-        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0], self.top3),
-                      (self.step1_red_bar_rect.right_bottom[0], self.bottom),
+        cv2.rectangle(canvas, (self.step1_rect[0].left_top[0],
+                               self.step1_rect[0].left_top[1]-self.addition_3bars_height[0]),
+                      (self.step1_rect[0].right_bottom[0],
+                       self.step1_rect[0].left_top[1]), a_color[0], thickness=-1)  # a
+        cv2.rectangle(canvas, (self.step1_rect[0].left_top[0],
+                               self.step1_rect[0].left_top[1]),
+                      self.step1_rect[0].right_bottom, step1_color[0], thickness=-1)  # step1
+        cv2.rectangle(canvas, (self.step1_rect[0].left_top[0], self.top3),
+                      (self.step1_rect[0].right_bottom[0], self.bottom),
                       rank3_color[0], thickness=-1)  # rank3
 
         # バーG
-        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0],
-                               self.step1_green_bar_rect.left_top[1]-self.addition_3bars_height[1]),
-                      (self.step1_green_bar_rect.right_bottom[0],
-                       self.step1_green_bar_rect.left_top[1]), a_color[1], thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0],
-                               self.step1_green_bar_rect.left_top[1]),
-                      self.step1_green_bar_rect.right_bottom, step1_color[1], thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0], self.top3),
-                      (self.step1_green_bar_rect.right_bottom[0],
+        cv2.rectangle(canvas, (self.step1_rect[1].left_top[0],
+                               self.step1_rect[1].left_top[1]-self.addition_3bars_height[1]),
+                      (self.step1_rect[1].right_bottom[0],
+                       self.step1_rect[1].left_top[1]), a_color[1], thickness=-1)
+        cv2.rectangle(canvas, (self.step1_rect[1].left_top[0],
+                               self.step1_rect[1].left_top[1]),
+                      self.step1_rect[1].right_bottom, step1_color[1], thickness=-1)
+        cv2.rectangle(canvas, (self.step1_rect[1].left_top[0], self.top3),
+                      (self.step1_rect[1].right_bottom[0],
                        self.bottom), rank3_color[1], thickness=-1)
 
         # バーB
-        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0],
-                               self.step1_blue_bar_rect.left_top[1]-self.addition_3bars_height[2]),
-                      (self.step1_blue_bar_rect.right_bottom[0],
-                       self.step1_blue_bar_rect.left_top[1]), a_color[2], thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0],
-                               self.step1_blue_bar_rect.left_top[1]),
-                      self.step1_blue_bar_rect.right_bottom, step1_color[2], thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0], self.top3),
-                      (self.step1_blue_bar_rect.right_bottom[0],
+        cv2.rectangle(canvas, (self.step1_rect[2].left_top[0],
+                               self.step1_rect[2].left_top[1]-self.addition_3bars_height[2]),
+                      (self.step1_rect[2].right_bottom[0],
+                       self.step1_rect[2].left_top[1]), a_color[2], thickness=-1)
+        cv2.rectangle(canvas, (self.step1_rect[2].left_top[0],
+                               self.step1_rect[2].left_top[1]),
+                      self.step1_rect[2].right_bottom, step1_color[2], thickness=-1)
+        cv2.rectangle(canvas, (self.step1_rect[2].left_top[0], self.top3),
+                      (self.step1_rect[2].right_bottom[0],
                        self.bottom), rank3_color[2], thickness=-1)

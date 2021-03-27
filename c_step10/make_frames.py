@@ -120,24 +120,24 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         circle_rail.theta = theta
 
         # バーR
-        bar_box.step1_red_bar_rect.left_top = (
+        bar_box.step1_rect[0].left_top = (
             bar_box.red_left, circle_rail.red_p[1])
-        bar_box.step1_red_bar_rect.right_bottom = (
+        bar_box.step1_rect[0].right_bottom = (
             bar_box.red_left+bar_box.one_width, bar_box.top3)
         # バーG
-        bar_box.step1_green_bar_rect.left_top = (
+        bar_box.step1_rect[1].left_top = (
             bar_box.green_left, circle_rail.green_p[1])
-        bar_box.step1_green_bar_rect.right_bottom = (
+        bar_box.step1_rect[1].right_bottom = (
             bar_box.green_left+bar_box.one_width, bar_box.top3)
         # バーB
-        bar_box.step1_blue_bar_rect.left_top = (
+        bar_box.step1_rect[2].left_top = (
             bar_box.blue_left, circle_rail.blue_p[1])
-        bar_box.step1_blue_bar_rect.right_bottom = (
+        bar_box.step1_rect[2].right_bottom = (
             bar_box.blue_left+bar_box.one_width, bar_box.top3)
 #        print(
-#            f"red={bar_box.step1_red_bar_rect.debug_string} \
-# green={bar_box.step1_green_bar_rect.debug_string} \
-# blue={bar_box.step1_blue_bar_rect.debug_string}")
+#            f"red={bar_box.step1_rect[0].debug_string} \
+# green={bar_box.step1_rect[1].debug_string} \
+# blue={bar_box.step1_rect[2].debug_string}")
 
         upper_bound_px = bar_box.get_step1_upper_bound_y()
         longest_rank2_bar_height = bar_box.top3 - upper_bound_px
@@ -428,19 +428,19 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, circle_rail.red_p,
-             (bar_box.step1_red_bar_rect.right_bottom[0],
+             (bar_box.step1_rect[0].right_bottom[0],
               circle_rail.red_p[1]),
              step1_3colors[0], thickness=2)
 
     # 水平線G
     cv2.line(canvas, circle_rail.green_p,
-             (bar_box.step1_green_bar_rect.right_bottom[0],
+             (bar_box.step1_rect[1].right_bottom[0],
               circle_rail.green_p[1]),
              step1_3colors[1], thickness=2)
 
     # 水平線B
     cv2.line(canvas, circle_rail.blue_p,
-             (bar_box.step1_blue_bar_rect.right_bottom[0],
+             (bar_box.step1_rect[2].right_bottom[0],
               circle_rail.blue_p[1]),
              step1_3colors[2], thickness=2)
 

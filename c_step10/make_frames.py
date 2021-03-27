@@ -166,11 +166,11 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         theta = outer_circle.phase * outer_circle.unit_arc
         color = calc_step1(theta)
         outer_color = append_rank3_to_color(color, bar_box.rates)
-        outer_upper_bound = outer_circle.get_upper_bound_value(bar_box.rates)
-        outer_color = calc_step2(outer_color, outer_upper_bound,
-                                 255,
-                                 bar_box.rank1_height_as_byte,
-                                 bar_box.rank3_height_as_byte)
+        outer_color = calc_step2(outer_color,
+                                 bar_box.get_max_rank23_height(),
+                                 bar_box.height,
+                                 bar_box.height1,
+                                 bar_box.height3)
         outer_circle.color_list.append(outer_color)
         #
 

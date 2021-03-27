@@ -309,6 +309,11 @@ class BarBox():
         """３段目が colorの成分値として いくつか"""
         return int(255 * (self.height3 / self.height))
 
+    def get_max_rank23_height(self):
+        """追加部分を含まない、最長のバーの縦幅"""
+        rank23_height = self.create_rank23_3bars_height()
+        return max(rank23_height[0], rank23_height[1], rank23_height[2])
+
     def get_step1_upper_bound_y(self):
         """step1の上限の座標"""
         return min(

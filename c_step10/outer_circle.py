@@ -92,10 +92,3 @@ class OuterCircle():
                         theta+self.unit_arc,
                         color,
                         thickness=int(2.5*GRID_INTERVAL_H))
-
-    def get_upper_bound_value(self, bar_rates):
-        """最大値"""
-        theta = self.phase * self.unit_arc
-        color = calc_step1(theta)
-        color = append_rank3_to_color(color, bar_rates)
-        return max(color[0], color[1], color[2])

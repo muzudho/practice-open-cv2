@@ -345,7 +345,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (left+i*GRID_UNIT, top),  # x,y
+                        (int(left+i*0.7*GRID_UNIT), top),  # x,y
                         self.font,
                         self.font_scale,
                         color,
@@ -360,14 +360,7 @@ class BarBox():
 
         top = self.bottom+int(2*GRID_UNIT)
 
-        def parse_figures(num):
-            if num > 99:
-                return [f"{int(num/100)}", f"{int(num/10) % 10}", f"{num % 10}"]
-            if num > 10:
-                return ["", f"{int(num/10) % 10}", f"{num % 10}"]
-            return ["", "", f"{num % 10}"]
-
-            # 1段目 10進R値テキスト
+        # 1段目 10進R値テキスト
         if a_color[0] != 0:
             self.draw_3figures(
                 canvas, a_color[0], self.step1_rect[0].left_top[0], top, a_3colors[0])

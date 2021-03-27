@@ -21,15 +21,17 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
 CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 300
+CANVAS_HEIGHT = 400
 CHANNELS = 3
 # モノクロ背景 0黒→255白
 MONO_BACKGROUND = 255
 
 # RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 4 * GRID_UNIT
+BAR_TOP1 = 7 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = 300
+BAR_BOX_LEFT = 18 * GRID_UNIT
+# 円の中心と、箱の左との距離
+CIRCLE_DISTANCE = 10 * GRID_UNIT
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -226,7 +228,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
 
-    circle_rail.center = (bar_box.left-7 * GRID_UNIT,
+    circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
                           circle_rail.top+circle_rail.range)  # x, y
     inner_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
@@ -239,7 +241,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.top3 = bar_box.top2 + bar_box.height2
     bar_box.bottom = bar_box.top3 + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
-    # print(f"bar_box.height={bar_box.height}")
+    print(f"bar_box.height={bar_box.height}")
     # RGBバー２段目領域
     bar_box.rank2_rect.left_top = (bar_box.left, bar_box.top2)
     bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.top3)

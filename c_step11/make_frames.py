@@ -379,13 +379,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
-    # 色成分数
-    bar_box.draw_rgb_number(canvas,
-                            a_color, a_3colors,
-                            step1_color, step1_3colors,
-                            rank3_byte, rank3_3colors,
-                            rank23a_color, rank23a_3colors)
-
     # 時計の針
     clock_hand_len = 4*GRID_UNIT
     inner_p = (
@@ -420,6 +413,13 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状
+
+    # 色成分数
+    bar_box.draw_rgb_number(canvas,
+                            a_color, a_3colors,
+                            step1_color,
+                            rank3_byte, rank3_3colors,
+                            rank23a_color, rank23a_3colors)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

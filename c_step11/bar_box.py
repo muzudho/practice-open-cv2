@@ -2,7 +2,7 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, BLACK
+from colors import LIGHT_GRAY, BLACK, WHITE
 from color_calc import convert_3heights_to_3bytes, convert_height_to_byte
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -320,6 +320,9 @@ class BarBox():
             self.rank3_rect.right_bottom,
             LIGHT_GRAY,
             thickness=self.thickness)
+        # バーの下の黒い所
+        cv2.rectangle(canvas, (int(self.left-self.thickness/2), self.bottom),
+                      (int(self.right+self.thickness/2), self.bottom+GRID_UNIT), LIGHT_GRAY, thickness=-1)
 
     def draw_rank2_box(self, canvas):
         """２段目の箱を描きます"""
@@ -353,7 +356,7 @@ class BarBox():
 
     def draw_rgb_number(self, canvas,
                         a_color, a_3colors,
-                        step1_color, step1_3colors,
+                        step1_color,
                         rank3_byte, rank3_3colors,
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
@@ -375,22 +378,23 @@ class BarBox():
             self.draw_3figures(
                 canvas, a_color[2], self.step1_rect[2].left_top[0], top, a_3colors[2])
 
-        top = self.bottom+int(4*GRID_UNIT)
-
-        # 2段目 10進R値テキスト
+        # step1 10進R値テキスト
         if step1_color[0] != 0:
             self.draw_3figures(
-                canvas, step1_color[0], self.step1_rect[0].left_top[0], top, step1_3colors[0])
+                canvas, step1_color[0], self.step1_rect[0].left_top[0],
+                int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4), WHITE)
 
-        # 2段目 10進G値テキスト
+        # step1 10進G値テキスト
         if step1_color[1] != 0:
             self.draw_3figures(
-                canvas, step1_color[1], self.step1_rect[1].left_top[0], top, step1_3colors[1])
+                canvas, step1_color[1], self.step1_rect[1].left_top[0],
+                int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4), WHITE)
 
-        # 2段目 10進B値テキスト
+        # step1 10進B値テキスト
         if step1_color[2] != 0:
             self.draw_3figures(
-                canvas, step1_color[2], self.step1_rect[2].left_top[0], top, step1_3colors[2])
+                canvas, step1_color[2], self.step1_rect[2].left_top[0],
+                int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4), WHITE)
 
         top = self.bottom+int(6*GRID_UNIT)
 

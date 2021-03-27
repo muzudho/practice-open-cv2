@@ -52,6 +52,24 @@ def calc_color_element_rates(color):
         rank2_color[0] / variable_height,
         rank2_color[1] / variable_height,
         rank2_color[2] / variable_height)
+    # 弧度法に変換
+    color_rates = (
+        color_rates[0] * 360,
+        color_rates[1] * 360,
+        color_rates[2] * 360)
+    """
+    # 元が cos(theta) だったので、acos(theta) したらどうか？
+    colors_theta = (
+        math.acos(color_rates[0]),
+        math.acos(color_rates[1]),
+        math.acos(color_rates[2]))
+    # 緑は -120°、 青は 120° 足しているから、逆に引いたらどうか
+    colors_theta = (
+        colors_theta[0],
+        colors_theta[1] + math.radians(120),
+        colors_theta[2] - math.radians(120),
+    )
+    """
     return color_rates
 
 

@@ -319,9 +319,9 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     rank23a_3colors = (to_be_red(rank23a_color), to_be_green(
         rank23a_color), to_be_blue(rank23a_color))
     print(
-        f"calc_color_element_rates(rank23_color)=({calc_color_element_rates(rank23_color)[0]:0.2f}, \
-{calc_color_element_rates(rank23_color)[1]:0.2f}, \
-{calc_color_element_rates(rank23_color)[2]:0.2f})")
+        f"theta={circle_rail.theta:>6.2f} color_element(rank23_color)=({calc_color_element_rates(rank23_color)[0]:>6.2f}, \
+{calc_color_element_rates(rank23_color)[1]:>6.2f}, \
+{calc_color_element_rates(rank23_color)[2]:>6.2f})")
     bar_box.draw_bars(canvas, a_3colors, step1_3colors, rank3_3colors)  # RGBバー
 
     # 色見本 筆算の線

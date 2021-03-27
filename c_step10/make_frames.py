@@ -4,8 +4,11 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, RED, GREEN, BLUE
-from color_calc import calc_step1, calc_step2, append_rank3_to_color, convert_3heights_to_3bytes
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK, LIGHT_RED, LIGHT_GREEN, \
+    LIGHT_BLUE, RED, GREEN, BLUE
+from color_calc import calc_step1, calc_step2, append_rank3_to_color, \
+    convert_3heights_to_3bytes, to_be_red, to_be_green, to_be_blue, \
+    calc_color_element_rates
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -131,7 +134,8 @@ def make_circle(canvas, seq, bar_rates, tone_name):
             bar_box.blue_left+bar_box.one_width, bar_box.top3)
 #        print(
 #            f"red={bar_box.step1_red_bar_rect.debug_string} \
-# green={bar_box.step1_green_bar_rect.debug_string} blue={bar_box.step1_blue_bar_rect.debug_string}")
+# green={bar_box.step1_green_bar_rect.debug_string} \
+# blue={bar_box.step1_blue_bar_rect.debug_string}")
 
         upper_bound_px = bar_box.get_step1_upper_bound_y()
         longest_rank2_bar_height = bar_box.top3 - upper_bound_px
@@ -295,11 +299,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.line(canvas, circle_rail.blue_p,
              circle_rail.red_p, BLACK, thickness=2)
 
-    # 3色成分
-    a_3colors = (RED, GREEN, BLUE)
-    step1_3colors = (LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE)
-    rank3_3colors = (RED, GREEN, BLUE)
-    rank23a_3colors = (LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE)
     # 1色成分
     a_color = convert_3heights_to_3bytes(
         bar_box.addition_3bars_height, bar_box.height)
@@ -307,8 +306,22 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
         bar_box.create_step1_3bars_height(), bar_box.height)
     rank3_color = convert_3heights_to_3bytes(
         bar_box.create_rank3_3bars_height(), bar_box.height)
+    rank23_color = convert_3heights_to_3bytes(
+        bar_box.create_rank23_3bars_height(), bar_box.height)
     rank23a_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
+    # 3色成分
+    a_3colors = (to_be_red(a_color), to_be_green(a_color), to_be_blue(a_color))
+    step1_3colors = (to_be_red(step1_color), to_be_green(
+        step1_color), to_be_blue(step1_color))
+    rank3_3colors = (to_be_red(rank3_color), to_be_green(
+        rank3_color), to_be_blue(rank3_color))
+    rank23a_3colors = (to_be_red(rank23a_color), to_be_green(
+        rank23a_color), to_be_blue(rank23a_color))
+    print(
+        f"calc_color_element_rates(rank23_color)=({calc_color_element_rates(rank23_color)[0]:0.2f}, \
+{calc_color_element_rates(rank23_color)[1]:0.2f}, \
+{calc_color_element_rates(rank23_color)[2]:0.2f})")
     bar_box.draw_bars(canvas, a_3colors, step1_3colors, rank3_3colors)  # RGBバー
 
     # 色見本 筆算の線

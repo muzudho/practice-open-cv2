@@ -2,7 +2,7 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, BLACK, RED, GREEN, BLUE
+from colors import LIGHT_GRAY, BLACK
 from conf import GRID_INTERVAL_H
 from rectangle import Rectangle
 
@@ -366,6 +366,13 @@ class BarBox():
             int(self.red_rank23_height/self.height*255),
             int(self.green_rank23_height/self.height*255),
             int(self.blue_rank23_height/self.height*255))
+
+    def create_rank23_3bars_height(self):
+        """色を作成"""
+        return (
+            self.red_rank23_height,
+            self.green_rank23_height,
+            self.blue_rank23_height)
 
     def create_rank23a_3bars_height(self):
         """色を作成"""

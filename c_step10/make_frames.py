@@ -384,15 +384,13 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23_color, thickness=-1)  # 色見本
 
-    """
-    # 色見本 3
-    left_top = (color_example_left, int(
-        bar_box.bottom+9*GRID_INTERVAL_H))
-    right_bottom = (left_top[0]+color_example_width,
-                    left_top[1]+color_example_width)
-    cv2.rectangle(canvas, left_top,
-                  right_bottom, rank3_color, thickness=-1)  # 色見本
-    """
+#    # 色見本 3
+#    left_top = (color_example_left, int(
+#        bar_box.bottom+9*GRID_INTERVAL_H))
+#    right_bottom = (left_top[0]+color_example_width,
+#                    left_top[1]+color_example_width)
+#    cv2.rectangle(canvas, left_top,
+#                  right_bottom, rank3_color, thickness=-1)  # 色見本
 
     # 色見本 23a
     left_top = (color_example_left, int(

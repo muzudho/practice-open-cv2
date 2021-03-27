@@ -155,9 +155,6 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 
         bar_box.addition_3bars_height = (red_add, green_add, blue_add)
 
-        ceil_height = bar_box.ceil_height_rgb_value
-        base_line = bar_box.base_line_rgb_value
-
         # 内環状
         theta = inner_circle.phase * inner_circle.unit_arc
         color = calc_step1(theta)
@@ -170,7 +167,9 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         outer_color = append_rank3_to_color(color, bar_box.rates)
         outer_upper_bound = outer_circle.get_upper_bound_value(bar_box.rates)
         outer_color = calc_step2(outer_color, outer_upper_bound,
-                                 255, ceil_height, base_line)
+                                 255,
+                                 bar_box.rank1_height_as_byte,
+                                 bar_box.rank3_height_as_byte)
         outer_circle.color_list.append(outer_color)
         #
 

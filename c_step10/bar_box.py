@@ -327,21 +327,6 @@ class BarBox():
         return self.bottom - self.__step1_blue_bar_rect.left_top[1] + self.addition_3bars_height[2]
 
     @property
-    def red_rank23_height(self):
-        """Rバーの縦幅"""
-        return self.bottom - self.__step1_red_bar_rect.left_top[1]
-
-    @property
-    def green_rank23_height(self):
-        """Gバーの縦幅"""
-        return self.bottom - self.__step1_green_bar_rect.left_top[1]
-
-    @property
-    def blue_rank23_height(self):
-        """Bバーの縦幅"""
-        return self.bottom - self.__step1_blue_bar_rect.left_top[1]
-
-    @property
     def thickness(self):
         """線の太さ"""
         return self.__thickness
@@ -360,19 +345,12 @@ class BarBox():
             self.green_rank3_height,
             self.blue_rank3_height)
 
-    def create_rank23_color(self):
-        """色を作成"""
-        return (
-            int(self.red_rank23_height/self.height*255),
-            int(self.green_rank23_height/self.height*255),
-            int(self.blue_rank23_height/self.height*255))
-
     def create_rank23_3bars_height(self):
         """色を作成"""
         return (
-            self.red_rank23_height,
-            self.green_rank23_height,
-            self.blue_rank23_height)
+            self.bottom - self.__step1_red_bar_rect.left_top[1],
+            self.bottom - self.__step1_green_bar_rect.left_top[1],
+            self.bottom - self.__step1_blue_bar_rect.left_top[1])
 
     def create_rank23a_3bars_height(self):
         """色を作成"""
@@ -381,20 +359,20 @@ class BarBox():
             self.green_rank23a_height,
             self.blue_rank23a_height)
 
-    def create_rank23a_color(self):
-        """色を作成"""
-        return (
-            int(self.red_rank23a_height/self.height*255),
-            int(self.green_rank23a_height/self.height*255),
-            int(self.blue_rank23a_height/self.height*255))
+#    def create_rank23a_color(self):
+#        """色を作成"""
+#        return (
+#            int(self.red_rank23a_height/self.height*255),
+#            int(self.green_rank23a_height/self.height*255),
+#            int(self.blue_rank23a_height/self.height*255))
 
     @property
-    def ceil_height_rgb_value(self):
+    def rank1_height_as_byte(self):
         """１段目が colorの成分値として いくつか"""
         return int(255 * (self.height1 / self.height))
 
     @property
-    def base_line_rgb_value(self):
+    def rank3_height_as_byte(self):
         """３段目が colorの成分値として いくつか"""
         return int(255 * (self.height3 / self.height))
 

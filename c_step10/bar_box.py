@@ -535,18 +535,14 @@ class BarBox():
     def draw_bars(self, canvas):
         """バーを描きます"""
 
-        gap = int(self.one_width * 1/4)
-
         # バーR
         cv2.rectangle(canvas, self.addition_red_bar_rect.left_top,
                       (self.step1_red_bar_rect.right_bottom[0],
                        self.step1_red_bar_rect.left_top[1]), RED, thickness=-1)
-        cv2.rectangle(canvas, self.step1_red_bar_rect.left_top,
-                      (self.step1_red_bar_rect.left_top[0]+gap, self.bottom), RED, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0]+gap,
+        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0],
                                self.step1_red_bar_rect.left_top[1]),
                       self.step1_red_bar_rect.right_bottom, LIGHT_RED, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0]+gap, self.top3),  # yは逆さ
+        cv2.rectangle(canvas, (self.step1_red_bar_rect.left_top[0], self.top3),  # yは逆さ
                       (self.step1_red_bar_rect.right_bottom[0], self.bottom),
                       LIGHT_RED, thickness=-1)
 
@@ -554,12 +550,10 @@ class BarBox():
         cv2.rectangle(canvas, self.addition_green_bar_rect.left_top,
                       (self.step1_green_bar_rect.right_bottom[0],
                        self.step1_green_bar_rect.left_top[1]), GREEN, thickness=-1)
-        cv2.rectangle(canvas, self.step1_green_bar_rect.left_top,
-                      (self.step1_green_bar_rect.left_top[0]+gap, self.bottom), GREEN, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0]+gap,
+        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0],
                                self.step1_green_bar_rect.left_top[1]),
                       self.step1_green_bar_rect.right_bottom, LIGHT_GREEN, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0]+gap, self.top3),
+        cv2.rectangle(canvas, (self.step1_green_bar_rect.left_top[0], self.top3),
                       (self.step1_green_bar_rect.right_bottom[0],
                        self.bottom), LIGHT_GREEN, thickness=-1)
 
@@ -567,12 +561,10 @@ class BarBox():
         cv2.rectangle(canvas, self.addition_blue_bar_rect.left_top,
                       (self.step1_blue_bar_rect.right_bottom[0],
                        self.step1_blue_bar_rect.left_top[1]), BLUE, thickness=-1)
-        cv2.rectangle(canvas, self.step1_blue_bar_rect.left_top,
-                      (self.step1_blue_bar_rect.left_top[0]+gap, self.bottom), BLUE, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0]+gap,
+        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0],
                                self.step1_blue_bar_rect.left_top[1]),
                       self.step1_blue_bar_rect.right_bottom, LIGHT_BLUE, thickness=-1)
-        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0]+gap, self.top3),
+        cv2.rectangle(canvas, (self.step1_blue_bar_rect.left_top[0], self.top3),
                       (self.step1_blue_bar_rect.right_bottom[0],
                        self.bottom), LIGHT_BLUE, thickness=-1)
 

@@ -145,12 +145,13 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         #    f"longest_rank2_bar_height={longest_rank2_bar_height} bar_box.height={bar_box.height}")
         zoom = longest_rank2_bar_height / bar_box.height2
         # print(f"zoom={zoom}")
-        red_add = int(bar_box.red_step1_height / zoom) - \
-            bar_box.red_step1_height
-        green_add = int(bar_box.green_step1_height / zoom) - \
-            bar_box.green_step1_height
-        blue_add = int(bar_box.blue_step1_height / zoom) - \
-            bar_box.blue_step1_height
+        step1_3bars_height = bar_box.create_step1_3bars_height()
+        red_add = int(step1_3bars_height[0] / zoom) - \
+            step1_3bars_height[0]
+        green_add = int(step1_3bars_height[1] / zoom) - \
+            step1_3bars_height[1]
+        blue_add = int(step1_3bars_height[2] / zoom) - \
+            step1_3bars_height[2]
         #print(f"red_add={red_add} green_add={green_add} blue_add={blue_add}")
 
         bar_box.addition_3bars_height = (red_add, green_add, blue_add)

@@ -315,29 +315,38 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     bar_box.draw_bars(canvas)  # RGBバー
 
-    rank23_color = bar_box.create_rank23_color()  # step1 色値
+    # 色見本 筆算の線
+    line_left = bar_box.left - 12*GRID_INTERVAL_H
+    line_right = bar_box.right + 4*GRID_INTERVAL_H
+    line_top = bar_box.bottom+int(9*GRID_INTERVAL_H)
+    cv2.line(canvas, (line_left, line_top),
+             (line_right, line_top), LIGHT_GRAY, thickness=2)
 
-    # 色見本
+    # 色見本串線
     color_example_width = 4*GRID_INTERVAL_H
     color_example_left = int(bar_box.left - 1.5 * color_example_width)
     left_top = (
         color_example_left+int(color_example_width/2),
         int(bar_box.bottom+1*GRID_INTERVAL_H))
     right_bottom = (left_top[0],
-                    int(bar_box.bottom+11*GRID_INTERVAL_H))
+                    int(bar_box.bottom+5*GRID_INTERVAL_H))
     cv2.line(canvas, left_top, right_bottom, LIGHT_GRAY, thickness=2)
+
+    # 色見本 23
+    rank23_color = bar_box.create_rank23_color()  # step1 色値
     left_top = (color_example_left, int(
-        bar_box.bottom+6*GRID_INTERVAL_H))
+        bar_box.bottom+5*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23_color, thickness=-1)  # 色見本
 
-    rank23a_color = bar_box.create_rank23a_color()  # step2 色値
+    # 色見本 23a
+    rank23a_color = bar_box.create_rank23a_color()  # 23a 色値
     bar_box.draw_rgb_number(canvas, rank23_color,
-                            rank23a_color)  # step2 RGB値テキスト
+                            rank23a_color)  # 23a RGB値テキスト
     left_top = (color_example_left, int(
-        bar_box.bottom+2*GRID_INTERVAL_H))
+        bar_box.bottom+9*GRID_INTERVAL_H))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,

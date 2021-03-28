@@ -44,6 +44,11 @@ def convert_height_to_byte(bar_height, box_height):
     return convert_rate_to_byte(rate)
 
 
+def convert_byte_to_height(color, box_height):
+    """色を、バーの縦幅ピクセルに変えます"""
+    return color/255*box_height
+
+
 def convert_3rates_to_3bytes(n3rates):
     """３本のバーの縦幅ピクセルを、色に変えます"""
     return (

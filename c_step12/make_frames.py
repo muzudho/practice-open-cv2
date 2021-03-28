@@ -360,7 +360,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
 
-    # TODO 振動を表示
+    # 振動を表示
     left = bar_box.left - 2*GRID_UNIT
     right = bar_box.left - 1*GRID_UNIT
     # 最大値

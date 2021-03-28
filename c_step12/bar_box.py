@@ -3,7 +3,7 @@
 
 import cv2
 from colors import LIGHT_GRAY, BLACK, WHITE
-from color_calc import convert_height_to_byte
+from color_calc import convert_height_to_byte, convert_byte_to_height
 from conf import GRID_UNIT
 from rectangle import Rectangle
 
@@ -363,32 +363,32 @@ class BarBox():
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
-        # 追加値 10進R値テキスト
-        if a_color[0] != 0:
-            self.draw_3figures(
-                canvas,
-                a_color[0],
-                self.step1_rect[0].left_top[0],
-                self.step1_rect[0].left_top[1]-GRID_UNIT,
-                a_3colors[0])
+        # 23a 10進R値テキスト
+        self.draw_3figures(
+            canvas,
+            rank23a_color[0],
+            self.step1_rect[0].left_top[0],
+            int(self.step1_rect[0].left_top[1] -
+                convert_byte_to_height(a_color[0], self.height)-GRID_UNIT/2),
+            a_3colors[0])
 
-        # 追加値 10進G値テキスト
-        if a_color[1] != 0:
-            self.draw_3figures(
-                canvas,
-                a_color[1],
-                self.step1_rect[1].left_top[0],
-                self.step1_rect[1].left_top[1]-GRID_UNIT,
-                a_3colors[1])
+        # 23a 10進G値テキスト
+        self.draw_3figures(
+            canvas,
+            rank23a_color[1],
+            self.step1_rect[1].left_top[0],
+            int(self.step1_rect[1].left_top[1] -
+                convert_byte_to_height(a_color[1], self.height)-GRID_UNIT/2),
+            a_3colors[1])
 
-        # 追加値 10進B値テキスト
-        if a_color[2] != 0:
-            self.draw_3figures(
-                canvas,
-                a_color[2],
-                self.step1_rect[2].left_top[0],
-                self.step1_rect[2].left_top[1]-GRID_UNIT,
-                a_3colors[2])
+        # 23a 10進B値テキスト
+        self.draw_3figures(
+            canvas,
+            rank23a_color[2],
+            self.step1_rect[2].left_top[0],
+            int(self.step1_rect[2].left_top[1] -
+                convert_byte_to_height(a_color[2], self.height)-GRID_UNIT/2),
+            a_3colors[2])
 
         # step1+rank3 10進R値テキスト
         if step1_color[0] != 0:

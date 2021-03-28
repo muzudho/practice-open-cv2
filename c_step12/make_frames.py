@@ -347,7 +347,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 最大値
     upper_bound_y = circle_rail.upper_bound_y()
     # 最小値
-    lower_bound_y = bar_box.top3  # circle_rail.lower_bound_y()
+    lower_bound_y = circle_rail.lower_bound_y()
     # 色見本 23a
     left_top = (color_example_left,
                 int(upper_bound_y-color_example_width))

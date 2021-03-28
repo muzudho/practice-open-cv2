@@ -325,26 +325,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     bar_box.draw_3bars(canvas, a_3colors, step1_3colors,
                        rank3_3colors)  # RGBバー
 
-    # プラス記号
-    color_example_width = int(1.5*GRID_UNIT)
-    color_example_left = int(bar_box.left - 1.5 * color_example_width)
-
-    # 色見本 23a
-    left_top = (color_example_left, int(
-        bar_box.bottom+int(2.5*GRID_UNIT)))
-    right_bottom = (left_top[0]+color_example_width,
-                    left_top[1]+color_example_width)
-    cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23a_color, thickness=-1)  # 色見本
-
-    # 色見本 rank23
-    left_top = (color_example_left,
-                int(bar_box.bottom+3.75*GRID_UNIT))
-    right_bottom = (left_top[0]+color_example_width,
-                    left_top[1]+color_example_width)
-    cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23_color, thickness=-1)  # 色見本
-
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
     # 時計の針
@@ -360,15 +340,33 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
 
-    # 振動を表示
     left = bar_box.left - 2*GRID_UNIT
     right = bar_box.left - 1*GRID_UNIT
+    color_example_width = int(1.5*GRID_UNIT)
+    color_example_left = int(left - color_example_width)
     # 最大値
     upper_bound_y = circle_rail.upper_bound_y()
     # 最小値
     lower_bound_y = bar_box.top3  # circle_rail.lower_bound_y()
+    # 色見本 23a
+    left_top = (color_example_left,
+                int(upper_bound_y-color_example_width))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, rank23a_color, thickness=-1)  # 色見本
+
+    # 振動を表示
     cv2.rectangle(canvas, (left, upper_bound_y),
                   (right, lower_bound_y), LIGHT_GRAY, thickness=-1)  # 色見本
+
+    # 色見本 rank23
+    left_top = (color_example_left,
+                int(upper_bound_y))
+    right_bottom = (left_top[0]+color_example_width,
+                    left_top[1]+color_example_width)
+    cv2.rectangle(canvas, left_top,
+                  right_bottom, rank23_color, thickness=-1)  # 色見本
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ

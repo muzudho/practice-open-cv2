@@ -417,49 +417,6 @@ class BarBox():
                 int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4),
                 WHITE)
 
-        top = int(self.bottom+3*GRID_UNIT)
-
-        # rank23a 10進R値テキスト
-        left = self.step1_rect[0].left_top[0]
-        self.draw_3figures(
-            canvas, rank23a_color[0], left, int(top+GRID_UNIT*3/4), rank23a_3colors[0])
-
-        # rank23a 10進G値テキスト
-        left = self.step1_rect[1].left_top[0]
-        self.draw_3figures(
-            canvas, rank23a_color[1], left, int(top+GRID_UNIT*3/4), rank23a_3colors[1])
-
-        # rank23a 10進B値テキスト
-        left = self.step1_rect[2].left_top[0]
-        self.draw_3figures(
-            canvas, rank23a_color[2], left, int(top+GRID_UNIT*3/4), rank23a_3colors[2])
-
-        top = int(self.bottom+4*GRID_UNIT)
-
-        # rank23 10進R値テキスト
-        left = self.step1_rect[0].left_top[0]
-        cv2.rectangle(canvas, (left, top),
-                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT),
-                      step1_3colors[0], thickness=-1)  # 色見本
-        self.draw_3figures(
-            canvas, rank23_color[0], left, int(top+GRID_UNIT*3/4), WHITE)
-
-        # rank23 10進G値テキスト
-        left = self.step1_rect[1].left_top[0]
-        cv2.rectangle(canvas, (left, top),
-                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT),
-                      step1_3colors[1], thickness=-1)  # 色見本
-        self.draw_3figures(
-            canvas, rank23_color[1], left, int(top+GRID_UNIT*3/4), WHITE)
-
-        # rank23 10進B値テキスト
-        left = self.step1_rect[2].left_top[0]
-        cv2.rectangle(canvas, (left, top),
-                      (int(left+2.3*GRID_UNIT), top+GRID_UNIT),
-                      step1_3colors[2], thickness=-1)  # 色見本
-        self.draw_3figures(
-            canvas, rank23_color[2], left, int(top+GRID_UNIT*3/4), WHITE)
-
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""
         rank23_byte = convert_height_to_byte(

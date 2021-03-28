@@ -363,43 +363,59 @@ class BarBox():
                         rank23a_color, rank23a_3colors):
         """RGB値テキストを描きます"""
 
-        top = int(self.top2-GRID_UNIT/2)
-
         # 追加値 10進R値テキスト
         if a_color[0] != 0:
             self.draw_3figures(
-                canvas, a_color[0], self.step1_rect[0].left_top[0], top, a_3colors[0])
+                canvas,
+                a_color[0],
+                self.step1_rect[0].left_top[0],
+                self.step1_rect[0].left_top[1]-GRID_UNIT,
+                a_3colors[0])
 
         # 追加値 10進G値テキスト
         if a_color[1] != 0:
             self.draw_3figures(
-                canvas, a_color[1], self.step1_rect[1].left_top[0], top, a_3colors[1])
+                canvas,
+                a_color[1],
+                self.step1_rect[1].left_top[0],
+                self.step1_rect[1].left_top[1]-GRID_UNIT,
+                a_3colors[1])
 
         # 追加値 10進B値テキスト
         if a_color[2] != 0:
             self.draw_3figures(
-                canvas, a_color[2], self.step1_rect[2].left_top[0], top, a_3colors[2])
+                canvas,
+                a_color[2],
+                self.step1_rect[2].left_top[0],
+                self.step1_rect[2].left_top[1]-GRID_UNIT,
+                a_3colors[2])
 
         # step1+rank3 10進R値テキスト
         if step1_color[0] != 0:
             self.draw_3figures(
-                canvas, step1_color[0] +
-                rank3_byte, self.step1_rect[0].left_top[0],
-                int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4), WHITE)
+                canvas,
+                step1_color[0] + rank3_byte,
+                self.step1_rect[0].left_top[0],
+                int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4),
+                WHITE)
 
         # step1+rank3 10進G値テキスト
         if step1_color[1] != 0:
             self.draw_3figures(
-                canvas, step1_color[1] +
-                rank3_byte, self.step1_rect[1].left_top[0],
-                int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4), WHITE)
+                canvas,
+                step1_color[1] + rank3_byte,
+                self.step1_rect[1].left_top[0],
+                int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4),
+                WHITE)
 
         # step1+rank3 10進B値テキスト
         if step1_color[2] != 0:
             self.draw_3figures(
-                canvas, step1_color[2] +
-                rank3_byte, self.step1_rect[2].left_top[0],
-                int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4), WHITE)
+                canvas,
+                step1_color[2] + rank3_byte,
+                self.step1_rect[2].left_top[0],
+                int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4),
+                WHITE)
 
         top = int(self.bottom+3*GRID_UNIT)
 

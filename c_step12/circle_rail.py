@@ -105,6 +105,12 @@ class CircleRail():
     def blue_p(self, val):
         self.__blue_p = val
 
+    def upper_bound_y(self):
+        return min(self.red_p[1], self.green_p[1], self.blue_p[1])
+
+    def lower_bound_y(self):
+        return max(self.red_p[1], self.green_p[1], self.blue_p[1])
+
     def draw_red_p(self, canvas):
         """円周上の点Rを描きます"""
         cv2.circle(canvas, self.red_p,

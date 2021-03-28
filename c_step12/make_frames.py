@@ -360,6 +360,16 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
 
+    # TODO 振動を表示
+    left = bar_box.left - 2*GRID_UNIT
+    right = bar_box.left - 1*GRID_UNIT
+    # 最大値
+    upper_bound_y = circle_rail.upper_bound_y()
+    # 最小値
+    lower_bound_y = bar_box.top3  # circle_rail.lower_bound_y()
+    cv2.rectangle(canvas, (left, upper_bound_y),
+                  (right, lower_bound_y), LIGHT_GRAY, thickness=-1)  # 色見本
+
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas, circle_rail.red_p,

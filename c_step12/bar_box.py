@@ -343,7 +343,7 @@ class BarBox():
         def parse_figures(num):
             if num > 99:
                 return [f"{int(num/100)}", f"{int(num/10) % 10}", f"{num % 10}"]
-            if num > 10:
+            if num > 9:
                 return ["", f"{int(num/10) % 10}", f"{num % 10}"]
             return ["", "", f"{num % 10}"]
         figures = parse_figures(num)

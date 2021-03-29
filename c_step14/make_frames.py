@@ -196,7 +196,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
     bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-    bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
+    bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
     bar_box.rate_text_gap = int(0.2*GRID_UNIT)
     # 円レール
@@ -209,9 +209,12 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
-    bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
-    bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
-    bar_box.right = bar_box.blue_left + bar_box.one_width
+    bar_box.red2_left = bar_box.red_left + bar_box.one_width
+    bar_box.green_left = bar_box.red2_left + bar_box.one_width
+    bar_box.green2_left = bar_box.green_left + bar_box.one_width
+    bar_box.blue_left = bar_box.green2_left + bar_box.one_width
+    bar_box.blue2_left = bar_box.blue_left + bar_box.one_width
+    bar_box.right = bar_box.blue2_left + bar_box.one_width
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
 

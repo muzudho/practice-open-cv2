@@ -375,58 +375,115 @@ class BarBox():
                         rank23d_color):
         """RGB値テキストを描きます"""
 
-        # 23a 10進R値テキスト
-        self.draw_3figures(
-            canvas,
-            rank23d_color[0],
-            self.step1_rect[0].left_top[0],
-            int(self.step1_rect[0].left_top[1] -
-                convert_byte_to_height(delta_color[0], self.height)-GRID_UNIT/2),
-            delta_3colors[0])
-
-        # 23a 10進G値テキスト
-        self.draw_3figures(
-            canvas,
-            rank23d_color[1],
-            self.step1_rect[1].left_top[0],
-            int(self.step1_rect[1].left_top[1] -
-                convert_byte_to_height(delta_color[1], self.height)-GRID_UNIT/2),
-            delta_3colors[1])
-
-        # 23a 10進B値テキスト
-        self.draw_3figures(
-            canvas,
-            rank23d_color[2],
-            self.step1_rect[2].left_top[0],
-            int(self.step1_rect[2].left_top[1] -
-                convert_byte_to_height(delta_color[2], self.height)-GRID_UNIT/2),
-            delta_3colors[2])
-
-        # step1+rank3 10進R値テキスト
-        if step1_color[0] != 0:
+        # 10進R値テキスト
+        left = self.step1_rect[0].left_top[0]
+        top = self.step1_rect[0].left_top[1]
+        over_top = int(
+            top - convert_byte_to_height(delta_color[0], self.height)-GRID_UNIT/2)
+        under_top = int(top+GRID_UNIT*3/4)
+        if delta_color[0] > -1:
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[0],
+                left,
+                over_top,
+                delta_3colors[0])
+            # step1+rank3
             self.draw_3figures(
                 canvas,
                 step1_color[0] + rank3_byte,
-                self.step1_rect[0].left_top[0],
-                int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4),
+                left,
+                under_top,
+                WHITE)
+        else:
+            # step1+rank3
+            self.draw_3figures(
+                canvas,
+                rank23d_color[0],
+                left,
+                under_top,
+                delta_3colors[0])
+            # 23d
+            self.draw_3figures(
+                canvas,
+                step1_color[0] + rank3_byte,
+                left,
+                over_top,
                 WHITE)
 
-        # step1+rank3 10進G値テキスト
-        if step1_color[1] != 0:
+        # 10進G値テキスト
+        left = self.step1_rect[1].left_top[0]
+        top = self.step1_rect[1].left_top[1]
+        over_top = int(top -
+                       convert_byte_to_height(delta_color[1], self.height)-GRID_UNIT/2)
+        under_top = int(top+GRID_UNIT*3/4)
+        if delta_color[1] > -1:
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[1],
+                left,
+                over_top,
+                delta_3colors[1])
+            # step1+rank3
             self.draw_3figures(
                 canvas,
                 step1_color[1] + rank3_byte,
-                self.step1_rect[1].left_top[0],
-                int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4),
+                left,
+                under_top,
+                WHITE)
+        else:
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[1],
+                left,
+                under_top,
+                delta_3colors[1])
+            # step1+rank3
+            self.draw_3figures(
+                canvas,
+                step1_color[1] + rank3_byte,
+                left,
+                over_top,
                 WHITE)
 
-        # step1+rank3 10進B値テキスト
-        if step1_color[2] != 0:
+        # 10進B値テキスト
+        left = self.step1_rect[2].left_top[0]
+        top = self.step1_rect[2].left_top[1]
+        over_top = int(top -
+                       convert_byte_to_height(delta_color[2], self.height)-GRID_UNIT/2)
+        under_top = int(top+GRID_UNIT*3/4)
+        if delta_color[1] > -1:
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[2],
+                left,
+                over_top,
+                delta_3colors[2])
+            # step1+rank3
             self.draw_3figures(
                 canvas,
                 step1_color[2] + rank3_byte,
-                self.step1_rect[2].left_top[0],
-                int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4),
+                left,
+                under_top,
+                WHITE)
+        else:
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[2],
+                left,
+                under_top,
+                delta_3colors[2])
+            # step1+rank3
+            self.draw_3figures(
+                canvas,
+                step1_color[2] + rank3_byte,
+                left,
+                over_top,
                 WHITE)
 
     def draw_y_axis_label(self, canvas):

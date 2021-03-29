@@ -356,22 +356,34 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
+    if delta_color[0] > -1:
+        line_color = step1_3colors[0]
+    else:
+        line_color = delta_3colors[0]
     cv2.line(canvas, circle_rail.red_p,
              (bar_box.step1_rect[0].right_bottom[0],
               circle_rail.red_p[1]),
-             step1_3colors[0], thickness=2)
+             line_color, thickness=2)
 
     # 水平線G
+    if delta_color[1] > -1:
+        line_color = step1_3colors[1]
+    else:
+        line_color = delta_3colors[1]
     cv2.line(canvas, circle_rail.green_p,
              (bar_box.step1_rect[1].right_bottom[0],
               circle_rail.green_p[1]),
-             step1_3colors[1], thickness=2)
+             line_color, thickness=2)
 
     # 水平線B
+    if delta_color[2] > -1:
+        line_color = step1_3colors[2]
+    else:
+        line_color = delta_3colors[2]
     cv2.line(canvas, circle_rail.blue_p,
              (bar_box.step1_rect[2].right_bottom[0],
               circle_rail.blue_p[1]),
-             step1_3colors[2], thickness=2)
+             line_color, thickness=2)
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状

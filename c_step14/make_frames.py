@@ -348,6 +348,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 正三角形の振動を表示
     cv2.rectangle(canvas, (left, upper_bound_y),
                   (right, lower_bound_y), WHITE, thickness=-1)  # 色見本
+    cv2.rectangle(canvas, (bar_box.left-color_example_width, bar_box.top2),
+                  (bar_box.left-color_example_width+GRID_UNIT, bar_box.top3), BLACK, thickness=-1)  # 色見本
 
     # 色見本 rank23
     left_top = (color_example_left+color_example_width,

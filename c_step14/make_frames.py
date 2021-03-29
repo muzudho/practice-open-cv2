@@ -19,7 +19,7 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 520  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_WIDTH = 550  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
 CANVAS_HEIGHT = 320
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
@@ -28,9 +28,9 @@ MONO_BACKGROUND = SOFT_GRAY[0]
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 7 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(21 * GRID_UNIT)
+BAR_BOX_LEFT = int(22 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = int(12.5 * GRID_UNIT)
+CIRCLE_DISTANCE = int(13.5 * GRID_UNIT)
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -329,8 +329,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
 
-    left = bar_box.left - 2*GRID_UNIT
-    right = bar_box.left - 1*GRID_UNIT
+    left = bar_box.left - 4*GRID_UNIT
+    right = bar_box.left - 3*GRID_UNIT
     color_example_width = int(1.5*GRID_UNIT)
     color_example_left = int(left - color_example_width)
     # 最大値
@@ -338,7 +338,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 最小値
     lower_bound_y = circle_rail.lower_bound_y()
     # 色見本 23a
-    left_top = (color_example_left,
+    left_top = (bar_box.left-color_example_width,
                 bar_box.top2-color_example_width)
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
@@ -350,8 +350,8 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                   (right, lower_bound_y), WHITE, thickness=-1)  # 色見本
 
     # 色見本 rank23
-    left_top = (color_example_left,
-                int(upper_bound_y))
+    left_top = (color_example_left+color_example_width,
+                int(upper_bound_y-color_example_width))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,

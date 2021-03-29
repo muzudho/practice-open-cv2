@@ -408,7 +408,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 色成分数
     bar_box.draw_rgb_number(canvas,
-                            delta_color, delta_3colors,
+                            delta_color,
                             step1_color,
                             rank3_byte,
                             rank23d_color)

@@ -329,9 +329,10 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
 
-    left = bar_box.left - 4*GRID_UNIT
-    right = bar_box.left - 3*GRID_UNIT
     color_example_width = int(1.5*GRID_UNIT)
+    left = bar_box.left - 2*color_example_width
+    swing_bar_width = int(0.75*color_example_width)
+    right = left+swing_bar_width
     color_example_left = int(left - color_example_width)
     # 最大値
     upper_bound_y = circle_rail.upper_bound_y()
@@ -352,11 +353,12 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     cv2.rectangle(canvas, (left, lower_bound_y),
                   (right, bar_box.bottom), BRIGHT_GRAY, thickness=-1)
     # diameter
-    cv2.rectangle(canvas, (bar_box.left-color_example_width, bar_box.top2),
-                  (bar_box.left-color_example_width+GRID_UNIT, bar_box.top3),
+    left = bar_box.left-color_example_width
+    cv2.rectangle(canvas, (left, bar_box.top2),
+                  (left+swing_bar_width, bar_box.top3),
                   BLACK, thickness=-1)
-    cv2.rectangle(canvas, (bar_box.left-color_example_width, bar_box.top3),
-                  (bar_box.left-color_example_width+GRID_UNIT, bar_box.bottom),
+    cv2.rectangle(canvas, (left, bar_box.top3),
+                  (left+swing_bar_width, bar_box.bottom),
                   BRIGHT_GRAY, thickness=-1)
 
     # 色見本 rank23

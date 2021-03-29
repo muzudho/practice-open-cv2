@@ -493,33 +493,65 @@ class BarBox():
         cv2.rectangle(canvas, (left, self.top3),
                       (self.step1_rect[0].right_bottom[0], self.bottom),
                       rank3_color[0], thickness=-1)  # rank3
-        cv2.rectangle(canvas, (left,
-                               self.step1_rect[0].left_top[1]-self.delta_3bars_height[0]),
-                      (self.step1_rect[0].right_bottom[0],
-                       self.step1_rect[0].left_top[1]), delta_color[0], thickness=-1)  # delta
+        delta = self.delta_3bars_height[0]
+        if delta > 0:
+            cv2.rectangle(canvas,
+                          (left, top2-delta),
+                          (self.step1_rect[0].right_bottom[0], top2),
+                          delta_color[0],
+                          thickness=-1)  # delta
+        else:
+            cv2.rectangle(canvas,
+                          (left, top2),
+                          (self.step1_rect[0].right_bottom[0], top2-delta),
+                          delta_color[0],
+                          thickness=-1)  # delta
 
         # バーG
         left = self.step1_rect[1].left_top[0]
-        top = self.step1_rect[1].left_top[1]
-        cv2.rectangle(canvas, (left, top),
+        top2 = self.step1_rect[1].left_top[1]
+        cv2.rectangle(canvas, (left, top2),
                       self.step1_rect[1].right_bottom, step1_color[1], thickness=-1)
         cv2.rectangle(canvas, (left, self.top3),
                       (self.step1_rect[1].right_bottom[0],
                        self.bottom), rank3_color[1], thickness=-1)
-        cv2.rectangle(canvas, (left,
-                               self.step1_rect[1].left_top[1]-self.delta_3bars_height[1]),
-                      (self.step1_rect[1].right_bottom[0],
-                       self.step1_rect[1].left_top[1]), delta_color[1], thickness=-1)
+        delta = self.delta_3bars_height[1]
+        if self.delta_3bars_height[1] > 0:
+            cv2.rectangle(canvas,
+                          (left, top2-delta),
+                          (self.step1_rect[1].right_bottom[0], top2),
+                          delta_color[1],
+                          thickness=-1)
+        else:
+            cv2.rectangle(canvas,
+                          (left, top2),
+                          (self.step1_rect[1].right_bottom[0], top2-delta),
+                          delta_color[1],
+                          thickness=-1)
 
         # バーB
         left = self.step1_rect[2].left_top[0]
-        top = self.step1_rect[2].left_top[1]
-        cv2.rectangle(canvas, (left, top),
-                      self.step1_rect[2].right_bottom, step1_color[2], thickness=-1)
-        cv2.rectangle(canvas, (left, self.top3),
-                      (self.step1_rect[2].right_bottom[0],
-                       self.bottom), rank3_color[2], thickness=-1)
-        cv2.rectangle(canvas, (self.step1_rect[2].left_top[0],
-                               self.step1_rect[2].left_top[1]-self.delta_3bars_height[2]),
-                      (self.step1_rect[2].right_bottom[0],
-                       self.step1_rect[2].left_top[1]), delta_color[2], thickness=-1)
+        top2 = self.step1_rect[2].left_top[1]
+        cv2.rectangle(canvas,
+                      (left, top2),
+                      self.step1_rect[2].right_bottom,
+                      step1_color[2],
+                      thickness=-1)
+        cv2.rectangle(canvas,
+                      (left, self.top3),
+                      (self.step1_rect[2].right_bottom[0], self.bottom),
+                      rank3_color[2],
+                      thickness=-1)
+        delta = self.delta_3bars_height[2]
+        if delta > 0:
+            cv2.rectangle(canvas,
+                          (self.step1_rect[2].left_top[0], top2-delta),
+                          (self.step1_rect[2].right_bottom[0], top2),
+                          delta_color[2],
+                          thickness=-1)
+        else:
+            cv2.rectangle(canvas,
+                          (self.step1_rect[2].left_top[0], top2),
+                          (self.step1_rect[2].right_bottom[0], top2-delta),
+                          delta_color[2],
+                          thickness=-1)

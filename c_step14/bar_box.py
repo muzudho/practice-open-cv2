@@ -518,7 +518,7 @@ class BarBox():
         left = self.right+self.y_axis_label_gap
         # 255
         self.draw_3figures(
-            canvas, 255, left, int(self.top1+GRID_UNIT/2), BLACK)
+            canvas, 255, left, int(self.top1+GRID_UNIT/2), DARK_GRAY)
         # ceil
         self.draw_3figures(
             canvas, rank23_byte, left, int(self.top2+GRID_UNIT/2), BLACK)
@@ -527,7 +527,7 @@ class BarBox():
             canvas, rank3_byte, left, int(self.top3+GRID_UNIT/2), BLACK)
         # 0
         self.draw_3figures(
-            canvas, 0, left, int(self.bottom+GRID_UNIT/2), BLACK)
+            canvas, 0, left, int(self.bottom+GRID_UNIT/2), DARK_GRAY)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
@@ -538,7 +538,7 @@ class BarBox():
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_GRAY,
+                    DARK_GRAY,
                     self.line_type)
         # ２段目のバー率
         rate_y = int((self.top2 + self.top3)/2 + GRID_UNIT/2)
@@ -556,7 +556,7 @@ class BarBox():
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
-                    LIGHT_GRAY,
+                    DARK_GRAY,
                     self.line_type)
 
     def draw_3bars(self, canvas, delta_color, step1_color, rank3_color):
@@ -581,8 +581,8 @@ class BarBox():
             delta_top = top2
             delta_bottom = top2-delta
         cv2.rectangle(canvas,
-                      (left, delta_top),
-                      (right, delta_bottom),
+                      (left+self.one_width, delta_top),
+                      (right+self.one_width, delta_bottom),
                       delta_color[0],
                       thickness=-1)  # delta
 
@@ -603,8 +603,8 @@ class BarBox():
             delta_top = top2
             delta_bottom = top2-delta
         cv2.rectangle(canvas,
-                      (left, delta_top),
-                      (right, delta_bottom),
+                      (left+self.one_width, delta_top),
+                      (right+self.one_width, delta_bottom),
                       delta_color[1],
                       thickness=-1)
 
@@ -630,7 +630,7 @@ class BarBox():
             delta_top = top2
             delta_bottom = top2-delta
         cv2.rectangle(canvas,
-                      (left, delta_top),
-                      (right, delta_bottom),
+                      (left+self.one_width, delta_top),
+                      (right+self.one_width, delta_bottom),
                       delta_color[2],
                       thickness=-1)

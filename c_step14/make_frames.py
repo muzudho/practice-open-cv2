@@ -28,9 +28,9 @@ MONO_BACKGROUND = SOFT_GRAY[0]
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 7 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(20.5 * GRID_UNIT)
+BAR_BOX_LEFT = int(21 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = 12 * GRID_UNIT
+CIRCLE_DISTANCE = int(12.5 * GRID_UNIT)
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -327,7 +327,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
         int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))
             + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
+    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
 
     left = bar_box.left - 2*GRID_UNIT
     right = bar_box.left - 1*GRID_UNIT

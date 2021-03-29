@@ -487,50 +487,51 @@ class BarBox():
 
         # バーR
         left = self.step1_rect[0].left_top[0]
+        right = self.step1_rect[0].right_bottom[0]
         top2 = self.step1_rect[0].left_top[1]
         cv2.rectangle(canvas, (left, top2),
                       self.step1_rect[0].right_bottom, step1_color[0], thickness=-1)  # step1
         cv2.rectangle(canvas, (left, self.top3),
-                      (self.step1_rect[0].right_bottom[0], self.bottom),
+                      (right, self.bottom),
                       rank3_color[0], thickness=-1)  # rank3
         delta = self.delta_3bars_height[0]
         if delta > 0:
-            cv2.rectangle(canvas,
-                          (left, top2-delta),
-                          (self.step1_rect[0].right_bottom[0], top2),
-                          delta_color[0],
-                          thickness=-1)  # delta
+            delta_top = top2-delta
+            delta_bottom = top2
         else:
-            cv2.rectangle(canvas,
-                          (left, top2),
-                          (self.step1_rect[0].right_bottom[0], top2-delta),
-                          delta_color[0],
-                          thickness=-1)  # delta
+            delta_top = top2
+            delta_bottom = top2-delta
+        cv2.rectangle(canvas,
+                      (left, delta_top),
+                      (right, delta_bottom),
+                      delta_color[0],
+                      thickness=-1)  # delta
 
         # バーG
         left = self.step1_rect[1].left_top[0]
+        right = self.step1_rect[1].right_bottom[0]
         top2 = self.step1_rect[1].left_top[1]
         cv2.rectangle(canvas, (left, top2),
                       self.step1_rect[1].right_bottom, step1_color[1], thickness=-1)
         cv2.rectangle(canvas, (left, self.top3),
-                      (self.step1_rect[1].right_bottom[0],
+                      (right,
                        self.bottom), rank3_color[1], thickness=-1)
         delta = self.delta_3bars_height[1]
-        if self.delta_3bars_height[1] > 0:
-            cv2.rectangle(canvas,
-                          (left, top2-delta),
-                          (self.step1_rect[1].right_bottom[0], top2),
-                          delta_color[1],
-                          thickness=-1)
+        if delta > 0:
+            delta_top = top2-delta
+            delta_bottom = top2
         else:
-            cv2.rectangle(canvas,
-                          (left, top2),
-                          (self.step1_rect[1].right_bottom[0], top2-delta),
-                          delta_color[1],
-                          thickness=-1)
+            delta_top = top2
+            delta_bottom = top2-delta
+        cv2.rectangle(canvas,
+                      (left, delta_top),
+                      (right, delta_bottom),
+                      delta_color[1],
+                      thickness=-1)
 
         # バーB
         left = self.step1_rect[2].left_top[0]
+        right = self.step1_rect[2].right_bottom[0]
         top2 = self.step1_rect[2].left_top[1]
         cv2.rectangle(canvas,
                       (left, top2),
@@ -539,19 +540,18 @@ class BarBox():
                       thickness=-1)
         cv2.rectangle(canvas,
                       (left, self.top3),
-                      (self.step1_rect[2].right_bottom[0], self.bottom),
+                      (right, self.bottom),
                       rank3_color[2],
                       thickness=-1)
         delta = self.delta_3bars_height[2]
         if delta > 0:
-            cv2.rectangle(canvas,
-                          (self.step1_rect[2].left_top[0], top2-delta),
-                          (self.step1_rect[2].right_bottom[0], top2),
-                          delta_color[2],
-                          thickness=-1)
+            delta_top = top2-delta
+            delta_bottom = top2
         else:
-            cv2.rectangle(canvas,
-                          (self.step1_rect[2].left_top[0], top2),
-                          (self.step1_rect[2].right_bottom[0], top2-delta),
-                          delta_color[2],
-                          thickness=-1)
+            delta_top = top2
+            delta_bottom = top2-delta
+        cv2.rectangle(canvas,
+                      (left, delta_top),
+                      (right, delta_bottom),
+                      delta_color[2],
+                      thickness=-1)

@@ -39,7 +39,7 @@ class BarBox():
         self.__font_scale = 0
         self.__line_type = 0
         self.__font = None
-        self.__addition_3bars_height = (0, 0, 0)
+        self.__delta_3bars_height = (0, 0, 0)
         self.__thickness = 2
 
     @property
@@ -264,13 +264,13 @@ class BarBox():
         self.__font = val
 
     @property
-    def addition_3bars_height(self):
+    def delta_3bars_height(self):
         """色の追加値"""
-        return self.__addition_3bars_height
+        return self.__delta_3bars_height
 
-    @addition_3bars_height.setter
-    def addition_3bars_height(self, val):
-        self.__addition_3bars_height = val
+    @delta_3bars_height.setter
+    def delta_3bars_height(self, val):
+        self.__delta_3bars_height = val
 
     @property
     def thickness(self):
@@ -298,9 +298,9 @@ class BarBox():
         """色を作成"""
         rank23_height = self.create_rank23_3bars_height()
         return (
-            rank23_height[0] + self.addition_3bars_height[0],
-            rank23_height[1] + self.addition_3bars_height[1],
-            rank23_height[2] + self.addition_3bars_height[2])
+            rank23_height[0] + self.delta_3bars_height[0],
+            rank23_height[1] + self.delta_3bars_height[1],
+            rank23_height[2] + self.delta_3bars_height[2])
 
     def get_max_rank23_height(self):
         """追加部分を含まない、最長のバーの縦幅"""
@@ -350,7 +350,14 @@ class BarBox():
                 return [f"{int(num/100)}", f"{int(num/10) % 10}", f"{num % 10}"]
             if num > 9:
                 return ["", f"{int(num/10) % 10}", f"{num % 10}"]
-            return ["", "", f"{num % 10}"]
+            if num > -1:
+                return ["", f"", f"{num % 10}"]
+            if num > -10:
+                return ["", f"-", f"{num % 10}"]
+            if num > -100:
+                return ["-", f"{int(num/10) % 10}", f"{num % 10}"]
+            # 入りきらない
+            return ["X", "X", f"X"]
         figures = parse_figures(num)
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
@@ -362,38 +369,38 @@ class BarBox():
                         self.line_type)
 
     def draw_rgb_number(self, canvas,
-                        a_color, a_3colors,
-                        step1_color, step1_3colors,
-                        rank3_byte, rank23_color,
-                        rank23a_color, rank23a_3colors):
+                        delta_color, delta_3colors,
+                        step1_color,
+                        rank3_byte,
+                        rank23d_color):
         """RGB値テキストを描きます"""
 
         # 23a 10進R値テキスト
         self.draw_3figures(
             canvas,
-            rank23a_color[0],
+            rank23d_color[0],
             self.step1_rect[0].left_top[0],
             int(self.step1_rect[0].left_top[1] -
-                convert_byte_to_height(a_color[0], self.height)-GRID_UNIT/2),
-            a_3colors[0])
+                convert_byte_to_height(delta_color[0], self.height)-GRID_UNIT/2),
+            delta_3colors[0])
 
         # 23a 10進G値テキスト
         self.draw_3figures(
             canvas,
-            rank23a_color[1],
+            rank23d_color[1],
             self.step1_rect[1].left_top[0],
             int(self.step1_rect[1].left_top[1] -
-                convert_byte_to_height(a_color[1], self.height)-GRID_UNIT/2),
-            a_3colors[1])
+                convert_byte_to_height(delta_color[1], self.height)-GRID_UNIT/2),
+            delta_3colors[1])
 
         # 23a 10進B値テキスト
         self.draw_3figures(
             canvas,
-            rank23a_color[2],
+            rank23d_color[2],
             self.step1_rect[2].left_top[0],
             int(self.step1_rect[2].left_top[1] -
-                convert_byte_to_height(a_color[2], self.height)-GRID_UNIT/2),
-            a_3colors[2])
+                convert_byte_to_height(delta_color[2], self.height)-GRID_UNIT/2),
+            delta_3colors[2])
 
         # step1+rank3 10進R値テキスト
         if step1_color[0] != 0:
@@ -473,16 +480,16 @@ class BarBox():
                     LIGHT_GRAY,
                     self.line_type)
 
-    def draw_3bars(self, canvas, a_color, step1_color, rank3_color):
+    def draw_3bars(self, canvas, delta_color, step1_color, rank3_color):
         """バーを描きます"""
 
         # yは逆さ
 
         # バーR
         cv2.rectangle(canvas, (self.step1_rect[0].left_top[0],
-                               self.step1_rect[0].left_top[1]-self.addition_3bars_height[0]),
+                               self.step1_rect[0].left_top[1]-self.delta_3bars_height[0]),
                       (self.step1_rect[0].right_bottom[0],
-                       self.step1_rect[0].left_top[1]), a_color[0], thickness=-1)  # a
+                       self.step1_rect[0].left_top[1]), delta_color[0], thickness=-1)  # a
         cv2.rectangle(canvas, (self.step1_rect[0].left_top[0],
                                self.step1_rect[0].left_top[1]),
                       self.step1_rect[0].right_bottom, step1_color[0], thickness=-1)  # step1
@@ -492,9 +499,9 @@ class BarBox():
 
         # バーG
         cv2.rectangle(canvas, (self.step1_rect[1].left_top[0],
-                               self.step1_rect[1].left_top[1]-self.addition_3bars_height[1]),
+                               self.step1_rect[1].left_top[1]-self.delta_3bars_height[1]),
                       (self.step1_rect[1].right_bottom[0],
-                       self.step1_rect[1].left_top[1]), a_color[1], thickness=-1)
+                       self.step1_rect[1].left_top[1]), delta_color[1], thickness=-1)
         cv2.rectangle(canvas, (self.step1_rect[1].left_top[0],
                                self.step1_rect[1].left_top[1]),
                       self.step1_rect[1].right_bottom, step1_color[1], thickness=-1)
@@ -504,9 +511,9 @@ class BarBox():
 
         # バーB
         cv2.rectangle(canvas, (self.step1_rect[2].left_top[0],
-                               self.step1_rect[2].left_top[1]-self.addition_3bars_height[2]),
+                               self.step1_rect[2].left_top[1]-self.delta_3bars_height[2]),
                       (self.step1_rect[2].right_bottom[0],
-                       self.step1_rect[2].left_top[1]), a_color[2], thickness=-1)
+                       self.step1_rect[2].left_top[1]), delta_color[2], thickness=-1)
         cv2.rectangle(canvas, (self.step1_rect[2].left_top[0],
                                self.step1_rect[2].left_top[1]),
                       self.step1_rect[2].right_bottom, step1_color[2], thickness=-1)

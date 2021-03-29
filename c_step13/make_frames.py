@@ -142,7 +142,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 # green={bar_box.step1_rect[1].debug_string} \
 # blue={bar_box.step1_rect[2].debug_string}")
 
-        bar_box.addition_3bars_height = calc_bar_delta(
+        bar_box.delta_3bars_height = calc_bar_delta(
             bar_box.create_step1_3bars_height(),
             bar_box.create_rank23_3bars_height(),
             bar_box.height2
@@ -294,21 +294,20 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
              circle_rail.red_p, BLACK, thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
-    a_color = convert_3heights_to_3bytes(
-        bar_box.addition_3bars_height, bar_box.height)
+    delta_color = convert_3heights_to_3bytes(
+        bar_box.delta_3bars_height, bar_box.height)
     step1_color = convert_3heights_to_3bytes(
         bar_box.create_step1_3bars_height(), bar_box.height)
     rank3_byte = convert_height_to_byte(
         bar_box.height3, bar_box.height)
     rank23_color = convert_3heights_to_3bytes(
         bar_box.create_rank23_3bars_height(), bar_box.height)
-    rank23a_color = convert_3heights_to_3bytes(
+    rank23d_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
     # 3色成分（配色）
-    a_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
+    delta_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
     step1_3colors = (VIVID_RED, VIVID_GREEN, VIVID_BLUE)
     rank3_3colors = (BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE)
-    rank23a_3colors = (RED, GREEN, BLUE)
 
 #    # (WIP) 成分から角度を逆算
 #    element_rates, expected_theta = calc_color_element_rates(rank23_color)
@@ -318,7 +317,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 # color_element(rank23_color)=({element_rates[0]:>7.3f}, \
 # {element_rates[1]:>7.3f}, \
 # {element_rates[2]:>7.3f})")
-    bar_box.draw_3bars(canvas, a_3colors, step1_3colors,
+    bar_box.draw_3bars(canvas, delta_3colors, step1_3colors,
                        rank3_3colors)  # RGBバー
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
@@ -350,7 +349,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23a_color, thickness=-1)  # 色見本
+                  right_bottom, rank23d_color, thickness=-1)  # 色見本
 
     # 振動を表示
     cv2.rectangle(canvas, (left, upper_bound_y),
@@ -391,10 +390,10 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 色成分数
     bar_box.draw_rgb_number(canvas,
-                            a_color, a_3colors,
-                            step1_color, step1_3colors,
-                            rank3_byte, rank23_color,
-                            rank23a_color, rank23a_3colors)
+                            delta_color, delta_3colors,
+                            step1_color,
+                            rank3_byte,
+                            rank23d_color)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

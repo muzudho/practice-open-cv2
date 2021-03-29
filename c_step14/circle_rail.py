@@ -59,6 +59,7 @@ class CircleRail():
 
     @property
     def theta(self):
+        """角度"""
         return self.__theta
 
     @theta.setter
@@ -72,11 +73,13 @@ class CircleRail():
 
         # 円周上の緑の点の位置
         self.green_p = (int(self.range * math.sin(math.radians(theta-120)) + self.center[0]),
-                        int(-self.range * math.cos(math.radians(theta-120)) + self.center[1]))  # yは上下反転
+                        int(-self.range * math.cos(math.radians(theta-120)) +
+                            self.center[1]))  # yは上下反転
 
         # 円周上の青の点の位置
         self.blue_p = (int(self.range * math.sin(math.radians(theta+120)) + self.center[0]),
-                       int(-self.range * math.cos(math.radians(theta+120)) + self.center[1]))  # yは上下反転
+                       int(-self.range * math.cos(math.radians(theta+120)) +
+                           self.center[1]))  # yは上下反転
 
     @property
     def red_p(self):
@@ -106,9 +109,11 @@ class CircleRail():
         self.__blue_p = val
 
     def upper_bound_y(self):
+        """上限"""
         return min(self.red_p[1], self.green_p[1], self.blue_p[1])
 
     def lower_bound_y(self):
+        """下限"""
         return max(self.red_p[1], self.green_p[1], self.blue_p[1])
 
     def draw_red_p(self, canvas):

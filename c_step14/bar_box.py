@@ -2,8 +2,8 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, BLACK, WHITE, \
-    LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, DARK_GRAY
+from colors import BLACK, WHITE, \
+    DARK_GRAY
 from color_calc import convert_height_to_byte, convert_byte_to_height
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -397,7 +397,7 @@ class BarBox():
 
     def draw_rgb_number(self, canvas,
                         delta_color, delta_3colors,
-                        step1_color, step1_3colors,
+                        step1_color,
                         rank3_byte,
                         rank23d_color):
         """RGB値テキストを描きます"""

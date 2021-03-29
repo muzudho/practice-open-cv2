@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from colors import WHITE, PALE_GRAY, BRIGHT_GRAY, BLACK,  \
+from colors import PALE_GRAY, LIGHT_GRAY, BLACK,  \
     DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     VIVID_RED, VIVID_GREEN, VIVID_BLUE, SOFT_GRAY
 from color_calc import calc_step1, calc_step2, \
@@ -19,7 +19,7 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 550  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
 CANVAS_HEIGHT = 320
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
@@ -28,9 +28,9 @@ MONO_BACKGROUND = SOFT_GRAY[0]
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 7 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(22 * GRID_UNIT)
+BAR_BOX_LEFT = int(20.5 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = int(13.5 * GRID_UNIT)
+CIRCLE_DISTANCE = 12 * GRID_UNIT
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -196,7 +196,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
     bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-    bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
+    bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
     bar_box.rate_text_gap = int(0.2*GRID_UNIT)
     # 円レール
@@ -209,12 +209,9 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
-    bar_box.red2_left = bar_box.red_left + bar_box.one_width
-    bar_box.green_left = bar_box.red2_left + bar_box.one_width
-    bar_box.green2_left = bar_box.green_left + bar_box.one_width
-    bar_box.blue_left = bar_box.green2_left + bar_box.one_width
-    bar_box.blue2_left = bar_box.blue_left + bar_box.one_width
-    bar_box.right = bar_box.blue2_left + bar_box.one_width
+    bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
+    bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
+    bar_box.right = bar_box.blue_left + bar_box.one_width
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
 
@@ -281,11 +278,11 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 円に内接する線。三角形
     cv2.line(canvas, circle_rail.red_p,
-             circle_rail.green_p, WHITE, thickness=2)
+             circle_rail.green_p, BLACK, thickness=2)
     cv2.line(canvas, circle_rail.green_p,
-             circle_rail.blue_p, WHITE, thickness=2)
+             circle_rail.blue_p, BLACK, thickness=2)
     cv2.line(canvas, circle_rail.blue_p,
-             circle_rail.red_p, WHITE, thickness=2)
+             circle_rail.red_p, BLACK, thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     delta_color = convert_3heights_to_3bytes(
@@ -327,10 +324,10 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
             math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
         int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))
             + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
+    cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
 
-    left = bar_box.left - 4*GRID_UNIT
-    right = bar_box.left - 3*GRID_UNIT
+    left = bar_box.left - 2*GRID_UNIT
+    right = bar_box.left - 1*GRID_UNIT
     color_example_width = int(1.5*GRID_UNIT)
     color_example_left = int(left - color_example_width)
     # 最大値
@@ -338,30 +335,20 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     # 最小値
     lower_bound_y = circle_rail.lower_bound_y()
     # 色見本 23a
-    left_top = (bar_box.left-color_example_width,
+    left_top = (color_example_left,
                 bar_box.top2-color_example_width)
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23d_color, thickness=-1)  # 色見本
 
-    # 正三角形の振動を表示
-    # inner
+    # 振動を表示
     cv2.rectangle(canvas, (left, upper_bound_y),
-                  (right, lower_bound_y), WHITE, thickness=-1)
-    cv2.rectangle(canvas, (left, lower_bound_y),
-                  (right, bar_box.bottom), BRIGHT_GRAY, thickness=-1)
-    # diameter
-    cv2.rectangle(canvas, (bar_box.left-color_example_width, bar_box.top2),
-                  (bar_box.left-color_example_width+GRID_UNIT, bar_box.top3),
-                  BLACK, thickness=-1)
-    cv2.rectangle(canvas, (bar_box.left-color_example_width, bar_box.top3),
-                  (bar_box.left-color_example_width+GRID_UNIT, bar_box.bottom),
-                  BRIGHT_GRAY, thickness=-1)
+                  (right, lower_bound_y), LIGHT_GRAY, thickness=-1)  # 色見本
 
     # 色見本 rank23
-    left_top = (color_example_left+color_example_width,
-                int(upper_bound_y-color_example_width))
+    left_top = (color_example_left,
+                int(upper_bound_y))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,

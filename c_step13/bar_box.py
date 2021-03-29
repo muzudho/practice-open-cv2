@@ -370,7 +370,7 @@ class BarBox():
 
     def draw_rgb_number(self, canvas,
                         delta_color, delta_3colors,
-                        step1_color,
+                        step1_color, step1_3colors,
                         rank3_byte,
                         rank23d_color):
         """RGB値テキストを描きます"""
@@ -400,16 +400,16 @@ class BarBox():
             # step1+rank3
             self.draw_3figures(
                 canvas,
-                rank23d_color[0],
-                left,
-                under_top,
-                delta_3colors[0])
-            # 23d
-            self.draw_3figures(
-                canvas,
                 step1_color[0] + rank3_byte,
                 left,
                 over_top,
+                step1_3colors[0])
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[0],
+                left,
+                under_top - self.delta_3bars_height[0],
                 WHITE)
 
         # 10進G値テキスト
@@ -434,19 +434,19 @@ class BarBox():
                 under_top,
                 WHITE)
         else:
-            # 23d
-            self.draw_3figures(
-                canvas,
-                rank23d_color[1],
-                left,
-                under_top,
-                delta_3colors[1])
             # step1+rank3
             self.draw_3figures(
                 canvas,
                 step1_color[1] + rank3_byte,
                 left,
                 over_top,
+                step1_3colors[1])
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[1],
+                left,
+                under_top - self.delta_3bars_height[1],
                 WHITE)
 
         # 10進B値テキスト
@@ -471,19 +471,19 @@ class BarBox():
                 under_top,
                 WHITE)
         else:
-            # 23d
-            self.draw_3figures(
-                canvas,
-                rank23d_color[2],
-                left,
-                under_top,
-                delta_3colors[2])
             # step1+rank3
             self.draw_3figures(
                 canvas,
                 step1_color[2] + rank3_byte,
                 left,
                 over_top,
+                step1_3colors[2])
+            # 23d
+            self.draw_3figures(
+                canvas,
+                rank23d_color[2],
+                left,
+                under_top - self.delta_3bars_height[2],
                 WHITE)
 
     def draw_y_axis_label(self, canvas):

@@ -408,9 +408,9 @@ class BarBox():
 
         # 10進R値テキスト
         left = self.step1_rect[0].left_top[0]
-        over_top = int(
-            self.step1_rect[0].left_top[1]-GRID_UNIT/2)
-        under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT)
+        top = self.step1_rect[0].left_top[1]
+        over_top = int(top-GRID_UNIT/2)
+        under_top = int(top+GRID_UNIT*3/4)
         delta = delta_color[0]
         if rank23d_color[0] == top2_byte or rank23d_color[0] == top3_byte:
             fit_font_color = BLACK
@@ -460,13 +460,14 @@ class BarBox():
                 canvas,
                 rank23d_color[0],
                 left+self.one_width,
-                int(under_top - self.delta_3bars_height[0] + GRID_UNIT*3/4),
+                int(under_top - self.delta_3bars_height[0]),
                 fit_font_color)
 
         # 10進G値テキスト
         left = self.step1_rect[1].left_top[0]
-        over_top = int(self.step1_rect[1].left_top[1]-GRID_UNIT/2)
-        under_top = int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4)
+        top = self.step1_rect[1].left_top[1]
+        over_top = int(top-GRID_UNIT/2)
+        under_top = int(top+GRID_UNIT*3/4)
         delta = delta_color[1]
         if rank23d_color[1] == top2_byte or rank23d_color[1] == top3_byte:
             fit_font_color = BLACK
@@ -474,7 +475,7 @@ class BarBox():
             fit_font_color = BRIGHT_GRAY
 
         if delta > 0:
-            # delta
+            # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
@@ -489,7 +490,7 @@ class BarBox():
                 under_top,
                 WHITE)
         elif delta == 0:
-            # delta
+            # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
@@ -511,18 +512,19 @@ class BarBox():
                 left,
                 under_top,
                 WHITE)
-            # delta
+            # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
                 left+self.one_width,
-                int(under_top - self.delta_3bars_height[1] + GRID_UNIT*3/4),
+                int(under_top - self.delta_3bars_height[1]),
                 fit_font_color)
 
         # 10進B値テキスト
         left = self.step1_rect[2].left_top[0]
-        over_top = int(self.step1_rect[2].left_top[1]-GRID_UNIT/2)
-        under_top = int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4)
+        top = self.step1_rect[2].left_top[1]
+        over_top = int(top-GRID_UNIT/2)
+        under_top = int(top+GRID_UNIT*3/4)
         delta = delta_color[2]
         if rank23d_color[2] == top2_byte or rank23d_color[2] == top3_byte:
             fit_font_color = BLACK
@@ -530,7 +532,7 @@ class BarBox():
             fit_font_color = BRIGHT_GRAY
 
         if delta > 0:
-            # delta
+            # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
@@ -545,7 +547,7 @@ class BarBox():
                 under_top,
                 WHITE)
         elif delta == 0:
-            # delta
+            # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
@@ -567,12 +569,12 @@ class BarBox():
                 left,
                 under_top,
                 WHITE)
-            # delta
+            # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
                 left+self.one_width,
-                int(under_top - self.delta_3bars_height[2] + GRID_UNIT*3/4),
+                int(under_top - self.delta_3bars_height[2]),
                 fit_font_color)
 
     def draw_y_axis_label(self, canvas):
@@ -585,16 +587,16 @@ class BarBox():
         left = self.right+self.y_axis_label_gap
         # 255
         self.draw_3figures(
-            canvas, 255, left, int(self.top1+GRID_UNIT/2), BRIGHT_GRAY)
+            canvas, 255, left, int(self.top1-GRID_UNIT/2), BRIGHT_GRAY)
         # ceil
         self.draw_3figures(
-            canvas, rank23_byte, left, int(self.top2+GRID_UNIT/2), BLACK)
+            canvas, rank23_byte, left, int(self.top2-GRID_UNIT/2), BLACK)
         # base_line
         self.draw_3figures(
-            canvas, rank3_byte, left, int(self.top3+GRID_UNIT/2), BLACK)
+            canvas, rank3_byte, left, int(self.top3+GRID_UNIT*3/4), BLACK)
         # 0
         self.draw_3figures(
-            canvas, 0, left, int(self.bottom+GRID_UNIT/2), BRIGHT_GRAY)
+            canvas, 0, left, int(self.bottom+GRID_UNIT*3/4), BRIGHT_GRAY)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""

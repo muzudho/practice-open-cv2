@@ -12,31 +12,35 @@ def calc_step1(theta):
     return (red_rate, green_rate, blue_rate)
 
 
-def calc_step2(step1_3bars_height, diameter):
-    """フィットしたときの差分"""
-    longest_bar_height = max(
-        step1_3bars_height[0], step1_3bars_height[1], step1_3bars_height[2])
-    shortest_bar_height = min(
-        step1_3bars_height[0], step1_3bars_height[1], step1_3bars_height[2])
-    inner_height = longest_bar_height - shortest_bar_height
+def calc_step2(n3bars_h, diameter):
+    """フィットしたときの差分
+    n3bars_h : (int,int,int)
+        ２段目の箱の中の３本のバーの縦幅
+    diameter : int
+        ２段目の箱の縦幅
+    """
 
     if diameter == 0:
         return (0, 0, 0)
 
-    zoom = inner_height / diameter
-    print(f"zoom={zoom} inner_height={inner_height} diameter={diameter}")
+    longest = max(n3bars_h[0], n3bars_h[1], n3bars_h[2])
+    shortest = min(n3bars_h[0], n3bars_h[1], n3bars_h[2])
+    inner = longest - shortest
 
-    inner_r = step1_3bars_height[0] - shortest_bar_height
-    inner_g = step1_3bars_height[1] - shortest_bar_height
-    inner_b = step1_3bars_height[2] - shortest_bar_height
+    zoom = inner / diameter
+    # print(f"zoom={zoom} inner={inner} diameter={diameter}")
+
+    inner_r = n3bars_h[0] - shortest
+    inner_g = n3bars_h[1] - shortest
+    inner_b = n3bars_h[2] - shortest
 
     fit_r = int(inner_r / zoom)
     fit_g = int(inner_g / zoom)
     fit_b = int(inner_b / zoom)
 
-    r_bar_delta = fit_r - step1_3bars_height[0]
-    g_bar_delta = fit_g - step1_3bars_height[1]
-    b_bar_delta = fit_b - step1_3bars_height[2]
+    r_bar_delta = fit_r - n3bars_h[0]
+    g_bar_delta = fit_g - n3bars_h[1]
+    b_bar_delta = fit_b - n3bars_h[2]
 
     return (r_bar_delta, g_bar_delta, b_bar_delta)
 

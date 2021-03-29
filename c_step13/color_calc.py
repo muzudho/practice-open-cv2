@@ -12,13 +12,19 @@ def calc_step1(theta):
     return (red_rate, green_rate, blue_rate)
 
 
-def calc_bar_delta(step1_3bars_height, diameter):
+def calc_step2(step1_3bars_height, diameter):
+    """フィットしたときの差分"""
     longest_bar_height = max(
         step1_3bars_height[0], step1_3bars_height[1], step1_3bars_height[2])
     shortest_bar_height = min(
         step1_3bars_height[0], step1_3bars_height[1], step1_3bars_height[2])
     inner_height = longest_bar_height - shortest_bar_height
-    zoom = inner_height / diameter
+
+    if diameter == 0:
+        zoom = 1
+    else:
+        zoom = inner_height / diameter
+
     red_bar_delta = int(step1_3bars_height[0] / zoom) - \
         step1_3bars_height[0]
     green_bar_delta = int(step1_3bars_height[1] / zoom) - \
@@ -26,24 +32,6 @@ def calc_bar_delta(step1_3bars_height, diameter):
     blue_bar_delta = int(step1_3bars_height[2] / zoom) - \
         step1_3bars_height[2]
     return (red_bar_delta, green_bar_delta, blue_bar_delta)
-
-
-def calc_step2(step1_color, max_bar_height, min_bar_height, bar_box_height, ceil_height, floor_height):
-    """色変換計算ステップ２"""
-    diameter = bar_box_height - ceil_height - floor_height
-    inner_height = max_bar_height - min_bar_height
-    zoom = inner_height / diameter
-    if zoom == 0:
-        new_color = (
-            int(floor_height),
-            int(floor_height),
-            int(floor_height))
-    else:
-        new_color = (
-            int((step1_color[0]-floor_height)/zoom+floor_height),
-            int((step1_color[1]-floor_height)/zoom+floor_height),
-            int((step1_color[2]-floor_height)/zoom+floor_height))
-    return new_color
 
 
 def convert_3heights_to_3bytes(n3bars_height, box_height):

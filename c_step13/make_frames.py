@@ -5,13 +5,12 @@ import math
 import cv2
 import numpy as np
 from colors import PALE_GRAY, LIGHT_GRAY, BLACK,  \
-    RED, GREEN, BLUE,  \
     DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     VIVID_RED, VIVID_GREEN, VIVID_BLUE
 from color_calc import calc_step1, calc_step2, \
     convert_3heights_to_3bytes,  \
     append_rank3_to_color_rate, \
-    convert_3rates_to_3bytes, convert_height_to_byte, calc_bar_delta
+    convert_3rates_to_3bytes, convert_height_to_byte, convert_3heights_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -142,7 +141,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 # green={bar_box.step1_rect[1].debug_string} \
 # blue={bar_box.step1_rect[2].debug_string}")
 
-        bar_box.delta_3bars_height = calc_bar_delta(
+        bar_box.delta_3bars_height = calc_step2(
             bar_box.create_step1_3bars_height(),
             bar_box.height2
         )
@@ -158,15 +157,8 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         # 外環状
         theta = outer_circle.phase * outer_circle.unit_arc
         color_rate = calc_step1(theta)
-        outer_step1_color_rate = append_rank3_to_color_rate(
-            color_rate, bar_box.rates)
-        outer_color = convert_3rates_to_3bytes(outer_step1_color_rate)
-        outer_color = calc_step2(outer_color,
-                                 bar_box.get_max_rank23_height(),
-                                 bar_box.get_min_rank23_height(),
-                                 bar_box.height,
-                                 bar_box.height1,
-                                 bar_box.height3)
+        outer_color = convert_3heights_to_3bytes(
+            bar_box.create_rank23a_3bars_height(), bar_box.height)
         outer_circle.color_list.append(outer_color)
         #
 

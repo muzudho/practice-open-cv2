@@ -2,7 +2,8 @@
 """
 
 import cv2
-from colors import LIGHT_GRAY, BLACK, WHITE
+from colors import LIGHT_GRAY, BLACK, WHITE, \
+    LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import convert_height_to_byte, convert_byte_to_height
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -410,7 +411,7 @@ class BarBox():
                 rank23d_color[0],
                 left,
                 under_top - self.delta_3bars_height[0],
-                WHITE)
+                LIGHT_RED)
 
         # 10進G値テキスト
         left = self.step1_rect[1].left_top[0]
@@ -447,7 +448,7 @@ class BarBox():
                 rank23d_color[1],
                 left,
                 under_top - self.delta_3bars_height[1],
-                WHITE)
+                LIGHT_GREEN)
 
         # 10進B値テキスト
         left = self.step1_rect[2].left_top[0]
@@ -484,7 +485,7 @@ class BarBox():
                 rank23d_color[2],
                 left,
                 under_top - self.delta_3bars_height[2],
-                WHITE)
+                LIGHT_BLUE)
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""

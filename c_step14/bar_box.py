@@ -3,7 +3,7 @@
 
 import cv2
 from colors import BLACK, WHITE, \
-    DARK_GRAY
+    BRIGHT_GRAY
 from color_calc import convert_height_to_byte, convert_byte_to_height
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -354,7 +354,7 @@ class BarBox():
             canvas,
             self.rank1_rect.left_top,
             self.rank3_rect.right_bottom,
-            DARK_GRAY,
+            BRIGHT_GRAY,
             thickness=self.thickness)
 
     def draw_rank2_box(self, canvas):
@@ -408,13 +408,28 @@ class BarBox():
             self.step1_rect[0].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT)
         delta = delta_color[0]
-        if delta > -1:
+        if delta > 0:
             # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[0],
                 left+self.one_width,
                 over_top - convert_byte_to_height(delta, self.height),
+                delta_3colors[0])
+            # step1+rank3
+            self.draw_3figures(
+                canvas,
+                step1_color[0] + rank3_byte,
+                left,
+                under_top,
+                WHITE)
+        elif delta == 0:
+            # delta
+            self.draw_3figures(
+                canvas,
+                rank23d_color[0],
+                left+self.one_width,
+                under_top,
                 delta_3colors[0])
             # step1+rank3
             self.draw_3figures(
@@ -444,13 +459,28 @@ class BarBox():
         over_top = int(self.step1_rect[1].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4)
         delta = delta_color[1]
-        if delta > -1:
+        if delta > 0:
             # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
                 left+self.one_width,
                 over_top - convert_byte_to_height(delta, self.height),
+                delta_3colors[0])
+            # step1+rank3
+            self.draw_3figures(
+                canvas,
+                step1_color[1] + rank3_byte,
+                left,
+                under_top,
+                WHITE)
+        elif delta == 0:
+            # delta
+            self.draw_3figures(
+                canvas,
+                rank23d_color[1],
+                left+self.one_width,
+                under_top,
                 delta_3colors[0])
             # step1+rank3
             self.draw_3figures(
@@ -480,13 +510,28 @@ class BarBox():
         over_top = int(self.step1_rect[2].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4)
         delta = delta_color[2]
-        if delta > -1:
+        if delta > 0:
             # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
                 left+self.one_width,
                 over_top - convert_byte_to_height(delta, self.height),
+                delta_3colors[2])
+            # step1+rank3
+            self.draw_3figures(
+                canvas,
+                step1_color[2] + rank3_byte,
+                left,
+                under_top,
+                WHITE)
+        elif delta == 0:
+            # delta
+            self.draw_3figures(
+                canvas,
+                rank23d_color[2],
+                left+self.one_width,
+                under_top,
                 delta_3colors[2])
             # step1+rank3
             self.draw_3figures(
@@ -521,7 +566,7 @@ class BarBox():
         left = self.right+self.y_axis_label_gap
         # 255
         self.draw_3figures(
-            canvas, 255, left, int(self.top1+GRID_UNIT/2), DARK_GRAY)
+            canvas, 255, left, int(self.top1+GRID_UNIT/2), BRIGHT_GRAY)
         # ceil
         self.draw_3figures(
             canvas, rank23_byte, left, int(self.top2+GRID_UNIT/2), BLACK)
@@ -530,7 +575,7 @@ class BarBox():
             canvas, rank3_byte, left, int(self.top3+GRID_UNIT/2), BLACK)
         # 0
         self.draw_3figures(
-            canvas, 0, left, int(self.bottom+GRID_UNIT/2), DARK_GRAY)
+            canvas, 0, left, int(self.bottom+GRID_UNIT/2), BRIGHT_GRAY)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
@@ -541,7 +586,7 @@ class BarBox():
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
-                    DARK_GRAY,
+                    BRIGHT_GRAY,
                     self.line_type)
         # ２段目のバー率
         rate_y = int((self.top2 + self.top3)/2 + GRID_UNIT/2)
@@ -559,7 +604,7 @@ class BarBox():
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
-                    DARK_GRAY,
+                    BRIGHT_GRAY,
                     self.line_type)
 
     def draw_3bars(self, canvas, delta_color, step1_color, rank3_color):

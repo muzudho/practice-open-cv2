@@ -398,14 +398,15 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                             rank3_byte,
                             rank23d_color)
 
-    cv2.putText(canvas,
-                # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
-                f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, {bar_box.delta_3bars_height[1]}, {bar_box.delta_3bars_height[2]})",
-                (10, 10),  # x,y
-                cv2.FONT_HERSHEY_SIMPLEX,
-                FONT_SCALE,
-                BLACK,
-                lineType=2)
+    # debug
+    # cv2.putText(canvas,
+    #            # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
+    #            f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, {bar_box.delta_3bars_height[1]}, {bar_box.delta_3bars_height[2]})",
+    #            (10, 10),  # x,y
+    #            cv2.FONT_HERSHEY_SIMPLEX,
+    #            FONT_SCALE,
+    #            BLACK,
+    #            lineType=2)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

@@ -11,7 +11,7 @@ from colors import PALE_GRAY, LIGHT_GRAY, BLACK,  \
 from color_calc import calc_step1, calc_step2, \
     convert_3heights_to_3bytes,  \
     append_rank3_to_color_rate, \
-    convert_3rates_to_3bytes, convert_height_to_byte
+    convert_3rates_to_3bytes, convert_height_to_byte, calc_bar_delta
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -142,16 +142,11 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 # green={bar_box.step1_rect[1].debug_string} \
 # blue={bar_box.step1_rect[2].debug_string}")
 
-        longest_step1_bar_height = bar_box.get_max_step1_height()
-        zoom = longest_step1_bar_height / bar_box.height2
-        step1_3bars_height = bar_box.create_step1_3bars_height()
-        red_add_px = int(step1_3bars_height[0] / zoom) - \
-            step1_3bars_height[0]
-        green_add_px = int(step1_3bars_height[1] / zoom) - \
-            step1_3bars_height[1]
-        blue_add_px = int(step1_3bars_height[2] / zoom) - \
-            step1_3bars_height[2]
-        bar_box.addition_3bars_height = (red_add_px, green_add_px, blue_add_px)
+        bar_box.addition_3bars_height = calc_bar_delta(
+            bar_box.create_step1_3bars_height(),
+            bar_box.create_rank23_3bars_height(),
+            bar_box.height2
+        )
 
         # 内環状
         theta = inner_circle.phase * inner_circle.unit_arc
@@ -351,7 +346,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     lower_bound_y = circle_rail.lower_bound_y()
     # 色見本 23a
     left_top = (color_example_left,
-                int(upper_bound_y-color_example_width))
+                bar_box.top2-color_example_width)
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,

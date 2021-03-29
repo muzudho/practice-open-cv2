@@ -52,18 +52,18 @@ BAR_RATES = [
     [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
-    'Bright',
-    'Strong',
-    'Deep',
-    'Light',
-    'Soft',
-    'Dull',
-    'Dark',
-    'Pale',
-    'Light grayish',
-    'Grayish',
-    'Dark grayish',
-    'Vivid',  # Cosine curve
+    'Bright zone',
+    'Strong zone',
+    'Deep zone',
+    'Light zone',
+    'Soft zone',
+    'Dull zone',
+    'Dark zone',
+    'Pale zone',
+    'Light grayish zone',
+    'Grayish zone',
+    'Dark grayish zone',
+    'Vivid zone',  # Cosine curve
 ]
 
 

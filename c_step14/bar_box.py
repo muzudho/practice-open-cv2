@@ -406,6 +406,8 @@ class BarBox():
         top3_byte = convert_height_to_byte(
             self.height3, self.height)
 
+        top2_over_top = int(self.top2-GRID_UNIT/2)
+
         # 10進R値テキスト
         left = self.step1_rect[0].left_top[0]
         top = self.step1_rect[0].left_top[1]
@@ -416,6 +418,7 @@ class BarBox():
             fit_font_color = BLACK
         else:
             fit_font_color = BRIGHT_GRAY
+        triangle_font_top = under_top
 
         if delta > 0:
             # fit
@@ -425,35 +428,39 @@ class BarBox():
                 left+self.one_width,
                 over_top - convert_byte_to_height(delta, self.height),
                 fit_font_color)
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[0] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
         elif delta == 0:
+            fit_font_top = under_top
+            if rank23d_color[0] == top2_byte:
+                fit_font_top = top2_over_top
+                triangle_font_top = top2_over_top
             # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[0],
                 left+self.one_width,
-                under_top,
+                fit_font_top,
                 fit_font_color)
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[0] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
         else:
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[0] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
             # fit
             self.draw_3figures(
@@ -473,6 +480,7 @@ class BarBox():
             fit_font_color = BLACK
         else:
             fit_font_color = BRIGHT_GRAY
+        triangle_font_top = under_top
 
         if delta > 0:
             # fit
@@ -482,35 +490,39 @@ class BarBox():
                 left+self.one_width,
                 over_top - convert_byte_to_height(delta, self.height),
                 fit_font_color)
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[1] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
         elif delta == 0:
+            fit_font_top = under_top
+            if rank23d_color[1] == top2_byte:
+                fit_font_top = top2_over_top
+                triangle_font_top = top2_over_top
             # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
                 left+self.one_width,
-                under_top,
+                fit_font_top,
                 fit_font_color)
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[1] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
         else:
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[1] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
             # fit
             self.draw_3figures(
@@ -530,6 +542,7 @@ class BarBox():
             fit_font_color = BLACK
         else:
             fit_font_color = BRIGHT_GRAY
+        triangle_font_top = under_top
 
         if delta > 0:
             # fit
@@ -539,35 +552,39 @@ class BarBox():
                 left+self.one_width,
                 over_top - convert_byte_to_height(delta, self.height),
                 fit_font_color)
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[2] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
         elif delta == 0:
+            fit_font_top = under_top
+            if rank23d_color[2] == top2_byte:
+                fit_font_top = top2_over_top
+                triangle_font_top = top2_over_top
             # fit
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
                 left+self.one_width,
-                under_top,
+                fit_font_top,
                 fit_font_color)
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[2] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
         else:
-            # step1+rank3
+            # triangle
             self.draw_3figures(
                 canvas,
                 step1_color[2] + rank3_byte,
                 left,
-                under_top,
+                triangle_font_top,
                 WHITE)
             # fit
             self.draw_3figures(

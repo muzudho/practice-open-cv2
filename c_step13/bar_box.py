@@ -380,7 +380,7 @@ class BarBox():
         left = self.step1_rect[0].left_top[0]
         over_top = int(
             self.step1_rect[0].left_top[1]-GRID_UNIT/2)
-        under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4)
+        under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT)
         if delta_color[0] > -1:
             # 23d
             self.draw_3figures(
@@ -409,7 +409,7 @@ class BarBox():
                 canvas,
                 rank23d_color[0],
                 left,
-                under_top - self.delta_3bars_height[0],
+                int(under_top - self.delta_3bars_height[0] + GRID_UNIT*3/4),
                 LIGHT_RED)
 
         # 10進G値テキスト
@@ -444,7 +444,7 @@ class BarBox():
                 canvas,
                 rank23d_color[1],
                 left,
-                under_top - self.delta_3bars_height[1],
+                int(under_top - self.delta_3bars_height[1] + GRID_UNIT*3/4),
                 LIGHT_GREEN)
 
         # 10進B値テキスト
@@ -479,7 +479,7 @@ class BarBox():
                 canvas,
                 rank23d_color[2],
                 left,
-                under_top - self.delta_3bars_height[2],
+                int(under_top - self.delta_3bars_height[2] + GRID_UNIT*3/4),
                 LIGHT_BLUE)
 
     def draw_y_axis_label(self, canvas):

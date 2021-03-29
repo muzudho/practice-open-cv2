@@ -408,11 +408,11 @@ class BarBox():
             self.step1_rect[0].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT)
         if delta_color[0] > -1:
-            # 23d
+            # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[0],
-                left,
+                left+self.one_width,
                 over_top - convert_byte_to_height(delta_color[0], self.height),
                 delta_3colors[0])
             # step1+rank3
@@ -428,28 +428,28 @@ class BarBox():
                 canvas,
                 step1_color[0] + rank3_byte,
                 left,
-                over_top,
-                step1_3colors[0])
-            # 23d
+                under_top,
+                WHITE)
+            # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[0],
-                left,
+                left+self.one_width,
                 int(under_top - self.delta_3bars_height[0] + GRID_UNIT*3/4),
-                LIGHT_RED)
+                delta_3colors[0])
 
         # 10進G値テキスト
         left = self.step1_rect[1].left_top[0]
         over_top = int(self.step1_rect[1].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4)
         if delta_color[1] > -1:
-            # 23d
+            # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
-                left,
+                left+self.one_width,
                 over_top - convert_byte_to_height(delta_color[1], self.height),
-                delta_3colors[1])
+                delta_3colors[0])
             # step1+rank3
             self.draw_3figures(
                 canvas,
@@ -463,26 +463,26 @@ class BarBox():
                 canvas,
                 step1_color[1] + rank3_byte,
                 left,
-                over_top,
-                step1_3colors[1])
-            # 23d
+                under_top,
+                WHITE)
+            # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
-                left,
+                left+self.one_width,
                 int(under_top - self.delta_3bars_height[1] + GRID_UNIT*3/4),
-                LIGHT_GREEN)
+                delta_3colors[1])
 
         # 10進B値テキスト
         left = self.step1_rect[2].left_top[0]
         over_top = int(self.step1_rect[2].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4)
         if delta_color[1] > -1:
-            # 23d
+            # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
-                left,
+                left+self.one_width,
                 over_top - convert_byte_to_height(delta_color[2], self.height),
                 delta_3colors[2])
             # step1+rank3
@@ -498,15 +498,15 @@ class BarBox():
                 canvas,
                 step1_color[2] + rank3_byte,
                 left,
-                over_top,
-                step1_3colors[2])
-            # 23d
+                under_top,
+                WHITE)
+            # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
-                left,
+                left+self.one_width,
                 int(under_top - self.delta_3bars_height[2] + GRID_UNIT*3/4),
-                LIGHT_BLUE)
+                delta_3colors[2])
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""

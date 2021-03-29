@@ -407,13 +407,14 @@ class BarBox():
         over_top = int(
             self.step1_rect[0].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT)
-        if delta_color[0] > -1:
+        delta = delta_color[0]
+        if delta > -1:
             # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[0],
                 left+self.one_width,
-                over_top - convert_byte_to_height(delta_color[0], self.height),
+                over_top - convert_byte_to_height(delta, self.height),
                 delta_3colors[0])
             # step1+rank3
             self.draw_3figures(
@@ -442,13 +443,14 @@ class BarBox():
         left = self.step1_rect[1].left_top[0]
         over_top = int(self.step1_rect[1].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4)
-        if delta_color[1] > -1:
+        delta = delta_color[1]
+        if delta > -1:
             # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
                 left+self.one_width,
-                over_top - convert_byte_to_height(delta_color[1], self.height),
+                over_top - convert_byte_to_height(delta, self.height),
                 delta_3colors[0])
             # step1+rank3
             self.draw_3figures(
@@ -477,13 +479,14 @@ class BarBox():
         left = self.step1_rect[2].left_top[0]
         over_top = int(self.step1_rect[2].left_top[1]-GRID_UNIT/2)
         under_top = int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4)
-        if delta_color[1] > -1:
+        delta = delta_color[2]
+        if delta > -1:
             # delta
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
                 left+self.one_width,
-                over_top - convert_byte_to_height(delta_color[2], self.height),
+                over_top - convert_byte_to_height(delta, self.height),
                 delta_3colors[2])
             # step1+rank3
             self.draw_3figures(

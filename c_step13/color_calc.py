@@ -12,11 +12,11 @@ def calc_step1(theta):
     return (red_rate, green_rate, blue_rate)
 
 
-def calc_bar_delta(step1_3bars_height, rank23_3bars_height, diameter):
+def calc_bar_delta(step1_3bars_height, diameter):
     longest_bar_height = max(
-        rank23_3bars_height[0], rank23_3bars_height[1], rank23_3bars_height[2])
+        step1_3bars_height[0], step1_3bars_height[1], step1_3bars_height[2])
     shortest_bar_height = min(
-        rank23_3bars_height[0], rank23_3bars_height[1], rank23_3bars_height[2])
+        step1_3bars_height[0], step1_3bars_height[1], step1_3bars_height[2])
     inner_height = longest_bar_height - shortest_bar_height
     zoom = inner_height / diameter
     red_bar_delta = int(step1_3bars_height[0] / zoom) - \

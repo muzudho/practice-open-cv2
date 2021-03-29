@@ -144,7 +144,6 @@ def make_circle(canvas, seq, bar_rates, tone_name):
 
         bar_box.delta_3bars_height = calc_bar_delta(
             bar_box.create_step1_3bars_height(),
-            bar_box.create_rank23_3bars_height(),
             bar_box.height2
         )
 
@@ -394,6 +393,14 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
                             step1_color,
                             rank3_byte,
                             rank23d_color)
+
+    cv2.putText(canvas,
+                f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
+                (10, 10),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                BLACK,
+                lineType=2)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

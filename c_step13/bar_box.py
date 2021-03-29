@@ -378,17 +378,16 @@ class BarBox():
 
         # 10進R値テキスト
         left = self.step1_rect[0].left_top[0]
-        top = self.step1_rect[0].left_top[1]
         over_top = int(
-            top - convert_byte_to_height(delta_color[0], self.height)-GRID_UNIT/2)
-        under_top = int(top+GRID_UNIT*3/4)
+            self.step1_rect[0].left_top[1]-GRID_UNIT/2)
+        under_top = int(self.step1_rect[0].left_top[1]+GRID_UNIT*3/4)
         if delta_color[0] > -1:
             # 23d
             self.draw_3figures(
                 canvas,
                 rank23d_color[0],
                 left,
-                over_top,
+                over_top - convert_byte_to_height(delta_color[0], self.height),
                 delta_3colors[0])
             # step1+rank3
             self.draw_3figures(
@@ -415,17 +414,15 @@ class BarBox():
 
         # 10進G値テキスト
         left = self.step1_rect[1].left_top[0]
-        top = self.step1_rect[1].left_top[1]
-        over_top = int(top -
-                       convert_byte_to_height(delta_color[1], self.height)-GRID_UNIT/2)
-        under_top = int(top+GRID_UNIT*3/4)
+        over_top = int(self.step1_rect[1].left_top[1]-GRID_UNIT/2)
+        under_top = int(self.step1_rect[1].left_top[1]+GRID_UNIT*3/4)
         if delta_color[1] > -1:
             # 23d
             self.draw_3figures(
                 canvas,
                 rank23d_color[1],
                 left,
-                over_top,
+                over_top - convert_byte_to_height(delta_color[1], self.height),
                 delta_3colors[1])
             # step1+rank3
             self.draw_3figures(
@@ -452,17 +449,15 @@ class BarBox():
 
         # 10進B値テキスト
         left = self.step1_rect[2].left_top[0]
-        top = self.step1_rect[2].left_top[1]
-        over_top = int(top -
-                       convert_byte_to_height(delta_color[2], self.height)-GRID_UNIT/2)
-        under_top = int(top+GRID_UNIT*3/4)
+        over_top = int(self.step1_rect[2].left_top[1]-GRID_UNIT/2)
+        under_top = int(self.step1_rect[2].left_top[1]+GRID_UNIT*3/4)
         if delta_color[1] > -1:
             # 23d
             self.draw_3figures(
                 canvas,
                 rank23d_color[2],
                 left,
-                over_top,
+                over_top - convert_byte_to_height(delta_color[2], self.height),
                 delta_3colors[2])
             # step1+rank3
             self.draw_3figures(

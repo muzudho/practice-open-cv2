@@ -21,17 +21,24 @@ def calc_step2(step1_3bars_height, diameter):
     inner_height = longest_bar_height - shortest_bar_height
 
     if diameter == 0:
-        zoom = 1
-    else:
-        zoom = inner_height / diameter
+        return (0, 0, 0)
 
-    red_bar_delta = int(step1_3bars_height[0] / zoom) - \
-        step1_3bars_height[0]
-    green_bar_delta = int(step1_3bars_height[1] / zoom) - \
-        step1_3bars_height[1]
-    blue_bar_delta = int(step1_3bars_height[2] / zoom) - \
-        step1_3bars_height[2]
-    return (red_bar_delta, green_bar_delta, blue_bar_delta)
+    zoom = inner_height / diameter
+    print(f"zoom={zoom} inner_height={inner_height} diameter={diameter}")
+
+    inner_r = step1_3bars_height[0] - shortest_bar_height
+    inner_g = step1_3bars_height[1] - shortest_bar_height
+    inner_b = step1_3bars_height[2] - shortest_bar_height
+
+    fit_r = int(inner_r / zoom)
+    fit_g = int(inner_g / zoom)
+    fit_b = int(inner_b / zoom)
+
+    r_bar_delta = fit_r - step1_3bars_height[0]
+    g_bar_delta = fit_g - step1_3bars_height[1]
+    b_bar_delta = fit_b - step1_3bars_height[2]
+
+    return (r_bar_delta, g_bar_delta, b_bar_delta)
 
 
 def convert_3heights_to_3bytes(n3bars_height, box_height):

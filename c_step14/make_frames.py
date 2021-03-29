@@ -316,19 +316,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
-    # 時計の針
-    clock_hand_len = int(4.5*GRID_UNIT)
-    inner_p = (
-        int(circle_rail.range * math.cos(math.radians(circle_rail.theta-90)) +
-            circle_rail.center[0]),
-        int(circle_rail.range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
-    outer_p = (
-        int((circle_rail.range+clock_hand_len) *
-            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))
-            + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
-
     color_example_width = int(1.5*GRID_UNIT)
     left = bar_box.left - 2*color_example_width
     swing_bar_width = int(0.75*color_example_width)
@@ -402,6 +389,45 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状
+
+    # 時計の針
+    inner_range = circle_rail.range
+    second_range = int(5.5*GRID_UNIT)
+    third_range = int(6.5*GRID_UNIT)
+    fourth_range = int(7.5*GRID_UNIT)
+    inner_p = (
+        int(inner_range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(inner_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int(second_range *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int(second_range * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
+    #
+    inner_p = (
+        int(second_range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(second_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int((third_range) *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int((third_range) * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, WHITE, thickness=2)
+    #
+    inner_p = (
+        int(third_range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(third_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int(fourth_range *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int(fourth_range * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, BLACK, thickness=2)
+    #
 
     # バー箱の２段目の黒枠
     bar_box.draw_rank2_box(canvas)

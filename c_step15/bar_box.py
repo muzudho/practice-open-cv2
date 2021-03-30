@@ -496,10 +496,7 @@ class BarBox():
         # バーR
         left = self.step1_rect[0].left_top[0]
         right = self.step1_rect[0].right_bottom[0]
-        top = self.step1_rect[0].left_top[1]
-        delta = self.delta_3bars_height[0]
-        if delta > 0:
-            top -= delta
+        top = self.step1_rect[0].left_top[1] - self.delta_3bars_height[0]
         cv2.rectangle(canvas, (left, top),
                       self.step1_rect[0].right_bottom, RED, thickness=-1)  # rank2d
         cv2.rectangle(canvas, (left, self.top3),
@@ -509,9 +506,7 @@ class BarBox():
         # バーG
         left = self.step1_rect[1].left_top[0]
         right = self.step1_rect[1].right_bottom[0]
-        top = self.step1_rect[1].left_top[1]
-        if delta > 0:
-            top -= delta
+        top = self.step1_rect[1].left_top[1] - self.delta_3bars_height[1]
         cv2.rectangle(canvas, (left, top),
                       self.step1_rect[1].right_bottom, GREEN, thickness=-1)
         cv2.rectangle(canvas, (left, self.top3),
@@ -521,9 +516,7 @@ class BarBox():
         # バーB
         left = self.step1_rect[2].left_top[0]
         right = self.step1_rect[2].right_bottom[0]
-        top = self.step1_rect[2].left_top[1]
-        if delta > 0:
-            top -= delta
+        top = self.step1_rect[2].left_top[1] - self.delta_3bars_height[2]
         cv2.rectangle(canvas,
                       (left, top),
                       self.step1_rect[2].right_bottom,

@@ -26,6 +26,11 @@ class CircleRail():
         """半径"""
         return self.__range
 
+    @property
+    def diameter(self):
+        """直径"""
+        return 2*self.__range
+
     @range.setter
     def range(self, val):
         self.__range = val
@@ -68,53 +73,53 @@ class CircleRail():
 
         self.__theta = theta
         # 円周上の赤い点の位置
-        self.red_p = (int(self.range * math.sin(math.radians(theta)) + self.center[0]),
-                      int(-self.range * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
+        self.__red_p = (int(self.range * math.sin(math.radians(theta)) + self.center[0]),
+                        int(-self.range * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
 
         # 円周上の緑の点の位置
-        self.green_p = (int(self.range * math.sin(math.radians(theta-120)) + self.center[0]),
-                        int(-self.range * math.cos(math.radians(theta-120)) +
-                            self.center[1]))  # yは上下反転
+        self.__green_p = (int(self.range * math.sin(math.radians(theta-120)) + self.center[0]),
+                          int(-self.range * math.cos(math.radians(theta-120)) +
+                              self.center[1]))  # yは上下反転
 
         # 円周上の青の点の位置
-        self.blue_p = (int(self.range * math.sin(math.radians(theta+120)) + self.center[0]),
-                       int(-self.range * math.cos(math.radians(theta+120)) +
-                           self.center[1]))  # yは上下反転
+        self.__blue_p = (int(self.range * math.sin(math.radians(theta+120)) + self.center[0]),
+                         int(-self.range * math.cos(math.radians(theta+120)) +
+                             self.center[1]))  # yは上下反転
 
     @property
     def red_p(self):
         """円周上の赤の点の位置"""
         return self.__red_p
 
-    @red_p.setter
-    def red_p(self, val):
-        self.__red_p = val
-
     @property
     def green_p(self):
         """円周上の緑の点の位置"""
         return self.__green_p
-
-    @green_p.setter
-    def green_p(self, val):
-        self.__green_p = val
 
     @property
     def blue_p(self):
         """円周上の青の点の位置"""
         return self.__blue_p
 
-    @blue_p.setter
-    def blue_p(self, val):
-        self.__blue_p = val
-
+    @property
     def upper_bound_y(self):
         """上限"""
         return min(self.red_p[1], self.green_p[1], self.blue_p[1])
 
+    @property
     def lower_bound_y(self):
         """下限"""
         return max(self.red_p[1], self.green_p[1], self.blue_p[1])
+
+    @property
+    def inner_height(self):
+        """上限と下限の差分の長さ"""
+        return self.upper_bound_y - self.lower_bound_y
+
+    @property
+    def zoom(self):
+        """直径に対するinner_heightの割合。0.0～1.0"""
+        return self.inner_height / self.diameter
 
     def draw_red_p(self, canvas):
         """円周上の点Rを描きます"""

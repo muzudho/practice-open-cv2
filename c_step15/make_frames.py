@@ -6,7 +6,8 @@ import cv2
 import numpy as np
 from colors import WHITE, PALE_GRAY, BRIGHT_GRAY, BLACK,  \
     DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
-    VIVID_RED, VIVID_GREEN, VIVID_BLUE, SOFT_GRAY
+    VIVID_RED, VIVID_GREEN, VIVID_BLUE, SOFT_GRAY, \
+    RED, GREEN, BLUE
 from color_calc import calc_step1, calc_step2, \
     convert_3heights_to_3bytes,  \
     append_rank3_to_color_rate, \
@@ -285,8 +286,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
              circle_rail.red_p, WHITE, thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
-    delta_color = convert_3heights_to_3bytes(
-        bar_box.delta_3bars_height, bar_box.height)
     step1_color = convert_3heights_to_3bytes(
         bar_box.create_step1_3bars_height(), bar_box.height)
     rank3_byte = convert_height_to_byte(
@@ -295,10 +294,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
         bar_box.create_rank23_3bars_height(), bar_box.height)
     rank23d_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
-    # 3色成分（配色）
-    delta_3colors = (DARK_RED, DARK_GREEN, DARK_BLUE)
-    step1_3colors = (VIVID_RED, VIVID_GREEN, VIVID_BLUE)
-    rank3_3colors = (BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE)
 
 #    # (WIP) 成分から角度を逆算
 #    element_rates, expected_theta = calc_color_element_rates(rank23_color)
@@ -308,8 +303,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 # color_element(rank23_color)=({element_rates[0]:>7.3f}, \
 # {element_rates[1]:>7.3f}, \
 # {element_rates[2]:>7.3f})")
-    bar_box.draw_3bars(canvas, step1_3colors,
-                       rank3_3colors)  # RGBバー
+    bar_box.draw_3bars(canvas)  # RGBバー
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
@@ -355,34 +349,22 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-    if delta_color[0] > -1:
-        line_color = step1_3colors[0]
-    else:
-        line_color = delta_3colors[0]
     cv2.line(canvas, circle_rail.red_p,
-             (bar_box.step1_rect[0].right_bottom[0],
+             (bar_box.step1_rect[0].left_top[0],
               circle_rail.red_p[1]),
-             line_color, thickness=2)
+             RED, thickness=2)
 
     # 水平線G
-    if delta_color[1] > -1:
-        line_color = step1_3colors[1]
-    else:
-        line_color = delta_3colors[1]
     cv2.line(canvas, circle_rail.green_p,
-             (bar_box.step1_rect[1].right_bottom[0],
+             (bar_box.step1_rect[1].left_top[0],
               circle_rail.green_p[1]),
-             line_color, thickness=2)
+             GREEN, thickness=2)
 
     # 水平線B
-    if delta_color[2] > -1:
-        line_color = step1_3colors[2]
-    else:
-        line_color = delta_3colors[2]
     cv2.line(canvas, circle_rail.blue_p,
-             (bar_box.step1_rect[2].right_bottom[0],
+             (bar_box.step1_rect[2].left_top[0],
               circle_rail.blue_p[1]),
-             line_color, thickness=2)
+             BLUE, thickness=2)
 
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状

@@ -3,7 +3,8 @@
 
 import cv2
 from colors import BLACK, \
-    BRIGHT_GRAY, RED, GREEN, BLUE
+    BRIGHT_GRAY, RED, GREEN, BLUE, \
+    BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE
 from color_calc import convert_height_to_byte
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -449,7 +450,7 @@ class BarBox():
                     BRIGHT_GRAY,
                     self.line_type)
 
-    def draw_3bars(self, canvas, step1_color, rank3_color):
+    def draw_3bars(self, canvas):
         """バーを描きます"""
 
         # yは逆さ
@@ -462,10 +463,10 @@ class BarBox():
         if delta > 0:
             top -= delta
         cv2.rectangle(canvas, (left, top),
-                      self.step1_rect[0].right_bottom, step1_color[0], thickness=-1)  # rank2d
+                      self.step1_rect[0].right_bottom, RED, thickness=-1)  # rank2d
         cv2.rectangle(canvas, (left, self.top3),
                       (right, self.bottom),
-                      rank3_color[0], thickness=-1)  # rank3
+                      BRIGHT_RED, thickness=-1)  # rank3
 
         # バーG
         left = self.step1_rect[1].left_top[0]
@@ -474,10 +475,10 @@ class BarBox():
         if delta > 0:
             top -= delta
         cv2.rectangle(canvas, (left, top),
-                      self.step1_rect[1].right_bottom, step1_color[1], thickness=-1)
+                      self.step1_rect[1].right_bottom, GREEN, thickness=-1)
         cv2.rectangle(canvas, (left, self.top3),
                       (right,
-                       self.bottom), rank3_color[1], thickness=-1)
+                       self.bottom), BRIGHT_GREEN, thickness=-1)
 
         # バーB
         left = self.step1_rect[2].left_top[0]
@@ -488,10 +489,10 @@ class BarBox():
         cv2.rectangle(canvas,
                       (left, top),
                       self.step1_rect[2].right_bottom,
-                      step1_color[2],
+                      BLUE,
                       thickness=-1)
         cv2.rectangle(canvas,
                       (left, self.top3),
                       (right, self.bottom),
-                      rank3_color[2],
+                      BRIGHT_BLUE,
                       thickness=-1)

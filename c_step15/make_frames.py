@@ -17,16 +17,16 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 500  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_WIDTH = 550  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
 CANVAS_HEIGHT = 360
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
 MONO_BACKGROUND = SOFT_GRAY[0]
 
 # RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 7 * GRID_UNIT
+BAR_TOP1 = 9 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(22 * GRID_UNIT)
+BAR_BOX_LEFT = int(24 * GRID_UNIT)
 # 円の中心と、箱の左との距離
 CIRCLE_DISTANCE = int(13.5 * GRID_UNIT)
 

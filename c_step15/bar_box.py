@@ -2,10 +2,9 @@
 """
 
 import cv2
-from colors import BLACK, \
+from colors import  \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
     BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
-    DARK_RED, DARK_GREEN, DARK_BLUE, \
     DARK_GRAYISH_BLACK, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_height_to_byte
@@ -319,8 +318,10 @@ class BarBox():
         else:
             blue = fitted[2] / triangle[2]
 
-        print(
-            f"multiple=({red:7.3f},{green:7.3f},{blue:7.3f}) fitted=({fitted[0]},{fitted[1]},{fitted[2]}) fitted=({triangle[0]},{triangle[1]},{triangle[2]})")
+        # print(
+        #    f"multiple=({red:7.3f},{green:7.3f},{blue:7.3f}) \
+        # fitted=({fitted[0]},{fitted[1]},{fitted[2]}) \
+        # fitted=({triangle[0]},{triangle[1]},{triangle[2]})")
         return (red, green, blue)
 
     def create_step1_3bars_height(self):

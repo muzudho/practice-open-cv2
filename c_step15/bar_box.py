@@ -369,30 +369,62 @@ class BarBox():
 
     def draw_rgb_number(self, canvas, rank23d_color):
         """RGB値テキストを描きます"""
+        top2_byte = convert_height_to_byte(
+            self.height2+self.height3, self.height)
+        top3_byte = convert_height_to_byte(
+            self.height3, self.height)
+        top2_over_top = int(self.top2-GRID_UNIT/2)
 
         # 10進R値テキスト
-        top = self.bottom + GRID_UNIT
+        color = rank23d_color[0]
+        if color == top2_byte:
+            top = top2_over_top
+        elif color == top3_byte:
+            top = self.step1_rect[0].left_top[1] - \
+                self.delta_3bars_height[0] + GRID_UNIT
+        else:
+            top = self.step1_rect[0].left_top[1] - \
+                self.delta_3bars_height[0] + GRID_UNIT
 
-        # Red
         self.draw_3figures(
             canvas,
-            rank23d_color[0],
+            color,
             self.step1_rect[0].left_top[0],
             top,
             DARK_RED)
 
         # 10進G値テキスト
+        color = rank23d_color[1]
+        if color == top2_byte:
+            top = top2_over_top
+        elif color == top3_byte:
+            top = self.step1_rect[1].left_top[1] - \
+                self.delta_3bars_height[1] + GRID_UNIT
+        else:
+            top = self.step1_rect[1].left_top[1] - \
+                self.delta_3bars_height[1] + GRID_UNIT
+
         self.draw_3figures(
             canvas,
-            rank23d_color[1],
+            color,
             self.step1_rect[1].left_top[0],
             top,
             DARK_GREEN)
 
         # 10進B値テキスト
+        color = rank23d_color[2]
+        if color == top2_byte:
+            top = top2_over_top
+        elif color == top3_byte:
+            top = self.step1_rect[2].left_top[1] - \
+                self.delta_3bars_height[2] + GRID_UNIT
+        else:
+            top = self.step1_rect[2].left_top[1] - \
+                self.delta_3bars_height[2] + GRID_UNIT
+
         self.draw_3figures(
             canvas,
-            rank23d_color[2],
+            color,
             self.step1_rect[2].left_top[0],
             top,
             DARK_BLUE)

@@ -6,7 +6,8 @@ from colors import BLACK, \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
     BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     DARK_RED, DARK_GREEN, DARK_BLUE, \
-    DARK_GRAYISH_BLACK, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE
+    DARK_GRAYISH_BLACK, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
+    PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_height_to_byte
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -378,6 +379,7 @@ class BarBox():
 
         # 10進R値テキスト
         color = rank23d_color[0]
+        font_color = DARK_GRAYISH_RED
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
@@ -386,16 +388,18 @@ class BarBox():
         else:
             top = self.step1_rect[0].left_top[1] - \
                 self.delta_3bars_height[0] + GRID_UNIT
+            font_color = PALE_RED
 
         self.draw_3figures(
             canvas,
             color,
             self.step1_rect[0].left_top[0],
             top,
-            DARK_GRAYISH_RED)
+            font_color)
 
         # 10進G値テキスト
         color = rank23d_color[1]
+        font_color = DARK_GRAYISH_GREEN
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
@@ -404,16 +408,18 @@ class BarBox():
         else:
             top = self.step1_rect[1].left_top[1] - \
                 self.delta_3bars_height[1] + GRID_UNIT
+            font_color = PALE_GREEN
 
         self.draw_3figures(
             canvas,
             color,
             self.step1_rect[1].left_top[0],
             top,
-            DARK_GRAYISH_GREEN)
+            font_color)
 
         # 10進B値テキスト
         color = rank23d_color[2]
+        font_color = DARK_GRAYISH_BLUE
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
@@ -422,13 +428,14 @@ class BarBox():
         else:
             top = self.step1_rect[2].left_top[1] - \
                 self.delta_3bars_height[2] + GRID_UNIT
+            font_color = PALE_BLUE
 
         self.draw_3figures(
             canvas,
             color,
             self.step1_rect[2].left_top[0],
             top,
-            DARK_GRAYISH_BLUE)
+            font_color)
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""

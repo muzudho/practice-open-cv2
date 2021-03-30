@@ -4,6 +4,9 @@
 # Pale
 WHITE = (245, 245, 245)  # 少し控えめ
 PALE_GRAY = (216, 216, 216)
+PALE_RED = (255, 178, 178)
+PALE_GREEN = (178, 255, 178)
+PALE_BLUE = (178, 178, 255)
 
 # Light
 BRIGHT_GRAY = (140, 140, 140)

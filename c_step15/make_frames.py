@@ -308,7 +308,7 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 # color_element(rank23_color)=({element_rates[0]:>7.3f}, \
 # {element_rates[1]:>7.3f}, \
 # {element_rates[2]:>7.3f})")
-    bar_box.draw_3bars(canvas, delta_3colors, step1_3colors,
+    bar_box.draw_3bars(canvas, step1_3colors,
                        rank3_3colors)  # RGBバー
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト

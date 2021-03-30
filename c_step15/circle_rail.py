@@ -101,13 +101,13 @@ class CircleRail():
                                int(-rng2 * math.cos(math.radians(theta)) + self.center[1]))
 
         # 円周上の緑の点の位置
-        rng2 *= self.range * n3bars_multiple[1]
+        rng2 = self.range * n3bars_multiple[1]
         self.__fitted_green_p = (int(rng2 * math.sin(math.radians(theta-120)) + self.center[0]),
                                  int(-rng2 * math.cos(math.radians(theta-120)) +
                                      self.center[1]))
 
         # 円周上の青の点の位置
-        rng2 *= self.range * n3bars_multiple[2]
+        rng2 = self.range * n3bars_multiple[2]
         self.__fitted_blue_p = (int(rng2 * math.sin(math.radians(theta+120)) + self.center[0]),
                                 int(-rng2 * math.cos(math.radians(theta+120)) +
                                     self.center[1]))

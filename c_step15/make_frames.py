@@ -5,7 +5,8 @@ import math
 import cv2
 import numpy as np
 from colors import WHITE, PALE_GRAY, BLACK,  \
-    SOFT_GRAY, RED, GREEN, BLUE
+    SOFT_GRAY, RED, GREEN, BLUE, \
+    DARK_GRAYISH_BLACK
 from color_calc import calc_step2, \
     convert_3heights_to_3bytes
 from bar_box import BarBox
@@ -244,7 +245,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 (bar_box.left, int(BAR_TOP1-2.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
-                BLACK,
+                DARK_GRAYISH_BLACK,
                 line_type)
 
 

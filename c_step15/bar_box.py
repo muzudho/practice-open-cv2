@@ -6,7 +6,7 @@ from colors import BLACK, \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
     BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     DARK_RED, DARK_GREEN, DARK_BLUE, \
-    DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE
+    DARK_GRAYISH_BLACK, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE
 from color_calc import convert_height_to_byte
 from conf import GRID_UNIT
 from rectangle import Rectangle
@@ -331,7 +331,7 @@ class BarBox():
             thickness=self.thickness)
 
     def draw_rank2_box(self, canvas):
-        """２段目の箱を描きます"""
+        """２段目の箱の輪郭を描きます"""
         # 線の太さを考慮
         thickness_minus1 = self.thickness-1
         cv2.rectangle(
@@ -340,7 +340,7 @@ class BarBox():
              self.rank2_rect.left_top[1]-thickness_minus1),
             (self.rank2_rect.right_bottom[0]+thickness_minus1,
              self.rank2_rect.right_bottom[1]+thickness_minus1),
-            BLACK,
+            DARK_GRAYISH_BLACK,
             thickness=thickness_minus1+1)
 
     def draw_3figures(self, canvas, num, left, top, color):
@@ -441,15 +441,15 @@ class BarBox():
         # 255
         self.draw_3figures(
             canvas, 255, left, int(self.top1-GRID_UNIT/2), BRIGHT_GRAY)
-        # ceil
-        self.draw_3figures(
-            canvas, rank23_byte, left, int(self.top2-GRID_UNIT/2), BLACK)
-        # base_line
-        self.draw_3figures(
-            canvas, rank3_byte, left, int(self.top3+GRID_UNIT), BLACK)
         # 0
         self.draw_3figures(
             canvas, 0, left, int(self.bottom+GRID_UNIT), BRIGHT_GRAY)
+        # ceil
+        self.draw_3figures(
+            canvas, rank23_byte, left, int(self.top2-GRID_UNIT/2), DARK_GRAYISH_BLACK)
+        # base_line
+        self.draw_3figures(
+            canvas, rank3_byte, left, int(self.top3+GRID_UNIT), DARK_GRAYISH_BLACK)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
@@ -469,7 +469,7 @@ class BarBox():
                     (self.right+self.rate_text_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
-                    BLACK,
+                    DARK_GRAYISH_BLACK,
                     self.line_type)
         # ３段目のバー率
         rate_y = int((self.top3 + self.bottom)/2 + GRID_UNIT/2)

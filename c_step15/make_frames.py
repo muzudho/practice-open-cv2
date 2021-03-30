@@ -324,16 +324,16 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
                 circle_rail.center,
                 (second_range, second_range),
                 -90,
-                int(circle_rail.theta-outer_circle.unit_arc),
-                circle_rail.theta+outer_circle.unit_arc,
+                int(circle_rail.theta-outer_circle.unit_arc/2),
+                int(circle_rail.theta+outer_circle.unit_arc/2),
                 PALE_GRAY,
                 thickness=tickness)
     cv2.ellipse(canvas,
                 circle_rail.center,
                 (third_range, third_range),
                 -90,
-                int(circle_rail.theta-outer_circle.unit_arc),
-                circle_rail.theta+outer_circle.unit_arc,
+                int(circle_rail.theta-outer_circle.unit_arc/2),
+                int(circle_rail.theta+outer_circle.unit_arc/2),
                 PALE_GRAY,
                 thickness=tickness)
     #

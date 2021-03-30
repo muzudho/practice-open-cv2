@@ -87,7 +87,7 @@ class OuterCircle():
                         self.origin,
                         self.area_size,
                         -90,
-                        theta-self.unit_arc,
-                        theta+self.unit_arc,
+                        int(theta-self.unit_arc/2),
+                        int(theta+self.unit_arc/2),
                         color,
                         thickness=int(1.25*GRID_UNIT))

@@ -34,13 +34,24 @@ def calc_step2(n3bars_h, diameter):
     inner_g = n3bars_h[1] - shortest
     inner_b = n3bars_h[2] - shortest
 
-    fit_r = int(inner_r / zoom)
-    fit_g = int(inner_g / zoom)
-    fit_b = int(inner_b / zoom)
+    # 0除算が起こるなら（仕方が無いので）差分は 0 にします
+    if zoom == 0:
+        r_bar_delta = 0
+    else:
+        fit_r = int(inner_r / zoom)
+        r_bar_delta = fit_r - n3bars_h[0]
 
-    r_bar_delta = fit_r - n3bars_h[0]
-    g_bar_delta = fit_g - n3bars_h[1]
-    b_bar_delta = fit_b - n3bars_h[2]
+    if zoom == 0:
+        g_bar_delta = 0
+    else:
+        fit_g = int(inner_g / zoom)
+        g_bar_delta = fit_g - n3bars_h[1]
+
+    if zoom == 0:
+        b_bar_delta = 0
+    else:
+        fit_b = int(inner_b / zoom)
+        b_bar_delta = fit_b - n3bars_h[2]
 
     return (r_bar_delta, g_bar_delta, b_bar_delta)
 

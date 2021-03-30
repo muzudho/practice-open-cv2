@@ -296,7 +296,7 @@ class BarBox():
             abs(fitted[0] - half),
             abs(fitted[1] - half),
             abs(fitted[2] - half))
-        # 0除算が起きるケースは、1.0 にします。分子が0になるケースは、分子を1として計算します
+        # 0除算が起きるケースは、（仕方がないので）1.0 にします。分子が0になるケースは、分子を1として計算します
         if triangle[0] == 0:
             red = 1.0
         elif fitted[0] == 0:
@@ -349,7 +349,7 @@ class BarBox():
             rank2_height[1] + self.height3,
             rank2_height[2] + self.height3)
 
-    def create_rank23a_3bars_height(self):
+    def create_rank23d_3bars_height(self):
         """バーの長さを作成"""
         rank23_height = self.create_rank23_3bars_height()
         return (

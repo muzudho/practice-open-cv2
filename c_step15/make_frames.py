@@ -17,8 +17,8 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 550  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
-CANVAS_HEIGHT = 360
+CANVAS_WIDTH = 500  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_HEIGHT = 400
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
 MONO_BACKGROUND = SOFT_GRAY[0]
@@ -26,9 +26,9 @@ MONO_BACKGROUND = SOFT_GRAY[0]
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 9 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(24 * GRID_UNIT)
+BAR_BOX_LEFT = int(22 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = int(13.5 * GRID_UNIT)
+CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -144,7 +144,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         # 外環状
         theta = outer_circle.phase * outer_circle.unit_arc
         outer_color = convert_3heights_to_3bytes(
-            bar_box.create_rank23a_3bars_height(), bar_box.height)
+            bar_box.create_rank23d_3bars_height(), bar_box.height)
         outer_circle.color_list.append(outer_color)
         #
 
@@ -258,6 +258,20 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     circle_rail.draw_green_p(canvas)  # 円周上の点G
     circle_rail.draw_blue_p(canvas)  # 円周上の点B
 
+    # 背景の上限、下限の線
+    cv2.line(canvas,
+             (circle_rail.center[0] - 2*circle_rail.range,
+              int(circle_rail.center[1] - circle_rail.range)),
+             (circle_rail.center[0] + 2*circle_rail.range,
+              int(circle_rail.center[1] - circle_rail.range)),
+             PALE_GRAY, thickness=2)
+    cv2.line(canvas,
+             (circle_rail.center[0] - 2*circle_rail.range,
+              int(circle_rail.center[1] + circle_rail.range)),
+             (circle_rail.center[0] + 2*circle_rail.range,
+              int(circle_rail.center[1] + circle_rail.range)),
+             PALE_GRAY, thickness=2)
+
     # 円に内接する線。正三角形
     cv2.line(canvas, circle_rail.red_p,
              circle_rail.green_p, WHITE, thickness=2)
@@ -267,6 +281,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
              circle_rail.red_p, WHITE, thickness=2)
 
     # 調整された三角形
+    # bar_box.create_rank23d_3bars_height()
     n3bars_multiple = bar_box.create_3bars_multiple()
     circle_rail.calc_fitted_p(n3bars_multiple)
     cv2.line(canvas, circle_rail.fitted_red_p,
@@ -278,7 +293,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     rank23d_color = convert_3heights_to_3bytes(
-        bar_box.create_rank23a_3bars_height(), bar_box.height)
+        bar_box.create_rank23d_3bars_height(), bar_box.height)
 
 #    # (WIP) 成分から角度を逆算
 #    element_rates, expected_theta = calc_color_element_rates(rank23_color)
@@ -359,18 +374,18 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
                             rank23d_color)
 
     # debug
-    cv2.putText(canvas,
-                f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
-                # f"zoom={circle_rail.zoom}",
-                #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
-                #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \
-                #    {bar_box.delta_3bars_height[1]}, \
-                #    {bar_box.delta_3bars_height[2]})",
-                (10, 10),  # x,y
-                cv2.FONT_HERSHEY_SIMPLEX,
-                FONT_SCALE,
-                BLACK,
-                lineType=2)
+    # cv2.putText(canvas,
+    f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
+    # f"zoom={circle_rail.zoom}",
+    #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
+    #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \
+    #    {bar_box.delta_3bars_height[1]}, \
+    #    {bar_box.delta_3bars_height[2]})",
+    # (10, 10),  # x,y
+    # cv2.FONT_HERSHEY_SIMPLEX,
+    # FONT_SCALE,
+    # BLACK,
+    # lineType=2)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

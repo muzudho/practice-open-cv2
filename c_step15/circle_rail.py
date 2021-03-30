@@ -19,6 +19,9 @@ class CircleRail():
         self.__red_p = (0, 0)
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
+        self.__fitted_red_p = (0, 0)
+        self.__fitted_green_p = (0, 0)
+        self.__fitted_blue_p = (0, 0)
         self.__theta = 0
 
     @property
@@ -69,22 +72,46 @@ class CircleRail():
 
     @theta.setter
     def theta(self, theta):
-        """円周上の赤の点の角度を設定"""
+        """円周上の点の位置を設定"""
 
         self.__theta = theta
+        rng = self.range
         # 円周上の赤い点の位置
-        self.__red_p = (int(self.range * math.sin(math.radians(theta)) + self.center[0]),
-                        int(-self.range * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
+        self.__red_p = (int(rng * math.sin(math.radians(theta)) + self.center[0]),
+                        int(-rng * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
 
         # 円周上の緑の点の位置
-        self.__green_p = (int(self.range * math.sin(math.radians(theta-120)) + self.center[0]),
-                          int(-self.range * math.cos(math.radians(theta-120)) +
-                              self.center[1]))  # yは上下反転
+        self.__green_p = (int(rng * math.sin(math.radians(theta-120)) + self.center[0]),
+                          int(-rng * math.cos(math.radians(theta-120)) +
+                              self.center[1]))
 
         # 円周上の青の点の位置
-        self.__blue_p = (int(self.range * math.sin(math.radians(theta+120)) + self.center[0]),
-                         int(-self.range * math.cos(math.radians(theta+120)) +
-                             self.center[1]))  # yは上下反転
+        self.__blue_p = (int(rng * math.sin(math.radians(theta+120)) + self.center[0]),
+                         int(-rng * math.cos(math.radians(theta+120)) +
+                             self.center[1]))
+
+    def calc_fitted_p(self):
+        """円周上の点の位置を設定"""
+
+        theta = self.__theta
+        if self.zoom == 0:
+            rng2 = self.range
+        else:
+            rng2 = self.range/self.zoom
+
+        # 円周上の赤い点の位置
+        self.__fitted_red_p = (int(rng2 * math.sin(math.radians(theta)) + self.center[0]),
+                               int(-rng2 * math.cos(math.radians(theta)) + self.center[1]))
+
+        # 円周上の緑の点の位置
+        self.__fitted_green_p = (int(rng2 * math.sin(math.radians(theta-120)) + self.center[0]),
+                                 int(-rng2 * math.cos(math.radians(theta-120)) +
+                                     self.center[1]))
+
+        # 円周上の青の点の位置
+        self.__fitted_blue_p = (int(rng2 * math.sin(math.radians(theta+120)) + self.center[0]),
+                                int(-rng2 * math.cos(math.radians(theta+120)) +
+                                    self.center[1]))
 
     @property
     def red_p(self):
@@ -102,6 +129,21 @@ class CircleRail():
         return self.__blue_p
 
     @property
+    def fitted_red_p(self):
+        """円周上の赤の点の位置"""
+        return self.__fitted_red_p
+
+    @property
+    def fitted_green_p(self):
+        """円周上の緑の点の位置"""
+        return self.__fitted_green_p
+
+    @property
+    def fitted_blue_p(self):
+        """円周上の青の点の位置"""
+        return self.__fitted_blue_p
+
+    @property
     def upper_bound_y(self):
         """上限"""
         return min(self.red_p[1], self.green_p[1], self.blue_p[1])
@@ -114,7 +156,7 @@ class CircleRail():
     @property
     def inner_height(self):
         """上限と下限の差分の長さ"""
-        return self.upper_bound_y - self.lower_bound_y
+        return self.lower_bound_y - self.upper_bound_y  # yは逆さ
 
     @property
     def zoom(self):

@@ -284,23 +284,24 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
+    circle_rail.calc_fitted_p()
     top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
-             circle_rail.red_p,
+             circle_rail.fitted_red_p,
              (bar_box.step1_rect[0].left_top[0], top),
              RED, thickness=2)
 
     # 水平線G
     top = bar_box.step1_rect[1].left_top[1] - bar_box.delta_3bars_height[1]
     cv2.line(canvas,
-             circle_rail.green_p,
+             circle_rail.fitted_green_p,
              (bar_box.step1_rect[1].left_top[0], top),
              GREEN, thickness=2)
 
     # 水平線B
     top = bar_box.step1_rect[2].left_top[1] - bar_box.delta_3bars_height[2]
     cv2.line(canvas,
-             circle_rail.blue_p,
+             circle_rail.fitted_blue_p,
              (bar_box.step1_rect[2].left_top[0], top),
              BLUE, thickness=2)
 
@@ -349,16 +350,17 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
                             rank23d_color)
 
     # debug
-    # cv2.putText(canvas,
-    #            # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
-    #            f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \
-    # {bar_box.delta_3bars_height[1]}, \
-    # {bar_box.delta_3bars_height[2]})",
-    #            (10, 10),  # x,y
-    #            cv2.FONT_HERSHEY_SIMPLEX,
-    #            FONT_SCALE,
-    #            BLACK,
-    #            lineType=2)
+    cv2.putText(canvas,
+                f"zoom={circle_rail.zoom}",
+                #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
+                #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \
+                #    {bar_box.delta_3bars_height[1]}, \
+                #    {bar_box.delta_3bars_height[2]})",
+                (10, 10),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                BLACK,
+                lineType=2)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

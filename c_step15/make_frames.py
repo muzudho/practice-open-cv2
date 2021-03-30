@@ -304,10 +304,10 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     outer_circle.draw_me(canvas)  # 外環状
 
     # 時計の針
+    tickness = 2
     inner_range = circle_rail.range
-    second_range = int(5.5*GRID_UNIT)
-    third_range = int(6.5*GRID_UNIT)
-    fourth_range = int(7.5*GRID_UNIT)
+    second_range = int(6.5*GRID_UNIT)-tickness
+    third_range = int(7.5*GRID_UNIT)+tickness
     inner_p = (
         int(inner_range * math.cos(math.radians(circle_rail.theta-90)) +
             circle_rail.center[0]),
@@ -318,28 +318,24 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
         int(second_range * math.sin(math.radians(circle_rail.theta-90))
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
-    #
-    inner_p = (
-        int(second_range * math.cos(math.radians(circle_rail.theta-90)) +
-            circle_rail.center[0]),
-        int(second_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
-    outer_p = (
-        int((third_range) *
-            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int((third_range) * math.sin(math.radians(circle_rail.theta-90))
-            + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, WHITE, thickness=2)
-    #
-    inner_p = (
-        int(third_range * math.cos(math.radians(circle_rail.theta-90)) +
-            circle_rail.center[0]),
-        int(third_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
-    outer_p = (
-        int(fourth_range *
-            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int(fourth_range * math.sin(math.radians(circle_rail.theta-90))
-            + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, BLACK, thickness=2)
+    # 時計の針の先
+    # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
+    cv2.ellipse(canvas,
+                circle_rail.center,
+                (second_range, second_range),
+                -90,
+                int(circle_rail.theta-outer_circle.unit_arc/2),
+                circle_rail.theta+outer_circle.unit_arc,
+                BLACK,
+                thickness=tickness)
+    cv2.ellipse(canvas,
+                circle_rail.center,
+                (third_range, third_range),
+                -90,
+                int(circle_rail.theta-outer_circle.unit_arc/2),
+                circle_rail.theta+outer_circle.unit_arc,
+                BLACK,
+                thickness=tickness)
     #
 
     # バー箱の２段目の黒枠

@@ -282,6 +282,24 @@ class BarBox():
         """線の太さ"""
         return self.__thickness
 
+    @property
+    def red_multiple(self):
+        """赤の倍数"""
+        # y は逆さ
+        return (self.step1_rect[0].left_top[1] - self.delta_3bars_height[0]) / self.height
+
+    @property
+    def green_multiple(self):
+        """緑の倍数"""
+        # y は逆さ
+        return (self.step1_rect[1].left_top[1] - self.delta_3bars_height[1]) / self.height
+
+    @property
+    def blue_multiple(self):
+        """青の倍数"""
+        # y は逆さ
+        return (self.step1_rect[2].left_top[1] - self.delta_3bars_height[2]) / self.height
+
     def create_step1_3bars_height(self):
         """色を作成"""
         return (

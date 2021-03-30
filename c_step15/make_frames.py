@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, LIGHT_GRAY, BLACK,  \
+from colors import WHITE, PALE_GRAY, BRIGHT_GRAY, BLACK,  \
     DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     VIVID_RED, VIVID_GREEN, VIVID_BLUE, SOFT_GRAY
 from color_calc import calc_step1, calc_step2, \
@@ -19,7 +19,7 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_WIDTH = 540  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
 CANVAS_HEIGHT = 320
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
@@ -28,9 +28,9 @@ MONO_BACKGROUND = SOFT_GRAY[0]
 # RGBバー１段目（レールとなる円より上にある）
 BAR_TOP1 = 7 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(20.5 * GRID_UNIT)
+BAR_BOX_LEFT = int(22 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = 12 * GRID_UNIT
+CIRCLE_DISTANCE = int(13.5 * GRID_UNIT)
 
 # とりあえず 11トーン
 BAR_RATES = [
@@ -52,18 +52,18 @@ BAR_RATES = [
     [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
-    'Bright',
-    'Strong',
-    'Deep',
-    'Light',
-    'Soft',
-    'Dull',
-    'Dark',
-    'Pale',
-    'Light grayish',
-    'Grayish',
-    'Dark grayish',
-    'Vivid',  # Cosine curve
+    'Bright zone',
+    'Strong zone',
+    'Deep zone',
+    'Light zone',
+    'Soft zone',
+    'Dull zone',
+    'Dark zone',
+    'Pale zone',
+    'Light grayish zone',
+    'Grayish zone',
+    'Dark grayish zone',
+    'Vivid zone',  # Cosine curve
 ]
 
 
@@ -196,7 +196,7 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
     bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-    bar_box.one_width = 36  # フォント１文字の横幅が 12 と想定
+    bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
     bar_box.rate_text_gap = int(0.2*GRID_UNIT)
     # 円レール
@@ -209,9 +209,12 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
-    bar_box.green_left = bar_box.red_left + bar_box.one_width + 1
-    bar_box.blue_left = bar_box.green_left + bar_box.one_width + 1
-    bar_box.right = bar_box.blue_left + bar_box.one_width
+    bar_box.red2_left = bar_box.red_left + bar_box.one_width
+    bar_box.green_left = bar_box.red2_left + bar_box.one_width
+    bar_box.green2_left = bar_box.green_left + bar_box.one_width
+    bar_box.blue_left = bar_box.green2_left + bar_box.one_width
+    bar_box.blue2_left = bar_box.blue_left + bar_box.one_width
+    bar_box.right = bar_box.blue2_left + bar_box.one_width
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
 
@@ -246,13 +249,13 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     return bar_box, circle_rail, inner_circle, outer_circle
 
 
-def draw_grid(canvas):
-    """背景に罫線を引きます"""
+def draw_grid(_canvas):
+    """背景に罫線を引きます。あくまで開発用"""
     # 水平線グリッド
-    for i in range(0, int(CANVAS_HEIGHT/(GRID_UNIT/2))+1):
-        y_num = GRID_UNIT*i
-        cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
-                 PALE_GRAY, thickness=1)
+    # for i in range(0, int(CANVAS_HEIGHT/(GRID_UNIT/2))+1):
+    #    y_num = GRID_UNIT*i
+    #    cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
+    #             PALE_GRAY, thickness=1)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):
@@ -278,11 +281,11 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     # 円に内接する線。三角形
     cv2.line(canvas, circle_rail.red_p,
-             circle_rail.green_p, BLACK, thickness=2)
+             circle_rail.green_p, WHITE, thickness=2)
     cv2.line(canvas, circle_rail.green_p,
-             circle_rail.blue_p, BLACK, thickness=2)
+             circle_rail.blue_p, WHITE, thickness=2)
     cv2.line(canvas, circle_rail.blue_p,
-             circle_rail.red_p, BLACK, thickness=2)
+             circle_rail.red_p, WHITE, thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     delta_color = convert_3heights_to_3bytes(
@@ -313,42 +316,41 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
 
-    # 時計の針
-    clock_hand_len = int(4.5*GRID_UNIT)
-    inner_p = (
-        int(circle_rail.range * math.cos(math.radians(circle_rail.theta-90)) +
-            circle_rail.center[0]),
-        int(circle_rail.range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
-    outer_p = (
-        int((circle_rail.range+clock_hand_len) *
-            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int((circle_rail.range+clock_hand_len) * math.sin(math.radians(circle_rail.theta-90))
-            + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, LIGHT_GRAY, thickness=2)
-
-    left = bar_box.left - 2*GRID_UNIT
-    right = bar_box.left - 1*GRID_UNIT
     color_example_width = int(1.5*GRID_UNIT)
+    left = bar_box.left - 2*color_example_width
+    swing_bar_width = int(0.75*color_example_width)
+    right = left+swing_bar_width
     color_example_left = int(left - color_example_width)
     # 最大値
     upper_bound_y = circle_rail.upper_bound_y()
     # 最小値
     lower_bound_y = circle_rail.lower_bound_y()
     # 色見本 23a
-    left_top = (color_example_left,
+    left_top = (bar_box.left-color_example_width,
                 bar_box.top2-color_example_width)
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
                   right_bottom, rank23d_color, thickness=-1)  # 色見本
 
-    # 振動を表示
+    # 正三角形の振動を表示
+    # inner
     cv2.rectangle(canvas, (left, upper_bound_y),
-                  (right, lower_bound_y), LIGHT_GRAY, thickness=-1)  # 色見本
+                  (right, lower_bound_y), WHITE, thickness=-1)
+    cv2.rectangle(canvas, (left, lower_bound_y),
+                  (right, bar_box.bottom), BRIGHT_GRAY, thickness=-1)
+    # diameter
+    left = bar_box.left-color_example_width
+    cv2.rectangle(canvas, (left, bar_box.top2),
+                  (left+swing_bar_width, bar_box.top3),
+                  BLACK, thickness=-1)
+    cv2.rectangle(canvas, (left, bar_box.top3),
+                  (left+swing_bar_width, bar_box.bottom),
+                  BRIGHT_GRAY, thickness=-1)
 
     # 色見本 rank23
-    left_top = (color_example_left,
-                int(upper_bound_y))
+    left_top = (color_example_left+color_example_width,
+                int(upper_bound_y-color_example_width))
     right_bottom = (left_top[0]+color_example_width,
                     left_top[1]+color_example_width)
     cv2.rectangle(canvas, left_top,
@@ -388,12 +390,50 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状
 
+    # 時計の針
+    inner_range = circle_rail.range
+    second_range = int(5.5*GRID_UNIT)
+    third_range = int(6.5*GRID_UNIT)
+    fourth_range = int(7.5*GRID_UNIT)
+    inner_p = (
+        int(inner_range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(inner_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int(second_range *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int(second_range * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
+    #
+    inner_p = (
+        int(second_range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(second_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int((third_range) *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int((third_range) * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, WHITE, thickness=2)
+    #
+    inner_p = (
+        int(third_range * math.cos(math.radians(circle_rail.theta-90)) +
+            circle_rail.center[0]),
+        int(third_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+    outer_p = (
+        int(fourth_range *
+            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
+        int(fourth_range * math.sin(math.radians(circle_rail.theta-90))
+            + circle_rail.center[1]))
+    cv2.line(canvas, inner_p, outer_p, BLACK, thickness=2)
+    #
+
     # バー箱の２段目の黒枠
     bar_box.draw_rank2_box(canvas)
 
     # 色成分数
     bar_box.draw_rgb_number(canvas,
-                            delta_color, delta_3colors,
                             step1_color,
                             rank3_byte,
                             rank23d_color)

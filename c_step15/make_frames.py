@@ -209,12 +209,9 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
-    bar_box.red2_left = bar_box.red_left + bar_box.one_width
-    bar_box.green_left = bar_box.red2_left + bar_box.one_width
-    bar_box.green2_left = bar_box.green_left + bar_box.one_width
-    bar_box.blue_left = bar_box.green2_left + bar_box.one_width
-    bar_box.blue2_left = bar_box.blue_left + bar_box.one_width
-    bar_box.right = bar_box.blue2_left + bar_box.one_width
+    bar_box.green_left = bar_box.red_left + bar_box.one_width
+    bar_box.blue_left = bar_box.green_left + bar_box.one_width
+    bar_box.right = bar_box.blue_left + bar_box.one_width
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
 

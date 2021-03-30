@@ -288,29 +288,39 @@ class BarBox():
         triangle = self.create_step1_3bars_height()
         fitted = self.create_rank2d_3bars_height()
         # ２段目の箱の真ん中を原点とする座標に変換。正負の符号を正に揃える
+        half = int(self.height2/2)
         triangle = (
-            abs(int(triangle[0] - self.height2/2)),
-            abs(int(triangle[1] - self.height2/2)),
-            abs(int(triangle[2] - self.height2/2)))
+            abs(triangle[0] - half),
+            abs(triangle[1] - half),
+            abs(triangle[2] - half))
         fitted = (
-            abs(int(fitted[0] - self.height2/2)),
-            abs(int(fitted[1] - self.height2/2)),
-            abs(int(fitted[2] - self.height2/2)))
-        # 0除算が起きるケースは、1 にします
+            abs(fitted[0] - half),
+            abs(fitted[1] - half),
+            abs(fitted[2] - half))
+        # 0除算が起きるケースは、1.0 にします。分子が0になるケースは、分子を1として計算します
         if triangle[0] == 0:
-            red = 1
+            red = 1.0
+        elif fitted[0] == 0:
+            red = 1 / triangle[0]
         else:
             red = fitted[0] / triangle[0]
 
         if triangle[1] == 0:
-            green = 1
+            green = 1.0
+        elif fitted[1] == 0:
+            green = 1 / triangle[1]
         else:
             green = fitted[1] / triangle[1]
 
         if triangle[2] == 0:
-            blue = 1
+            blue = 1.0
+        elif fitted[2] == 0:
+            blue = 1 / triangle[2]
         else:
             blue = fitted[2] / triangle[2]
+
+        print(
+            f"multiple=({red:7.3f},{green:7.3f},{blue:7.3f}) fitted=({fitted[0]},{fitted[1]},{fitted[2]}) fitted=({triangle[0]},{triangle[1]},{triangle[2]})")
         return (red, green, blue)
 
     def create_step1_3bars_height(self):

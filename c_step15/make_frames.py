@@ -352,7 +352,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # debug
     cv2.putText(canvas,
-                f"multiple=({n3bars_multiple[0]}, {n3bars_multiple[1]}, {n3bars_multiple[2]})",
+                f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
                 # f"zoom={circle_rail.zoom}",
                 #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
                 #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \

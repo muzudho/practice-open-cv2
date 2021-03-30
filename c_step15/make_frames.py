@@ -4,10 +4,8 @@
 import math
 import cv2
 import numpy as np
-from colors import WHITE, PALE_GRAY, BRIGHT_GRAY, BLACK,  \
-    DARK_RED, DARK_GREEN, DARK_BLUE, BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
-    VIVID_RED, VIVID_GREEN, VIVID_BLUE, SOFT_GRAY, \
-    RED, GREEN, BLUE
+from colors import WHITE, PALE_GRAY, BLACK,  \
+    SOFT_GRAY, RED, GREEN, BLUE
 from color_calc import calc_step1, calc_step2, \
     convert_3heights_to_3bytes,  \
     append_rank3_to_color_rate, \
@@ -290,8 +288,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
         bar_box.create_step1_3bars_height(), bar_box.height)
     rank3_byte = convert_height_to_byte(
         bar_box.height3, bar_box.height)
-    rank23_color = convert_3heights_to_3bytes(
-        bar_box.create_rank23_3bars_height(), bar_box.height)
     rank23d_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
 
@@ -306,46 +302,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
     bar_box.draw_3bars(canvas)  # RGBバー
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
-
-    color_example_width = int(1.5*GRID_UNIT)
-    left = bar_box.left - 2*color_example_width
-    swing_bar_width = int(0.75*color_example_width)
-    right = left+swing_bar_width
-    color_example_left = int(left - color_example_width)
-    # 最大値
-    upper_bound_y = circle_rail.upper_bound_y()
-    # 最小値
-    lower_bound_y = circle_rail.lower_bound_y()
-    # 色見本 23a
-    left_top = (bar_box.left-color_example_width,
-                bar_box.top2-color_example_width)
-    right_bottom = (left_top[0]+color_example_width,
-                    left_top[1]+color_example_width)
-    cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23d_color, thickness=-1)  # 色見本
-
-    # 正三角形の振動を表示
-    # inner
-    cv2.rectangle(canvas, (left, upper_bound_y),
-                  (right, lower_bound_y), WHITE, thickness=-1)
-    cv2.rectangle(canvas, (left, lower_bound_y),
-                  (right, bar_box.bottom), BRIGHT_GRAY, thickness=-1)
-    # diameter
-    left = bar_box.left-color_example_width
-    cv2.rectangle(canvas, (left, bar_box.top2),
-                  (left+swing_bar_width, bar_box.top3),
-                  BLACK, thickness=-1)
-    cv2.rectangle(canvas, (left, bar_box.top3),
-                  (left+swing_bar_width, bar_box.bottom),
-                  BRIGHT_GRAY, thickness=-1)
-
-    # 色見本 rank23
-    left_top = (color_example_left+color_example_width,
-                int(upper_bound_y-color_example_width))
-    right_bottom = (left_top[0]+color_example_width,
-                    left_top[1]+color_example_width)
-    cv2.rectangle(canvas, left_top,
-                  right_bottom, rank23_color, thickness=-1)  # 色見本
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ

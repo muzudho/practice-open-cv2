@@ -284,8 +284,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-    circle_rail.calc_fitted_p(
-        bar_box.red_multiple, bar_box.green_multiple, bar_box.blue_multiple)
+    n3bars_multiple = bar_box.create_3bars_multiple()
+    circle_rail.calc_fitted_p(n3bars_multiple)
     top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
              circle_rail.fitted_red_p,
@@ -352,7 +352,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # debug
     cv2.putText(canvas,
-                f"multiple=({bar_box.red_multiple}, {bar_box.green_multiple}, {bar_box.blue_multiple})",
+                f"multiple=({n3bars_multiple[0]}, {n3bars_multiple[1]}, {n3bars_multiple[2]})",
                 # f"zoom={circle_rail.zoom}",
                 #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
                 #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \

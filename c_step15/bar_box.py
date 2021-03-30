@@ -282,26 +282,39 @@ class BarBox():
         """線の太さ"""
         return self.__thickness
 
-    @property
-    def red_multiple(self):
-        """赤の倍数"""
-        # y は逆さ
-        return (self.step1_rect[0].left_top[1] - self.delta_3bars_height[0]) / self.height
+    def create_3bars_multiple(self):
+        """RGBの倍数"""
+        # 2段目の箱での棒の縦幅
+        triangle = self.create_step1_3bars_height()
+        fitted = self.create_rank2d_3bars_height()
+        # ２段目の箱の真ん中を原点とする座標に変換。正負の符号を正に揃える
+        triangle = (
+            abs(int(triangle[0] - self.height2/2)),
+            abs(int(triangle[1] - self.height2/2)),
+            abs(int(triangle[2] - self.height2/2)))
+        fitted = (
+            abs(int(fitted[0] - self.height2/2)),
+            abs(int(fitted[1] - self.height2/2)),
+            abs(int(fitted[2] - self.height2/2)))
+        # 0除算が起きるケースは、1 にします
+        if triangle[0] == 0:
+            red = 1
+        else:
+            red = fitted[0] / triangle[0]
 
-    @property
-    def green_multiple(self):
-        """緑の倍数"""
-        # y は逆さ
-        return (self.step1_rect[1].left_top[1] - self.delta_3bars_height[1]) / self.height
+        if triangle[1] == 0:
+            green = 1
+        else:
+            green = fitted[1] / triangle[1]
 
-    @property
-    def blue_multiple(self):
-        """青の倍数"""
-        # y は逆さ
-        return (self.step1_rect[2].left_top[1] - self.delta_3bars_height[2]) / self.height
+        if triangle[2] == 0:
+            blue = 1
+        else:
+            blue = fitted[2] / triangle[2]
+        return (red, green, blue)
 
     def create_step1_3bars_height(self):
-        """色を作成"""
+        """バーの長さを作成"""
         return (
             self.__step1_rect[0].right_bottom[1] -
             self.__step1_rect[0].left_top[1],
@@ -309,8 +322,16 @@ class BarBox():
             self.__step1_rect[1].left_top[1],
             self.__step1_rect[2].right_bottom[1] - self.__step1_rect[2].left_top[1])
 
+    def create_rank2d_3bars_height(self):
+        """バーの長さを作成"""
+        rank2_height = self.create_step1_3bars_height()
+        return (
+            rank2_height[0] + self.delta_3bars_height[0],
+            rank2_height[1] + self.delta_3bars_height[1],
+            rank2_height[2] + self.delta_3bars_height[2])
+
     def create_rank23_3bars_height(self):
-        """色を作成"""
+        """バーの長さを作成"""
         rank2_height = self.create_step1_3bars_height()
         return (
             rank2_height[0] + self.height3,
@@ -318,7 +339,7 @@ class BarBox():
             rank2_height[2] + self.height3)
 
     def create_rank23a_3bars_height(self):
-        """色を作成"""
+        """バーの長さを作成"""
         rank23_height = self.create_rank23_3bars_height()
         return (
             rank23_height[0] + self.delta_3bars_height[0],

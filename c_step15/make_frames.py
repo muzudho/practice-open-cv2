@@ -258,13 +258,23 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     circle_rail.draw_green_p(canvas)  # 円周上の点G
     circle_rail.draw_blue_p(canvas)  # 円周上の点B
 
-    # 円に内接する線。三角形
+    # 円に内接する線。正三角形
     cv2.line(canvas, circle_rail.red_p,
              circle_rail.green_p, WHITE, thickness=2)
     cv2.line(canvas, circle_rail.green_p,
              circle_rail.blue_p, WHITE, thickness=2)
     cv2.line(canvas, circle_rail.blue_p,
              circle_rail.red_p, WHITE, thickness=2)
+
+    # 調整された三角形
+    n3bars_multiple = bar_box.create_3bars_multiple()
+    circle_rail.calc_fitted_p(n3bars_multiple)
+    cv2.line(canvas, circle_rail.fitted_red_p,
+             circle_rail.fitted_green_p, BLACK, thickness=2)
+    cv2.line(canvas, circle_rail.fitted_green_p,
+             circle_rail.fitted_blue_p, BLACK, thickness=2)
+    cv2.line(canvas, circle_rail.fitted_blue_p,
+             circle_rail.fitted_red_p, BLACK, thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     rank23d_color = convert_3heights_to_3bytes(
@@ -284,8 +294,6 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-    n3bars_multiple = bar_box.create_3bars_multiple()
-    circle_rail.calc_fitted_p(n3bars_multiple)
     top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
              circle_rail.fitted_red_p,

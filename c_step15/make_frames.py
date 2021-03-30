@@ -6,10 +6,8 @@ import cv2
 import numpy as np
 from colors import WHITE, PALE_GRAY, BLACK,  \
     SOFT_GRAY, RED, GREEN, BLUE
-from color_calc import calc_step1, calc_step2, \
-    convert_3heights_to_3bytes,  \
-    append_rank3_to_color_rate, \
-    convert_3rates_to_3bytes, convert_height_to_byte
+from color_calc import calc_step2, \
+    convert_3heights_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -79,12 +77,11 @@ def main():
         tone_name = TONE_NAME[i]
 
         # 描画：トーン名と バー箱 の紹介
-        inner_circle = OuterCircle()
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _inner_circle, _outer_circle = make_scene1(
-                bar_rates, inner_circle, outer_circle)
+            bar_box, _circle_rail, _outer_circle = make_scene1(
+                bar_rates, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
@@ -106,15 +103,13 @@ def main():
 def make_circle(canvas, seq, bar_rates, tone_name):
     """色相環一周分の画像を出力"""
 
-    inner_circle = OuterCircle()
     outer_circle = OuterCircle()
 
     for phase in range(0, PHASE_COUNTS):
         theta = 360/PHASE_COUNTS*phase
         canvas = make_canvas()
-        bar_box, circle_rail, inner_circle, outer_circle = make_scene1(
-            bar_rates, inner_circle, outer_circle)
-        inner_circle.phase = phase
+        bar_box, circle_rail, outer_circle = make_scene1(
+            bar_rates, outer_circle)
         outer_circle.phase = phase
 
         # 円周上の点の位置
@@ -145,17 +140,8 @@ def make_circle(canvas, seq, bar_rates, tone_name):
             bar_box.height2
         )
 
-        # 内環状
-        theta = inner_circle.phase * inner_circle.unit_arc
-        color_rate = calc_step1(theta)
-        inner_step1_color_rate = append_rank3_to_color_rate(
-            color_rate, bar_box.rates)
-        inner_color = convert_3rates_to_3bytes(inner_step1_color_rate)
-        inner_circle.color_list.append(inner_color)
-
         # 外環状
         theta = outer_circle.phase * outer_circle.unit_arc
-        color_rate = calc_step1(theta)
         outer_color = convert_3heights_to_3bytes(
             bar_box.create_rank23a_3bars_height(), bar_box.height)
         outer_circle.color_list.append(outer_color)
@@ -164,7 +150,7 @@ def make_circle(canvas, seq, bar_rates, tone_name):
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             inner_circle, outer_circle)
+                             outer_circle)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -181,7 +167,7 @@ def make_canvas():
                    MONO_BACKGROUND, dtype=np.uint8)
 
 
-def make_scene1(bar_rates, inner_circle, outer_circle):
+def make_scene1(bar_rates, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
@@ -216,7 +202,6 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
 
     circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
                           circle_rail.top+circle_rail.range)  # x, y
-    inner_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
     # RGBバー２段目
@@ -235,14 +220,11 @@ def make_scene1(bar_rates, inner_circle, outer_circle):
     bar_box.rank3_rect.left_top = (bar_box.left, bar_box.top3)
     bar_box.rank3_rect.right_bottom = (bar_box.right, bar_box.bottom)
 
-    inner_circle.area_size = (int(6*GRID_UNIT),
-                              int(6*GRID_UNIT))
-    inner_circle.phases = PHASE_COUNTS
     outer_circle.area_size = (int(7*GRID_UNIT),
                               int(7*GRID_UNIT))
     outer_circle.phases = PHASE_COUNTS
 
-    return bar_box, circle_rail, inner_circle, outer_circle
+    return bar_box, circle_rail, outer_circle
 
 
 def draw_grid(_canvas):
@@ -266,7 +248,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
+def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_me(canvas)  # 円レール
@@ -284,10 +266,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
              circle_rail.red_p, WHITE, thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
-    step1_color = convert_3heights_to_3bytes(
-        bar_box.create_step1_3bars_height(), bar_box.height)
-    rank3_byte = convert_height_to_byte(
-        bar_box.height3, bar_box.height)
     rank23d_color = convert_3heights_to_3bytes(
         bar_box.create_rank23a_3bars_height(), bar_box.height)
 
@@ -322,7 +300,6 @@ def draw_canvas(canvas, bar_box, circle_rail, inner_circle, outer_circle):
               circle_rail.blue_p[1]),
              BLUE, thickness=2)
 
-    inner_circle.draw_me(canvas)  # 内環状
     outer_circle.draw_me(canvas)  # 外環状
 
     # 時計の針

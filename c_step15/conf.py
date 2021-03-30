@@ -6,7 +6,7 @@
 """
 
 # グリッド間隔
-GRID_UNIT = 14
+GRID_UNIT = 16
 
 # 色相環一周分のコマ数
 PHASE_COUNTS = 24

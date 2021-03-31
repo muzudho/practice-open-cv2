@@ -368,7 +368,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
         rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
     elif phase == 10:
         # 緑より、赤と青が上
-        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
+        rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
     else:
         # 下から緑、青、赤
         pass

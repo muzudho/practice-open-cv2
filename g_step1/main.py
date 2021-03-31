@@ -116,9 +116,13 @@ def main():
     if distance_fp < distance_gp:
         point_h = point_fp
         point_i = point_gp
+        one_side_len = distance_fp
+        next_theta = theta+30+60
     else:
         point_h = point_gp
         point_i = point_fp
+        one_side_len = distance_gp
+        next_theta = theta-30-60
 
     cv2.circle(canvas,
                point_h,
@@ -130,6 +134,16 @@ def main():
                5,
                PALE_GRAY,
                thickness=-1)
+
+    # 線分eh, hj のなす角が
+    # 60°になるような線分hjを引く。
+    # 点jは線分ei上の交点とする
+    line_hj = make_beam(one_side_len, next_theta, point_h)
+    cv2.line(canvas,
+             line_hj[0],
+             line_hj[1],
+             BLACK,
+             thickness=thichness)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
@@ -148,6 +162,13 @@ def make_line(range1, theta, center):
              int(-range1 * math.cos(math.radians(theta)) + center[1])),  # yは逆さ
             (int(range1 * math.sin(math.radians(180+theta)) + center[0]),
              int(-range1 * math.cos(math.radians(180+theta)) + center[1])))
+
+
+def make_beam(range1, theta, center):
+    """直線((x1,y1),(x2,y2))を求めます"""
+    return ((center[0], center[1]),  # yは逆さ
+            (int(range1 * math.sin(math.radians(theta)) + center[0]),
+             int(-range1 * math.cos(math.radians(theta)) + center[1])))
 
 
 def line_cross(line_ab, line_cd):

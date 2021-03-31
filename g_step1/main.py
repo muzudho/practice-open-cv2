@@ -142,6 +142,26 @@ def main():
     cv2.line(canvas,
              line_hj[0],
              line_hj[1],
+             RED,
+             thickness=thichness)
+
+    # 正三角形に必要な３点が求まりました
+    triangle_e = point_e
+    triangle_h = point_h
+    triangle_j = line_hj[1]
+    cv2.line(canvas,
+             triangle_e,
+             triangle_h,
+             BLACK,
+             thickness=thichness)
+    cv2.line(canvas,
+             triangle_h,
+             triangle_j,
+             BLACK,
+             thickness=thichness)
+    cv2.line(canvas,
+             triangle_j,
+             triangle_e,
              BLACK,
              thickness=thichness)
 

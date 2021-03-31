@@ -35,15 +35,17 @@ def main():
 
     # 平行する２本の直線a, b
     # a
+    line_a = ((10, 100), (400, 100))
     cv2.line(canvas,
-             (10, 100),
-             (400, 100),
+             line_a[0],
+             line_a[1],
              PALE_GRAY,
              thickness=thichness)
     # b
+    line_b = ((10, 300), (400, 300))
     cv2.line(canvas,
-             (10, 300),
-             (400, 300),
+             line_b[0],
+             line_b[1],
              PALE_GRAY,
              thickness=thichness)
 
@@ -60,16 +62,24 @@ def main():
 
     # 点cを通るtheta度の直線d
     d_length = 300
-    d_p1 = (int(d_length * math.sin(math.radians(theta)) + point_c[0]),
-            int(d_length * -math.sin(math.radians(theta)) + point_c[0]))  # yは逆さ
-    d_p2 = (int(d_length * math.sin(math.radians(360-theta)) + point_c[0]),
-            int(d_length * -math.sin(math.radians(360-theta)) + point_c[0]))
+    line_d = ((int(d_length * math.sin(math.radians(theta)) + point_c[0]),
+               int(d_length * -math.sin(math.radians(theta)) + point_c[0])),  # yは逆さ
+              (int(d_length * math.sin(math.radians(360-theta)) + point_c[0]),
+               int(d_length * -math.sin(math.radians(360-theta)) + point_c[0])))
     # d
     cv2.line(canvas,
-             d_p1,
-             d_p2,
+             line_d[0],
+             line_d[1],
              PALE_GRAY,
              thickness=thichness)
+
+    # 線a,dの交点をeとする
+    point_e = line_cross(line_a, line_d)
+    cv2.circle(canvas,
+               point_e,
+               5,
+               PALE_GRAY,
+               thickness=-1)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
@@ -80,6 +90,38 @@ def main():
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
     cv2.imwrite(f"./shared/out-g_step1.png", canvas)
+
+
+def line_cross(line_ab, line_cd):
+    """二直線の交点を求める。
+    https://blog.goo.ne.jp/r-de-r/e/1fa725fab4548e1c0615743dc5ab58b6
+    """
+    a_x = line_ab[0][0]
+    a_y = line_ab[0][1]
+    b_x = line_ab[1][0]
+    b_y = line_ab[1][1]
+    c_x = line_cd[0][0]
+    c_y = line_cd[0][1]
+    d_x = line_cd[1][0]
+    d_y = line_cd[1][1]
+    if a_x == b_x and c_x == d_x:
+        cross_x = cross_y = np.nan
+    elif a_x == b_x:
+        cross_x = a_x
+        cross_y = (d_y - c_y) / (d_x - c_x) * (a_x - c_x) + c_y
+    elif c_x == d_x:
+        cross_x = c_x
+        cross_y = (b_y - a_y) / (b_x - a_x) * (c_x - a_x) + a_y
+    else:
+        work1 = (b_y-a_y)/(b_x-a_x)
+        work3 = (d_y-c_y)/(d_x-c_x)
+        if work1 == work3:
+            cross_x = cross_y = np.nan
+        else:
+            cross_x = (work1*a_x-a_y-work3*c_x+c_y)/(work1-work3)
+            cross_y = (b_y-a_y)/(b_x-a_x)*(cross_x-a_x)+a_y
+
+    return (int(cross_x), int(cross_y))
 
 
 main()

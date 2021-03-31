@@ -355,14 +355,14 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     # 水平線G
     top = bar_box.step1_rect[1].left_top[1] - bar_box.delta_3bars_height[1]
     cv2.line(canvas,
-             rgb_points[1],
+             rgb_points[2],  # 青と緑が入れ替わっているのが工夫
              (bar_box.step1_rect[1].left_top[0], top),
              GREEN, thickness=2)
 
     # 水平線B
     top = bar_box.step1_rect[2].left_top[1] - bar_box.delta_3bars_height[2]
     cv2.line(canvas,
-             rgb_points[2],
+             rgb_points[1],
              (bar_box.step1_rect[2].left_top[0], top),
              BLUE, thickness=2)
 

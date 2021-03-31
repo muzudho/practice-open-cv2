@@ -19,9 +19,6 @@ class CircleRail():
         self.__red_p = (0, 0)
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
-        self.__fitted_red_p = (0, 0)
-        self.__fitted_green_p = (0, 0)
-        self.__fitted_blue_p = (0, 0)
         self.__theta = 0
 
     @property
@@ -90,28 +87,6 @@ class CircleRail():
                          int(-rng * math.cos(math.radians(theta+120)) +
                              self.center[1]))
 
-    def calc_fitted_p(self, n3bars_multiple):
-        """円周上の点の位置を設定"""
-
-        theta = self.__theta
-
-        # 円周上の赤い点の位置
-        rng2 = self.range * n3bars_multiple[0]
-        self.__fitted_red_p = (int(rng2 * math.sin(math.radians(theta)) + self.center[0]),
-                               int(-rng2 * math.cos(math.radians(theta)) + self.center[1]))
-
-        # 円周上の緑の点の位置
-        rng2 = self.range * n3bars_multiple[1]
-        self.__fitted_green_p = (int(rng2 * math.sin(math.radians(theta-120)) + self.center[0]),
-                                 int(-rng2 * math.cos(math.radians(theta-120)) +
-                                     self.center[1]))
-
-        # 円周上の青の点の位置
-        rng2 = self.range * n3bars_multiple[2]
-        self.__fitted_blue_p = (int(rng2 * math.sin(math.radians(theta+120)) + self.center[0]),
-                                int(-rng2 * math.cos(math.radians(theta+120)) +
-                                    self.center[1]))
-
     @property
     def red_p(self):
         """円周上の赤の点の位置"""
@@ -126,21 +101,6 @@ class CircleRail():
     def blue_p(self):
         """円周上の青の点の位置"""
         return self.__blue_p
-
-    @property
-    def fitted_red_p(self):
-        """円周上の赤の点の位置"""
-        return self.__fitted_red_p
-
-    @property
-    def fitted_green_p(self):
-        """円周上の緑の点の位置"""
-        return self.__fitted_green_p
-
-    @property
-    def fitted_blue_p(self):
-        """円周上の青の点の位置"""
-        return self.__fitted_blue_p
 
     @property
     def upper_bound_y(self):

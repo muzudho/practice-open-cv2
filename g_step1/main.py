@@ -72,7 +72,6 @@ def main():
              PALE_GRAY,
              thickness=thichness)
 
-    '''
     # 線a,dの交点をeとする
     point_e = line_cross(line_a, line_d)
     cv2.circle(canvas,
@@ -94,7 +93,6 @@ def main():
              line_g[1],
              GREEN,
              thickness=thichness)
-    '''
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

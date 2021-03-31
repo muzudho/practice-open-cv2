@@ -13,6 +13,7 @@ from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
+from triangle import draw_triangle
 
 
 # 描画する画像を作る
@@ -284,12 +285,19 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     # bar_box.create_rank23d_3bars_height()
     n3bars_multiple = bar_box.create_3bars_multiple()
     circle_rail.calc_fitted_p(n3bars_multiple)
-    cv2.line(canvas, circle_rail.fitted_red_p,
-             circle_rail.fitted_green_p, BLACK, thickness=2)
-    cv2.line(canvas, circle_rail.fitted_green_p,
-             circle_rail.fitted_blue_p, BLACK, thickness=2)
-    cv2.line(canvas, circle_rail.fitted_blue_p,
-             circle_rail.fitted_red_p, BLACK, thickness=2)
+#    cv2.line(canvas, circle_rail.fitted_red_p,
+#             circle_rail.fitted_green_p, BLACK, thickness=2)
+#    cv2.line(canvas, circle_rail.fitted_green_p,
+#             circle_rail.fitted_blue_p, BLACK, thickness=2)
+#    cv2.line(canvas, circle_rail.fitted_blue_p,
+#             circle_rail.fitted_red_p, BLACK, thickness=2)
+    draw_triangle(canvas,
+                  bar_box.top2,
+                  bar_box.top3,
+                  circle_rail.theta,
+                  circle_rail.center,
+                  BLACK,
+                  thichness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     rank23d_color = convert_3heights_to_3bytes(

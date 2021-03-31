@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from colors import WHITE, PALE_GRAY, BLACK,  \
+from colors import PALE_GRAY, BLACK,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
 from color_calc import calc_step2, \
@@ -334,7 +334,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
         # 下から緑、青、赤
         phase = 11
     # 赤、青、緑 の順なのが工夫
-    rbg_points = calc_triangle(bar_box.top2,
+    rbg_points = calc_triangle(canvas,
+                               bar_box.top2,
                                bar_box.top3,
                                triangle_theta,
                                circle_rail.center)

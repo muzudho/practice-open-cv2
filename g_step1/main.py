@@ -59,6 +59,10 @@ def main():
 
     # 0時の方向を0°とする時計回りの角度(弧度法)
     theta = 25
+    # theta = -25
+    # theta = 45
+    # theta = 60  # 逆三角形
+    # theta = 65 # はみ出てしまう
 
     # 点cを通るtheta度の直線d
     d_length = 800

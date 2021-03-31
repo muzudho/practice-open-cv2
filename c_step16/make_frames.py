@@ -284,47 +284,47 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     # 調整された三角形
     # 上限の線に交わっている点が 赤か、青か、緑か は区別する必要があります
     rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    if rank23d_3bars_height[0] >= rank23d_3bars_height[1] or \
-            rank23d_3bars_height[0] >= rank23d_3bars_height[2]:
-        # 赤が一番長い
+    if rank23d_3bars_height[0] >= rank23d_3bars_height[1] and \
+            rank23d_3bars_height[0] > rank23d_3bars_height[2]:
+        # 赤が緑以上、青より長い
+        longest = 0
         triangle_theta = circle_rail.theta
-    elif rank23d_3bars_height[1] >= rank23d_3bars_height[0] or \
+    elif rank23d_3bars_height[1] > rank23d_3bars_height[0] and \
             rank23d_3bars_height[1] >= rank23d_3bars_height[2]:
-        # 緑が一番長い
+        # 緑が赤より長く、青以上
+        longest = 1
         triangle_theta = circle_rail.theta-120
-    elif rank23d_3bars_height[2] >= rank23d_3bars_height[0] or \
-            rank23d_3bars_height[2] >= rank23d_3bars_height[1]:
+    else:
         # 青が一番長い
+        longest = 2
         triangle_theta = circle_rail.theta+120
-    rgb_points = calc_triangle(bar_box.top2,
+    # 赤、青、緑 の順なのが工夫
+    rbg_points = calc_triangle(bar_box.top2,
                                bar_box.top3,
                                triangle_theta,
                                circle_rail.center)
-    if rank23d_3bars_height[0] >= rank23d_3bars_height[1] or \
-            rank23d_3bars_height[0] >= rank23d_3bars_height[2]:
+    if longest == 0:
         # 赤が一番長い
         pass
-    elif rank23d_3bars_height[1] >= rank23d_3bars_height[0] or \
-            rank23d_3bars_height[1] >= rank23d_3bars_height[2]:
+    elif longest == 1:
         # 緑が一番長い
-        rgb_points = (rgb_points[1], rgb_points[2], rgb_points[0])
-    elif rank23d_3bars_height[2] >= rank23d_3bars_height[0] or \
-            rank23d_3bars_height[2] >= rank23d_3bars_height[1]:
+        rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])
+    else:
         # 青が一番長い
-        rgb_points = (rgb_points[2], rgb_points[0], rgb_points[1])
+        rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
     cv2.line(canvas,
-             rgb_points[0],
-             rgb_points[1],
+             rbg_points[0],
+             rbg_points[1],
              BLACK,
              thickness=2)
     cv2.line(canvas,
-             rgb_points[1],
-             rgb_points[2],
+             rbg_points[1],
+             rbg_points[2],
              BLACK,
              thickness=2)
     cv2.line(canvas,
-             rgb_points[2],
-             rgb_points[0],
+             rbg_points[2],
+             rbg_points[0],
              BLACK,
              thickness=2)
 
@@ -348,21 +348,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
-             rgb_points[0],
+             rbg_points[0],
              (bar_box.step1_rect[0].left_top[0], top),
              RED, thickness=2)
 
     # 水平線G
     top = bar_box.step1_rect[1].left_top[1] - bar_box.delta_3bars_height[1]
     cv2.line(canvas,
-             rgb_points[2],  # 青と緑が入れ替わっているのが工夫
+             rbg_points[2],  # 青と緑が入れ替わっているのが工夫
              (bar_box.step1_rect[1].left_top[0], top),
              GREEN, thickness=2)
 
     # 水平線B
     top = bar_box.step1_rect[2].left_top[1] - bar_box.delta_3bars_height[2]
     cv2.line(canvas,
-             rgb_points[1],
+             rbg_points[1],
              (bar_box.step1_rect[2].left_top[0], top),
              BLUE, thickness=2)
 
@@ -411,18 +411,19 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
                             rank23d_color)
 
     # debug
-    # cv2.putText(canvas,
-    #f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
+    cv2.putText(canvas,
+                f"triangle_theta={triangle_theta} longest={longest}",
+                (10, 10),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                BLACK,
+                lineType=2)
+    # f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
     # f"zoom={circle_rail.zoom}",
     #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
     #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \
-    #    {bar_box.delta_3bars_height[1]}, \
-    #    {bar_box.delta_3bars_height[2]})",
-    # (10, 10),  # x,y
-    # cv2.FONT_HERSHEY_SIMPLEX,
-    # FONT_SCALE,
-    # BLACK,
-    # lineType=2)
+    # {bar_box.delta_3bars_height[1]}, \
+    # {bar_box.delta_3bars_height[2]})",
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

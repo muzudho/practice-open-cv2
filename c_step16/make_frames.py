@@ -345,7 +345,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
         rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])
     elif phase == 4:
         # 青や赤より緑が上
-        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
+        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
     elif phase == 5:
         # 下から赤、青、緑
         rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])

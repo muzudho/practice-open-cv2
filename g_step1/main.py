@@ -16,7 +16,7 @@ BLUE = (100, 100, 250)
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 500
+CANVAS_WIDTH = 600
 CANVAS_HEIGHT = 500
 CHANNELS = 3
 # モノクロ背景 0黒→255白
@@ -50,7 +50,7 @@ def main():
              thickness=thichness)
 
     # ある点c
-    point_c = (180, 220)
+    point_c = (280, 220)
     cv2.circle(canvas,
                point_c,
                5,
@@ -61,7 +61,7 @@ def main():
     theta = 25
 
     # 点cを通るtheta度の直線d
-    d_length = 300
+    d_length = 800
     line_d = make_line(d_length, theta, point_c)
     print(
         f"line_d=(({line_d[0][0]},{line_d[0][1]}),({line_d[1][0]},{line_d[1][1]}))")
@@ -93,6 +93,20 @@ def main():
              line_g[1],
              GREEN,
              thickness=thichness)
+
+    # 線b と、 線 f,g の交点を f', g' とする
+    point_fp = line_cross(line_b, line_f)
+    point_gp = line_cross(line_b, line_g)
+    cv2.circle(canvas,
+               point_fp,
+               5,
+               RED,
+               thickness=-1)
+    cv2.circle(canvas,
+               point_gp,
+               5,
+               GREEN,
+               thickness=-1)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

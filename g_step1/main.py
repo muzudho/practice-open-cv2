@@ -50,7 +50,7 @@ def main():
              thickness=thichness)
 
     # ある点c
-    point_c = (200, 200)
+    point_c = (180, 220)
     cv2.circle(canvas,
                point_c,
                5,
@@ -62,7 +62,9 @@ def main():
 
     # 点cを通るtheta度の直線d
     d_length = 300
-    line_d = make_line(point_c, d_length, theta)
+    line_d = make_line(d_length, theta, point_c)
+    print(
+        f"line_d=(({line_d[0][0]},{line_d[0][1]}),({line_d[1][0]},{line_d[1][1]}))")
     # d
     cv2.line(canvas,
              line_d[0],
@@ -70,6 +72,7 @@ def main():
              PALE_GRAY,
              thickness=thichness)
 
+    '''
     # 線a,dの交点をeとする
     point_e = line_cross(line_a, line_d)
     cv2.circle(canvas,
@@ -79,6 +82,19 @@ def main():
                thickness=-1)
 
     # 点e で、線d に対して 30° の２本の直線 f,g が走る
+    line_f = make_line(d_length, theta+30, point_e)
+    line_g = make_line(d_length, theta-30, point_e)
+    cv2.line(canvas,
+             line_f[0],
+             line_f[1],
+             RED,
+             thickness=thichness)
+    cv2.line(canvas,
+             line_g[0],
+             line_g[1],
+             GREEN,
+             thickness=thichness)
+    '''
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
@@ -91,12 +107,12 @@ def main():
     cv2.imwrite(f"./shared/out-g_step1.png", canvas)
 
 
-def make_line(center, range1, theta):
+def make_line(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
     return ((int(range1 * math.sin(math.radians(theta)) + center[0]),
-             int(range1 * -math.sin(math.radians(theta)) + center[1])),  # yは逆さ
-            (int(range1 * math.sin(math.radians(360-theta)) + center[0]),
-             int(range1 * -math.sin(math.radians(360-theta)) + center[1])))
+             int(-range1 * math.cos(math.radians(theta)) + center[1])),  # yは逆さ
+            (int(range1 * math.sin(math.radians(180+theta)) + center[0]),
+             int(-range1 * math.cos(math.radians(180+theta)) + center[1])))
 
 
 def line_cross(line_ab, line_cd):
@@ -112,7 +128,7 @@ def line_cross(line_ab, line_cd):
     d_x = line_cd[1][0]
     d_y = line_cd[1][1]
     if a_x == b_x and c_x == d_x:
-        cross_x = cross_y = np.nan
+        return (np.nan, np.nan)
     elif a_x == b_x:
         cross_x = a_x
         cross_y = (d_y - c_y) / (d_x - c_x) * (a_x - c_x) + c_y
@@ -123,7 +139,7 @@ def line_cross(line_ab, line_cd):
         work1 = (b_y-a_y)/(b_x-a_x)
         work3 = (d_y-c_y)/(d_x-c_x)
         if work1 == work3:
-            cross_x = cross_y = np.nan
+            return (np.nan, np.nan)
         else:
             cross_x = (work1*a_x-a_y-work3*c_x+c_y)/(work1-work3)
             cross_y = (b_y-a_y)/(b_x-a_x)*(cross_x-a_x)+a_y

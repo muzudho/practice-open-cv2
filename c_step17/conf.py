@@ -9,7 +9,8 @@
 GRID_UNIT = 16
 
 # 色相環一周分のコマ数
-PHASE_COUNTS = 24
+# PHASE_COUNTS = 24
+PHASE_COUNTS = 360
 
 # フォント倍率
 FONT_SCALE = 0.5

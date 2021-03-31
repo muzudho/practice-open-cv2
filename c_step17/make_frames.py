@@ -35,6 +35,8 @@ CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
 BAR_RATES = [
     # 鮮やかさ2番
     [0.1, 0.7, 0.2],  # Bright
+]
+"""
     [0.2, 0.7, 0.1],  # Strong
     [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
@@ -49,7 +51,7 @@ BAR_RATES = [
     [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     [0.0, 1.0, 0.0],  # Vivid
-]
+    """
 TONE_NAME = [
     'Bright zone',
     'Strong zone',

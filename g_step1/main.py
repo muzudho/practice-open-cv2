@@ -1,6 +1,7 @@
 """png画像を複数枚出力します
 """
 
+import math
 import cv2
 import numpy as np
 
@@ -47,11 +48,28 @@ def main():
              thickness=thichness)
 
     # ある点c
+    point_c = (200, 200)
     cv2.circle(canvas,
-               (200, 200),
+               point_c,
                5,
                PALE_GRAY,
                thickness=-1)  # thichness=-1 は塗りつぶし
+
+    # 0時の方向を0°とする時計回りの角度(弧度法)
+    theta = 25
+
+    # 点cを通るtheta度の直線d
+    d_length = 300
+    d_p1 = (int(d_length * math.sin(math.radians(theta)) + point_c[0]),
+            int(d_length * -math.sin(math.radians(theta)) + point_c[0]))  # yは逆さ
+    d_p2 = (int(d_length * math.sin(math.radians(360-theta)) + point_c[0]),
+            int(d_length * -math.sin(math.radians(360-theta)) + point_c[0]))
+    # d
+    cv2.line(canvas,
+             d_p1,
+             d_p2,
+             PALE_GRAY,
+             thickness=thichness)
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

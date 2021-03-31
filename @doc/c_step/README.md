@@ -15,3 +15,7 @@
 ![20210328color36a2.png](./img/20210328color36a2.png)  
 
 ![20210328color37.png](./img/20210328color37.png)  
+
+## 正三角形の描き方
+
+![20210331color41a2.png](./img/20210331color41a2.png)  

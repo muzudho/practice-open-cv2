@@ -312,6 +312,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     elif red < blue and blue == green:
         # 赤より大きい青は緑と等しい
         phase = 6
+        triangle_theta -= 120
     elif red < green and green < blue:
         # 下から赤、緑、青
         phase = 7
@@ -352,7 +353,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
         rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
     elif phase == 6:
         # 赤より、青と緑が上
-        rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])
+        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
     elif phase == 7:
         # 下から赤、緑、青
         rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])

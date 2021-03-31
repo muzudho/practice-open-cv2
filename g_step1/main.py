@@ -108,6 +108,29 @@ def main():
                GREEN,
                thickness=-1)
 
+    # 点f', g' のうち、点e に近い方を 点h、
+    # 遠い方を 点i とする。
+    # 等距離なら どちらでもよい
+    distance_fp = distance(point_e, point_fp)
+    distance_gp = distance(point_e, point_gp)
+    if distance_fp < distance_gp:
+        point_h = point_fp
+        point_i = point_gp
+    else:
+        point_h = point_gp
+        point_i = point_fp
+
+    cv2.circle(canvas,
+               point_h,
+               5,
+               BLUE,
+               thickness=-1)
+    cv2.circle(canvas,
+               point_i,
+               5,
+               PALE_GRAY,
+               thickness=-1)
+
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
     # cv2.waitKey(0)
@@ -128,7 +151,7 @@ def make_line(range1, theta, center):
 
 
 def line_cross(line_ab, line_cd):
-    """二直線の交点を求める。
+    """二直線の交点を求めます。
     https://blog.goo.ne.jp/r-de-r/e/1fa725fab4548e1c0615743dc5ab58b6
     """
     a_x = line_ab[0][0]
@@ -157,6 +180,16 @@ def line_cross(line_ab, line_cd):
             cross_y = (b_y-a_y)/(b_x-a_x)*(cross_x-a_x)+a_y
 
     return (int(cross_x), int(cross_y))
+
+
+def distance(point_a, point_b):
+    """２点間の距離を求めます。
+    https://tokibito.hatenablog.com/entry/20121222/1356187172
+    """
+    np_point_a = np.array([point_a[0], point_a[1]])
+    np_point_b = np.array([point_b[0], point_b[1]])
+    np_diff = np_point_b - np_point_a
+    return np.linalg.norm(np_diff)
 
 
 main()

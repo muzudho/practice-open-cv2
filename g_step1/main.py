@@ -62,10 +62,7 @@ def main():
 
     # 点cを通るtheta度の直線d
     d_length = 300
-    line_d = ((int(d_length * math.sin(math.radians(theta)) + point_c[0]),
-               int(d_length * -math.sin(math.radians(theta)) + point_c[0])),  # yは逆さ
-              (int(d_length * math.sin(math.radians(360-theta)) + point_c[0]),
-               int(d_length * -math.sin(math.radians(360-theta)) + point_c[0])))
+    line_d = make_line(point_c, d_length, theta)
     # d
     cv2.line(canvas,
              line_d[0],
@@ -81,6 +78,8 @@ def main():
                PALE_GRAY,
                thickness=-1)
 
+    # 点e で、線d に対して 30° の２本の直線 f,g が走る
+
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)
     # cv2.waitKey(0)
@@ -90,6 +89,14 @@ def main():
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
     cv2.imwrite(f"./shared/out-g_step1.png", canvas)
+
+
+def make_line(center, range1, theta):
+    """直線((x1,y1),(x2,y2))を求めます"""
+    return ((int(range1 * math.sin(math.radians(theta)) + center[0]),
+             int(range1 * -math.sin(math.radians(theta)) + center[1])),  # yは逆さ
+            (int(range1 * math.sin(math.radians(360-theta)) + center[0]),
+             int(range1 * -math.sin(math.radians(360-theta)) + center[1])))
 
 
 def line_cross(line_ab, line_cd):

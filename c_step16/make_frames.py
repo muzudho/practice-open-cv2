@@ -13,7 +13,7 @@ from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
-from triangle import draw_triangle
+from triangle import calc_triangle
 
 
 # 描画する画像を作る
@@ -282,26 +282,55 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
              circle_rail.red_p, WHITE, thickness=2)
 
     # 調整された三角形
-    # bar_box.create_rank23d_3bars_height()
-    n3bars_multiple = bar_box.create_3bars_multiple()
-    circle_rail.calc_fitted_p(n3bars_multiple)
-#    cv2.line(canvas, circle_rail.fitted_red_p,
-#             circle_rail.fitted_green_p, BLACK, thickness=2)
-#    cv2.line(canvas, circle_rail.fitted_green_p,
-#             circle_rail.fitted_blue_p, BLACK, thickness=2)
-#    cv2.line(canvas, circle_rail.fitted_blue_p,
-#             circle_rail.fitted_red_p, BLACK, thickness=2)
-    draw_triangle(canvas,
-                  bar_box.top2,
-                  bar_box.top3,
-                  circle_rail.theta,
-                  circle_rail.center,
-                  BLACK,
-                  thichness=2)
+    # 上限の線に交わっている点が 赤か、青か、緑か は区別する必要があります
+    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
+    if rank23d_3bars_height[0] >= rank23d_3bars_height[1] or \
+            rank23d_3bars_height[0] >= rank23d_3bars_height[2]:
+        # 赤が一番長い
+        triangle_theta = circle_rail.theta
+    elif rank23d_3bars_height[1] >= rank23d_3bars_height[0] or \
+            rank23d_3bars_height[1] >= rank23d_3bars_height[2]:
+        # 緑が一番長い
+        triangle_theta = circle_rail.theta-120
+    elif rank23d_3bars_height[2] >= rank23d_3bars_height[0] or \
+            rank23d_3bars_height[2] >= rank23d_3bars_height[1]:
+        # 青が一番長い
+        triangle_theta = circle_rail.theta+120
+    rgb_points = calc_triangle(bar_box.top2,
+                               bar_box.top3,
+                               triangle_theta,
+                               circle_rail.center)
+    if rank23d_3bars_height[0] >= rank23d_3bars_height[1] or \
+            rank23d_3bars_height[0] >= rank23d_3bars_height[2]:
+        # 赤が一番長い
+        pass
+    elif rank23d_3bars_height[1] >= rank23d_3bars_height[0] or \
+            rank23d_3bars_height[1] >= rank23d_3bars_height[2]:
+        # 緑が一番長い
+        rgb_points = (rgb_points[1], rgb_points[2], rgb_points[0])
+    elif rank23d_3bars_height[2] >= rank23d_3bars_height[0] or \
+            rank23d_3bars_height[2] >= rank23d_3bars_height[1]:
+        # 青が一番長い
+        rgb_points = (rgb_points[2], rgb_points[0], rgb_points[1])
+    cv2.line(canvas,
+             rgb_points[0],
+             rgb_points[1],
+             BLACK,
+             thickness=2)
+    cv2.line(canvas,
+             rgb_points[1],
+             rgb_points[2],
+             BLACK,
+             thickness=2)
+    cv2.line(canvas,
+             rgb_points[2],
+             rgb_points[0],
+             BLACK,
+             thickness=2)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     rank23d_color = convert_3heights_to_3bytes(
-        bar_box.create_rank23d_3bars_height(), bar_box.height)
+        rank23d_3bars_height, bar_box.height)
 
 #    # (WIP) 成分から角度を逆算
 #    element_rates, expected_theta = calc_color_element_rates(rank23_color)
@@ -319,21 +348,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
-             circle_rail.fitted_red_p,
+             rgb_points[0],
              (bar_box.step1_rect[0].left_top[0], top),
              RED, thickness=2)
 
     # 水平線G
     top = bar_box.step1_rect[1].left_top[1] - bar_box.delta_3bars_height[1]
     cv2.line(canvas,
-             circle_rail.fitted_green_p,
+             rgb_points[1],
              (bar_box.step1_rect[1].left_top[0], top),
              GREEN, thickness=2)
 
     # 水平線B
     top = bar_box.step1_rect[2].left_top[1] - bar_box.delta_3bars_height[2]
     cv2.line(canvas,
-             circle_rail.fitted_blue_p,
+             rgb_points[2],
              (bar_box.step1_rect[2].left_top[0], top),
              BLUE, thickness=2)
 
@@ -383,7 +412,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # debug
     # cv2.putText(canvas,
-    f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
+    #f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
     # f"zoom={circle_rail.zoom}",
     #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
     #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \

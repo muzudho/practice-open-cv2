@@ -282,36 +282,89 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
              circle_rail.red_p, WHITE, thickness=2)
 
     # 調整された三角形
-    # 上限の線に交わっている点が 赤か、青か、緑か は区別する必要があります
+    # 赤、緑、青 の点の位置関係は全部で１２相です
     rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    if rank23d_3bars_height[0] >= rank23d_3bars_height[1] and \
-            rank23d_3bars_height[0] > rank23d_3bars_height[2]:
-        # 赤が緑以上、青より長い
-        longest = 0
-        triangle_theta = circle_rail.theta
-    elif rank23d_3bars_height[1] > rank23d_3bars_height[0] and \
-            rank23d_3bars_height[1] >= rank23d_3bars_height[2]:
-        # 緑が赤より長く、青以上
-        longest = 1
-        triangle_theta = circle_rail.theta-120
+    red = rank23d_3bars_height[0]
+    green = rank23d_3bars_height[1]
+    blue = rank23d_3bars_height[2]
+    if green < red and blue < red:
+        # 緑や青より赤が上
+        phase = 0
+    elif blue < green and green < red:
+        # 下から青、緑、赤
+        phase = 1
+    elif blue < green and blue < red:
+        # 青より、緑と赤が上
+        phase = 2
+    elif blue < red and red < green:
+        # 下から青、赤、緑
+        phase = 3
+    elif blue < green and red < green:
+        # 青や赤より緑が上
+        phase = 4
+    elif red < blue and blue < green:
+        # 下から赤、青、緑
+        phase = 5
+    elif red < blue and red < green:
+        # 赤より、青と緑が上
+        phase = 6
+    elif red < green and green < blue:
+        # 下から赤、緑、青
+        phase = 7
+    elif red < blue and green < blue:
+        # 赤や緑より青が上
+        phase = 8
+    elif green < red and red < blue:
+        # 下から緑、赤、青
+        phase = 9
+    elif green < red and green < blue:
+        # 緑より、赤と青が上
+        phase = 10
     else:
-        # 青が一番長い
-        longest = 2
-        triangle_theta = circle_rail.theta+120
+        # 下から緑、青、赤
+        phase = 11
+    triangle_theta = circle_rail.theta+phase*30
     # 赤、青、緑 の順なのが工夫
     rbg_points = calc_triangle(bar_box.top2,
                                bar_box.top3,
                                triangle_theta,
                                circle_rail.center)
-    if longest == 0:
-        # 赤が一番長い
+    if phase == 0:
+        # 緑や青より赤が上
         pass
-    elif longest == 1:
-        # 緑が一番長い
+    elif phase == 1:
+        # 下から青、緑、赤
+        pass
+    elif phase == 2:
+        # 青より、緑と赤が上
+        pass
+    elif phase == 3:
+        # 下から青、赤、緑
+        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
+    elif phase == 4:
+        # 青や赤より緑が上
+        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
+    elif phase == 5:
+        # 下から赤、青、緑
         rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])
+    elif phase == 6:
+        # 赤より、青と緑が上
+        rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])
+    elif phase == 7:
+        # 下から赤、緑、青
+        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
+    elif phase == 8:
+        # 赤や緑より青が上
+        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
+    elif phase == 9:
+        # 下から緑、赤、青
+        rbg_points = (rbg_points[1], rbg_points[0], rbg_points[2])
+    elif phase == 10:
+        # 緑より、赤と青が上
+        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
     else:
-        # 青が一番長い
-        rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
+        # 下から緑、青、赤
+        pass
     cv2.line(canvas,
              rbg_points[0],
              rbg_points[1],
@@ -412,7 +465,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # debug
     cv2.putText(canvas,
-                f"triangle_theta={triangle_theta} longest={longest}",
+                f"triangle_theta={triangle_theta} phase={phase}",
                 (10, 10),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

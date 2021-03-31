@@ -287,38 +287,38 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     red = rank23d_3bars_height[0]
     green = rank23d_3bars_height[1]
     blue = rank23d_3bars_height[2]
-    if green < red and blue < red:
-        # 緑や青より赤が上
+    if green == blue and blue < red:
+        # 緑と青は等しく、それより赤が上
         phase = 0
     elif blue < green and green < red:
         # 下から青、緑、赤
         phase = 1
-    elif blue < green and blue < red:
-        # 青より、緑と赤が上
+    elif blue < green and green == red:
+        # 青より大きい緑は赤と等しい
         phase = 2
     elif blue < red and red < green:
         # 下から青、赤、緑
         phase = 3
-    elif blue < green and red < green:
-        # 青や赤より緑が上
+    elif blue == red and red < green:
+        # 青と赤は等しく、それより緑が上
         phase = 4
     elif red < blue and blue < green:
         # 下から赤、青、緑
         phase = 5
-    elif red < blue and red < green:
-        # 赤より、青と緑が上
+    elif red < blue and blue == green:
+        # 赤より大きい青は緑と等しい
         phase = 6
     elif red < green and green < blue:
         # 下から赤、緑、青
         phase = 7
-    elif red < blue and green < blue:
-        # 赤や緑より青が上
+    elif red == green and green < blue:
+        # 赤と緑は等しく、それより青が上
         phase = 8
     elif green < red and red < blue:
         # 下から緑、赤、青
         phase = 9
-    elif green < red and green < blue:
-        # 緑より、赤と青が上
+    elif green < red and red == blue:
+        # 緑より大きい赤は青と等しい
         phase = 10
     else:
         # 下から緑、青、赤

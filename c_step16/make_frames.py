@@ -371,7 +371,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
         rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
     else:
         # 下から緑、青、赤
-        pass
+        rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
+
     cv2.line(canvas,
              rbg_points[0],
              rbg_points[1],

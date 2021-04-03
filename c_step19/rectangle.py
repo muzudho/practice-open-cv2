@@ -4,9 +4,9 @@
 class Rectangle():
     """矩形"""
 
-    def __init__(self):
-        self.__left_top = (0, 0)
-        self.__right_bottom = (0, 0)
+    def __init__(self, left=0, top=0, right=0, bottom=0):
+        self.__left_top = (left, top)
+        self.__right_bottom = (right, bottom)
 
     @property
     def left_top(self):

@@ -14,7 +14,7 @@ from circle_rail import CircleRail
 from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 from inscribed_triangle import InscribedTriangle
-
+from rectangle import Rectangle
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -217,21 +217,25 @@ def update_scene1_with_rotate(
     green_bar_height = int(color_rate[1] * bar_box.height)
     blue_bar_height = int(color_rate[2] * bar_box.height)
 
-    # バーR
-    bar_box.n3bars_rect[0].left_top = (
-        bar_box.red_left, bar_box.bottom - red_bar_height)
-    bar_box.n3bars_rect[0].right_bottom = (
-        bar_box.red_left+bar_box.one_width, bar_box.top3)
+    # バーR ( (left, top), (right, bottom) )
     # バーG
-    bar_box.n3bars_rect[1].left_top = (
-        bar_box.green_left, bar_box.bottom - green_bar_height)
-    bar_box.n3bars_rect[1].right_bottom = (
-        bar_box.green_left+bar_box.one_width, bar_box.top3)
     # バーB
-    bar_box.n3bars_rect[2].left_top = (
-        bar_box.blue_left, bar_box.bottom - blue_bar_height)
-    bar_box.n3bars_rect[2].right_bottom = (
-        bar_box.blue_left+bar_box.one_width, bar_box.top3)
+    bar_box.n3bars_rect = (
+        Rectangle(
+            bar_box.red_left,
+            bar_box.bottom - red_bar_height,
+            bar_box.red_left+bar_box.one_width,
+            bar_box.top3),
+        Rectangle(
+            bar_box.green_left,
+            bar_box.bottom - green_bar_height,
+            bar_box.green_left+bar_box.one_width,
+            bar_box.top3),
+        Rectangle(
+            bar_box.blue_left,
+            bar_box.bottom - blue_bar_height,
+            bar_box.blue_left+bar_box.one_width,
+            bar_box.top3))
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc

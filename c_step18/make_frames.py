@@ -53,18 +53,18 @@ BAR_RATES = [
     [0.0, 1.0, 0.0],  # Vivid
     """
 TONE_NAME = [
-    # 'Bright zone',
-    'Strong zone',
-    'Deep zone',
-    'Light zone',
-    'Soft zone',
-    'Dull zone',
-    'Dark zone',
-    'Pale zone',
-    'Light grayish zone',
-    'Grayish zone',
-    'Dark grayish zone',
-    'Vivid zone',  # Cosine curve
+    # 'Bright',
+    'Strong',
+    'Deep',
+    'Light',
+    'Soft',
+    'Dull',
+    'Dark',
+    'Pale',
+    'Light grayish',
+    'Grayish',
+    'Dark grayish',
+    'Vivid',  # Cosine curve
 ]
 
 
@@ -261,7 +261,14 @@ def draw_tone_name(canvas, bar_box, tone_name):
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, int(BAR_TOP1-2.5*GRID_UNIT)),  # x,y
+                (bar_box.left, int(BAR_TOP1-3.5*GRID_UNIT)),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                DARK_GRAYISH_BLACK,
+                line_type)
+    cv2.putText(canvas,
+                f"tone diameter",
+                (bar_box.left+GRID_UNIT, int(BAR_TOP1-2.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 DARK_GRAYISH_BLACK,

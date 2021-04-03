@@ -9,6 +9,7 @@
 GRID_UNIT = 16
 
 # 色相環一周分のコマ数
+# PHASE_COUNTS = 6
 # PHASE_COUNTS = 24
 PHASE_COUNTS = 360
 

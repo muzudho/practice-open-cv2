@@ -286,44 +286,12 @@ class BarBox():
         """線の太さ"""
         return self.__thickness
 
-    def create_step1_3bars_height(self):
-        """バーの長さを作成"""
-        return (
-            self.top3 - self.__n3bars_rect[0].left_top[1],
-            self.top3 - self.__n3bars_rect[1].left_top[1],
-            self.top3 - self.__n3bars_rect[2].left_top[1])
-
-    def create_rank23_3bars_height(self):
-        """バーの長さを作成"""
-        rank2_height = self.create_step1_3bars_height()
-        return (
-            rank2_height[0] + self.height3,
-            rank2_height[1] + self.height3,
-            rank2_height[2] + self.height3)
-
     def create_rank23d_3bars_height(self):
         """バーの長さを作成"""
         return (
-            self.__n3bars_rect[0].right_bottom[1] -
-            self.__n3bars_rect[0].left_top[1],
-            self.__n3bars_rect[1].right_bottom[1] -
-            self.__n3bars_rect[1].left_top[1],
-            self.__n3bars_rect[2].right_bottom[1] - self.__n3bars_rect[2].left_top[1])
-
-    def get_max_rank23_height(self):
-        """追加部分を含まない、最長のバーの縦幅"""
-        rank23_height = self.create_rank23_3bars_height()
-        return max(rank23_height[0], rank23_height[1], rank23_height[2])
-
-    def get_min_rank23_height(self):
-        """追加部分を含まない、最短のバーの縦幅"""
-        rank23_height = self.create_rank23_3bars_height()
-        return min(rank23_height[0], rank23_height[1], rank23_height[2])
-
-    def get_max_step1_height(self):
-        """追加部分と、３段目を含まない、最長のバーの縦幅"""
-        step1_height = self.create_step1_3bars_height()
-        return max(step1_height[0], step1_height[1], step1_height[2])
+            self.bottom - self.red_top,
+            self.bottom - self.green_top,
+            self.bottom - self.blue_top)
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""
@@ -386,9 +354,9 @@ class BarBox():
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
-            top = self.__n3bars_rect[0].left_top[1] + GRID_UNIT
+            top = self.red_top + GRID_UNIT
         else:
-            top = self.__n3bars_rect[0].left_top[1] + GRID_UNIT
+            top = self.red_top + GRID_UNIT
             font_color = PALE_RED
 
         self.draw_3figures(
@@ -404,9 +372,9 @@ class BarBox():
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
-            top = self.__n3bars_rect[1].left_top[1] + GRID_UNIT
+            top = self.green_top + GRID_UNIT
         else:
-            top = self.__n3bars_rect[1].left_top[1] + GRID_UNIT
+            top = self.green_top + GRID_UNIT
             font_color = PALE_GREEN
 
         self.draw_3figures(
@@ -422,9 +390,9 @@ class BarBox():
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
-            top = self.__n3bars_rect[2].left_top[1] + GRID_UNIT
+            top = self.blue_top + GRID_UNIT
         else:
-            top = self.__n3bars_rect[2].left_top[1] + GRID_UNIT
+            top = self.blue_top + GRID_UNIT
             font_color = PALE_BLUE
 
         self.draw_3figures(

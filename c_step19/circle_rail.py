@@ -5,7 +5,6 @@ import math
 
 import cv2
 from colors import WHITE, PALE_GRAY, RED, GREEN, BLUE
-from conf import GRID_UNIT
 
 
 class CircleRail():
@@ -13,7 +12,7 @@ class CircleRail():
     """
 
     def __init__(self):
-        self.__range = 0
+        self.__range1 = 0
         self.__top = 0
         self.__center = (0, 0)
         self.__point_range = 0
@@ -25,14 +24,14 @@ class CircleRail():
         self.__border_right = 0
 
     @property
-    def range(self):
+    def range1(self):
         """半径"""
-        return self.__range
+        return self.__range1
 
     @property
     def diameter(self):
         """直径"""
-        return 2*self.__range
+        return 2*self.__range1
 
     @property
     def border_left(self):
@@ -54,9 +53,9 @@ class CircleRail():
         """上下の境界線の右端"""
         self.__border_right = val
 
-    @range.setter
-    def range(self, val):
-        self.__range = val
+    @range1.setter
+    def range1(self, val):
+        self.__range1 = val
 
     @property
     def top(self):
@@ -95,7 +94,7 @@ class CircleRail():
         """円周上の点の位置を設定"""
 
         self.__theta = theta
-        rng = self.range
+        rng = self.range1
         # 円周上の赤い点の位置
         self.__red_p = (int(rng * math.sin(math.radians(theta)) + self.center[0]),
                         int(-rng * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
@@ -164,7 +163,7 @@ class CircleRail():
         """描きます"""
         # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
         cv2.circle(canvas, self.center,
-                   self.range, WHITE, thickness=2)
+                   self.range1, WHITE, thickness=2)
 
     def draw_triangle(self, canvas):
         """円に内接する線。正三角形"""
@@ -179,13 +178,13 @@ class CircleRail():
         """背景の上限、下限の線"""
         cv2.line(canvas,
                  (self.__border_left,
-                  int(self.center[1] - self.range)),
+                  int(self.center[1] - self.range1)),
                  (self.__border_right,
-                  int(self.center[1] - self.range)),
+                  int(self.center[1] - self.range1)),
                  PALE_GRAY, thickness=2)
         cv2.line(canvas,
                  (self.__border_left,
-                  int(self.center[1] + self.range)),
+                  int(self.center[1] + self.range1)),
                  (self.__border_right,
-                  int(self.center[1] + self.range)),
+                  int(self.center[1] + self.range1)),
                  PALE_GRAY, thickness=2)

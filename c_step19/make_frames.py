@@ -35,7 +35,7 @@ CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
 VERTICAL_PARCENT = [
     # 鮮やかさ2番
     # [0.1, 0.7, 0.2],  # Bright
-    # [0.2, 0.7, 0.1],  # Strong
+    [0.2, 0.7, 0.1],  # Strong
     # [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
     # [0.0, 0.4, 0.6],  # Light
@@ -44,7 +44,7 @@ VERTICAL_PARCENT = [
     # [0.4, 0.4, 0.2],  # Dark
     # 鮮やかさ4番
     # [0.0, 0.3, 0.7],  # Pale
-    [0.2, 0.3, 0.5],  # Light grayish
+    # [0.2, 0.3, 0.5],  # Light grayish
     # [0.4, 0.3, 0.3],  # Grayish
     # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
@@ -52,14 +52,14 @@ VERTICAL_PARCENT = [
 ]
 TONE_NAME = [
     # 'Bright',
-    # 'Strong',
+    'Strong',
     # 'Deep',
     # 'Light',
     # 'Soft',
     # 'Dull',
     # 'Dark',
     # 'Pale',
-    'Light grayish',
+    # 'Light grayish',
     # 'Grayish',
     # 'Dark grayish',
     # 'Vivid',  # Cosine curve
@@ -169,12 +169,12 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail.top = BAR_TOP1 + bar_box.height1
 
     # 円レール
-    circle_rail.range = int(bar_box.height2 / 2)
+    circle_rail.range1 = int(bar_box.height2 / 2)
     circle_rail.border_left = GRID_UNIT
     circle_rail.border_right = bar_box.left - GRID_UNIT
 
     circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
-                          circle_rail.top+circle_rail.range)  # x, y
+                          circle_rail.top+circle_rail.range1)  # x, y
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
     # RGBバー２段目
@@ -222,7 +222,8 @@ def update_scene1_with_rotate(
     green_bar_height = int(color_rate[1] * bar_box.height)
     blue_bar_height = int(color_rate[2] * bar_box.height)
 #    print(
-#        f"red_bar_height={red_bar_height} green_bar_height={green_bar_height} blue_bar_height={blue_bar_height}")
+#        f"red_bar_height={red_bar_height} green_bar_height={green_bar_height} \
+# blue_bar_height={blue_bar_height}")
 
     # バーR ( (left, top), (right, bottom) )
     # バーG
@@ -251,8 +252,9 @@ def update_scene1_with_rotate(
         rank23d_3bars_height, bar_box.height))
     #
 
-    inscribed_triangle.update(
-        bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
+    # TODO inscribed_triangle.update(
+    #     bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
+
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],
                gravity[1] - circle_rail.center[1])
@@ -327,7 +329,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     # 時計の針
     tickness = 2
-    inner_range = circle_rail.range
+    inner_range = circle_rail.range1
     second_range = int(6.5*GRID_UNIT)-tickness
     third_range = int(7.5*GRID_UNIT)+tickness
     inner_p = (

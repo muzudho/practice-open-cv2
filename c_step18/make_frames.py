@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from colors import PALE_GRAY, BLACK,  \
+from colors import PALE_GRAY,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
 from color_calc import calc_step2, \
@@ -271,7 +271,8 @@ def draw_tone_name(canvas, bar_box, tone_name):
 def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     """アニメの１コマを作成します"""
 
-    # circle_rail.draw_me(canvas)  # 円レール
+    circle_rail.draw_circle(canvas)  # 円レール
+    circle_rail.draw_triangle(canvas)  # 円に内接する正三角形
 
     # circle_rail.draw_red_p(canvas)  # 円周上の点R
     # circle_rail.draw_green_p(canvas)  # 円周上の点G
@@ -376,17 +377,17 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     bar_box.draw_rgb_number(canvas,
                             rank23d_color)
 
-    gravity = inscribed_triangle.triangular_center_of_gravity()
+    # gravity = inscribed_triangle.triangular_center_of_gravity()
 
     # debug
-    cv2.putText(canvas,
-                f"theta={circle_rail.theta} phase={outer_circle.phase}",
-                # f"theta={circle_rail.theta} phase={outer_circle.phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
-                (10, 10),  # x,y
-                cv2.FONT_HERSHEY_SIMPLEX,
-                FONT_SCALE,
-                BLACK,
-                lineType=2)
+    # cv2.putText(canvas,
+    #            f"theta={circle_rail.theta}",
+    #            # f"theta={circle_rail.theta} phase={outer_circle.phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
+    #            (10, 10),  # x,y
+    #            cv2.FONT_HERSHEY_SIMPLEX,
+    #            FONT_SCALE,
+    #            BLACK,
+    #            lineType=2)
     # f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
     # f"zoom={circle_rail.zoom}",
     #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",

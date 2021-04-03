@@ -46,7 +46,7 @@ class InscribedTriangle():
         triangle_theta = theta  # +phase*30
         if green == blue and blue < red:
             # 緑と青は等しく、それより赤が上
-            phase = 0
+            phase = 0  # トライアングル・フェーズ
         elif blue < green and green < red:
             # 下から青、緑、赤
             phase = 1

@@ -75,19 +75,24 @@ class OuterCircle():
         """描きます"""
         # 色相環
         color_count = len(self.color_list)
+        # print(
+        #    f"color_count={color_count} self.area_size=({self.area_size[0]}, {self.area_size[1]})")
         for i in range(0, color_count):
             theta = i * self.unit_arc
-            # print(f"i={i} color_count={color_count}")
             color = self.color_list[i]
-            # print(f"[{i}] color={color}")
+            # print(f"[{i}] theta={theta} color={color}")
 
             # 円弧
             # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
+            start_angle = int(theta-self.unit_arc/2)
+            end_angle = int(theta+self.unit_arc/2)
+            if start_angle == end_angle:
+                end_angle += 1  # 差が 0 だと変なとこ描画するんで
             cv2.ellipse(canvas,
                         self.origin,
                         self.area_size,
                         -90,
-                        int(theta-self.unit_arc/2),
-                        int(theta+self.unit_arc/2),
+                        start_angle,
+                        end_angle,
                         color,
                         thickness=int(1.25*GRID_UNIT))

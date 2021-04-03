@@ -38,12 +38,11 @@ class BarBox():
         self.__rank2_rect = Rectangle()
         self.__rank3_rect = Rectangle()
 
-        self.__step1_rect = (Rectangle(), Rectangle(), Rectangle())
+        self.__n3bars_rect = (Rectangle(), Rectangle(), Rectangle())
 
         self.__font_scale = 0
         self.__line_type = 0
         self.__font = None
-        self.__delta_3bars_height = (0, 0, 0)
         self.__thickness = 2
 
     @property
@@ -232,13 +231,13 @@ class BarBox():
         self.__rank3_rect = val
 
     @property
-    def step1_rect(self):
-        """step1の３本のバーの矩形"""
-        return self.__step1_rect
+    def n3bars_rect(self):
+        """３本のバーの矩形"""
+        return self.__n3bars_rect
 
-    @step1_rect.setter
-    def step1_rect(self, val):
-        self.__step1_rect = val
+    @n3bars_rect.setter
+    def n3bars_rect(self, val):
+        self.__n3bars_rect = val
 
     @property
     def font_scale(self):
@@ -268,78 +267,16 @@ class BarBox():
         self.__font = val
 
     @property
-    def delta_3bars_height(self):
-        """色の追加値"""
-        return self.__delta_3bars_height
-
-    @delta_3bars_height.setter
-    def delta_3bars_height(self, val):
-        self.__delta_3bars_height = val
-
-    @property
     def thickness(self):
         """線の太さ"""
         return self.__thickness
 
-    def create_3bars_multiple(self):
-        """RGBの倍数"""
-        # 2段目の箱での棒の縦幅
-        triangle = self.create_step1_3bars_height()
-        fitted = self.create_rank2d_3bars_height()
-        # ２段目の箱の真ん中を原点とする座標に変換。正負の符号を正に揃える
-        half = int(self.height2/2)
-        triangle = (
-            abs(triangle[0] - half),
-            abs(triangle[1] - half),
-            abs(triangle[2] - half))
-        fitted = (
-            abs(fitted[0] - half),
-            abs(fitted[1] - half),
-            abs(fitted[2] - half))
-        # 0除算が起きるケースは、（仕方がないので）1.0 にします。分子が0になるケースは、分子を1として計算します
-        if triangle[0] == 0:
-            red = 1.0
-        elif fitted[0] == 0:
-            red = 1 / triangle[0]
-        else:
-            red = fitted[0] / triangle[0]
-
-        if triangle[1] == 0:
-            green = 1.0
-        elif fitted[1] == 0:
-            green = 1 / triangle[1]
-        else:
-            green = fitted[1] / triangle[1]
-
-        if triangle[2] == 0:
-            blue = 1.0
-        elif fitted[2] == 0:
-            blue = 1 / triangle[2]
-        else:
-            blue = fitted[2] / triangle[2]
-
-        # print(
-        #    f"multiple=({red:7.3f},{green:7.3f},{blue:7.3f}) \
-        # fitted=({fitted[0]},{fitted[1]},{fitted[2]}) \
-        # fitted=({triangle[0]},{triangle[1]},{triangle[2]})")
-        return (red, green, blue)
-
     def create_step1_3bars_height(self):
         """バーの長さを作成"""
         return (
-            self.__step1_rect[0].right_bottom[1] -
-            self.__step1_rect[0].left_top[1],
-            self.__step1_rect[1].right_bottom[1] -
-            self.__step1_rect[1].left_top[1],
-            self.__step1_rect[2].right_bottom[1] - self.__step1_rect[2].left_top[1])
-
-    def create_rank2d_3bars_height(self):
-        """バーの長さを作成"""
-        rank2_height = self.create_step1_3bars_height()
-        return (
-            rank2_height[0] + self.delta_3bars_height[0],
-            rank2_height[1] + self.delta_3bars_height[1],
-            rank2_height[2] + self.delta_3bars_height[2])
+            self.top3 - self.__n3bars_rect[0].left_top[1],
+            self.top3 - self.__n3bars_rect[1].left_top[1],
+            self.top3 - self.__n3bars_rect[2].left_top[1])
 
     def create_rank23_3bars_height(self):
         """バーの長さを作成"""
@@ -351,11 +288,12 @@ class BarBox():
 
     def create_rank23d_3bars_height(self):
         """バーの長さを作成"""
-        rank23_height = self.create_rank23_3bars_height()
         return (
-            rank23_height[0] + self.delta_3bars_height[0],
-            rank23_height[1] + self.delta_3bars_height[1],
-            rank23_height[2] + self.delta_3bars_height[2])
+            self.__n3bars_rect[0].right_bottom[1] -
+            self.__n3bars_rect[0].left_top[1],
+            self.__n3bars_rect[1].right_bottom[1] -
+            self.__n3bars_rect[1].left_top[1],
+            self.__n3bars_rect[2].right_bottom[1] - self.__n3bars_rect[2].left_top[1])
 
     def get_max_rank23_height(self):
         """追加部分を含まない、最長のバーの縦幅"""
@@ -433,17 +371,15 @@ class BarBox():
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
-            top = self.step1_rect[0].left_top[1] - \
-                self.delta_3bars_height[0] + GRID_UNIT
+            top = self.__n3bars_rect[0].left_top[1] + GRID_UNIT
         else:
-            top = self.step1_rect[0].left_top[1] - \
-                self.delta_3bars_height[0] + GRID_UNIT
+            top = self.__n3bars_rect[0].left_top[1] + GRID_UNIT
             font_color = PALE_RED
 
         self.draw_3figures(
             canvas,
             color,
-            self.step1_rect[0].left_top[0],
+            self.__red_left,
             top,
             font_color)
 
@@ -453,17 +389,15 @@ class BarBox():
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
-            top = self.step1_rect[1].left_top[1] - \
-                self.delta_3bars_height[1] + GRID_UNIT
+            top = self.__n3bars_rect[1].left_top[1] + GRID_UNIT
         else:
-            top = self.step1_rect[1].left_top[1] - \
-                self.delta_3bars_height[1] + GRID_UNIT
+            top = self.__n3bars_rect[1].left_top[1] + GRID_UNIT
             font_color = PALE_GREEN
 
         self.draw_3figures(
             canvas,
             color,
-            self.step1_rect[1].left_top[0],
+            self.__green_left,
             top,
             font_color)
 
@@ -473,17 +407,15 @@ class BarBox():
         if color == top2_byte:
             top = top2_over_top
         elif color == top3_byte:
-            top = self.step1_rect[2].left_top[1] - \
-                self.delta_3bars_height[2] + GRID_UNIT
+            top = self.__n3bars_rect[2].left_top[1] + GRID_UNIT
         else:
-            top = self.step1_rect[2].left_top[1] - \
-                self.delta_3bars_height[2] + GRID_UNIT
+            top = self.__n3bars_rect[2].left_top[1] + GRID_UNIT
             font_color = PALE_BLUE
 
         self.draw_3figures(
             canvas,
             color,
-            self.step1_rect[2].left_top[0],
+            self.__blue_left,
             top,
             font_color)
 
@@ -541,17 +473,17 @@ class BarBox():
     @property
     def fitted_red_top(self):
         """フィット後の赤バーの上端"""
-        return self.step1_rect[0].left_top[1] - self.delta_3bars_height[0]
+        return self.__n3bars_rect[0].left_top[1]
 
     @property
     def fitted_green_top(self):
         """フィット後の緑バーの上端"""
-        return self.step1_rect[1].left_top[1] - self.delta_3bars_height[1]
+        return self.__n3bars_rect[1].left_top[1]
 
     @property
     def fitted_blue_top(self):
         """フィット後の青バーの上端"""
-        return self.step1_rect[2].left_top[1] - self.delta_3bars_height[2]
+        return self.__n3bars_rect[2].left_top[1]
 
     def draw_3bars(self, canvas):
         """バーを描きます"""
@@ -559,34 +491,32 @@ class BarBox():
         # yは逆さ
 
         # バーR
-        left = self.step1_rect[0].left_top[0]
-        right = self.step1_rect[0].right_bottom[0]
+        left = self.__red_left
+        right = left + self.__one_width
         top = self.fitted_red_top
         cv2.rectangle(canvas, (left, top),
-                      self.step1_rect[0].right_bottom, RED, thickness=-1)  # rank2d
+                      self.top3, RED, thickness=-1)  # rank2d
         cv2.rectangle(canvas, (left, self.top3),
                       (right, self.bottom),
                       BRIGHT_RED, thickness=-1)  # rank3
 
         # バーG
-        left = self.step1_rect[1].left_top[0]
-        right = self.step1_rect[1].right_bottom[0]
+        left = self.__green_left
+        right = left + self.__one_width
         top = self.fitted_green_top
         cv2.rectangle(canvas, (left, top),
-                      self.step1_rect[1].right_bottom, GREEN, thickness=-1)
+                      self.top3, GREEN, thickness=-1)
         cv2.rectangle(canvas, (left, self.top3),
                       (right,
                        self.bottom), BRIGHT_GREEN, thickness=-1)
 
         # バーB
-        left = self.step1_rect[2].left_top[0]
-        right = self.step1_rect[2].right_bottom[0]
+        left = self.__blue_left
+        right = left + self.__one_width
         top = self.fitted_blue_top
         cv2.rectangle(canvas,
                       (left, top),
-                      self.step1_rect[2].right_bottom,
-                      BLUE,
-                      thickness=-1)
+                      self.top3, BLUE, thickness=-1)
         cv2.rectangle(canvas,
                       (left, self.top3),
                       (right, self.bottom),

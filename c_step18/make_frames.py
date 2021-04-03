@@ -84,7 +84,7 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _outer_circle = make_scene1(
+            bar_box, _circle_rail, _outer_circle = update_scene1(
                 bar_rates, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
@@ -97,59 +97,23 @@ def main():
             seq += 1
 
         # 描画：色相環のアニメーション表示
-        seq, canvas = make_circle(canvas, seq, bar_rates, tone_name)
+        seq, canvas = update_circle(canvas, seq, bar_rates, tone_name)
 
         for _ in range(0, 10):  # Wait frames
             cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
             seq += 1
 
 
-def make_circle(canvas, seq, bar_rates, tone_name):
+def update_circle(canvas, seq, bar_rates, tone_name):
     """色相環一周分の画像を出力"""
 
     outer_circle = OuterCircle()
 
     for phase in range(0, PHASE_COUNTS):
-        theta = 360/PHASE_COUNTS*phase
         canvas = make_canvas()
-        bar_box, circle_rail, outer_circle = make_scene1(
+        bar_box, circle_rail, outer_circle = update_scene1(
             bar_rates, outer_circle)
-        outer_circle.phase = phase
-
-        # 円周上の点の位置
-        circle_rail.theta = theta
-
-        # バーR
-        bar_box.step1_rect[0].left_top = (
-            bar_box.red_left, circle_rail.red_p[1])
-        bar_box.step1_rect[0].right_bottom = (
-            bar_box.red_left+bar_box.one_width, bar_box.top3)
-        # バーG
-        bar_box.step1_rect[1].left_top = (
-            bar_box.green_left, circle_rail.green_p[1])
-        bar_box.step1_rect[1].right_bottom = (
-            bar_box.green_left+bar_box.one_width, bar_box.top3)
-        # バーB
-        bar_box.step1_rect[2].left_top = (
-            bar_box.blue_left, circle_rail.blue_p[1])
-        bar_box.step1_rect[2].right_bottom = (
-            bar_box.blue_left+bar_box.one_width, bar_box.top3)
-#        print(
-#            f"red={bar_box.step1_rect[0].debug_string} \
-# green={bar_box.step1_rect[1].debug_string} \
-# blue={bar_box.step1_rect[2].debug_string}")
-
-        bar_box.delta_3bars_height = calc_step2(
-            bar_box.create_step1_3bars_height(),
-            bar_box.height2
-        )
-
-        # 外環状
-        theta = outer_circle.phase * outer_circle.unit_arc
-        outer_color = convert_3heights_to_3bytes(
-            bar_box.create_rank23d_3bars_height(), bar_box.height)
-        outer_circle.color_list.append(outer_color)
-        #
+        update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
@@ -171,7 +135,7 @@ def make_canvas():
                    MONO_BACKGROUND, dtype=np.uint8)
 
 
-def make_scene1(bar_rates, outer_circle):
+def update_scene1(bar_rates, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
@@ -229,6 +193,48 @@ def make_scene1(bar_rates, outer_circle):
     outer_circle.phases = PHASE_COUNTS
 
     return bar_box, circle_rail, outer_circle
+
+
+def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle):
+    """回転が伴うモデルを更新"""
+    theta = 360/PHASE_COUNTS*phase
+
+    outer_circle.phase = phase
+
+    # 円周上の点の位置
+    circle_rail.theta = theta
+
+    # バーR
+    bar_box.step1_rect[0].left_top = (
+        bar_box.red_left, circle_rail.red_p[1])
+    bar_box.step1_rect[0].right_bottom = (
+        bar_box.red_left+bar_box.one_width, bar_box.top3)
+    # バーG
+    bar_box.step1_rect[1].left_top = (
+        bar_box.green_left, circle_rail.green_p[1])
+    bar_box.step1_rect[1].right_bottom = (
+        bar_box.green_left+bar_box.one_width, bar_box.top3)
+    # バーB
+    bar_box.step1_rect[2].left_top = (
+        bar_box.blue_left, circle_rail.blue_p[1])
+    bar_box.step1_rect[2].right_bottom = (
+        bar_box.blue_left+bar_box.one_width, bar_box.top3)
+#        print(
+#            f"red={bar_box.step1_rect[0].debug_string} \
+# green={bar_box.step1_rect[1].debug_string} \
+# blue={bar_box.step1_rect[2].debug_string}")
+
+    bar_box.delta_3bars_height = calc_step2(
+        bar_box.create_step1_3bars_height(),
+        bar_box.height2
+    )
+
+    # 外環状
+    theta = outer_circle.phase * outer_circle.unit_arc
+    outer_color = convert_3heights_to_3bytes(
+        bar_box.create_rank23d_3bars_height(), bar_box.height)
+    outer_circle.color_list.append(outer_color)
+    #
 
 
 def draw_grid(_canvas):

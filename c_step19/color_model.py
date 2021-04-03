@@ -1,4 +1,11 @@
-"""色モデル"""
+"""色モデル
+
+ライブラリによって、
+0° がどこか、
+回転方向は 時計回りか、逆時計回りか、
+y は どちらが上か
+異なるので、実装者は 調整してください。
+"""
 
 import math
 
@@ -12,25 +19,17 @@ def to_color_rate(vertical_parcent, theta):
         時計回りに黄色、緑、青緑……、と進んでいきます
     """
 
-    # ライブラリによって、
-    # 0° がどこか、
-    # 回転方向は 時計回りか、逆時計回りか、
-    # y は どちらが上か
-    # 異なるので調整してください。
-    #
-    # 12時の方向を 0° に合わせるため、 -90° 引きます
-    to12 = 0  # -90.0
     # 半径 1.0、 中心座標 (0,0) は省略
     # 欲しいのは 中心からの相対 y 座標 1.0 ～ -1.0 だけ
     # n3y_on_circumference : (float, float, float)
     #     ２段目の箱の中に占める３本のバーの縦幅の割合 0.0～1.0
     n3y_on_circumference = (
         # 円周上の赤い点の位置 0.0～1.0
-        math.cos(math.radians(theta+to12)),  # yは上下反転
+        math.cos(math.radians(theta)),  # yは上下反転
         # 円周上の緑の点の位置
-        math.cos(math.radians(theta+to12-120)),
+        math.cos(math.radians(theta-120)),
         # 円周上の青の点の位置
-        math.cos(math.radians(theta+to12+120)))
+        math.cos(math.radians(theta+120)))
 #    print(
 #        f"n3y_on_circumference=({n3y_on_circumference[0]:10.7f}, {n3y_on_circumference[1]:10.7f}, \
 # {n3y_on_circumference[2]:10.7f})")

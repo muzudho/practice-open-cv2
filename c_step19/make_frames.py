@@ -310,24 +310,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
-    top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
              inscribed_triangle.rbg_points[0],
-             (bar_box.step1_rect[0].left_top[0], top),
+             (bar_box.step1_rect[0].left_top[0], bar_box.fitted_red_top),
              RED, thickness=2)
 
     # 水平線G
-    top = bar_box.step1_rect[1].left_top[1] - bar_box.delta_3bars_height[1]
     cv2.line(canvas,
              inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
-             (bar_box.step1_rect[1].left_top[0], top),
+             (bar_box.step1_rect[1].left_top[0], bar_box.fitted_green_top),
              GREEN, thickness=2)
 
     # 水平線B
-    top = bar_box.step1_rect[2].left_top[1] - bar_box.delta_3bars_height[2]
     cv2.line(canvas,
              inscribed_triangle.rbg_points[1],
-             (bar_box.step1_rect[2].left_top[0], top),
+             (bar_box.step1_rect[2].left_top[0], bar_box.fitted_blue_top),
              BLUE, thickness=2)
 
     outer_circle.draw_me(canvas)  # 外環状
@@ -390,11 +387,6 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     #            BLACK,
     #            lineType=2)
     # f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
-    # f"zoom={circle_rail.zoom}",
-    #               # f"delta_color=({delta_color[0]}, {delta_color[1]}, {delta_color[2]})",
-    #               f"delta_3bars_height=({bar_box.delta_3bars_height[0]}, \
-    # {bar_box.delta_3bars_height[1]}, \
-    # {bar_box.delta_3bars_height[2]})",
 
     # cv2.imshow('Title', canvas)
     # cv2.imwrite('form.jpg',canvas)

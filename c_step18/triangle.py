@@ -9,7 +9,7 @@ import numpy as np
 from colors import PALE_GRAY
 
 
-def calc_triangle(canvas, upper_y, lower_y, theta, center):
+def calc_triangle(upper_y, lower_y, theta, center):
     """画像を出力
     theta : int
         0時の方向を0°とする時計回りの角度(弧度法)
@@ -27,11 +27,11 @@ def calc_triangle(canvas, upper_y, lower_y, theta, center):
     d_length = 10000
     line_d = make_line(d_length, theta, center)
     # d
-    cv2.line(canvas,
-             line_d[0],
-             line_d[1],
-             PALE_GRAY,
-             thickness=2)
+    # cv2.line(canvas,
+    #         line_d[0],
+    #         line_d[1],
+    #         PALE_GRAY,
+    #         thickness=2)
 
     # 線a,dの交点をeとする
     point_e = line_cross(line_a, line_d)

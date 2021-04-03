@@ -13,7 +13,7 @@ from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
-from triangle import calc_triangle
+from inscribed_triangle import InscribedTriangle
 
 
 # 描画する画像を作る
@@ -84,7 +84,7 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _outer_circle = update_scene1(
+            bar_box, _circle_rail, _outer_circle, _inscribed_triangle = update_scene1(
                 bar_rates, outer_circle)
             draw_grid(canvas)
             bar_box.draw_outline(canvas)
@@ -111,14 +111,15 @@ def update_circle(canvas, seq, bar_rates, tone_name):
 
     for phase in range(0, PHASE_COUNTS):
         canvas = make_canvas()
-        bar_box, circle_rail, outer_circle = update_scene1(
+        bar_box, circle_rail, outer_circle, inscribed_triangle = update_scene1(
             bar_rates, outer_circle)
-        update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle)
+        update_scene1_with_rotate(
+            phase, bar_box, circle_rail, outer_circle, inscribed_triangle)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             outer_circle)
+                             outer_circle, inscribed_triangle)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -141,6 +142,7 @@ def update_scene1(bar_rates, outer_circle):
 
     bar_box = BarBox()
     circle_rail = CircleRail()
+    inscribed_triangle = InscribedTriangle()
 
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
@@ -192,10 +194,10 @@ def update_scene1(bar_rates, outer_circle):
                               int(7*GRID_UNIT))
     outer_circle.phases = PHASE_COUNTS
 
-    return bar_box, circle_rail, outer_circle
+    return bar_box, circle_rail, outer_circle, inscribed_triangle
 
 
-def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle):
+def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle, inscribed_triangle):
     """回転が伴うモデルを更新"""
     theta = 360/PHASE_COUNTS*phase
 
@@ -231,10 +233,14 @@ def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle):
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
+    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
     outer_color = convert_3heights_to_3bytes(
-        bar_box.create_rank23d_3bars_height(), bar_box.height)
+        rank23d_3bars_height, bar_box.height)
     outer_circle.color_list.append(outer_color)
     #
+
+    inscribed_triangle.update(
+        bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
 
 
 def draw_grid(_canvas):
@@ -258,7 +264,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
+def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     """アニメの１コマを作成します"""
 
     # circle_rail.draw_me(canvas)  # 円レール
@@ -281,130 +287,10 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
               int(circle_rail.center[1] + circle_rail.range)),
              PALE_GRAY, thickness=2)
 
-    # 円に内接する線。正三角形
-    # cv2.line(canvas, circle_rail.red_p,
-    #         circle_rail.green_p, WHITE, thickness=2)
-    # cv2.line(canvas, circle_rail.green_p,
-    #         circle_rail.blue_p, WHITE, thickness=2)
-    # cv2.line(canvas, circle_rail.blue_p,
-    #         circle_rail.red_p, WHITE, thickness=2)
-
-    # 調整された三角形
-    # 赤、緑、青 の点の位置関係は全部で１２相です
-    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    red = rank23d_3bars_height[0]
-    green = rank23d_3bars_height[1]
-    blue = rank23d_3bars_height[2]
-    triangle_theta = circle_rail.theta  # +phase*30
-    if green == blue and blue < red:
-        # 緑と青は等しく、それより赤が上
-        phase = 0
-    elif blue < green and green < red:
-        # 下から青、緑、赤
-        phase = 1
-    elif blue < green and green == red:
-        # 青より大きい緑は赤と等しい
-        phase = 2
-    elif blue < red and red < green:
-        # 下から青、赤、緑
-        phase = 3
-        triangle_theta -= 120
-    elif blue == red and red < green:
-        # 青と赤は等しく、それより緑が上
-        phase = 4
-        triangle_theta -= 120
-    elif red < blue and blue < green:
-        # 下から赤、青、緑
-        phase = 5
-        triangle_theta -= 120
-    elif red < blue and blue == green:
-        # 赤より大きい青は緑と等しい
-        phase = 6
-        triangle_theta -= 120
-    elif red < green and green < blue:
-        # 下から赤、緑、青
-        phase = 7
-        triangle_theta += 120
-    elif red == green and green < blue:
-        # 赤と緑は等しく、それより青が上
-        phase = 8
-        triangle_theta += 120
-    elif green < red and red < blue:
-        # 下から緑、赤、青
-        phase = 9
-        triangle_theta += 120
-    elif green < red and red == blue:
-        # 緑より大きい赤は青と等しい
-        phase = 10
-    else:
-        # 下から緑、青、赤
-        phase = 11
-    # 赤、青、緑 の順なのが工夫
-    rbg_points = calc_triangle(canvas,
-                               bar_box.top2,
-                               bar_box.top3,
-                               triangle_theta,
-                               circle_rail.center)
-    if phase == 0:
-        # 緑や青より赤が上
-        pass
-    elif phase == 1:
-        # 下から青、緑、赤
-        pass
-    elif phase == 2:
-        # 青より、緑と赤が上
-        pass
-    elif phase == 3:
-        # 下から青、赤、緑
-        rbg_points = (rbg_points[2], rbg_points[1], rbg_points[0])
-    elif phase == 4:
-        # 青や赤より緑が上
-        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
-    elif phase == 5:
-        # 下から赤、青、緑
-        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
-    elif phase == 6:
-        # 赤より、青と緑が上
-        rbg_points = (rbg_points[1], rbg_points[2], rbg_points[0])
-    elif phase == 7:
-        # 下から赤、緑、青
-        rbg_points = (rbg_points[1], rbg_points[0], rbg_points[2])
-    elif phase == 8:
-        # 赤や緑より青が上
-        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
-    elif phase == 9:
-        # 下から緑、赤、青
-        rbg_points = (rbg_points[2], rbg_points[0], rbg_points[1])
-    elif phase == 10:
-        # 緑より、赤と青が上
-        rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
-    else:
-        # 下から緑、青、赤
-        rbg_points = (rbg_points[0], rbg_points[2], rbg_points[1])
-
-    cv2.line(canvas,
-             rbg_points[0],
-             rbg_points[1],
-             BLACK,
-             thickness=2)
-    cv2.line(canvas,
-             rbg_points[1],
-             rbg_points[2],
-             BLACK,
-             thickness=2)
-    cv2.line(canvas,
-             rbg_points[2],
-             rbg_points[0],
-             BLACK,
-             thickness=2)
-    cv2.circle(canvas, rbg_points[0],
-               int(GRID_UNIT/4), RED, thickness=-1)
-    cv2.circle(canvas, rbg_points[1],
-               int(GRID_UNIT/4), BLUE, thickness=-1)
-    cv2.circle(canvas, rbg_points[2],
-               int(GRID_UNIT/4), GREEN, thickness=-1)
+    inscribed_triangle.draw(canvas)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
+    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
     rank23d_color = convert_3heights_to_3bytes(
         rank23d_3bars_height, bar_box.height)
 
@@ -424,21 +310,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     top = bar_box.step1_rect[0].left_top[1] - bar_box.delta_3bars_height[0]
     cv2.line(canvas,
-             rbg_points[0],
+             inscribed_triangle.rbg_points[0],
              (bar_box.step1_rect[0].left_top[0], top),
              RED, thickness=2)
 
     # 水平線G
     top = bar_box.step1_rect[1].left_top[1] - bar_box.delta_3bars_height[1]
     cv2.line(canvas,
-             rbg_points[2],  # 青と緑が入れ替わっているのが工夫
+             inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
              (bar_box.step1_rect[1].left_top[0], top),
              GREEN, thickness=2)
 
     # 水平線B
     top = bar_box.step1_rect[2].left_top[1] - bar_box.delta_3bars_height[2]
     cv2.line(canvas,
-             rbg_points[1],
+             inscribed_triangle.rbg_points[1],
              (bar_box.step1_rect[2].left_top[0], top),
              BLUE, thickness=2)
 
@@ -490,7 +376,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
 
     # debug
     cv2.putText(canvas,
-                f"triangle_theta={triangle_theta} phase={phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
+                f"theta={circle_rail.theta} phase={outer_circle.phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
                 (10, 10),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

@@ -287,13 +287,13 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     # 背景の上限、下限の線
     cv2.line(canvas,
-             (circle_rail.center[0] - 2*circle_rail.range,
+             (GRID_UNIT,
               int(circle_rail.center[1] - circle_rail.range)),
              (circle_rail.center[0] + 2*circle_rail.range,
               int(circle_rail.center[1] - circle_rail.range)),
              PALE_GRAY, thickness=2)
     cv2.line(canvas,
-             (circle_rail.center[0] - 2*circle_rail.range,
+             (GRID_UNIT,
               int(circle_rail.center[1] + circle_rail.range)),
              (circle_rail.center[0] + 2*circle_rail.range,
               int(circle_rail.center[1] + circle_rail.range)),
@@ -359,20 +359,24 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
     # 時計の針の先
     # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
+    start_angle = int(circle_rail.theta-outer_circle.unit_arc/2)
+    end_angle = int(circle_rail.theta+outer_circle.unit_arc/2)
+    if start_angle == end_angle:
+        end_angle += 1  # 差が 0 だと変なとこ描画するんで
     cv2.ellipse(canvas,
                 circle_rail.center,
                 (second_range, second_range),
                 -90,
-                int(circle_rail.theta-outer_circle.unit_arc/2),
-                int(circle_rail.theta+outer_circle.unit_arc/2),
+                start_angle,
+                end_angle,
                 PALE_GRAY,
                 thickness=tickness)
     cv2.ellipse(canvas,
                 circle_rail.center,
                 (third_range, third_range),
                 -90,
-                int(circle_rail.theta-outer_circle.unit_arc/2),
-                int(circle_rail.theta+outer_circle.unit_arc/2),
+                start_angle,
+                end_angle,
                 PALE_GRAY,
                 thickness=tickness)
     #

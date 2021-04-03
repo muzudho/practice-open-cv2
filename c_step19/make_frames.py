@@ -210,12 +210,12 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = theta
 
-    print(
-        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, \
- {vertical_parcent[2]}) theta={theta}")
+#    print(
+#        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, \
+# {vertical_parcent[2]}) theta={theta}")
     color_rate = to_color_rate(vertical_parcent, theta)
-    print(
-        f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")
+#    print(
+#        f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")
 
     # バーの高さに変換
     red_bar_height = int(color_rate[0] * bar_box.height)
@@ -252,8 +252,8 @@ def update_scene1_with_rotate(
         rank23d_3bars_height, bar_box.height))
     #
 
-    # TODO inscribed_triangle.update(
-    #     bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
+    inscribed_triangle.update(
+        bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
 
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],

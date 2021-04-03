@@ -31,9 +31,9 @@ def to_color_rate(vertical_parcent, theta):
         math.cos(math.radians(theta+to12-120)),
         # 円周上の青の点の位置
         math.cos(math.radians(theta+to12+120)))
-    print(
-        f"n3y_on_circumference=({n3y_on_circumference[0]:10.7f}, {n3y_on_circumference[1]:10.7f}, \
-{n3y_on_circumference[2]:10.7f})")
+#    print(
+#        f"n3y_on_circumference=({n3y_on_circumference[0]:10.7f}, {n3y_on_circumference[1]:10.7f}, \
+# {n3y_on_circumference[2]:10.7f})")
     if not -1.0 <= n3y_on_circumference[0] <= 1.0:
         raise Exception(f"red={n3y_on_circumference[0]}")
     if not -1.0 <= n3y_on_circumference[1] <= 1.0:
@@ -47,9 +47,9 @@ def to_color_rate(vertical_parcent, theta):
         (n3y_on_circumference[0] + 1.0) / 2,
         (n3y_on_circumference[1] + 1.0) / 2,
         (n3y_on_circumference[2] + 1.0) / 2)
-    print(
-        f"n3y_in_diameter=({n3y_in_diameter[0]:10.7f}, {n3y_in_diameter[1]:10.7f}, \
-{n3y_in_diameter[2]:10.7f})")
+#    print(
+#        f"n3y_in_diameter=({n3y_in_diameter[0]:10.7f}, {n3y_in_diameter[1]:10.7f}, \
+# {n3y_in_diameter[2]:10.7f})")
     if not 0.0 <= n3y_in_diameter[0] <= 1.0:
         raise Exception(f"red={n3y_in_diameter[0]}")
     if not 0.0 <= n3y_in_diameter[1] <= 1.0:
@@ -70,15 +70,15 @@ def to_color_rate(vertical_parcent, theta):
     length = longest - shortest
     if not 0.0 <= length <= 1.0:
         raise Exception(f"length={length}")
-    print(f"longest={longest} shortest={shortest} length={length}")
+#    print(f"longest={longest} shortest={shortest} length={length}")
 
     fit_to_diameter = (
         __one_fit(n3y_in_diameter[0], shortest, length),
         __one_fit(n3y_in_diameter[1], shortest, length),
         __one_fit(n3y_in_diameter[2], shortest, length))
-    print(
-        f"fit_to_diameter=({fit_to_diameter[0]:10.7f}, {fit_to_diameter[1]:10.7f}, \
-{fit_to_diameter[2]:10.7f})")
+#    print(
+#        f"fit_to_diameter=({fit_to_diameter[0]:10.7f}, {fit_to_diameter[1]:10.7f}, \
+# {fit_to_diameter[2]:10.7f})")
     if not 0.0 <= fit_to_diameter[0] <= 1.0:
         raise Exception(f"red={fit_to_diameter[0]}")
     if not 0.0 <= fit_to_diameter[1] <= 1.0:

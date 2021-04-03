@@ -4,9 +4,7 @@
 """
 
 import math
-import cv2
 import numpy as np
-from colors import PALE_GRAY
 
 
 def calc_triangle(upper_y, lower_y, theta, center):
@@ -80,8 +78,6 @@ def make_line(range1, theta, center):
 
 def make_beam(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
-    print(
-        f"range1={range1:10.7f} theta={theta:10.7f} center=({center[0]:10.7f}, {center[1]:10.7f})")
     return ((center[0], center[1]),  # yは逆さ
             (int(range1 * math.sin(math.radians(theta)) + center[0]),
              int(-range1 * math.cos(math.radians(theta)) + center[1])))

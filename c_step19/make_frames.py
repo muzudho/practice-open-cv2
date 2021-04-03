@@ -211,7 +211,8 @@ def update_scene1_with_rotate(
     circle_rail.theta = theta
 
     print(
-        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, {vertical_parcent[2]}) theta={theta}")
+        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, \
+ {vertical_parcent[2]}) theta={theta}")
     color_rate = to_color_rate(vertical_parcent, theta)
     print(
         f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")

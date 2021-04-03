@@ -14,6 +14,8 @@ def to_color_rate(vertical_parcent, theta):
 
     # 半径 1.0、 中心座標 (0,0) は省略
     # 欲しいのは 中心からの相対 y 座標 1.0 ～ -1.0 だけ
+    # n3y_on_circumference : (float, float, float)
+    #     ２段目の箱の中に占める３本のバーの縦幅の割合 0.0～1.0
     n3y_on_circumference = (
         # 円周上の赤い点の位置 0.0～1.0
         -math.cos(math.radians(theta)),  # yは上下反転
@@ -25,43 +27,47 @@ def to_color_rate(vertical_parcent, theta):
         f"n3y_on_circumference=({n3y_on_circumference[0]}, {n3y_on_circumference[1]}, \
 {n3y_on_circumference[2]})")
 
-    fit_color_rate = __fit_color_rate(
-        n3y_on_circumference)
+    # -1.0 ～ 1.0 を 0 ～ 2.0 に変換してから長短を調べます
+    n3y_in_diameter = (
+        n3y_on_circumference[0] + 1.0,
+        n3y_on_circumference[1] + 1.0,
+        n3y_on_circumference[2] + 1.0)
+    if not 0.0 <= n3y_in_diameter[0] <= 2.0:
+        raise Exception(f"red={n3y_in_diameter[0]}")
+    if not 0.0 <= n3y_in_diameter[1] <= 2.0:
+        raise Exception(f"green={n3y_in_diameter[0]}")
+    if not 0.0 <= n3y_in_diameter[2] <= 2.0:
+        raise Exception(f"blue={n3y_in_diameter[0]}")
+    longest = max(n3y_in_diameter[0], n3y_in_diameter[1], n3y_in_diameter[2])
+    if not 0.0 <= longest <= 2.0:
+        raise Exception(f"longest={longest}")
+    shortest = min(n3y_in_diameter[0], n3y_in_diameter[1], n3y_in_diameter[2])
+    if not 0.0 <= shortest <= 2.0:
+        raise Exception(f"shortest={shortest}")
+    length = longest - shortest
+    if not 0.0 <= length <= 2.0:
+        raise Exception(f"length={length}")
+    zoom = length / 2.0
+    if not 0.0 <= zoom <= 1.0:
+        raise Exception(f"zoom={zoom}")
+    print(f"longest={longest} shortest={shortest} length={length} zoom={zoom}")
+
+    fit_to_diameter = (
+        __one_fit(n3y_in_diameter[0], zoom),
+        __one_fit(n3y_in_diameter[1], zoom),
+        __one_fit(n3y_in_diameter[2], zoom))
+
     print(
-        f"fit_color_rate=({fit_color_rate[0]}, {fit_color_rate[1]}, {fit_color_rate[2]})")
+        f"fit_to_diameter=({fit_to_diameter[0]}, {fit_to_diameter[1]}, {fit_to_diameter[2]})")
     print(f"vertical_parcent[2]={vertical_parcent[2]}")
 
     # 'vertical_parcent[1]' - 箱全体に占める２段目の箱の縦幅の割合 0.0～1.0
     # 'vertical_parcent[2]' - 箱全体に占める３段目の箱の縦幅の割合 0.0～1.0
     # 0.0 ～ 1.0 の比で返します
     return (
-        fit_color_rate[0] * vertical_parcent[1] + vertical_parcent[2],
-        fit_color_rate[1] * vertical_parcent[1] + vertical_parcent[2],
-        fit_color_rate[2] * vertical_parcent[1] + vertical_parcent[2])
-
-
-def __fit_color_rate(n3y_on_circumference):
-    """フィット
-    n3y_on_circumference : (float, float, float)
-        ２段目の箱の中に占める３本のバーの縦幅の割合 0.0～1.0
-    """
-
-    # print(f"red={n3y_on_circumference[0]} green={n3y_on_circumference[1]} \
-    # blue={n3y_on_circumference[2]}")
-
-    # -1.0 ～ 1.0 を 0 ～ 2.0 に変換してから長短を調べます
-    longest = max(
-        n3y_on_circumference[0]+1.0, n3y_on_circumference[1]+1.0, n3y_on_circumference[2]+1.0)
-    shortest = min(
-        n3y_on_circumference[0]+1.0, n3y_on_circumference[1]+1.0, n3y_on_circumference[2]+1.0)
-    length = longest - shortest
-    zoom = length / 2.0
-    print(f"longest={longest} shortest={shortest} length={length} zoom={zoom}")
-
-    return (
-        __one_fit(n3y_on_circumference[0], zoom),
-        __one_fit(n3y_on_circumference[1], zoom),
-        __one_fit(n3y_on_circumference[2], zoom))
+        fit_to_diameter[0] * vertical_parcent[1] + vertical_parcent[2],
+        fit_to_diameter[1] * vertical_parcent[1] + vertical_parcent[2],
+        fit_to_diameter[2] * vertical_parcent[1] + vertical_parcent[2])
 
 
 def __one_fit(rate, zoom):

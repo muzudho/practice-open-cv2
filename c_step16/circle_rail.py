@@ -137,8 +137,17 @@ class CircleRail():
         cv2.circle(canvas, self.blue_p,
                    self.point_range, BLUE, thickness=-1)
 
-    def draw_me(self, canvas):
+    def draw_circle(self, canvas):
         """描きます"""
         # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
         cv2.circle(canvas, self.center,
                    self.range, WHITE, thickness=2)
+
+    def draw_triangle(self, canvas):
+        """円に内接する線。正三角形"""
+        cv2.line(canvas, self.red_p,
+                 self.green_p, WHITE, thickness=2)
+        cv2.line(canvas, self.green_p,
+                 self.blue_p, WHITE, thickness=2)
+        cv2.line(canvas, self.blue_p,
+                 self.red_p, WHITE, thickness=2)

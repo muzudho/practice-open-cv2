@@ -34,10 +34,10 @@ CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
 # とりあえず 11トーン
 BAR_RATES = [
     # 鮮やかさ2番
-    [0.1, 0.7, 0.2],  # Bright
+    # [0.1, 0.7, 0.2],  # Bright
+    [0.2, 0.7, 0.1],  # Strong
 ]
 """
-    [0.2, 0.7, 0.1],  # Strong
     [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
     [0.0, 0.4, 0.6],  # Light
@@ -53,7 +53,7 @@ BAR_RATES = [
     [0.0, 1.0, 0.0],  # Vivid
     """
 TONE_NAME = [
-    'Bright zone',
+    # 'Bright zone',
     'Strong zone',
     'Deep zone',
     'Light zone',
@@ -380,7 +380,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     # debug
     cv2.putText(canvas,
-                f"theta={circle_rail.theta} phase={outer_circle.phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
+                f"theta={circle_rail.theta} phase={outer_circle.phase}",
+                # f"theta={circle_rail.theta} phase={outer_circle.phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
                 (10, 10),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

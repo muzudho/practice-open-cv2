@@ -253,7 +253,8 @@ def draw_tone_name(canvas, bar_box, tone_name):
 def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
     """アニメの１コマを作成します"""
 
-    circle_rail.draw_me(canvas)  # 円レール
+    circle_rail.draw_circle(canvas)  # 円レール
+    circle_rail.draw_triangle(canvas)  # 円に内接する線。正三角形
 
     circle_rail.draw_red_p(canvas)  # 円周上の点R
     circle_rail.draw_green_p(canvas)  # 円周上の点G
@@ -272,14 +273,6 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle):
              (circle_rail.center[0] + 2*circle_rail.range,
               int(circle_rail.center[1] + circle_rail.range)),
              PALE_GRAY, thickness=2)
-
-    # 円に内接する線。正三角形
-    cv2.line(canvas, circle_rail.red_p,
-             circle_rail.green_p, WHITE, thickness=2)
-    cv2.line(canvas, circle_rail.green_p,
-             circle_rail.blue_p, WHITE, thickness=2)
-    cv2.line(canvas, circle_rail.blue_p,
-             circle_rail.red_p, WHITE, thickness=2)
 
     # 調整された三角形
     # 赤、緑、青 の点の位置関係は全部で１２相です

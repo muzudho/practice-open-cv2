@@ -240,6 +240,21 @@ class BarBox():
         self.__n3bars_rect = val
 
     @property
+    def red_top(self):
+        """フィット後の赤バーの上端"""
+        return self.__n3bars_rect[0].left_top[1]
+
+    @property
+    def green_top(self):
+        """フィット後の緑バーの上端"""
+        return self.__n3bars_rect[1].left_top[1]
+
+    @property
+    def blue_top(self):
+        """フィット後の青バーの上端"""
+        return self.__n3bars_rect[2].left_top[1]
+
+    @property
     def font_scale(self):
         """フォント・サイズの倍率"""
         return self.__font_scale
@@ -470,21 +485,6 @@ class BarBox():
                     BRIGHT_GRAY,
                     self.line_type)
 
-    @property
-    def fitted_red_top(self):
-        """フィット後の赤バーの上端"""
-        return self.__n3bars_rect[0].left_top[1]
-
-    @property
-    def fitted_green_top(self):
-        """フィット後の緑バーの上端"""
-        return self.__n3bars_rect[1].left_top[1]
-
-    @property
-    def fitted_blue_top(self):
-        """フィット後の青バーの上端"""
-        return self.__n3bars_rect[2].left_top[1]
-
     def draw_3bars(self, canvas):
         """バーを描きます"""
 
@@ -493,32 +493,46 @@ class BarBox():
         # バーR
         left = self.__red_left
         right = left + self.__one_width
-        top = self.fitted_red_top
-        cv2.rectangle(canvas, (left, top),
-                      self.top3, RED, thickness=-1)  # rank2d
-        cv2.rectangle(canvas, (left, self.top3),
+        top = self.red_top
+        bottom = self.top3
+        # print(
+        #    f"left={left} top={top} right={right} bottom={bottom} \
+        # RED=({RED[0]}, {RED[1]}, {RED[2]})")
+        cv2.rectangle(canvas,
+                      (left, top),
+                      (right, bottom),
+                      RED,
+                      thickness=-1)  # rank2d
+        cv2.rectangle(canvas,
+                      (left, self.top3),
                       (right, self.bottom),
-                      BRIGHT_RED, thickness=-1)  # rank3
+                      BRIGHT_RED,
+                      thickness=-1)  # rank3
 
         # バーG
         left = self.__green_left
         right = left + self.__one_width
-        top = self.fitted_green_top
-        cv2.rectangle(canvas, (left, top),
-                      self.top3, GREEN, thickness=-1)
-        cv2.rectangle(canvas, (left, self.top3),
-                      (right,
-                       self.bottom), BRIGHT_GREEN, thickness=-1)
+        top = self.green_top
+        cv2.rectangle(canvas,
+                      (left, top),
+                      (right, self.top3),
+                      GREEN,
+                      thickness=-1)
+        cv2.rectangle(canvas,
+                      (left, self.top3),
+                      (right, self.bottom),
+                      BRIGHT_GREEN,
+                      thickness=-1)
 
         # バーB
         left = self.__blue_left
         right = left + self.__one_width
-        top = self.fitted_blue_top
+        top = self.blue_top
         cv2.rectangle(canvas,
                       (left, top),
-                      self.top3, BLUE, thickness=-1)
+                      (right, self.top3),
+                      BLUE, thickness=-1)
         cv2.rectangle(canvas,
                       (left, self.top3),
                       (right, self.bottom),
-                      BRIGHT_BLUE,
-                      thickness=-1)
+                      BRIGHT_BLUE, thickness=-1)

@@ -4,11 +4,11 @@
 import math
 import cv2
 import numpy as np
+from color_model import to_color_rate
 from colors import PALE_GRAY,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
-from color_calc import calc_step2, \
-    convert_3heights_to_3bytes
+from color_calc import convert_3heights_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -32,7 +32,7 @@ BAR_BOX_LEFT = int(22 * GRID_UNIT)
 CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
 
 # とりあえず 11トーン
-BAR_RATES = [
+VERTICAL_PARCENT = [
     # 鮮やかさ2番
     # [0.1, 0.7, 0.2],  # Bright
     # [0.2, 0.7, 0.1],  # Strong
@@ -73,9 +73,9 @@ def main():
     # 連番
     seq = 0
 
-    size = len(BAR_RATES)
+    size = len(VERTICAL_PARCENT)
     for i in range(0, size):
-        bar_rates = BAR_RATES[i]
+        vertical_parcent = VERTICAL_PARCENT[i]
         tone_name = TONE_NAME[i]
 
         # 描画：トーン名と バー箱 の紹介
@@ -83,7 +83,7 @@ def main():
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
             bar_box, circle_rail, _outer_circle, _inscribed_triangle = update_scene1(
-                bar_rates, outer_circle)
+                vertical_parcent, outer_circle)
             draw_grid(canvas)
             circle_rail.draw_circle(canvas)  # 円レール
             circle_rail.draw_border(canvas)  # 背景の上限、下限の線
@@ -97,14 +97,14 @@ def main():
             seq += 1
 
         # 描画：色相環のアニメーション表示
-        seq, canvas = update_circle(canvas, seq, bar_rates, tone_name)
+        seq, canvas = update_circle(canvas, seq, vertical_parcent, tone_name)
 
         for _ in range(0, 10):  # Wait frames
             cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
             seq += 1
 
 
-def update_circle(canvas, seq, bar_rates, tone_name):
+def update_circle(canvas, seq, vertical_parcent, tone_name):
     """色相環一周分の画像を出力"""
 
     outer_circle = OuterCircle()
@@ -112,9 +112,9 @@ def update_circle(canvas, seq, bar_rates, tone_name):
     for phase in range(0, PHASE_COUNTS):
         canvas = make_canvas()
         bar_box, circle_rail, outer_circle, inscribed_triangle = update_scene1(
-            bar_rates, outer_circle)
-        update_scene1_with_rotate(
-            phase, bar_box, circle_rail, outer_circle, inscribed_triangle)
+            vertical_parcent, outer_circle)
+        update_scene1_with_rotate(vertical_parcent,
+                                  phase, bar_box, circle_rail, outer_circle, inscribed_triangle)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
@@ -136,7 +136,7 @@ def make_canvas():
                    MONO_BACKGROUND, dtype=np.uint8)
 
 
-def update_scene1(bar_rates, outer_circle):
+def update_scene1(vertical_parcent, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
@@ -147,7 +147,7 @@ def update_scene1(bar_rates, outer_circle):
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
     bar_box.top1 = BAR_TOP1
-    bar_box.rates = bar_rates
+    bar_box.rates = vertical_parcent
     bar_box.height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
     bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
@@ -200,7 +200,8 @@ def update_scene1(bar_rates, outer_circle):
     return bar_box, circle_rail, outer_circle, inscribed_triangle
 
 
-def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle, inscribed_triangle):
+def update_scene1_with_rotate(
+        vertical_parcent, phase, bar_box, circle_rail, outer_circle, inscribed_triangle):
     """回転が伴うモデルを更新"""
     theta = 360/PHASE_COUNTS*phase
 
@@ -209,37 +210,34 @@ def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle, inscrib
     # 円周上の点の位置
     circle_rail.theta = theta
 
+    color_rate = to_color_rate(vertical_parcent, theta)
+
+    # バーの高さに変換
+    red_bar_height = int(color_rate[0] * bar_box.height)
+    green_bar_height = int(color_rate[1] * bar_box.height)
+    blue_bar_height = int(color_rate[2] * bar_box.height)
+
     # バーR
-    bar_box.step1_rect[0].left_top = (
-        bar_box.red_left, circle_rail.red_p[1])
-    bar_box.step1_rect[0].right_bottom = (
+    bar_box.n3bars_rect[0].left_top = (
+        bar_box.red_left, bar_box.bottom - red_bar_height)
+    bar_box.n3bars_rect[0].right_bottom = (
         bar_box.red_left+bar_box.one_width, bar_box.top3)
     # バーG
-    bar_box.step1_rect[1].left_top = (
-        bar_box.green_left, circle_rail.green_p[1])
-    bar_box.step1_rect[1].right_bottom = (
+    bar_box.n3bars_rect[1].left_top = (
+        bar_box.green_left, bar_box.bottom - green_bar_height)
+    bar_box.n3bars_rect[1].right_bottom = (
         bar_box.green_left+bar_box.one_width, bar_box.top3)
     # バーB
-    bar_box.step1_rect[2].left_top = (
-        bar_box.blue_left, circle_rail.blue_p[1])
-    bar_box.step1_rect[2].right_bottom = (
+    bar_box.n3bars_rect[2].left_top = (
+        bar_box.blue_left, bar_box.bottom - blue_bar_height)
+    bar_box.n3bars_rect[2].right_bottom = (
         bar_box.blue_left+bar_box.one_width, bar_box.top3)
-#        print(
-#            f"red={bar_box.step1_rect[0].debug_string} \
-# green={bar_box.step1_rect[1].debug_string} \
-# blue={bar_box.step1_rect[2].debug_string}")
-
-    bar_box.delta_3bars_height = calc_step2(
-        bar_box.create_step1_3bars_height(),
-        bar_box.height2
-    )
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
     rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    outer_color = convert_3heights_to_3bytes(
-        rank23d_3bars_height, bar_box.height)
-    outer_circle.color_list.append(outer_color)
+    outer_circle.color_list.append(convert_3heights_to_3bytes(
+        rank23d_3bars_height, bar_box.height))
     #
 
     inscribed_triangle.update(
@@ -285,25 +283,12 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     circle_rail.draw_triangle(canvas)  # 円に内接する正三角形
     circle_rail.draw_border(canvas)  # 背景の上限、下限の線
 
-    # circle_rail.draw_red_p(canvas)  # 円周上の点R
-    # circle_rail.draw_green_p(canvas)  # 円周上の点G
-    # circle_rail.draw_blue_p(canvas)  # 円周上の点B
-
     inscribed_triangle.draw(canvas)
 
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
     rank23d_color = convert_3heights_to_3bytes(
         rank23d_3bars_height, bar_box.height)
-
-#    # (WIP) 成分から角度を逆算
-#    element_rates, expected_theta = calc_color_element_rates(rank23_color)
-#    if circle_rail.theta != expected_theta:
-#        print(
-#            f"theta={circle_rail.theta:>7.3f}~{expected_theta:>7.3f} \
-# color_element(rank23_color)=({element_rates[0]:>7.3f}, \
-# {element_rates[1]:>7.3f}, \
-# {element_rates[2]:>7.3f})")
     bar_box.draw_3bars(canvas)  # RGBバー
 
     bar_box.draw_y_axis_label(canvas)  # バー率テキスト
@@ -312,19 +297,19 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
              inscribed_triangle.rbg_points[0],
-             (bar_box.step1_rect[0].left_top[0], bar_box.fitted_red_top),
+             (bar_box.red_left, bar_box.red_top),
              RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas,
              inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
-             (bar_box.step1_rect[1].left_top[0], bar_box.fitted_green_top),
+             (bar_box.green_left, bar_box.green_top),
              GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas,
              inscribed_triangle.rbg_points[1],
-             (bar_box.step1_rect[2].left_top[0], bar_box.fitted_blue_top),
+             (bar_box.blue_left, bar_box.blue_top),
              BLUE, thickness=2)
 
     outer_circle.draw_me(canvas)  # 外環状
@@ -380,7 +365,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     # debug
     # cv2.putText(canvas,
     #            f"theta={circle_rail.theta}",
-    #            # f"theta={circle_rail.theta} phase={outer_circle.phase} gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
+    #            # f"theta={circle_rail.theta} phase={outer_circle.phase} \
+    #  gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
     #            (10, 10),  # x,y
     #            cv2.FONT_HERSHEY_SIMPLEX,
     #            FONT_SCALE,

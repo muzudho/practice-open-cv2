@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from color_model import to_color_rate
+from color_hul_model import to_color_rate
 from colors import PALE_GRAY,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK

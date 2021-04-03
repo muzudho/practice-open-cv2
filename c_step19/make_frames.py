@@ -210,12 +210,18 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = theta
 
+    print(
+        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, {vertical_parcent[2]}) theta={theta}")
     color_rate = to_color_rate(vertical_parcent, theta)
+    print(
+        f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")
 
     # バーの高さに変換
     red_bar_height = int(color_rate[0] * bar_box.height)
     green_bar_height = int(color_rate[1] * bar_box.height)
     blue_bar_height = int(color_rate[2] * bar_box.height)
+#    print(
+#        f"red_bar_height={red_bar_height} green_bar_height={green_bar_height} blue_bar_height={blue_bar_height}")
 
     # バーR ( (left, top), (right, bottom) )
     # バーG

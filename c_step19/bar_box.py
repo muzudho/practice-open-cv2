@@ -499,29 +499,29 @@ class BarBox():
         #    f"left={left} top={top} right={right} bottom={bottom} \
         # RED=({RED[0]}, {RED[1]}, {RED[2]})")
         cv2.rectangle(canvas,
-                      (left, top),
-                      (right, bottom),
-                      RED,
-                      thickness=-1)  # rank2d
-        cv2.rectangle(canvas,
                       (left, self.top3),
                       (right, self.bottom),
                       BRIGHT_RED,
                       thickness=-1)  # rank3
+        cv2.rectangle(canvas,
+                      (left, top),
+                      (right, bottom),
+                      RED,
+                      thickness=-1)  # rank2d
 
         # バーG
         left = self.__green_left
         right = left + self.__one_width
         top = self.green_top
         cv2.rectangle(canvas,
-                      (left, top),
-                      (right, self.top3),
-                      GREEN,
-                      thickness=-1)
-        cv2.rectangle(canvas,
                       (left, self.top3),
                       (right, self.bottom),
                       BRIGHT_GREEN,
+                      thickness=-1)
+        cv2.rectangle(canvas,
+                      (left, top),
+                      (right, self.top3),
+                      GREEN,
                       thickness=-1)
 
         # バーB
@@ -529,10 +529,10 @@ class BarBox():
         right = left + self.__one_width
         top = self.blue_top
         cv2.rectangle(canvas,
-                      (left, top),
-                      (right, self.top3),
-                      BLUE, thickness=-1)
-        cv2.rectangle(canvas,
                       (left, self.top3),
                       (right, self.bottom),
                       BRIGHT_BLUE, thickness=-1)
+        cv2.rectangle(canvas,
+                      (left, top),
+                      (right, self.top3),
+                      BLUE, thickness=-1)

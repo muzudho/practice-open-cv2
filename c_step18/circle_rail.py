@@ -4,7 +4,8 @@
 import math
 
 import cv2
-from colors import WHITE, RED, GREEN, BLUE
+from colors import WHITE, PALE_GRAY, RED, GREEN, BLUE
+from conf import GRID_UNIT
 
 
 class CircleRail():
@@ -20,6 +21,8 @@ class CircleRail():
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
         self.__theta = 0
+        self.__border_left = 0
+        self.__border_right = 0
 
     @property
     def range(self):
@@ -30,6 +33,26 @@ class CircleRail():
     def diameter(self):
         """直径"""
         return 2*self.__range
+
+    @property
+    def border_left(self):
+        """上下の境界線の左端"""
+        return self.__border_left
+
+    @border_left.setter
+    def border_left(self, val):
+        """上下の境界線の左端"""
+        self.__border_left = val
+
+    @property
+    def border_right(self):
+        """上下の境界線の右端"""
+        return self.__border_right
+
+    @border_right.setter
+    def border_right(self, val):
+        """上下の境界線の右端"""
+        self.__border_right = val
 
     @range.setter
     def range(self, val):
@@ -151,3 +174,18 @@ class CircleRail():
                  self.blue_p, WHITE, thickness=2)
         cv2.line(canvas, self.blue_p,
                  self.red_p, WHITE, thickness=2)
+
+    def draw_border(self, canvas):
+        """背景の上限、下限の線"""
+        cv2.line(canvas,
+                 (self.__border_left,
+                  int(self.center[1] - self.range)),
+                 (self.__border_right,
+                  int(self.center[1] - self.range)),
+                 PALE_GRAY, thickness=2)
+        cv2.line(canvas,
+                 (self.__border_left,
+                  int(self.center[1] + self.range)),
+                 (self.__border_right,
+                  int(self.center[1] + self.range)),
+                 PALE_GRAY, thickness=2)

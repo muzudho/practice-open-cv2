@@ -84,9 +84,11 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, _circle_rail, _outer_circle, _inscribed_triangle = update_scene1(
+            bar_box, circle_rail, _outer_circle, _inscribed_triangle = update_scene1(
                 bar_rates, outer_circle)
             draw_grid(canvas)
+            circle_rail.draw_circle(canvas)  # 円レール
+            circle_rail.draw_border(canvas)  # 背景の上限、下限の線
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
             bar_box.draw_bars_rate(canvas)  # バー率テキスト
@@ -154,8 +156,6 @@ def update_scene1(bar_rates, outer_circle):
     bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
     bar_box.rate_text_gap = int(0.2*GRID_UNIT)
-    # 円レール
-    circle_rail.range = int(bar_box.height2 / 2)
 
     # バー箱の左
     bar_box.left = BAR_BOX_LEFT
@@ -169,6 +169,11 @@ def update_scene1(bar_rates, outer_circle):
     bar_box.right = bar_box.blue_left + bar_box.one_width
     # レールとなる円 circle rail
     circle_rail.top = BAR_TOP1 + bar_box.height1
+
+    # 円レール
+    circle_rail.range = int(bar_box.height2 / 2)
+    circle_rail.border_left = GRID_UNIT
+    circle_rail.border_right = bar_box.left - GRID_UNIT
 
     circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
                           circle_rail.top+circle_rail.range)  # x, y
@@ -280,24 +285,11 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     circle_rail.draw_circle(canvas)  # 円レール
     circle_rail.draw_triangle(canvas)  # 円に内接する正三角形
+    circle_rail.draw_border(canvas)  # 背景の上限、下限の線
 
     # circle_rail.draw_red_p(canvas)  # 円周上の点R
     # circle_rail.draw_green_p(canvas)  # 円周上の点G
     # circle_rail.draw_blue_p(canvas)  # 円周上の点B
-
-    # 背景の上限、下限の線
-    cv2.line(canvas,
-             (GRID_UNIT,
-              int(circle_rail.center[1] - circle_rail.range)),
-             (circle_rail.center[0] + 2*circle_rail.range,
-              int(circle_rail.center[1] - circle_rail.range)),
-             PALE_GRAY, thickness=2)
-    cv2.line(canvas,
-             (GRID_UNIT,
-              int(circle_rail.center[1] + circle_rail.range)),
-             (circle_rail.center[0] + 2*circle_rail.range,
-              int(circle_rail.center[1] + circle_rail.range)),
-             PALE_GRAY, thickness=2)
 
     inscribed_triangle.draw(canvas)
 

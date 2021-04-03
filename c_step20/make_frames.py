@@ -18,7 +18,7 @@ from rectangle import Rectangle
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 500  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾）
+CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾） 470px なら圧縮されてしまう（＾～＾）
 CANVAS_HEIGHT = 400
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
@@ -35,7 +35,7 @@ CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
 VERTICAL_PARCENT = [
     # 鮮やかさ2番
     # [0.1, 0.7, 0.2],  # Bright
-    [0.2, 0.7, 0.1],  # Strong
+    # [0.2, 0.7, 0.1],  # Strong
     # [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
     # [0.0, 0.4, 0.6],  # Light
@@ -45,14 +45,14 @@ VERTICAL_PARCENT = [
     # 鮮やかさ4番
     # [0.0, 0.3, 0.7],  # Pale
     # [0.2, 0.3, 0.5],  # Light grayish
-    # [0.4, 0.3, 0.3],  # Grayish
+    [0.4, 0.3, 0.3],  # Grayish
     # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     # [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
     # 'Bright',
-    'Strong',
+    # 'Strong',
     # 'Deep',
     # 'Light',
     # 'Soft',
@@ -60,7 +60,7 @@ TONE_NAME = [
     # 'Dark',
     # 'Pale',
     # 'Light grayish',
-    # 'Grayish',
+    'Grayish',
     # 'Dark grayish',
     # 'Vivid',  # Cosine curve
 ]

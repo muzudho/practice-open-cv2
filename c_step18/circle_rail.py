@@ -122,12 +122,6 @@ class CircleRail():
         """直径に対するinner_heightの割合。0.0～1.0"""
         return self.inner_height / self.diameter
 
-    def triangular_center_of_gravity(self):
-        """三角形の重心"""
-        return (
-            (self.red_p[0]+self.green_p[0]+self.blue_p[0])/3,
-            (self.red_p[1]+self.green_p[1]+self.blue_p[1])/3)
-
     def draw_red_p(self, canvas):
         """円周上の点Rを描きます"""
         cv2.circle(canvas, self.red_p,

@@ -241,6 +241,10 @@ def update_scene1_with_rotate(phase, bar_box, circle_rail, outer_circle, inscrib
 
     inscribed_triangle.update(
         bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
+    gravity = inscribed_triangle.triangular_center_of_gravity()
+    diff_xy = (gravity[0] - circle_rail.center[0],
+               gravity[1] - circle_rail.center[1])
+    inscribed_triangle.correct_horizon(diff_xy)
 
 
 def draw_grid(_canvas):
@@ -372,7 +376,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     bar_box.draw_rgb_number(canvas,
                             rank23d_color)
 
-    gravity = circle_rail.triangular_center_of_gravity()
+    gravity = inscribed_triangle.triangular_center_of_gravity()
 
     # debug
     cv2.putText(canvas,

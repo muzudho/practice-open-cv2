@@ -18,6 +18,24 @@ class InscribedTriangle():
         """円周上の点R,B,G"""
         return self.__rbg_points
 
+    def triangular_center_of_gravity(self):
+        """三角形の重心"""
+        return (
+            int((self.__rbg_points[0][0]+self.__rbg_points[1]
+                 [0]+self.__rbg_points[2][0])/3),
+            int((self.__rbg_points[0][1]+self.__rbg_points[1][1]+self.__rbg_points[2][1])/3))
+
+    def correct_horizon(self, diff_xy):
+        """水平方向のずれの修正"""
+        self.__rbg_points = (
+            (self.__rbg_points[0][0] - diff_xy[0],
+             self.__rbg_points[0][1]),
+            (self.__rbg_points[1][0] - diff_xy[0],
+             self.__rbg_points[1][1]),
+            (self.__rbg_points[2][0] - diff_xy[0],
+             self.__rbg_points[2][1])
+        )
+
     def update(self, top2, top3, center, theta, rank23d_3bars_height):
         """円に内接する線。正三角形"""
 

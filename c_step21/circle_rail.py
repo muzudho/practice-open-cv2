@@ -166,14 +166,14 @@ class CircleRail():
     def draw_border(self, canvas):
         """背景の左限、右限の線"""
         cv2.line(canvas,
-                 (int(self.center[1] - self.range1),
+                 (int(self.center[0] - self.range1),
                   self.__border_top),
-                 (int(self.center[1] - self.range1),
+                 (int(self.center[0] - self.range1),
                   self.__border_bottom),
                  PALE_GRAY, thickness=2)
         cv2.line(canvas,
-                 (int(self.center[1] + self.range1),
+                 (int(self.center[0] + self.range1),
                   self.__border_top),
-                 (int(self.center[1] + self.range1),
+                 (int(self.center[0] + self.range1),
                   self.__border_bottom),
                  PALE_GRAY, thickness=2)

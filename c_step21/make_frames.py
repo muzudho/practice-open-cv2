@@ -158,7 +158,7 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # レールとなる円 circle rail
     circle_rail = CircleRail()
-    circle_rail.border_top = bar_box.bottom - GRID_UNIT
+    circle_rail.border_top = bar_box.bottom + GRID_UNIT
     circle_rail.border_bottom = CANVAS_HEIGHT - GRID_UNIT
     circle_rail.range1 = int(width2 / 2)
 

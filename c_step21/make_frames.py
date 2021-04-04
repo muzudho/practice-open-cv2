@@ -302,17 +302,17 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     cv2.ellipse(canvas,
                 circle_rail.center,
                 (rng2, rng2),
-                -90,
-                start_angle,
-                end_angle,
+                0,
+                360-start_angle,
+                360-end_angle,
                 PALE_GRAY,
                 thickness=tickness)
     cv2.ellipse(canvas,
                 circle_rail.center,
                 (rng3, rng3),
-                -90,
-                start_angle,
-                end_angle,
+                0,
+                360-start_angle,
+                360-end_angle,
                 PALE_GRAY,
                 thickness=tickness)
     #

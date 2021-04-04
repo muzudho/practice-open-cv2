@@ -158,13 +158,12 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # レールとなる円 circle rail
     circle_rail = CircleRail()
-    circle_rail.border_left = GRID_UNIT
-    circle_rail.border_right = bar_box.left - GRID_UNIT
-    circle_rail.top = bar_box.upper_x
+    circle_rail.border_top = bar_box.bottom - GRID_UNIT
+    circle_rail.border_bottom = CANVAS_HEIGHT - GRID_UNIT
     circle_rail.range1 = int(width2 / 2)
 
-    circle_rail.center = (bar_box.left,
-                          circle_rail.top+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
+    circle_rail.center = (int((bar_box.lower_x+bar_box.upper_x)/2),
+                          bar_box.bottom+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
     circle_rail.point_range = 4
 
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
@@ -209,7 +208,7 @@ def update_scene1_with_rotate(
     #
 
     inscribed_triangle.update(
-        circle_rail.top, bar_box.lower_x, circle_rail.center, theta, n3bars_width)
+        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, n3bars_width)
 
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],

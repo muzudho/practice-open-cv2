@@ -12,16 +12,16 @@ class CircleRail():
     """
 
     def __init__(self):
+        self.__border_top = 0
+        self.__border_bottom = 0
+
         self.__range1 = 0
-        self.__top = 0
         self.__center = (0, 0)
         self.__point_range = 0
         self.__red_p = (0, 0)
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
         self.__theta = 0
-        self.__border_top = 0
-        self.__border_bottom = 0
 
     @property
     def range1(self):
@@ -54,15 +54,6 @@ class CircleRail():
     @range1.setter
     def range1(self, val):
         self.__range1 = val
-
-    @property
-    def top(self):
-        """上端"""
-        return self.__top
-
-    @top.setter
-    def top(self, val):
-        self.__top = val
 
     @property
     def center(self):

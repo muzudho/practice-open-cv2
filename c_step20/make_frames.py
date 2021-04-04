@@ -179,16 +179,14 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail.point_range = 4
     # RGBバー２段目
     bar_box.upper_y = circle_rail.top
-    # bar_box.rank1_rect.left_top = (bar_box.left, BAR_TOP1)
-    # bar_box.rank1_rect.right_bottom = (bar_box.right, circle_rail.top)
     # バー２段目（レールとなる円と水平線を合わす）
     bar_box.lower_y = circle_rail.top + bar_box.height2
     bar_box.bottom = bar_box.lower_y + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
     # print(f"bar_box.height={bar_box.height}")
     # RGBバー２段目領域
-    bar_box.rank2_rect.left_top = (bar_box.left, circle_rail.top)
-    bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.lower_y)
+    #bar_box.rank2_rect.left_top = (bar_box.left, circle_rail.top)
+    #bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.lower_y)
     # RGBバー３段目
     bar_box.rank3_rect.left_top = (bar_box.left, bar_box.lower_y)
     bar_box.rank3_rect.right_bottom = (bar_box.right, bar_box.bottom)

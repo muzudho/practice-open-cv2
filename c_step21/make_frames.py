@@ -204,7 +204,7 @@ def update_scene1_with_rotate(
     theta = outer_circle.phase * outer_circle.unit_arc
     n3bars_width = bar_box.create_3bars_width()
     outer_circle.color_list.append(convert_3pixels_to_3bytes(
-        n3bars_width, bar_box.height))
+        n3bars_width, bar_box.width))
     #
 
     inscribed_triangle.update(

@@ -22,17 +22,17 @@ def inverse_func(color):
     theta = 0
 
     if green == blue and red == upper:
-        return 0, upper, lower
+        return 0, upper, lower, "A1"
     if red == green and blue == lower:
-        return 60, upper, lower
+        return 60, upper, lower, "A2"
     if red == blue and green == upper:
-        return 120, upper, lower
+        return 120, upper, lower, "A3"
     if green == blue and red == lower:
-        return 180, upper, lower
+        return 180, upper, lower, "A4"
     if red == green and blue == upper:
-        return 240, upper, lower
+        return 240, upper, lower, "A5"
     if red == blue and green == lower:
-        return 300, upper, lower
+        return 300, upper, lower, "A6"
 
     diameter = upper - lower
     if red == upper and blue == lower:
@@ -40,37 +40,37 @@ def inverse_func(color):
         increment = green - lower
         rad = increment/diameter
         theta = math.degrees(math.asin(rad))
-        return theta, upper, lower
+        return theta, upper, lower, "B1"
     if green == upper and blue == lower:
         # パターン２
         decrement = red - lower
         rad = decrement/diameter
         theta = math.degrees(math.asin(rad))
-        return theta, upper, lower
+        return theta, upper, lower, "B2"
     if red == lower and green == upper:
         # パターン３
         increment = blue - lower
         rad = increment/diameter
         theta = math.degrees(math.asin(rad))
-        return theta, upper, lower
+        return theta, upper, lower, "B3"
     if red == lower and blue == upper:
         # パターン４
         decrement = green - lower
         rad = decrement/diameter
         theta = math.degrees(math.asin(rad))
-        return theta, upper, lower
+        return theta, upper, lower, "B4"
     if green == lower and blue == upper:
         # パターン５
         increment = red - lower
         rad = increment/diameter
         theta = math.degrees(math.asin(rad))
-        return theta, upper, lower
+        return theta, upper, lower, "B5"
     if red == upper and green == lower:
         # パターン６
         decrement = blue - lower
         rad = decrement/diameter
         theta = math.degrees(math.asin(rad))
-        return theta, upper, lower
+        return theta, upper, lower, "B6"
 
     raise Exception(
         f"ERROR           | Logic error. color=({red}, {green}, {blue})")

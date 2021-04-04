@@ -202,20 +202,21 @@ def update_scene1_with_rotate(
     expected_color = (int(255*color_rate[0]),
                       int(255*color_rate[1]),
                       int(255*color_rate[2]))
-    actual_theta, actual_upper, actual_lower = inverse_func(expected_color)
+    actual_theta, actual_upper, actual_lower, pattern = inverse_func(
+        expected_color)
     # 誤差 +-1 まで許容
     if actual_upper < expected_upper - 1.0 or expected_upper + 1.0 < actual_upper:
         diff = actual_upper - expected_upper
         print(
-            f"ERROR           | expected_upper={expected_upper:3} actual_upper={actual_upper:3} diff={diff} theta({theta})")
+            f"ERROR           | expected_upper={expected_upper:3} actual_upper={actual_upper:3} diff={diff} theta={theta} pattern={pattern}")
     if actual_lower < expected_lower - 1.0 or expected_lower + 1.0 < actual_lower:
         diff = actual_lower - expected_lower
         print(
-            f"ERROR           | expected_lower={expected_lower:3} actual_lower={actual_lower:3} diff={diff} theta({theta})")
+            f"ERROR           | expected_lower={expected_lower:3} actual_lower={actual_lower:3} diff={diff} theta={theta} pattern={pattern}")
     if actual_theta < expected_theta - 1.0 or expected_theta + 1.0 < actual_theta:
         diff = actual_theta - expected_theta
         print(
-            f"ERROR           | expected_theta={expected_theta}° actual_theta={actual_theta:9.4f}° diff={diff:9.4f}")
+            f"ERROR           | expected_theta={expected_theta}° actual_theta={actual_theta:9.4f}° diff={diff:9.4f} pattern={pattern}")
 
     # バーR
     bar_box.red_right = bar_box.left + red_bar_width

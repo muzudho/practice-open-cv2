@@ -2,6 +2,19 @@
 """
 
 
+def convert_3bars_to_3bytes(n3bars_pixel, total_pixels):
+    """３本のバーの縦幅ピクセルを、色に変えます"""
+    r_x = n3bars_pixel[0]/total_pixels
+    g_x = n3bars_pixel[1]/total_pixels
+    b_x = n3bars_pixel[2]/total_pixels
+
+    rrx = int(255*r_x)
+    ggx = int(255*g_x)
+    bbx = int(255*b_x)
+
+    return (rrx, ggx, bbx)
+
+
 def convert_3pixels_to_3bytes(n3bars_pixel, total_pixels):
     """３本のバーの縦幅ピクセルを、色に変えます"""
     n3rates = (

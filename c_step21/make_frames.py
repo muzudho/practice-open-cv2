@@ -8,7 +8,7 @@ from color_hul_model import to_color_rate
 from colors import PALE_GRAY,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
-from color_calc import convert_3pixels_to_3bytes
+from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -323,10 +323,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     # 色成分数
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     n3bars_width = bar_box.create_3bars_width()
-    rank23d_color = convert_3pixels_to_3bytes(
-        n3bars_width, bar_box.height)
-    bar_box.draw_rgb_number(canvas,
-                            rank23d_color)
+    color = convert_3bars_to_3bytes(n3bars_width, bar_box.width)
+    bar_box.draw_rgb_number(canvas, color)
 
     # gravity = inscribed_triangle.triangular_center_of_gravity()
 

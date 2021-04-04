@@ -264,7 +264,7 @@ class BarBox():
                         color,
                         self.line_type)
 
-    def draw_rgb_number(self, canvas, rank23d_color):
+    def draw_rgb_number(self, canvas, rgb_numbers):
         """RGB値テキストを描きます"""
         width2 = self.__upper_x - self.__lower_x
         width3 = self.__lower_x - self.__left
@@ -275,7 +275,7 @@ class BarBox():
         right2_over = int(self.upper_x+GRID_UNIT/2)
 
         # 10進R値テキスト
-        num = rank23d_color[0]
+        num = rgb_numbers[0]
         font_color = DARK_GRAYISH_RED
         if num == right2_byte:
             right = right2_over
@@ -293,7 +293,7 @@ class BarBox():
             font_color)
 
         # 10進G値テキスト
-        num = rank23d_color[1]
+        num = rgb_numbers[1]
         font_color = DARK_GRAYISH_GREEN
         if num == right2_byte:
             right = right2_over
@@ -311,7 +311,7 @@ class BarBox():
             font_color)
 
         # 10進B値テキスト
-        num = rank23d_color[2]
+        num = rgb_numbers[2]
         font_color = DARK_GRAYISH_BLUE
         if num == right2_byte:
             right = right2_over
@@ -333,9 +333,9 @@ class BarBox():
         width2 = self.__upper_x - self.__lower_x
         width3 = self.__lower_x - self.__left
         rank23_byte = convert_pixel_to_byte(
-            width2+width3, self.height)
+            width2+width3, self.width)
         rank3_byte = convert_pixel_to_byte(
-            width3, self.height)
+            width3, self.width)
 
         top = self.top+self.label_gap
         # 255
@@ -350,13 +350,13 @@ class BarBox():
             int(self.left-2.5*GRID_UNIT),
             top,
             BRIGHT_GRAY)
-        # ceil
+        # U
         self.draw_3figures(
             canvas, rank23_byte,
             int(self.upper_x+GRID_UNIT/2),
             top,
             DARK_GRAYISH_BLACK)
-        # base_line
+        # L
         self.draw_3figures(
             canvas, rank3_byte,
             int(self.lower_x-2.5*GRID_UNIT),
@@ -366,8 +366,8 @@ class BarBox():
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
         top = self.top+self.label_gap
-        # １段目のバー率
-        left = int((self.__upper_x + self.__right)/2)
+        # 右列のバー率
+        left = int(self.__right - 0.5*GRID_UNIT)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
                     (left, top),  # x,y
@@ -375,8 +375,8 @@ class BarBox():
                     self.font_scale,
                     BRIGHT_GRAY,
                     self.line_type)
-        # ２段目のバー率
-        left = int((self.__lower_x + self.__upper_x)/2)
+        # 中列のバー率
+        left = int((self.__lower_x + self.__upper_x)/2 - 1.5*GRID_UNIT)
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
                     (left, top),  # x,y
@@ -384,8 +384,8 @@ class BarBox():
                     self.font_scale,
                     DARK_GRAYISH_BLACK,
                     self.line_type)
-        # ３段目のバー率
-        left = int((self.__left + self.__lower_x)/2)
+        # 左列のバー率
+        left = int(self.__left - 3*GRID_UNIT)
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
                     (left, top),  # x,y

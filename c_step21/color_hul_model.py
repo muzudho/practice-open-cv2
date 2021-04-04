@@ -42,61 +42,67 @@ def inverse_func(color):
             rad = increment/diameter
             theta = math.degrees(math.asin(rad))
             return theta, upper, lower, "B1"
+        # パターン２
         increment = upper - green
         rad = increment/diameter
         theta = 60-math.degrees(math.asin(rad))
         return theta, upper, lower, "B2"
     if green == upper and blue == lower:
-        # パターン２
+        # パターン３
         if diameter/2 < red-lower:
             decrement = red - lower
             rad = decrement/diameter
             theta = 135-math.degrees(math.asin(rad))
             return theta, upper, lower, "B3"
+        # パターン４
         decrement = red - lower
         rad = decrement/diameter
         theta = 130-math.degrees(math.asin(rad))
         return theta, upper, lower, "B4"
     if red == lower and green == upper:
-        # パターン３
+        # パターン５
         if blue-lower < diameter/2:
             increment = blue - lower
             rad = increment/diameter
             theta = 120+math.degrees(math.asin(rad))
             return theta, upper, lower, "B5"
+        # パターン６
         increment = blue - lower
         rad = increment/diameter
         theta = 120+math.degrees(math.asin(rad))
         return theta, upper, lower, "B6"
     if red == lower and blue == upper:
-        # パターン４
+        # パターン７
         if diameter/2 < green-lower:
             decrement = green - lower
             rad = decrement/diameter
             theta = 245-math.degrees(math.asin(rad))
             return theta, upper, lower, "B7"
+        # パターン８
         decrement = green - lower
         rad = decrement/diameter
         theta = 240-math.degrees(math.asin(rad))
         return theta, upper, lower, "B8"
     if green == lower and blue == upper:
-        # パターン５
+        # パターン９
         if red-lower < diameter/2:
             increment = red - lower
             rad = increment/diameter
             theta = 240+math.degrees(math.asin(rad))
             return theta, upper, lower, "B9"
+        # パターン１０
         increment = red - lower
         rad = increment/diameter
         theta = 240+math.degrees(math.asin(rad))
         return theta, upper, lower, "B10"
     if red == upper and green == lower:
-        # パターン６
+        # パターン１１
         if diameter/2 < green-lower:
             decrement = blue - lower
             rad = decrement/diameter
             theta = 360-math.degrees(math.asin(rad))
             return theta, upper, lower, "B11"
+        # パターン１２
         decrement = blue - lower
         rad = decrement/diameter
         theta = 360-math.degrees(math.asin(rad))

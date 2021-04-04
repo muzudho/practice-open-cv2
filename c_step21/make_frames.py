@@ -8,7 +8,7 @@ from color_hul_model import to_color_rate
 from colors import PALE_GRAY,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
-from color_calc import convert_3heights_to_3bytes
+from color_calc import convert_3pixels_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -204,7 +204,7 @@ def update_scene1_with_rotate(
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
     n3bars_width = bar_box.create_3bars_width()
-    outer_circle.color_list.append(convert_3heights_to_3bytes(
+    outer_circle.color_list.append(convert_3pixels_to_3bytes(
         n3bars_width, bar_box.height))
     #
 
@@ -324,7 +324,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     # 色成分数
     # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
     n3bars_width = bar_box.create_3bars_width()
-    rank23d_color = convert_3heights_to_3bytes(
+    rank23d_color = convert_3pixels_to_3bytes(
         n3bars_width, bar_box.height)
     bar_box.draw_rgb_number(canvas,
                             rank23d_color)

@@ -2,24 +2,24 @@
 """
 
 
-def convert_3heights_to_3bytes(n3bars_height, box_height):
+def convert_3pixels_to_3bytes(n3bars_pixel, total_pixels):
     """３本のバーの縦幅ピクセルを、色に変えます"""
     n3rates = (
-        n3bars_height[0]/box_height,
-        n3bars_height[1]/box_height,
-        n3bars_height[2]/box_height)
+        n3bars_pixel[0]/total_pixels,
+        n3bars_pixel[1]/total_pixels,
+        n3bars_pixel[2]/total_pixels)
     return convert_3rates_to_3bytes(n3rates)
 
 
-def convert_height_to_byte(bar_height, box_height):
+def convert_pixel_to_byte(element_pixels, total_pixels):
     """バーの縦幅ピクセルを、色に変えます"""
-    rate = bar_height/box_height
+    rate = element_pixels/total_pixels
     return convert_rate_to_byte(rate)
 
 
-def convert_byte_to_height(color, box_height):
+def convert_byte_to_pixel(color, pixels):
     """色を、バーの縦幅ピクセルに変えます"""
-    return int(color/255*box_height)
+    return int(color/255*pixels)
 
 
 def convert_3rates_to_3bytes(n3rates):

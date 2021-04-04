@@ -20,8 +20,8 @@ class CircleRail():
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
         self.__theta = 0
-        self.__border_left = 0
-        self.__border_right = 0
+        self.__border_top = 0
+        self.__border_bottom = 0
 
     @property
     def range1(self):
@@ -34,24 +34,22 @@ class CircleRail():
         return 2*self.__range1
 
     @property
-    def border_left(self):
-        """上下の境界線の左端"""
-        return self.__border_left
+    def border_top(self):
+        """上下の境界線の上端"""
+        return self.__border_top
 
-    @border_left.setter
-    def border_left(self, val):
-        """上下の境界線の左端"""
-        self.__border_left = val
+    @border_top.setter
+    def border_top(self, val):
+        self.__border_top = val
 
     @property
-    def border_right(self):
-        """上下の境界線の右端"""
-        return self.__border_right
+    def border_bottom(self):
+        """上下の境界線の下端"""
+        return self.__border_bottom
 
-    @border_right.setter
-    def border_right(self, val):
-        """上下の境界線の右端"""
-        self.__border_right = val
+    @border_bottom.setter
+    def border_bottom(self, val):
+        self.__border_bottom = val
 
     @range1.setter
     def range1(self, val):
@@ -175,16 +173,16 @@ class CircleRail():
                  self.red_p, WHITE, thickness=2)
 
     def draw_border(self, canvas):
-        """背景の上限、下限の線"""
+        """背景の左限、右限の線"""
         cv2.line(canvas,
-                 (self.__border_left,
-                  int(self.center[1] - self.range1)),
-                 (self.__border_right,
-                  int(self.center[1] - self.range1)),
+                 (int(self.center[1] - self.range1),
+                  self.__border_top),
+                 (int(self.center[1] - self.range1),
+                  self.__border_bottom),
                  PALE_GRAY, thickness=2)
         cv2.line(canvas,
-                 (self.__border_left,
-                  int(self.center[1] + self.range1)),
-                 (self.__border_right,
-                  int(self.center[1] + self.range1)),
+                 (int(self.center[1] + self.range1),
+                  self.__border_top),
+                 (int(self.center[1] + self.range1),
+                  self.__border_bottom),
                  PALE_GRAY, thickness=2)

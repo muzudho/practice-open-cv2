@@ -221,8 +221,8 @@ class BarBox():
         """輪郭を描きます"""
         cv2.rectangle(
             canvas,
-            self.rank1_rect.left_top,
-            self.rank3_rect.right_bottom,
+            (self.__left, self.__top),
+            (self.__right, self.__bottom),
             BRIGHT_GRAY,
             thickness=self.thickness)
 
@@ -232,10 +232,10 @@ class BarBox():
         thickness_minus1 = self.thickness-1
         cv2.rectangle(
             canvas,
-            (self.rank2_rect.left_top[0]-thickness_minus1,
-             self.rank2_rect.left_top[1]-thickness_minus1),
-            (self.rank2_rect.right_bottom[0]+thickness_minus1,
-             self.rank2_rect.right_bottom[1]+thickness_minus1),
+            (self.__lower_x - thickness_minus1,
+             self.__top - thickness_minus1),
+            (self.__upper_x + thickness_minus1,
+             self.__bottom + thickness_minus1),
             DARK_GRAYISH_BLACK,
             thickness=thickness_minus1+1)
 
@@ -328,8 +328,8 @@ class BarBox():
             self.blue_top,
             font_color)
 
-    def draw_y_axis_label(self, canvas):
-        """Y軸のラベルを描きます"""
+    def draw_x_axis_label(self, canvas):
+        """X軸のラベルを描きます"""
         width2 = self.__upper_x - self.__lower_x
         width3 = self.__lower_x - self.__left
         rank23_byte = convert_height_to_byte(

@@ -24,7 +24,7 @@ CHANNELS = 3
 MONO_BACKGROUND = SOFT_GRAY[0]
 
 # RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 9 * GRID_UNIT
+BAR_BOX_TOP = 9 * GRID_UNIT
 # 箱の左
 BAR_BOX_LEFT = int(22 * GRID_UNIT)
 # 円の中心と、箱の左との距離
@@ -142,26 +142,26 @@ def update_scene1(vertical_parcent, outer_circle):
     # RGBバー
     bar_box = BarBox()
     bar_box.rates = vertical_parcent
-    height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
-    height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
-    height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-    bar_box.top = BAR_TOP1
-    bar_box.upper_y = bar_box.top + height1
-    bar_box.lower_y = bar_box.upper_y + height2
-    bar_box.bottom = bar_box.lower_y + height3
-    bar_box.label_gap = int(0.25*GRID_UNIT)
+    width1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
+    width2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
+    width3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
     bar_box.left = BAR_BOX_LEFT
-    bar_box.right = bar_box.left + 90
+    bar_box.lower_x = bar_box.left + width3
+    bar_box.upper_x = bar_box.lower_x + width2
+    bar_box.right = bar_box.upper_x + width1
+    bar_box.top = BAR_BOX_TOP
+    bar_box.bottom = bar_box.top + 90
+    bar_box.label_gap = -GRID_UNIT
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
 
     # レールとなる円 circle rail
     circle_rail = CircleRail()
-    circle_rail.top = bar_box.upper_y
-    circle_rail.range1 = int(height2 / 2)
     circle_rail.border_left = GRID_UNIT
     circle_rail.border_right = bar_box.left - GRID_UNIT
+    circle_rail.top = bar_box.upper_x
+    circle_rail.range1 = int(width2 / 2)
 
     circle_rail.center = (bar_box.left,
                           circle_rail.top+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
@@ -187,14 +187,9 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = theta
 
-#    print(
-#        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, \
-# {vertical_parcent[2]}) theta={theta}")
     color_rate = to_color_rate(vertical_parcent, theta)
-#    print(
-#        f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")
 
-    # バーの高さに変換
+    # バーの横幅に変換
     red_bar_width = int(color_rate[0] * bar_box.width)
     green_bar_width = int(color_rate[1] * bar_box.width)
     blue_bar_width = int(color_rate[2] * bar_box.width)
@@ -214,7 +209,7 @@ def update_scene1_with_rotate(
     #
 
     inscribed_triangle.update(
-        circle_rail.top, bar_box.lower_y, circle_rail.center, theta, rank23d_3bars_height)
+        circle_rail.top, bar_box.lower_x, circle_rail.center, theta, rank23d_3bars_height)
 
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],
@@ -236,14 +231,14 @@ def draw_tone_name(canvas, bar_box, tone_name):
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, int(BAR_TOP1-3.5*GRID_UNIT)),  # x,y
+                (bar_box.left, int(BAR_BOX_TOP-3.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 DARK_GRAYISH_BLACK,
                 line_type)
     cv2.putText(canvas,
                 f"tone diameter",
-                (bar_box.left+GRID_UNIT, int(BAR_TOP1-2.5*GRID_UNIT)),  # x,y
+                (bar_box.left+GRID_UNIT, int(BAR_BOX_TOP-2.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 DARK_GRAYISH_BLACK,
@@ -265,7 +260,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
         rank23d_3bars_height, bar_box.height)
     bar_box.draw_3bars(canvas)  # RGBバー
 
-    bar_box.draw_y_axis_label(canvas)  # バー率テキスト
+    bar_box.draw_x_axis_label(canvas)  # X軸のラベル
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ

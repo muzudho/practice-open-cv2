@@ -146,12 +146,13 @@ def update_scene1(vertical_parcent, outer_circle):
 
     bar_box.rates = vertical_parcent
     height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
+    height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
 
     # バー
     # RGBバーの１段目、２段目、３段目の高さ（２０分率）
     bar_box.top1 = BAR_TOP1
     bar_box.upper_y = bar_box.top1 + height1
-    bar_box.height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
+    bar_box.lower_y = bar_box.upper_y + height2
     bar_box.height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
     bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
     bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
@@ -170,7 +171,7 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # レールとなる円 circle rail
     circle_rail.top = bar_box.upper_y
-    circle_rail.range1 = int(bar_box.height2 / 2)
+    circle_rail.range1 = int(height2 / 2)
     circle_rail.border_left = GRID_UNIT
     circle_rail.border_right = bar_box.left - GRID_UNIT
 
@@ -180,9 +181,8 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail.point_range = 4
     # RGBバー２段目
     # バー２段目（レールとなる円と水平線を合わす）
-    bar_box.lower_y = circle_rail.top + bar_box.height2
     bar_box.bottom = bar_box.lower_y + bar_box.height3
-    bar_box.height = height1 + bar_box.height2 + bar_box.height3
+    bar_box.height = height1 + height2 + bar_box.height3
     # print(f"bar_box.height={bar_box.height}")
 
     outer_circle.area_size = (int(7*GRID_UNIT),

@@ -36,7 +36,7 @@ class InscribedTriangle():
              self.__rbg_points[2][1])
         )
 
-    def update(self, top2, top3, center, theta, rank23d_3bars_height):
+    def update(self, upper_x, lower_x, center, theta, rank23d_3bars_height):
         """円に内接する線。正三角形"""
 
         # 赤、緑、青 の点の位置関係は全部で１２相です
@@ -88,8 +88,8 @@ class InscribedTriangle():
             # 下から緑、青、赤
             phase = 11
         # 赤、青、緑 の順なのが工夫
-        self.__rbg_points = calc_triangle(top2,
-                                          top3,
+        self.__rbg_points = calc_triangle(upper_x,
+                                          lower_x,
                                           triangle_theta,
                                           center)
         if phase == 0:

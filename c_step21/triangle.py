@@ -7,7 +7,7 @@ import math
 import numpy as np
 
 
-def calc_triangle(upper_y, lower_y, theta, center):
+def calc_triangle(upper_x, lower_x, theta, center):
     """画像を出力
     theta : int
         0時の方向を0°とする時計回りの角度(弧度法)
@@ -15,11 +15,11 @@ def calc_triangle(upper_y, lower_y, theta, center):
         ある点c
     """
 
-    # 平行する２本の直線a, b
-    # a
-    line_a = ((0, upper_y), (10000, upper_y))
-    # b
-    line_b = ((0, lower_y), (10000, lower_y))
+    # 平行する２本の直線 u, l
+    # u
+    line_u = ((upper_x, 0), (upper_x, 10000))
+    # l
+    line_l = ((lower_x, 0), (lower_x, 10000))
 
     # 点cを通るtheta度の直線d
     d_length = 10000
@@ -31,41 +31,41 @@ def calc_triangle(upper_y, lower_y, theta, center):
     #         PALE_GRAY,
     #         thickness=2)
 
-    # 線a,dの交点をeとする
-    point_e = line_cross(line_a, line_d)
+    # 線 u,l の交点をeとする
+    point_e = line_cross(line_u, line_d)
 
     # 点e で、線d に対して 30° の２本の直線 f,g が走る
     line_f = make_line(d_length, theta+30, point_e)
     line_g = make_line(d_length, theta-30, point_e)
 
     # 線b と、 線 f,g の交点を f', g' とする
-    point_fp = line_cross(line_b, line_f)
-    point_gp = line_cross(line_b, line_g)
+    point_fp = line_cross(line_l, line_f)
+    point_gp = line_cross(line_l, line_g)
 
-    # 点f', g' のうち、点e に近い方を 点h、
-    # 遠い方を 点i とする。
+    # 点f', g' のうち、点e に近い方を 点i、
+    # 遠い方を 点j とする。
     # 等距離なら どちらでもよい
     distance_fp = distance(point_e, point_fp)
     distance_gp = distance(point_e, point_gp)
     if distance_fp < distance_gp:
-        point_h = point_fp
+        point_i = point_fp
         one_side_len = distance_fp
         next_theta = theta+30+60
     else:
-        point_h = point_gp
+        point_i = point_gp
         one_side_len = distance_gp
         next_theta = theta-30-60
 
-    # 線分eh, hj のなす角が
-    # 60°になるような線分hjを引く。
-    # 点jは線分ei上の交点とする
-    line_hj = make_beam(one_side_len, next_theta, point_h)
+    # 線分 ei, ik のなす角が
+    # 60°になるような線分 ik を引く。
+    # 点 k は線分 ej,ik の交点とする
+    line_ik = make_beam(one_side_len, next_theta, point_i)
 
     # 正三角形に必要な３点が求まりました
     triangle_e = point_e
-    triangle_h = point_h
-    triangle_j = line_hj[1]
-    return (triangle_e, triangle_h, triangle_j)
+    triangle_i = point_i
+    triangle_k = line_ik[1]
+    return (triangle_e, triangle_i, triangle_k)
 
 
 def make_line(range1, theta, center):

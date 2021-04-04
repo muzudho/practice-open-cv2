@@ -180,10 +180,6 @@ def update_scene1(vertical_parcent, outer_circle):
                           circle_rail.top+circle_rail.range1)  # x, y
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
-    # RGBバー２段目
-    # バー２段目（レールとなる円と水平線を合わす）
-    bar_box.height = height1 + height2 + height3
-    # print(f"bar_box.height={bar_box.height}")
 
     outer_circle.area_size = (int(7*GRID_UNIT),
                               int(7*GRID_UNIT))

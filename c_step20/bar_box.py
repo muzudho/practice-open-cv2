@@ -24,7 +24,6 @@ class BarBox():
         self.__bottom = 0
         self.__upper_y = 0
         self.__lower_y = 0
-        self.__height = 0
         self.__one_width = 0
         self.__y_axis_label_gap = 0
         self.__rate_text_gap = 0
@@ -83,11 +82,7 @@ class BarBox():
     @property
     def height(self):
         """箱の縦幅"""
-        return self.__height
-
-    @height.setter
-    def height(self, val):
-        self.__height = val
+        return self.__bottom - self.__top1  # yは逆さ
 
     @property
     def height1(self):

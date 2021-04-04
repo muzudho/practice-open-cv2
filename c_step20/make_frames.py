@@ -18,8 +18,8 @@ from rectangle import Rectangle
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
-CANVAS_WIDTH = 450  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾） 470px なら圧縮されてしまう（＾～＾）
-CANVAS_HEIGHT = 400
+CANVAS_WIDTH = 800  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾） 470px なら圧縮されてしまう（＾～＾）
+CANVAS_HEIGHT = 800
 CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
 MONO_BACKGROUND = SOFT_GRAY[0]
@@ -178,19 +178,19 @@ def update_scene1(vertical_parcent, outer_circle):
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
     # RGBバー２段目
-    bar_box.top2 = circle_rail.top
+    bar_box.upper_y = circle_rail.top
     bar_box.rank1_rect.left_top = (bar_box.left, BAR_TOP1)
-    bar_box.rank1_rect.right_bottom = (bar_box.right, bar_box.top2)
+    bar_box.rank1_rect.right_bottom = (bar_box.right, circle_rail.top)
     # バー２段目（レールとなる円と水平線を合わす）
-    bar_box.top3 = bar_box.top2 + bar_box.height2
-    bar_box.bottom = bar_box.top3 + bar_box.height3
+    bar_box.lower_y = circle_rail.top + bar_box.height2
+    bar_box.bottom = bar_box.lower_y + bar_box.height3
     bar_box.height = bar_box.height1 + bar_box.height2 + bar_box.height3
     # print(f"bar_box.height={bar_box.height}")
     # RGBバー２段目領域
-    bar_box.rank2_rect.left_top = (bar_box.left, bar_box.top2)
-    bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.top3)
+    bar_box.rank2_rect.left_top = (bar_box.left, circle_rail.top)
+    bar_box.rank2_rect.right_bottom = (bar_box.right, bar_box.lower_y)
     # RGBバー３段目
-    bar_box.rank3_rect.left_top = (bar_box.left, bar_box.top3)
+    bar_box.rank3_rect.left_top = (bar_box.left, bar_box.lower_y)
     bar_box.rank3_rect.right_bottom = (bar_box.right, bar_box.bottom)
 
     outer_circle.area_size = (int(7*GRID_UNIT),
@@ -233,17 +233,17 @@ def update_scene1_with_rotate(
             bar_box.red_left,
             bar_box.bottom - red_bar_height,
             bar_box.red_left+bar_box.one_width,
-            bar_box.top3),
+            bar_box.lower_y),
         Rectangle(
             bar_box.green_left,
             bar_box.bottom - green_bar_height,
             bar_box.green_left+bar_box.one_width,
-            bar_box.top3),
+            bar_box.lower_y),
         Rectangle(
             bar_box.blue_left,
             bar_box.bottom - blue_bar_height,
             bar_box.blue_left+bar_box.one_width,
-            bar_box.top3))
+            bar_box.lower_y))
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
@@ -253,7 +253,7 @@ def update_scene1_with_rotate(
     #
 
     inscribed_triangle.update(
-        bar_box.top2, bar_box.top3, circle_rail.center, theta, rank23d_3bars_height)
+        circle_rail.top, bar_box.lower_y, circle_rail.center, theta, rank23d_3bars_height)
 
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],

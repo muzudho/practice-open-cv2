@@ -19,8 +19,8 @@ class BarBox():
     def __init__(self):
         self.__rates = [0, 0, 0]
         self.__top1 = 0
-        self.__top2 = 0
-        self.__top3 = 0
+        self.__upper_y = 0
+        self.__lower_y = 0
         self.__height = 0
         self.__height1 = 0
         self.__height2 = 0
@@ -64,22 +64,22 @@ class BarBox():
         self.__top1 = val
 
     @property
-    def top2(self):
+    def upper_y(self):
         """２段目の箱の上辺"""
-        return self.__top2
+        return self.__upper_y
 
-    @top2.setter
-    def top2(self, val):
-        self.__top2 = val
+    @upper_y.setter
+    def upper_y(self, val):
+        self.__upper_y = val
 
     @property
-    def top3(self):
+    def lower_y(self):
         """３段目の箱の上辺"""
-        return self.__top3
+        return self.__lower_y
 
-    @top3.setter
-    def top3(self, val):
-        self.__top3 = val
+    @lower_y.setter
+    def lower_y(self, val):
+        self.__lower_y = val
 
     @property
     def width(self):
@@ -346,7 +346,7 @@ class BarBox():
             self.height2+self.height3, self.height)
         top3_byte = convert_height_to_byte(
             self.height3, self.height)
-        top2_over_top = int(self.top2-GRID_UNIT/2)
+        top2_over_top = int(self.upper_y-GRID_UNIT/2)
 
         # 10進R値テキスト
         color = rank23d_color[0]
@@ -418,15 +418,15 @@ class BarBox():
             canvas, 0, left, int(self.bottom+GRID_UNIT), BRIGHT_GRAY)
         # ceil
         self.draw_3figures(
-            canvas, rank23_byte, left, int(self.top2-GRID_UNIT/2), DARK_GRAYISH_BLACK)
+            canvas, rank23_byte, left, int(self.upper_y-GRID_UNIT/2), DARK_GRAYISH_BLACK)
         # base_line
         self.draw_3figures(
-            canvas, rank3_byte, left, int(self.top3+GRID_UNIT), DARK_GRAYISH_BLACK)
+            canvas, rank3_byte, left, int(self.lower_y+GRID_UNIT), DARK_GRAYISH_BLACK)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
         # １段目のバー率
-        rate_y = int((self.top1 + self.top2)/2 - GRID_UNIT/2)
+        rate_y = int((self.top1 + self.upper_y)/2 - GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
@@ -435,7 +435,7 @@ class BarBox():
                     BRIGHT_GRAY,
                     self.line_type)
         # ２段目のバー率
-        rate_y = int((self.top2 + self.top3)/2 + GRID_UNIT/2)
+        rate_y = int((self.upper_y + self.lower_y)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
@@ -444,7 +444,7 @@ class BarBox():
                     DARK_GRAYISH_BLACK,
                     self.line_type)
         # ３段目のバー率
-        rate_y = int((self.top3 + self.bottom)/2 + GRID_UNIT/2)
+        rate_y = int((self.lower_y + self.bottom)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
                     (self.right+self.rate_text_gap, rate_y),  # x,y
@@ -462,12 +462,12 @@ class BarBox():
         left = self.__red_left
         right = left + self.__one_width
         top = self.red_top
-        bottom = self.top3
+        bottom = self.lower_y
         # print(
         #    f"left={left} top={top} right={right} bottom={bottom} \
         # RED=({RED[0]}, {RED[1]}, {RED[2]})")
         cv2.rectangle(canvas,
-                      (left, self.top3),
+                      (left, self.lower_y),
                       (right, self.bottom),
                       BRIGHT_RED,
                       thickness=-1)  # rank3
@@ -482,13 +482,13 @@ class BarBox():
         right = left + self.__one_width
         top = self.green_top
         cv2.rectangle(canvas,
-                      (left, self.top3),
+                      (left, self.lower_y),
                       (right, self.bottom),
                       BRIGHT_GREEN,
                       thickness=-1)
         cv2.rectangle(canvas,
                       (left, top),
-                      (right, self.top3),
+                      (right, self.lower_y),
                       GREEN,
                       thickness=-1)
 
@@ -497,10 +497,10 @@ class BarBox():
         right = left + self.__one_width
         top = self.blue_top
         cv2.rectangle(canvas,
-                      (left, self.top3),
+                      (left, self.lower_y),
                       (right, self.bottom),
                       BRIGHT_BLUE, thickness=-1)
         cv2.rectangle(canvas,
                       (left, top),
-                      (right, self.top3),
+                      (right, self.lower_y),
                       BLUE, thickness=-1)

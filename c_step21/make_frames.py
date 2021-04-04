@@ -44,10 +44,10 @@ VERTICAL_PARCENT = [
     # 鮮やかさ4番
     # [0.0, 0.3, 0.7],  # Pale
     # [0.2, 0.3, 0.5],  # Light grayish
-    [0.4, 0.3, 0.3],  # Grayish
+    # [0.4, 0.3, 0.3],  # Grayish
     # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
-    # [0.0, 1.0, 0.0],  # Vivid
+    [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
     # 'Bright',
@@ -59,9 +59,9 @@ TONE_NAME = [
     # 'Dark',
     # 'Pale',
     # 'Light grayish',
-    'Grayish',
+    # 'Grayish',
     # 'Dark grayish',
-    # 'Vivid',  # Cosine curve
+    'Vivid',  # Cosine curve
 ]
 
 

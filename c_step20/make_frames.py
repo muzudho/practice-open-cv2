@@ -140,32 +140,25 @@ def update_scene1(vertical_parcent, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
+    # RGBバー
     bar_box = BarBox()
-    circle_rail = CircleRail()
-    inscribed_triangle = InscribedTriangle()
-
     bar_box.rates = vertical_parcent
     height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
     height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
     height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-
-    # バー
-    # RGBバーの１段目、２段目、３段目の高さ（２０分率）
-    bar_box.top1 = BAR_TOP1
-    bar_box.upper_y = bar_box.top1 + height1
+    bar_box.top = BAR_TOP1
+    bar_box.upper_y = bar_box.top + height1
     bar_box.lower_y = bar_box.upper_y + height2
     bar_box.bottom = bar_box.lower_y + height3
     bar_box.label_gap = int(0.25*GRID_UNIT)
-
-    # バー箱の左
     bar_box.left = BAR_BOX_LEFT
     bar_box.right = bar_box.left + 90
-    # バーの筋
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
 
     # レールとなる円 circle rail
+    circle_rail = CircleRail()
     circle_rail.top = bar_box.upper_y
     circle_rail.range1 = int(height2 / 2)
     circle_rail.border_left = GRID_UNIT
@@ -173,12 +166,14 @@ def update_scene1(vertical_parcent, outer_circle):
 
     circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
                           circle_rail.top+circle_rail.range1)  # x, y
-    outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     circle_rail.point_range = 4
 
+    outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.area_size = (int(7*GRID_UNIT),
                               int(7*GRID_UNIT))
     outer_circle.phases = PHASE_COUNTS
+
+    inscribed_triangle = InscribedTriangle()
 
     return bar_box, circle_rail, outer_circle, inscribed_triangle
 

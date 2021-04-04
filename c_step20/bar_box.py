@@ -18,7 +18,7 @@ class BarBox():
 
     def __init__(self):
         self.__rates = [0, 0, 0]
-        self.__top1 = 0
+        self.__top = 0
         self.__left = 0
         self.__right = 0
         self.__bottom = 0
@@ -43,13 +43,13 @@ class BarBox():
         self.__rates = val
 
     @property
-    def top1(self):
+    def top(self):
         """１段目の箱の上辺"""
-        return self.__top1
+        return self.__top
 
-    @top1.setter
-    def top1(self, val):
-        self.__top1 = val
+    @top.setter
+    def top(self, val):
+        self.__top = val
 
     @property
     def upper_y(self):
@@ -77,12 +77,12 @@ class BarBox():
     @property
     def height(self):
         """箱の縦幅"""
-        return self.__bottom - self.__top1  # yは逆さ
+        return self.__bottom - self.__top  # yは逆さ
 
     @property
     def height1(self):
         """１段目の箱の縦幅"""
-        return self.__upper_y - self.__top1  # yは逆さ
+        return self.__upper_y - self.__top  # yは逆さ
 
     @property
     def height2(self):
@@ -153,7 +153,7 @@ class BarBox():
     @property
     def rank1_rect(self):
         """１段目の箱の矩形"""
-        return Rectangle(self.__left, self.__top1, self.__right, self.__bottom)
+        return Rectangle(self.__left, self.__top, self.__right, self.__bottom)
 
     @property
     def rank2_rect(self):
@@ -347,7 +347,7 @@ class BarBox():
         left = self.right+self.label_gap
         # 255
         self.draw_3figures(
-            canvas, 255, left, int(self.top1-GRID_UNIT/2), BRIGHT_GRAY)
+            canvas, 255, left, int(self.top-GRID_UNIT/2), BRIGHT_GRAY)
         # 0
         self.draw_3figures(
             canvas, 0, left, int(self.bottom+GRID_UNIT), BRIGHT_GRAY)
@@ -361,7 +361,7 @@ class BarBox():
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
         # １段目のバー率
-        rate_y = int((self.top1 + self.upper_y)/2 - GRID_UNIT/2)
+        rate_y = int((self.top + self.upper_y)/2 - GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
                     (self.right+self.label_gap, rate_y),  # x,y

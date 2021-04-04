@@ -91,8 +91,8 @@ class OuterCircle():
             cv2.ellipse(canvas,
                         self.origin,
                         self.area_size,
-                        -90,
-                        start_angle,
-                        end_angle,
+                        0,
+                        360-start_angle,
+                        360-end_angle,
                         color,
                         thickness=int(1.25*GRID_UNIT))

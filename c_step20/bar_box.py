@@ -25,8 +25,7 @@ class BarBox():
         self.__upper_y = 0
         self.__lower_y = 0
         self.__one_width = 0
-        self.__y_axis_label_gap = 0
-        self.__rate_text_gap = 0
+        self.__label_gap = 0
         self.__red_left = 0
         self.__green_left = 0
         self.__blue_left = 0
@@ -109,22 +108,13 @@ class BarBox():
         self.__one_width = val
 
     @property
-    def y_axis_label_gap(self):
+    def label_gap(self):
         """箱の右と、Y軸ラベルの間隔"""
-        return self.__y_axis_label_gap
+        return self.__label_gap
 
-    @y_axis_label_gap.setter
-    def y_axis_label_gap(self, val):
-        self.__y_axis_label_gap = val
-
-    @property
-    def rate_text_gap(self):
-        """バー率テキストの間隔"""
-        return self.__rate_text_gap
-
-    @rate_text_gap.setter
-    def rate_text_gap(self, val):
-        self.__rate_text_gap = val
+    @label_gap.setter
+    def label_gap(self, val):
+        self.__label_gap = val
 
     @property
     def left(self):
@@ -374,7 +364,7 @@ class BarBox():
         rank3_byte = convert_height_to_byte(
             self.height3, self.height)
 
-        left = self.right+self.y_axis_label_gap
+        left = self.right+self.label_gap
         # 255
         self.draw_3figures(
             canvas, 255, left, int(self.top1-GRID_UNIT/2), BRIGHT_GRAY)
@@ -394,7 +384,7 @@ class BarBox():
         rate_y = int((self.top1 + self.upper_y)/2 - GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
-                    (self.right+self.rate_text_gap, rate_y),  # x,y
+                    (self.right+self.label_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     BRIGHT_GRAY,
@@ -403,7 +393,7 @@ class BarBox():
         rate_y = int((self.upper_y + self.lower_y)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
-                    (self.right+self.rate_text_gap, rate_y),  # x,y
+                    (self.right+self.label_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     DARK_GRAYISH_BLACK,
@@ -412,7 +402,7 @@ class BarBox():
         rate_y = int((self.lower_y + self.bottom)/2 + GRID_UNIT/2)
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
-                    (self.right+self.rate_text_gap, rate_y),  # x,y
+                    (self.right+self.label_gap, rate_y),  # x,y
                     self.font,
                     self.font_scale,
                     BRIGHT_GRAY,

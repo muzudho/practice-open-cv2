@@ -156,8 +156,7 @@ def update_scene1(vertical_parcent, outer_circle):
     bar_box.lower_y = bar_box.upper_y + height2
     bar_box.bottom = bar_box.lower_y + height3
     bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
-    bar_box.y_axis_label_gap = int(0.25*GRID_UNIT)
-    bar_box.rate_text_gap = int(0.2*GRID_UNIT)
+    bar_box.label_gap = int(0.25*GRID_UNIT)
 
     # バー箱の左
     bar_box.left = BAR_BOX_LEFT

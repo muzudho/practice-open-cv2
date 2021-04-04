@@ -164,9 +164,6 @@ def update_scene1(vertical_parcent, outer_circle):
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
-    bar_box.red_left = bar_box.left
-    bar_box.green_left = int(bar_box.red_left + bar_box.one_width)
-    bar_box.blue_left = int(bar_box.green_left + bar_box.one_width)
 
     # レールとなる円 circle rail
     circle_rail.top = bar_box.upper_y

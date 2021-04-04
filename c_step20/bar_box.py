@@ -25,9 +25,6 @@ class BarBox():
         self.__upper_y = 0
         self.__lower_y = 0
         self.__label_gap = 0
-        self.__red_left = 0
-        self.__green_left = 0
-        self.__blue_left = 0
 
         self.__n3bars_rect = (Rectangle(), Rectangle(), Rectangle())
 
@@ -141,29 +138,17 @@ class BarBox():
     @property
     def red_left(self):
         """赤いバーの左座標"""
-        return self.__red_left
-
-    @red_left.setter
-    def red_left(self, val):
-        self.__red_left = val
+        return self.left
 
     @property
     def green_left(self):
         """緑のバーの左座標"""
-        return self.__green_left
-
-    @green_left.setter
-    def green_left(self, val):
-        self.__green_left = val
+        return int(self.left + self.one_width)
 
     @property
     def blue_left(self):
         """青のバーの左座標"""
-        return self.__blue_left
-
-    @blue_left.setter
-    def blue_left(self, val):
-        self.__blue_left = val
+        return int(self.left + 2*self.one_width)
 
     @property
     def rank1_rect(self):
@@ -312,7 +297,7 @@ class BarBox():
         self.draw_3figures(
             canvas,
             color,
-            self.__red_left,
+            self.red_left,
             top,
             font_color)
 
@@ -330,7 +315,7 @@ class BarBox():
         self.draw_3figures(
             canvas,
             color,
-            self.__green_left,
+            self.green_left,
             top,
             font_color)
 
@@ -348,7 +333,7 @@ class BarBox():
         self.draw_3figures(
             canvas,
             color,
-            self.__blue_left,
+            self.blue_left,
             top,
             font_color)
 
@@ -409,7 +394,7 @@ class BarBox():
         # yは逆さ
 
         # バーR
-        left = self.__red_left
+        left = self.red_left
         right = int(self.__left + self.one_width)
         top = self.red_top
         bottom = self.lower_y
@@ -428,7 +413,7 @@ class BarBox():
                       thickness=-1)  # rank2d
 
         # バーG
-        left = self.__green_left
+        left = self.green_left
         right = int(self.__left + 2*self.one_width)
         top = self.green_top
         cv2.rectangle(canvas,
@@ -443,7 +428,7 @@ class BarBox():
                       thickness=-1)
 
         # バーB
-        left = self.__blue_left
+        left = self.blue_left
         right = self.__right
         top = self.blue_top
         cv2.rectangle(canvas,

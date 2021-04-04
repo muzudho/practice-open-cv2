@@ -70,17 +70,17 @@ def calc_triangle(upper_x, lower_x, theta, center):
 
 def make_line(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
-    return ((int(range1 * math.sin(math.radians(theta)) + center[0]),
-             int(-range1 * math.cos(math.radians(theta)) + center[1])),  # yは逆さ
-            (int(range1 * math.sin(math.radians(180+theta)) + center[0]),
-             int(-range1 * math.cos(math.radians(180+theta)) + center[1])))
+    return ((int(range1 * math.cos(math.radians(theta)) + center[0]),
+             int(-range1 * math.sin(math.radians(theta)) + center[1])),  # yは逆さ
+            (int(range1 * math.cos(math.radians(180+theta)) + center[0]),
+             int(-range1 * math.sin(math.radians(180+theta)) + center[1])))
 
 
 def make_beam(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
     return ((center[0], center[1]),  # yは逆さ
-            (int(range1 * math.sin(math.radians(theta)) + center[0]),
-             int(-range1 * math.cos(math.radians(theta)) + center[1])))
+            (int(range1 * math.cos(math.radians(theta)) + center[0]),
+             int(-range1 * math.sin(math.radians(theta)) + center[1])))
 
 
 def line_cross(line_ab, line_cd):

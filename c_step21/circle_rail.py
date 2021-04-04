@@ -85,17 +85,17 @@ class CircleRail():
         self.__theta = theta
         rng = self.range1
         # 円周上の赤い点の位置
-        self.__red_p = (int(rng * math.sin(math.radians(theta)) + self.center[0]),
-                        int(-rng * math.cos(math.radians(theta)) + self.center[1]))  # yは上下反転
+        self.__red_p = (int(rng * math.cos(math.radians(theta)) + self.center[0]),
+                        int(-rng * math.sin(math.radians(theta)) + self.center[1]))  # yは上下反転
 
         # 円周上の緑の点の位置
-        self.__green_p = (int(rng * math.sin(math.radians(theta-120)) + self.center[0]),
-                          int(-rng * math.cos(math.radians(theta-120)) +
+        self.__green_p = (int(rng * math.cos(math.radians(theta-120)) + self.center[0]),
+                          int(-rng * math.sin(math.radians(theta-120)) +
                               self.center[1]))
 
         # 円周上の青の点の位置
-        self.__blue_p = (int(rng * math.sin(math.radians(theta+120)) + self.center[0]),
-                         int(-rng * math.cos(math.radians(theta+120)) +
+        self.__blue_p = (int(rng * math.cos(math.radians(theta+120)) + self.center[0]),
+                         int(-rng * math.sin(math.radians(theta+120)) +
                              self.center[1]))
 
     @property

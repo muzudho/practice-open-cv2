@@ -19,6 +19,9 @@ class BarBox():
     def __init__(self):
         self.__rates = [0, 0, 0]
         self.__top1 = 0
+        self.__left = 0
+        self.__right = 0
+        self.__bottom = 0
         self.__upper_y = 0
         self.__lower_y = 0
         self.__height = 0
@@ -28,13 +31,9 @@ class BarBox():
         self.__one_width = 0
         self.__y_axis_label_gap = 0
         self.__rate_text_gap = 0
-        self.__left = 0
-        self.__right = 0
-        self.__bottom = 0
         self.__red_left = 0
         self.__green_left = 0
         self.__blue_left = 0
-        self.__rank1_rect = Rectangle()
         self.__rank2_rect = Rectangle()
         self.__rank3_rect = Rectangle()
 
@@ -206,11 +205,7 @@ class BarBox():
     @property
     def rank1_rect(self):
         """１段目の箱の矩形"""
-        return self.__rank1_rect
-
-    @rank1_rect.setter
-    def rank1_rect(self, val):
-        self.__rank1_rect = val
+        return Rectangle(self.__left, self.__top1, self.__right, self.__bottom)
 
     @property
     def rank2_rect(self):

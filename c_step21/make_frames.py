@@ -28,7 +28,7 @@ BAR_TOP1 = 9 * GRID_UNIT
 # 箱の左
 BAR_BOX_LEFT = int(22 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
+CIRCLE_DISTANCE = int(14 * GRID_UNIT)
 
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
@@ -163,8 +163,8 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail.border_left = GRID_UNIT
     circle_rail.border_right = bar_box.left - GRID_UNIT
 
-    circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
-                          circle_rail.top+circle_rail.range1)  # x, y
+    circle_rail.center = (bar_box.left,
+                          circle_rail.top+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
     circle_rail.point_range = 4
 
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
@@ -195,19 +195,16 @@ def update_scene1_with_rotate(
 #        f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")
 
     # バーの高さに変換
-    red_bar_height = int(color_rate[0] * bar_box.height)
-    green_bar_height = int(color_rate[1] * bar_box.height)
-    blue_bar_height = int(color_rate[2] * bar_box.height)
-#    print(
-#        f"red_bar_height={red_bar_height} green_bar_height={green_bar_height} \
-# blue_bar_height={blue_bar_height}")
+    red_bar_width = int(color_rate[0] * bar_box.width)
+    green_bar_width = int(color_rate[1] * bar_box.width)
+    blue_bar_width = int(color_rate[2] * bar_box.width)
 
     # バーR
-    bar_box.red_top = bar_box.bottom - red_bar_height
+    bar_box.red_right = bar_box.left + red_bar_width
     # バーG
-    bar_box.green_top = bar_box.bottom - green_bar_height
+    bar_box.green_right = bar_box.left + green_bar_width
     # バーB
-    bar_box.blue_top = bar_box.bottom - blue_bar_height
+    bar_box.blue_right = bar_box.left + blue_bar_width
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
@@ -274,19 +271,19 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
              inscribed_triangle.rbg_points[0],
-             (bar_box.red_left, bar_box.red_top),
+             (bar_box.red_right, bar_box.red_top),
              RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas,
              inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
-             (bar_box.green_left, bar_box.green_top),
+             (bar_box.green_right, bar_box.green_top),
              GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas,
              inscribed_triangle.rbg_points[1],
-             (bar_box.blue_left, bar_box.blue_top),
+             (bar_box.blue_right, bar_box.blue_top),
              BLUE, thickness=2)
 
     outer_circle.draw_me(canvas)  # 外環状

@@ -4,7 +4,6 @@
 import cv2
 from colors import  \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
-    BRIGHT_RED, BRIGHT_GREEN, BRIGHT_BLUE, \
     DARK_GRAYISH_BLACK, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_height_to_byte
@@ -22,13 +21,13 @@ class BarBox():
         self.__left = 0
         self.__right = 0
         self.__bottom = 0
-        self.__upper_y = 0
-        self.__lower_y = 0
+        self.__upper_x = 0
+        self.__lower_x = 0
         self.__label_gap = 0
 
-        self.__red_top = 0
-        self.__green_top = 0
-        self.__blue_top = 0
+        self.__red_right = 0
+        self.__green_right = 0
+        self.__blue_right = 0
 
         self.__font_scale = 0
         self.__line_type = 0
@@ -54,22 +53,22 @@ class BarBox():
         self.__top = val
 
     @property
-    def upper_y(self):
-        """２段目の箱の上辺"""
-        return self.__upper_y
+    def upper_x(self):
+        """上限値(U)"""
+        return self.__upper_x
 
-    @upper_y.setter
-    def upper_y(self, val):
-        self.__upper_y = val
+    @upper_x.setter
+    def upper_x(self, val):
+        self.__upper_x = val
 
     @property
-    def lower_y(self):
-        """３段目の箱の上辺"""
-        return self.__lower_y
+    def lower_x(self):
+        """下限値(L)"""
+        return self.__lower_x
 
-    @lower_y.setter
-    def lower_y(self, val):
-        self.__lower_y = val
+    @lower_x.setter
+    def lower_x(self, val):
+        self.__lower_x = val
 
     @property
     def width(self):
@@ -82,9 +81,9 @@ class BarBox():
         return self.__bottom - self.__top  # yは逆さ
 
     @property
-    def one_width(self):
-        """バー１本分の幅 (float)"""
-        return (self.__right - self.__left) / 3
+    def one_height(self):
+        """バー１本分の縦幅 (float)"""
+        return (self.__bottom - self.__top) / 3  # yは逆さ
 
     @property
     def label_gap(self):
@@ -123,19 +122,46 @@ class BarBox():
         self.__bottom = val
 
     @property
-    def red_left(self):
-        """赤いバーの左座標"""
-        return self.left
+    def red_right(self):
+        """赤バーの右端"""
+        return self.__red_right
+
+    @red_right.setter
+    def red_right(self, val):
+        self.__red_right = val
 
     @property
-    def green_left(self):
-        """緑のバーの左座標"""
-        return int(self.left + self.one_width)
+    def red_top(self):
+        """赤いバーの上端"""
+        return self.top
 
     @property
-    def blue_left(self):
-        """青のバーの左座標"""
-        return int(self.left + 2*self.one_width)
+    def green_right(self):
+        """緑バーの右端"""
+        return self.__green_right
+
+    @green_right.setter
+    def green_right(self, val):
+        self.__green_right = val
+
+    @property
+    def green_top(self):
+        """緑のバー上端"""
+        return int(self.top + self.one_height)
+
+    @property
+    def blue_right(self):
+        """青バーの右端"""
+        return self.__blue_right
+
+    @blue_right.setter
+    def blue_right(self, val):
+        self.__blue_right = val
+
+    @property
+    def blue_top(self):
+        """青のバーの上端"""
+        return int(self.top + 2*self.one_height)
 
     @property
     def rank1_rect(self):
@@ -145,39 +171,12 @@ class BarBox():
     @property
     def rank2_rect(self):
         """２段目の箱の矩形"""
-        return Rectangle(self.__left, self.__upper_y, self.__right, self.__lower_y)
+        return Rectangle(self.__lower_x, self.__top, self.__upper_x, self.__bottom)
 
     @property
     def rank3_rect(self):
         """３段目の箱の矩形"""
-        return Rectangle(self.__left, self.__lower_y, self.__right, self.__bottom)
-
-    @property
-    def red_top(self):
-        """赤バーの上端"""
-        return self.__red_top
-
-    @red_top.setter
-    def red_top(self, val):
-        self.__red_top = val
-
-    @property
-    def green_top(self):
-        """緑バーの上端"""
-        return self.__green_top
-
-    @green_top.setter
-    def green_top(self, val):
-        self.__green_top = val
-
-    @property
-    def blue_top(self):
-        """青バーの上端"""
-        return self.__blue_top
-
-    @blue_top.setter
-    def blue_top(self, val):
-        self.__blue_top = val
+        return Rectangle(self.__upper_x, self.__top, self.__right, self.__bottom)
 
     @property
     def font_scale(self):
@@ -214,9 +213,9 @@ class BarBox():
     def create_rank23d_3bars_height(self):
         """バーの長さを作成"""
         return (
-            self.bottom - self.red_top,
-            self.bottom - self.green_top,
-            self.bottom - self.blue_top)
+            self.left - self.red_right,
+            self.left - self.green_right,
+            self.left - self.blue_right)
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""
@@ -267,116 +266,129 @@ class BarBox():
 
     def draw_rgb_number(self, canvas, rank23d_color):
         """RGB値テキストを描きます"""
-        height2 = self.__lower_y - self.__upper_y  # yは逆さ
-        height3 = self.__bottom - self.__lower_y  # yは逆さ
-        top2_byte = convert_height_to_byte(
-            height2+height3, self.height)
-        top3_byte = convert_height_to_byte(
-            height3, self.height)
-        top2_over_top = int(self.upper_y-GRID_UNIT/2)
+        width2 = self.__upper_x - self.__lower_x
+        width3 = self.__lower_x - self.__left
+        right2_byte = convert_height_to_byte(
+            width2+width3, self.height)
+        right3_byte = convert_height_to_byte(
+            width3, self.height)
+        right2_over = int(self.upper_x+GRID_UNIT/2)
 
         # 10進R値テキスト
         color = rank23d_color[0]
         font_color = DARK_GRAYISH_RED
-        if color == top2_byte:
-            top = top2_over_top
-        elif color == top3_byte:
-            top = self.red_top + GRID_UNIT
+        if color == right2_byte:
+            right = right2_over
+        elif color == right3_byte:
+            right = self.red_right + GRID_UNIT
         else:
-            top = self.red_top + GRID_UNIT
+            right = self.red_right + GRID_UNIT
             font_color = PALE_RED
 
         self.draw_3figures(
             canvas,
             color,
-            self.red_left,
-            top,
+            right,
+            self.red_top,
             font_color)
 
         # 10進G値テキスト
         color = rank23d_color[1]
         font_color = DARK_GRAYISH_GREEN
-        if color == top2_byte:
-            top = top2_over_top
-        elif color == top3_byte:
-            top = self.green_top + GRID_UNIT
+        if color == right2_byte:
+            right = right2_over
+        elif color == right3_byte:
+            right = self.green_right + GRID_UNIT
         else:
-            top = self.green_top + GRID_UNIT
+            right = self.green_right + GRID_UNIT
             font_color = PALE_GREEN
 
         self.draw_3figures(
             canvas,
             color,
-            self.green_left,
-            top,
+            right,
+            self.green_top,
             font_color)
 
         # 10進B値テキスト
         color = rank23d_color[2]
         font_color = DARK_GRAYISH_BLUE
-        if color == top2_byte:
-            top = top2_over_top
-        elif color == top3_byte:
-            top = self.blue_top + GRID_UNIT
+        if color == right2_byte:
+            right = right2_over
+        elif color == right3_byte:
+            right = self.blue_right + GRID_UNIT
         else:
-            top = self.blue_top + GRID_UNIT
+            right = self.blue_right + GRID_UNIT
             font_color = PALE_BLUE
 
         self.draw_3figures(
             canvas,
             color,
-            self.blue_left,
-            top,
+            right,
+            self.blue_top,
             font_color)
 
     def draw_y_axis_label(self, canvas):
         """Y軸のラベルを描きます"""
-        height2 = self.__lower_y - self.__upper_y  # yは逆さ
-        height3 = self.__bottom - self.__lower_y  # yは逆さ
+        width2 = self.__upper_x - self.__lower_x
+        width3 = self.__lower_x - self.__left
         rank23_byte = convert_height_to_byte(
-            height2+height3, self.height)
+            width2+width3, self.height)
         rank3_byte = convert_height_to_byte(
-            height3, self.height)
+            width3, self.height)
 
-        left = self.right+self.label_gap
+        top = self.top+self.label_gap
         # 255
         self.draw_3figures(
-            canvas, 255, left, int(self.top-GRID_UNIT/2), BRIGHT_GRAY)
+            canvas, 255,
+            int(self.right+GRID_UNIT/2),
+            top,
+            BRIGHT_GRAY)
         # 0
         self.draw_3figures(
-            canvas, 0, left, int(self.bottom+GRID_UNIT), BRIGHT_GRAY)
+            canvas, 0,
+            int(self.left-GRID_UNIT),
+            top,
+            BRIGHT_GRAY)
         # ceil
         self.draw_3figures(
-            canvas, rank23_byte, left, int(self.upper_y-GRID_UNIT/2), DARK_GRAYISH_BLACK)
+            canvas, rank23_byte,
+            int(self.upper_x+GRID_UNIT/2),
+            top,
+            DARK_GRAYISH_BLACK)
         # base_line
         self.draw_3figures(
-            canvas, rank3_byte, left, int(self.lower_y+GRID_UNIT), DARK_GRAYISH_BLACK)
+            canvas, rank3_byte,
+            int(self.lower_x-GRID_UNIT),
+            top,
+            DARK_GRAYISH_BLACK)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
+        top = self.top+self.label_gap
         # １段目のバー率
-        rate_y = int((self.top + self.upper_y)/2 - GRID_UNIT/2)
+        left = int((self.__upper_x + self.__right)/2)
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
-                    (self.right+self.label_gap, rate_y),  # x,y
+                    (left, top),  # x,y
                     self.font,
                     self.font_scale,
                     BRIGHT_GRAY,
                     self.line_type)
         # ２段目のバー率
-        rate_y = int((self.upper_y + self.lower_y)/2 + GRID_UNIT/2)
+        left = int((self.__lower_x + self.__upper_x)/2)
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
-                    (self.right+self.label_gap, rate_y),  # x,y
+                    (left, top),  # x,y
                     self.font,
                     self.font_scale,
                     DARK_GRAYISH_BLACK,
                     self.line_type)
         # ３段目のバー率
-        rate_y = int((self.lower_y + self.bottom)/2 + GRID_UNIT/2)
+        left = int((self.__left + self.__lower_x)/2)
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
-                    (self.right+self.label_gap, rate_y),  # x,y
+                    (left, top),  # x,y
                     self.font,
                     self.font_scale,
                     BRIGHT_GRAY,
@@ -388,48 +400,22 @@ class BarBox():
         # yは逆さ
 
         # バーR
-        left = self.red_left
-        right = int(self.__left + self.one_width)
-        top = self.red_top
-        bottom = self.lower_y
-        # print(
-        #    f"left={left} top={top} right={right} bottom={bottom} \
-        # RED=({RED[0]}, {RED[1]}, {RED[2]})")
         cv2.rectangle(canvas,
-                      (left, self.lower_y),
-                      (right, self.bottom),
-                      BRIGHT_RED,
-                      thickness=-1)  # rank3
-        cv2.rectangle(canvas,
-                      (left, top),
-                      (right, bottom),
+                      (self.__left, self.__top),
+                      (self.__red_right, int(self.__top + self.one_height)),
                       RED,
-                      thickness=-1)  # rank2d
+                      thickness=-1)
 
         # バーG
-        left = self.green_left
-        right = int(self.__left + 2*self.one_width)
-        top = self.green_top
         cv2.rectangle(canvas,
-                      (left, self.lower_y),
-                      (right, self.bottom),
-                      BRIGHT_GREEN,
-                      thickness=-1)
-        cv2.rectangle(canvas,
-                      (left, top),
-                      (right, self.lower_y),
+                      (self.__left, int(self.__top + self.one_height)),
+                      (self.__green_right, int(self.__top + 2*self.one_height)),
                       GREEN,
                       thickness=-1)
 
         # バーB
-        left = self.blue_left
-        right = self.__right
-        top = self.blue_top
         cv2.rectangle(canvas,
-                      (left, self.lower_y),
-                      (right, self.bottom),
-                      BRIGHT_BLUE, thickness=-1)
-        cv2.rectangle(canvas,
-                      (left, top),
-                      (right, self.lower_y),
-                      BLUE, thickness=-1)
+                      (self.__left, int(self.__top + 2*self.one_height)),
+                      (self.__blue_right, self.__bottom),
+                      BLUE,
+                      thickness=-1)

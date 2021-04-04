@@ -210,12 +210,12 @@ class BarBox():
         """線の太さ"""
         return self.__thickness
 
-    def create_rank23d_3bars_height(self):
+    def create_3bars_width(self):
         """バーの長さを作成"""
         return (
-            self.left - self.red_right,
-            self.left - self.green_right,
-            self.left - self.blue_right)
+            self.red_right - self.__left,
+            self.green_right - self.__left,
+            self.blue_right - self.__left)
 
     def draw_outline(self, canvas):
         """輪郭を描きます"""
@@ -275,57 +275,57 @@ class BarBox():
         right2_over = int(self.upper_x+GRID_UNIT/2)
 
         # 10進R値テキスト
-        color = rank23d_color[0]
+        num = rank23d_color[0]
         font_color = DARK_GRAYISH_RED
-        if color == right2_byte:
+        if num == right2_byte:
             right = right2_over
-        elif color == right3_byte:
-            right = self.red_right + GRID_UNIT
+        elif num == right3_byte:
+            right = int(self.red_right - 2.5*GRID_UNIT)
         else:
-            right = self.red_right + GRID_UNIT
+            right = int(self.red_right - 2.5*GRID_UNIT)
             font_color = PALE_RED
 
         self.draw_3figures(
             canvas,
-            color,
+            num,
             right,
-            self.red_top,
+            int(self.red_top+1.5*GRID_UNIT),
             font_color)
 
         # 10進G値テキスト
-        color = rank23d_color[1]
+        num = rank23d_color[1]
         font_color = DARK_GRAYISH_GREEN
-        if color == right2_byte:
+        if num == right2_byte:
             right = right2_over
-        elif color == right3_byte:
-            right = self.green_right + GRID_UNIT
+        elif num == right3_byte:
+            right = int(self.green_right - 2.5*GRID_UNIT)
         else:
-            right = self.green_right + GRID_UNIT
+            right = int(self.green_right - 2.5*GRID_UNIT)
             font_color = PALE_GREEN
 
         self.draw_3figures(
             canvas,
-            color,
+            num,
             right,
-            self.green_top,
+            int(self.green_top+1.5*GRID_UNIT),
             font_color)
 
         # 10進B値テキスト
-        color = rank23d_color[2]
+        num = rank23d_color[2]
         font_color = DARK_GRAYISH_BLUE
-        if color == right2_byte:
+        if num == right2_byte:
             right = right2_over
-        elif color == right3_byte:
-            right = self.blue_right + GRID_UNIT
+        elif num == right3_byte:
+            right = int(self.blue_right - 2.5*GRID_UNIT)
         else:
-            right = self.blue_right + GRID_UNIT
+            right = int(self.blue_right - 2.5*GRID_UNIT)
             font_color = PALE_BLUE
 
         self.draw_3figures(
             canvas,
-            color,
+            num,
             right,
-            self.blue_top,
+            int(self.blue_top+1.5*GRID_UNIT),
             font_color)
 
     def draw_x_axis_label(self, canvas):
@@ -347,7 +347,7 @@ class BarBox():
         # 0
         self.draw_3figures(
             canvas, 0,
-            int(self.left-GRID_UNIT),
+            int(self.left-2.5*GRID_UNIT),
             top,
             BRIGHT_GRAY)
         # ceil
@@ -359,7 +359,7 @@ class BarBox():
         # base_line
         self.draw_3figures(
             canvas, rank3_byte,
-            int(self.lower_x-GRID_UNIT),
+            int(self.lower_x-2.5*GRID_UNIT),
             top,
             DARK_GRAYISH_BLACK)
 

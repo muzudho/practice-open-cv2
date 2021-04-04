@@ -142,16 +142,16 @@ def update_scene1(vertical_parcent, outer_circle):
     # RGBバー
     bar_box = BarBox()
     bar_box.rates = vertical_parcent
-    width1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
-    width2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
-    width3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
+    width1 = int(bar_box.rates[0] * 20 * GRID_UNIT)
+    width2 = int(bar_box.rates[1] * 20 * GRID_UNIT)
+    width3 = int(bar_box.rates[2] * 20 * GRID_UNIT)
     bar_box.left = BAR_BOX_LEFT
     bar_box.lower_x = bar_box.left + width3
     bar_box.upper_x = bar_box.lower_x + width2
     bar_box.right = bar_box.upper_x + width1
     bar_box.top = BAR_BOX_TOP
     bar_box.bottom = bar_box.top + 90
-    bar_box.label_gap = -GRID_UNIT
+    bar_box.label_gap = int(-0.75*GRID_UNIT)
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
@@ -203,13 +203,13 @@ def update_scene1_with_rotate(
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
-    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
+    n3bars_width = bar_box.create_3bars_width()
     outer_circle.color_list.append(convert_3heights_to_3bytes(
-        rank23d_3bars_height, bar_box.height))
+        n3bars_width, bar_box.height))
     #
 
     inscribed_triangle.update(
-        circle_rail.top, bar_box.lower_x, circle_rail.center, theta, rank23d_3bars_height)
+        circle_rail.top, bar_box.lower_x, circle_rail.center, theta, n3bars_width)
 
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],
@@ -254,10 +254,6 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     inscribed_triangle.draw(canvas)
 
-    # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
-    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    rank23d_color = convert_3heights_to_3bytes(
-        rank23d_3bars_height, bar_box.height)
     bar_box.draw_3bars(canvas)  # RGBバー
 
     bar_box.draw_x_axis_label(canvas)  # X軸のラベル
@@ -326,6 +322,10 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     bar_box.draw_rank2_box(canvas)
 
     # 色成分数
+    # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
+    n3bars_width = bar_box.create_3bars_width()
+    rank23d_color = convert_3heights_to_3bytes(
+        n3bars_width, bar_box.height)
     bar_box.draw_rgb_number(canvas,
                             rank23d_color)
 

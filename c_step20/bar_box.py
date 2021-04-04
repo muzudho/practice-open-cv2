@@ -34,7 +34,6 @@ class BarBox():
         self.__red_left = 0
         self.__green_left = 0
         self.__blue_left = 0
-        self.__rank3_rect = Rectangle()
 
         self.__n3bars_rect = (Rectangle(), Rectangle(), Rectangle())
 
@@ -214,11 +213,7 @@ class BarBox():
     @property
     def rank3_rect(self):
         """３段目の箱の矩形"""
-        return self.__rank3_rect
-
-    @rank3_rect.setter
-    def rank3_rect(self, val):
-        self.__rank3_rect = val
+        return Rectangle(self.__left, self.__lower_y, self.__right, self.__bottom)
 
     @property
     def n3bars_rect(self):

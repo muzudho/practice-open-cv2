@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from color_hul_model import to_color_rate
+from color_hul_model import to_color_rate, inverse_func
 from colors import PALE_GRAY,  \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
@@ -192,6 +192,30 @@ def update_scene1_with_rotate(
     red_bar_width = int(color_rate[0] * bar_box.width)
     green_bar_width = int(color_rate[1] * bar_box.width)
     blue_bar_width = int(color_rate[2] * bar_box.width)
+
+    # 逆関数のテスト
+    expected_upper = int(
+        255 * (bar_box.upper_x - bar_box.left) / bar_box.width)
+    expected_lower = int(
+        255 * (bar_box.lower_x - bar_box.left) / bar_box.width)
+    expected_theta = theta
+    expected_color = (int(255*color_rate[0]),
+                      int(255*color_rate[1]),
+                      int(255*color_rate[2]))
+    actual_theta, actual_upper, actual_lower = inverse_func(expected_color)
+    # 誤差 +-1 まで許容
+    if actual_upper < expected_upper - 1.0 or expected_upper + 1.0 < actual_upper:
+        diff = actual_upper - expected_upper
+        print(
+            f"ERROR           | expected_upper={expected_upper:3} actual_upper={actual_upper:3} diff={diff} theta({theta})")
+    if actual_lower < expected_lower - 1.0 or expected_lower + 1.0 < actual_lower:
+        diff = actual_lower - expected_lower
+        print(
+            f"ERROR           | expected_lower={expected_lower:3} actual_lower={actual_lower:3} diff={diff} theta({theta})")
+    if actual_theta < expected_theta - 1.0 or expected_theta + 1.0 < actual_theta:
+        diff = actual_theta - expected_theta
+        print(
+            f"ERROR           | expected_theta={expected_theta}° actual_theta={actual_theta:9.4f}° diff={diff:9.4f}")
 
     # バーR
     bar_box.red_right = bar_box.left + red_bar_width

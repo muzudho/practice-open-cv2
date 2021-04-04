@@ -8,6 +8,74 @@ HSVモデルの仲間で、
 import math
 
 
+def inverse_func(color):
+    red = color[0]
+    green = color[1]
+    blue = color[2]
+    if red == green == blue:
+        raise Exception(f"monocro color=({red}, {green}, {blue})")
+
+    upper = max(red, green, blue)
+    lower = min(red, green, blue)
+
+    # 弧度法
+    theta = 0
+
+    if green == blue and red == upper:
+        return 0, upper, lower
+    if red == green and blue == lower:
+        return 60, upper, lower
+    if red == blue and green == upper:
+        return 120, upper, lower
+    if green == blue and red == lower:
+        return 180, upper, lower
+    if red == green and blue == upper:
+        return 240, upper, lower
+    if red == blue and green == lower:
+        return 300, upper, lower
+
+    diameter = upper - lower
+    if red == upper and blue == lower:
+        # パターン１
+        increment = green - lower
+        rad = increment/diameter
+        theta = math.degrees(math.asin(rad))
+        return theta, upper, lower
+    if green == upper and blue == lower:
+        # パターン２
+        decrement = red - lower
+        rad = decrement/diameter
+        theta = math.degrees(math.asin(rad))
+        return theta, upper, lower
+    if red == lower and green == upper:
+        # パターン３
+        increment = blue - lower
+        rad = increment/diameter
+        theta = math.degrees(math.asin(rad))
+        return theta, upper, lower
+    if red == lower and blue == upper:
+        # パターン４
+        decrement = green - lower
+        rad = decrement/diameter
+        theta = math.degrees(math.asin(rad))
+        return theta, upper, lower
+    if green == lower and blue == upper:
+        # パターン５
+        increment = red - lower
+        rad = increment/diameter
+        theta = math.degrees(math.asin(rad))
+        return theta, upper, lower
+    if red == upper and green == lower:
+        # パターン６
+        decrement = blue - lower
+        rad = decrement/diameter
+        theta = math.degrees(math.asin(rad))
+        return theta, upper, lower
+
+    raise Exception(
+        f"ERROR           | Logic error. color=({red}, {green}, {blue})")
+
+
 def to_color_rate(vertical_parcent, theta):
     """
     vertical_parcent : [float, float, float]

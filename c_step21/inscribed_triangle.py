@@ -26,14 +26,15 @@ class InscribedTriangle():
             int((self.__rbg_points[0][1]+self.__rbg_points[1][1]+self.__rbg_points[2][1])/3))
 
     def correct_horizon(self, diff_xy):
-        """水平方向のずれの修正"""
+        """垂直方向のずれの修正"""
+        # 水平方向には ずれてください
         self.__rbg_points = (
-            (self.__rbg_points[0][0] - diff_xy[0],
-             self.__rbg_points[0][1]),
-            (self.__rbg_points[1][0] - diff_xy[0],
-             self.__rbg_points[1][1]),
-            (self.__rbg_points[2][0] - diff_xy[0],
-             self.__rbg_points[2][1])
+            (self.__rbg_points[0][0],
+             self.__rbg_points[0][1] - diff_xy[1]),
+            (self.__rbg_points[1][0],
+             self.__rbg_points[1][1] - diff_xy[1]),
+            (self.__rbg_points[2][0],
+             self.__rbg_points[2][1] - diff_xy[1])
         )
 
     def update(self, upper_x, lower_x, center, theta, rank23d_3bars_height):

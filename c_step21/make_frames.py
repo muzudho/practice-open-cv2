@@ -280,17 +280,17 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     # 時計の針
     tickness = 2
-    inner_range = circle_rail.range1
-    second_range = int(6.5*GRID_UNIT)-tickness
-    third_range = int(7.5*GRID_UNIT)+tickness
+    rng1 = circle_rail.range1  # 1st range
+    rng2 = int(6.5*GRID_UNIT)-tickness  # 2nd range
+    rng3 = int(7.5*GRID_UNIT)+tickness  # 3rd range
     inner_p = (
-        int(inner_range * math.cos(math.radians(circle_rail.theta-90)) +
+        int(rng1 * math.cos(math.radians(circle_rail.theta)) +
             circle_rail.center[0]),
-        int(inner_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
+        int(-rng1 * math.sin(math.radians(circle_rail.theta))+circle_rail.center[1]))
     outer_p = (
-        int(second_range *
-            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int(second_range * math.sin(math.radians(circle_rail.theta-90))
+        int(rng2 *
+            math.cos(math.radians(circle_rail.theta))+circle_rail.center[0]),
+        int(-rng2 * math.sin(math.radians(circle_rail.theta))
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
     # 時計の針の先
@@ -301,7 +301,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
         end_angle += 1  # 差が 0 だと変なとこ描画するんで
     cv2.ellipse(canvas,
                 circle_rail.center,
-                (second_range, second_range),
+                (rng2, rng2),
                 -90,
                 start_angle,
                 end_angle,
@@ -309,7 +309,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
                 thickness=tickness)
     cv2.ellipse(canvas,
                 circle_rail.center,
-                (third_range, third_range),
+                (rng3, rng3),
                 -90,
                 start_angle,
                 end_angle,

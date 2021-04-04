@@ -155,19 +155,18 @@ def update_scene1(vertical_parcent, outer_circle):
     bar_box.upper_y = bar_box.top1 + height1
     bar_box.lower_y = bar_box.upper_y + height2
     bar_box.bottom = bar_box.lower_y + height3
-    bar_box.one_width = 30  # フォント１文字の横幅が 10 と想定
     bar_box.label_gap = int(0.25*GRID_UNIT)
 
     # バー箱の左
     bar_box.left = BAR_BOX_LEFT
+    bar_box.right = bar_box.left + 90
     # バーの筋
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
     bar_box.red_left = bar_box.left
-    bar_box.green_left = bar_box.red_left + bar_box.one_width
-    bar_box.blue_left = bar_box.green_left + bar_box.one_width
-    bar_box.right = bar_box.blue_left + bar_box.one_width
+    bar_box.green_left = int(bar_box.red_left + bar_box.one_width)
+    bar_box.blue_left = int(bar_box.green_left + bar_box.one_width)
 
     # レールとなる円 circle rail
     circle_rail.top = bar_box.upper_y
@@ -219,17 +218,17 @@ def update_scene1_with_rotate(
         Rectangle(
             bar_box.red_left,
             bar_box.bottom - red_bar_height,
-            bar_box.red_left+bar_box.one_width,
+            int(bar_box.red_left+bar_box.one_width),
             bar_box.lower_y),
         Rectangle(
             bar_box.green_left,
             bar_box.bottom - green_bar_height,
-            bar_box.green_left+bar_box.one_width,
+            int(bar_box.green_left+bar_box.one_width),
             bar_box.lower_y),
         Rectangle(
             bar_box.blue_left,
             bar_box.bottom - blue_bar_height,
-            bar_box.blue_left+bar_box.one_width,
+            int(bar_box.blue_left+bar_box.one_width),
             bar_box.lower_y))
 
     # 外環状

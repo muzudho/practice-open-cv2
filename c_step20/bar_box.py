@@ -24,7 +24,6 @@ class BarBox():
         self.__bottom = 0
         self.__upper_y = 0
         self.__lower_y = 0
-        self.__one_width = 0
         self.__label_gap = 0
         self.__red_left = 0
         self.__green_left = 0
@@ -100,12 +99,8 @@ class BarBox():
 
     @property
     def one_width(self):
-        """バー１本分の幅"""
-        return self.__one_width
-
-    @one_width.setter
-    def one_width(self, val):
-        self.__one_width = val
+        """バー１本分の幅 (float)"""
+        return (self.__right - self.__left) / 3
 
     @property
     def label_gap(self):
@@ -415,7 +410,7 @@ class BarBox():
 
         # バーR
         left = self.__red_left
-        right = left + self.__one_width
+        right = int(self.__left + self.one_width)
         top = self.red_top
         bottom = self.lower_y
         # print(
@@ -434,7 +429,7 @@ class BarBox():
 
         # バーG
         left = self.__green_left
-        right = left + self.__one_width
+        right = int(self.__left + 2*self.one_width)
         top = self.green_top
         cv2.rectangle(canvas,
                       (left, self.lower_y),
@@ -449,7 +444,7 @@ class BarBox():
 
         # バーB
         left = self.__blue_left
-        right = left + self.__one_width
+        right = self.__right
         top = self.blue_top
         cv2.rectangle(canvas,
                       (left, self.lower_y),

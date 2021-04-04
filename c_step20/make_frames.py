@@ -203,25 +203,12 @@ def update_scene1_with_rotate(
 #        f"red_bar_height={red_bar_height} green_bar_height={green_bar_height} \
 # blue_bar_height={blue_bar_height}")
 
-    # バーR ( (left, top), (right, bottom) )
+    # バーR
+    bar_box.red_top = bar_box.bottom - red_bar_height
     # バーG
+    bar_box.green_top = bar_box.bottom - green_bar_height
     # バーB
-    bar_box.n3bars_rect = (
-        Rectangle(
-            bar_box.red_left,
-            bar_box.bottom - red_bar_height,
-            int(bar_box.red_left+bar_box.one_width),
-            bar_box.lower_y),
-        Rectangle(
-            bar_box.green_left,
-            bar_box.bottom - green_bar_height,
-            int(bar_box.green_left+bar_box.one_width),
-            bar_box.lower_y),
-        Rectangle(
-            bar_box.blue_left,
-            bar_box.bottom - blue_bar_height,
-            int(bar_box.blue_left+bar_box.one_width),
-            bar_box.lower_y))
+    bar_box.blue_top = bar_box.bottom - blue_bar_height
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc

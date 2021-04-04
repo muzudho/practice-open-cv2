@@ -26,7 +26,9 @@ class BarBox():
         self.__lower_y = 0
         self.__label_gap = 0
 
-        self.__n3bars_rect = (Rectangle(), Rectangle(), Rectangle())
+        self.__red_top = 0
+        self.__green_top = 0
+        self.__blue_top = 0
 
         self.__font_scale = 0
         self.__line_type = 0
@@ -166,28 +168,31 @@ class BarBox():
         return Rectangle(self.__left, self.__lower_y, self.__right, self.__bottom)
 
     @property
-    def n3bars_rect(self):
-        """３本のバーの矩形"""
-        return self.__n3bars_rect
-
-    @n3bars_rect.setter
-    def n3bars_rect(self, val):
-        self.__n3bars_rect = val
-
-    @property
     def red_top(self):
-        """フィット後の赤バーの上端"""
-        return self.__n3bars_rect[0].left_top[1]
+        """赤バーの上端"""
+        return self.__red_top
+
+    @red_top.setter
+    def red_top(self, val):
+        self.__red_top = val
 
     @property
     def green_top(self):
-        """フィット後の緑バーの上端"""
-        return self.__n3bars_rect[1].left_top[1]
+        """緑バーの上端"""
+        return self.__green_top
+
+    @green_top.setter
+    def green_top(self, val):
+        self.__green_top = val
 
     @property
     def blue_top(self):
-        """フィット後の青バーの上端"""
-        return self.__n3bars_rect[2].left_top[1]
+        """青バーの上端"""
+        return self.__blue_top
+
+    @blue_top.setter
+    def blue_top(self, val):
+        self.__blue_top = val
 
     @property
     def font_scale(self):

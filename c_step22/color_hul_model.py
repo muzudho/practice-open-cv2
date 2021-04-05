@@ -60,7 +60,7 @@ def inverse_func(color):
         # パターン５
         if blue-lower < diameter/2:
             height = blue - lower
-            theta = 120 + math.degrees(math.asin(height/diameter))
+            theta = math.degrees(math.asin(height/diameter)) + 120
             return theta, upper, lower, "B5"
         # パターン６
         height = (blue - lower) - radius

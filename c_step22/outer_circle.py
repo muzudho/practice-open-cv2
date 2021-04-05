@@ -2,6 +2,7 @@
 
 import cv2
 from conf import GRID_UNIT
+from color_calc import color_to_byte
 
 
 class OuterCircle():
@@ -104,5 +105,5 @@ class OuterCircle():
                         0,
                         360-start_angle,
                         360-end_angle,
-                        color,
+                        color_to_byte(color),
                         thickness=self.tickness)

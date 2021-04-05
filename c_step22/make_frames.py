@@ -7,7 +7,8 @@ from color_hul_model import to_color_rate, inverse_func
 from colors import \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY
-from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
+from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes, \
+    color_to_byte
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -21,8 +22,6 @@ from rectangle import Rectangle
 CANVAS_WIDTH = 800  # crieitブログは少なくとも 横幅 450px なら圧縮されない（＾～＾） 470px なら圧縮されてしまう（＾～＾）
 CANVAS_HEIGHT = 800
 CHANNELS = 3
-# モノクロ背景 0黒→255白 178=SOFT_GRAY
-MONO_BACKGROUND = SOFT_GRAY[0]
 
 # RGBバー（レールとなる円より上にある）
 BAR_BOX_TOP = 6 * GRID_UNIT
@@ -134,7 +133,7 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
 def make_canvas():
     """キャンバス生成"""
     return np.full((CANVAS_HEIGHT, CANVAS_WIDTH, CHANNELS),
-                   MONO_BACKGROUND, dtype=np.uint8)
+                   color_to_byte(SOFT_GRAY)[0], dtype=np.uint8)
 
 
 def update_scene1(vertical_parcent, outer_circle):
@@ -275,7 +274,7 @@ def draw_grid(_canvas):
     # for i in range(0, int(CANVAS_HEIGHT/(GRID_UNIT/2))+1):
     #    y_num = GRID_UNIT*i
     #    cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
-    #             PALE_GRAY, thickness=1)
+    #             color_to_byte(PALE_GRAY), thickness=1)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):
@@ -286,14 +285,14 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 (bar_box.left, int(BAR_BOX_TOP-3.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
-                DARK_GRAYISH_GRAY,
+                color_to_byte(DARK_GRAYISH_GRAY),
                 line_type)
     cv2.putText(canvas,
                 f"tone diameter",
                 (bar_box.left+GRID_UNIT, int(BAR_BOX_TOP-2.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
-                DARK_GRAYISH_GRAY,
+                color_to_byte(DARK_GRAYISH_GRAY),
                 line_type)
 
 
@@ -315,19 +314,22 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     cv2.line(canvas,
              inscribed_triangle.rbg_points[0],
              (bar_box.red_right, bar_box.red_top),
-             RED, thickness=2)
+             color_to_byte(RED),
+             thickness=2)
 
     # 水平線G
     cv2.line(canvas,
              inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
              (bar_box.green_right, bar_box.green_top),
-             GREEN, thickness=2)
+             color_to_byte(GREEN),
+             thickness=2)
 
     # 水平線B
     cv2.line(canvas,
              inscribed_triangle.rbg_points[1],
              (bar_box.blue_right, bar_box.blue_top),
-             BLUE, thickness=2)
+             color_to_byte(BLUE),
+             thickness=2)
 
     outer_circle.draw_me(canvas)  # 外環状
 
@@ -338,7 +340,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     bar_box.draw_rank2_box(canvas)
 
     # 色成分数
-    # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
+    # 1色成分
     n3bars_width = bar_box.create_3bars_width()
     color = convert_3bars_to_3bytes(n3bars_width, bar_box.width)
     bar_box.draw_rgb_number(canvas, color)
@@ -353,7 +355,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     #            (10, 10),  # x,y
     #            cv2.FONT_HERSHEY_SIMPLEX,
     #            FONT_SCALE,
-    #            BLACK,
+    #            color_to_byte(BLACK),
     #            lineType=2)
     # f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
 

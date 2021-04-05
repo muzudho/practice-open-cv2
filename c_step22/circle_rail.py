@@ -5,6 +5,7 @@ import math
 
 import cv2
 from colors import WHITE, PALE_GRAY, RED, GREEN, BLUE
+from color_calc import color_to_byte
 from rectangle import Rectangle
 
 
@@ -147,32 +148,46 @@ class CircleRail():
     def draw_red_p(self, canvas):
         """円周上の点Rを描きます"""
         cv2.circle(canvas, self.red_p,
-                   self.point_range, RED, thickness=-1)
+                   self.point_range,
+                   color_to_byte(RED),
+                   thickness=-1)
 
     def draw_green_p(self, canvas):
         """円周上の点Gを描きます"""
         cv2.circle(canvas, self.green_p,
-                   self.point_range, GREEN, thickness=-1)
+                   self.point_range,
+                   color_to_byte(GREEN),
+                   thickness=-1)
 
     def draw_blue_p(self, canvas):
         """円周上の点Bを描きます"""
         cv2.circle(canvas, self.blue_p,
-                   self.point_range, BLUE, thickness=-1)
+                   self.point_range,
+                   color_to_byte(BLUE),
+                   thickness=-1)
 
     def draw_circle(self, canvas):
         """描きます"""
         # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
         cv2.circle(canvas, self.center,
-                   self.range1, WHITE, thickness=2)
+                   self.range1,
+                   color_to_byte(WHITE),
+                   thickness=2)
 
     def draw_triangle(self, canvas):
         """円に内接する線。正三角形"""
         cv2.line(canvas, self.red_p,
-                 self.green_p, WHITE, thickness=2)
+                 self.green_p,
+                 color_to_byte(WHITE),
+                 thickness=2)
         cv2.line(canvas, self.green_p,
-                 self.blue_p, WHITE, thickness=2)
+                 self.blue_p,
+                 color_to_byte(WHITE),
+                 thickness=2)
         cv2.line(canvas, self.blue_p,
-                 self.red_p, WHITE, thickness=2)
+                 self.red_p,
+                 color_to_byte(WHITE),
+                 thickness=2)
 
     def draw_border(self, canvas):
         """背景の左限、右限の線"""
@@ -187,7 +202,8 @@ class CircleRail():
         cv2.rectangle(canvas,
                       (left, top),
                       (right, bottom),
-                      PALE_GRAY, thickness=2)
+                      color_to_byte(PALE_GRAY),
+                      thickness=2)
 
         # 左限の線
         cv2.line(canvas,
@@ -195,11 +211,13 @@ class CircleRail():
                   self.__drawing_top),
                  (int(self.center[0] - self.range1),
                   self.__drawing_bottom),
-                 PALE_GRAY, thickness=2)
+                 color_to_byte(PALE_GRAY),
+                 thickness=2)
         # 右限の線
         cv2.line(canvas,
                  (int(self.center[0] + self.range1),
                   self.__drawing_top),
                  (int(self.center[0] + self.range1),
                   self.__drawing_bottom),
-                 PALE_GRAY, thickness=2)
+                 color_to_byte(PALE_GRAY),
+                 thickness=2)

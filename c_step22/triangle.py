@@ -28,7 +28,7 @@ def calc_triangle(upper_x, lower_x, theta, center):
     # cv2.line(canvas,
     #         line_d[0],
     #         line_d[1],
-    #         PALE_GRAY,
+    #         color_to_byte(PALE_GRAY),
     #         thickness=2)
 
     # 線 u,l の交点をeとする

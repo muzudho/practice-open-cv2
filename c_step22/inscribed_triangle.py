@@ -4,6 +4,7 @@
 import cv2
 from triangle import calc_triangle
 from colors import RED, GREEN, BLUE, BLACK
+from color_calc import color_to_byte
 from conf import GRID_UNIT
 
 
@@ -144,21 +145,27 @@ class InscribedTriangle():
         cv2.line(canvas,
                  self.rbg_points[0],
                  self.rbg_points[1],
-                 BLACK,
+                 color_to_byte(BLACK),
                  thickness=2)
         cv2.line(canvas,
                  self.rbg_points[1],
                  self.rbg_points[2],
-                 BLACK,
+                 color_to_byte(BLACK),
                  thickness=2)
         cv2.line(canvas,
                  self.rbg_points[2],
                  self.rbg_points[0],
-                 BLACK,
+                 color_to_byte(BLACK),
                  thickness=2)
         cv2.circle(canvas, self.rbg_points[0],
-                   int(GRID_UNIT/4), RED, thickness=-1)
+                   int(GRID_UNIT/4),
+                   color_to_byte(RED),
+                   thickness=-1)
         cv2.circle(canvas, self.rbg_points[1],
-                   int(GRID_UNIT/4), BLUE, thickness=-1)
+                   int(GRID_UNIT/4),
+                   color_to_byte(BLUE),
+                   thickness=-1)
         cv2.circle(canvas, self.rbg_points[2],
-                   int(GRID_UNIT/4), GREEN, thickness=-1)
+                   int(GRID_UNIT/4),
+                   color_to_byte(GREEN),
+                   thickness=-1)

@@ -37,16 +37,14 @@ def inverse_func(color):
     diameter = upper - lower
     radius = diameter / 2
     if red == upper and blue == lower:
-        # パターン１
+        # パターン１ (0°～30°)
         if green-lower < diameter/2:
-            zoomed_height = green - lower
-            height = zoomed_height / diameter  # 0.0～1.0 に変換
-            theta = math.degrees(math.asin(height))
+            height = green - lower
+            theta = math.degrees(math.asin(height/diameter))
             return theta, upper, lower, "B1"
-        # パターン２
-        increment = radius - (upper - green)
-        rad = increment/diameter
-        theta = math.degrees(math.asin(rad))
+        # パターン２ (30°～60°)
+        height = (green - lower) - radius
+        theta = math.degrees(math.asin(height/diameter))
         return theta, upper, lower, "B2"
     if green == upper and blue == lower:
         # パターン３

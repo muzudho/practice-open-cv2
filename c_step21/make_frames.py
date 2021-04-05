@@ -23,12 +23,14 @@ CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
 MONO_BACKGROUND = SOFT_GRAY[0]
 
-# RGBバー１段目（レールとなる円より上にある）
-BAR_BOX_TOP = 9 * GRID_UNIT
+# RGBバー（レールとなる円より上にある）
+BAR_BOX_TOP = 6 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(22 * GRID_UNIT)
+BAR_BOX_LEFT = int(18 * GRID_UNIT)
 # 円の中心と、箱の左との距離
 CIRCLE_DISTANCE = int(14 * GRID_UNIT)
+
+# 時計の針
 
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
@@ -167,8 +169,8 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail.point_range = 4
 
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
-    outer_circle.area_size = (int(7*GRID_UNIT),
-                              int(7*GRID_UNIT))
+    outer_circle.area_size = (int(bar_box.width*9/10),
+                              int(bar_box.width*9/10))
     outer_circle.phases = PHASE_COUNTS
 
     inscribed_triangle = InscribedTriangle()

@@ -64,37 +64,37 @@ def inverse_func(color):
             return theta, upper, lower, "B5"
         # パターン６
         height = (blue - lower) - radius
-        theta = 120 + math.degrees(math.asin(height/diameter)) + 30
+        theta = math.degrees(math.asin(height/diameter)) + 150
         return theta, upper, lower, "B6"
     if red == lower and blue == upper:
         # パターン７
         if diameter/2 < green-lower:
-            height = green - lower
-            theta = 245-math.degrees(math.asin(height/diameter))
+            height = (green - lower) - radius
+            theta = math.degrees(math.asin(height/diameter)) + 150
             return theta, upper, lower, "B7"
         # パターン８
         height = green - lower
-        theta = 240-math.degrees(math.asin(height/diameter))
+        theta = math.degrees(math.asin(height/diameter)) + 180
         return theta, upper, lower, "B8"
     if green == lower and blue == upper:
         # パターン９
         if red-lower < diameter/2:
             height = red - lower
-            theta = 240+math.degrees(math.asin(height/diameter))
+            theta = math.degrees(math.asin(height/diameter)) + 240
             return theta, upper, lower, "B9"
         # パターン１０
-        height = red - lower
-        theta = 240+math.degrees(math.asin(height/diameter))
+        height = (red - lower) - radius
+        theta = math.degrees(math.asin(height/diameter)) + 270
         return theta, upper, lower, "B10"
     if red == upper and green == lower:
         # パターン１１
         if diameter/2 < green-lower:
             height = blue - lower
-            theta = 360-math.degrees(math.asin(height/diameter))
+            theta = math.degrees(math.asin(height/diameter)) + 0
             return theta, upper, lower, "B11"
         # パターン１２
-        height = blue - lower
-        theta = 360-math.degrees(math.asin(height/diameter))
+        height = (blue - lower) - radius
+        theta = math.degrees(math.asin(height/diameter)) + 30
         return theta, upper, lower, "B12"
 
     raise Exception(

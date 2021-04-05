@@ -1,19 +1,20 @@
 """png画像を複数枚出力します
 """
 
-import math
 import cv2
 import numpy as np
-from color_hul_model import to_color_rate
-from colors import PALE_GRAY,  \
+from color_hul_model import to_color_rate, inverse_func
+from colors import \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
-from color_calc import convert_3heights_to_3bytes
+from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
-from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
+from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, RGB_BAR_TICKS
 from inscribed_triangle import InscribedTriangle
+from clock_hand import ClockHand
+from rectangle import Rectangle
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -23,12 +24,12 @@ CHANNELS = 3
 # モノクロ背景 0黒→255白 178=SOFT_GRAY
 MONO_BACKGROUND = SOFT_GRAY[0]
 
-# RGBバー１段目（レールとなる円より上にある）
-BAR_TOP1 = 9 * GRID_UNIT
+# RGBバー（レールとなる円より上にある）
+BAR_BOX_TOP = 6 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(22 * GRID_UNIT)
+BAR_BOX_LEFT = int(18 * GRID_UNIT)
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = int(11.5 * GRID_UNIT)
+CIRCLE_DISTANCE = int(14 * GRID_UNIT)
 
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
@@ -44,10 +45,10 @@ VERTICAL_PARCENT = [
     # 鮮やかさ4番
     # [0.0, 0.3, 0.7],  # Pale
     # [0.2, 0.3, 0.5],  # Light grayish
-    [0.4, 0.3, 0.3],  # Grayish
+    # [0.4, 0.3, 0.3],  # Grayish
     # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
-    # [0.0, 1.0, 0.0],  # Vivid
+    [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
     # 'Bright',
@@ -59,9 +60,9 @@ TONE_NAME = [
     # 'Dark',
     # 'Pale',
     # 'Light grayish',
-    'Grayish',
+    # 'Grayish',
     # 'Dark grayish',
-    # 'Vivid',  # Cosine curve
+    'Vivid',  # Cosine curve
 ]
 
 
@@ -81,7 +82,7 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, circle_rail, _outer_circle, _inscribed_triangle = update_scene1(
+            bar_box, circle_rail, _outer_circle, _inscribed_triangle, _clock_hand = update_scene1(
                 vertical_parcent, outer_circle)
             draw_grid(canvas)
             circle_rail.draw_circle(canvas)  # 円レール
@@ -110,15 +111,16 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
 
     for phase in range(0, PHASE_COUNTS):
         canvas = make_canvas()
-        bar_box, circle_rail, outer_circle, inscribed_triangle = update_scene1(
+        bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
         update_scene1_with_rotate(vertical_parcent,
-                                  phase, bar_box, circle_rail, outer_circle, inscribed_triangle)
+                                  phase, bar_box, circle_rail, outer_circle,
+                                  inscribed_triangle, clock_hand)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             outer_circle, inscribed_triangle)
+                             outer_circle, inscribed_triangle, clock_hand)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -142,43 +144,62 @@ def update_scene1(vertical_parcent, outer_circle):
     # RGBバー
     bar_box = BarBox()
     bar_box.rates = vertical_parcent
-    height1 = int(bar_box.rates[0] * 10 * GRID_UNIT)
-    height2 = int(bar_box.rates[1] * 10 * GRID_UNIT)
-    height3 = int(bar_box.rates[2] * 10 * GRID_UNIT)
-    bar_box.top = BAR_TOP1
-    bar_box.upper_y = bar_box.top + height1
-    bar_box.lower_y = bar_box.upper_y + height2
-    bar_box.bottom = bar_box.lower_y + height3
-    bar_box.label_gap = int(0.25*GRID_UNIT)
+    width1 = int(bar_box.rates[0] * 20 * GRID_UNIT)
+    width2 = int(bar_box.rates[1] * 20 * GRID_UNIT)
+    width3 = int(bar_box.rates[2] * 20 * GRID_UNIT)
     bar_box.left = BAR_BOX_LEFT
-    bar_box.right = bar_box.left + 90
+    bar_box.lower_x = bar_box.left + width3
+    bar_box.upper_x = bar_box.lower_x + width2
+    bar_box.right = bar_box.upper_x + width1
+    bar_box.top = BAR_BOX_TOP
+    bar_box.bottom = bar_box.top + 90
+    bar_box.label_gap = int(-0.75*GRID_UNIT)
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
 
     # レールとなる円 circle rail
     circle_rail = CircleRail()
-    circle_rail.top = bar_box.upper_y
-    circle_rail.range1 = int(height2 / 2)
-    circle_rail.border_left = GRID_UNIT
-    circle_rail.border_right = bar_box.left - GRID_UNIT
+    circle_rail.drawing_top = bar_box.bottom + GRID_UNIT
+    circle_rail.drawing_bottom = CANVAS_HEIGHT - GRID_UNIT
+    circle_rail.range1 = int(width2 / 2)
 
-    circle_rail.center = (bar_box.left - CIRCLE_DISTANCE,
-                          circle_rail.top+circle_rail.range1)  # x, y
+    circle_rail.center = (int((bar_box.lower_x+bar_box.upper_x)/2),
+                          bar_box.bottom+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
+    circle_rail.border_rect = Rectangle(
+        bar_box.lower_x,
+        circle_rail.center[1] - circle_rail.range1,
+        bar_box.upper_x,
+        circle_rail.center[1] + circle_rail.range1)
     circle_rail.point_range = 4
 
+    # 外環状
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
-    outer_circle.area_size = (int(7*GRID_UNIT),
-                              int(7*GRID_UNIT))
+    outer_circle.area_size = (int(bar_box.width*9/10),
+                              int(bar_box.width*9/10))
     outer_circle.phases = PHASE_COUNTS
+    outer_circle.tickness = int(1.5*GRID_UNIT)
 
     inscribed_triangle = InscribedTriangle()
 
-    return bar_box, circle_rail, outer_circle, inscribed_triangle
+    # 時計の針
+    clock_hand = ClockHand()
+    clock_hand.center = (circle_rail.center[0], circle_rail.center[1])
+    clock_hand.unit_arc = outer_circle.unit_arc
+    clock_hand.tickness = 2
+    clock_hand.rng1 = circle_rail.range1  # 1st range
+    rng2_expected = bar_box.width*9/10
+    clock_hand.rng2 = int(rng2_expected - outer_circle.tickness /
+                          2 - clock_hand.tickness)  # 2nd range
+    clock_hand.rng3 = int(rng2_expected + outer_circle.tickness /
+                          2 + clock_hand.tickness)  # 3rd range
+
+    return bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand
 
 
 def update_scene1_with_rotate(
-        vertical_parcent, phase, bar_box, circle_rail, outer_circle, inscribed_triangle):
+        vertical_parcent, phase, bar_box, circle_rail, outer_circle,
+        inscribed_triangle, clock_hand):
     """回転が伴うモデルを更新"""
     theta = 360/PHASE_COUNTS*phase
 
@@ -187,42 +208,65 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = theta
 
-#    print(
-#        f"vertical_parcent=({vertical_parcent[0]}, {vertical_parcent[1]}, \
-# {vertical_parcent[2]}) theta={theta}")
     color_rate = to_color_rate(vertical_parcent, theta)
-#    print(
-#        f"color_rate=({color_rate[0]}, {color_rate[1]}, {color_rate[2]})")
 
-    # バーの高さに変換
-    red_bar_height = int(color_rate[0] * bar_box.height)
-    green_bar_height = int(color_rate[1] * bar_box.height)
-    blue_bar_height = int(color_rate[2] * bar_box.height)
-#    print(
-#        f"red_bar_height={red_bar_height} green_bar_height={green_bar_height} \
-# blue_bar_height={blue_bar_height}")
+    # バーの横幅に変換
+    red_bar_width = int(color_rate[0] * bar_box.width)
+    green_bar_width = int(color_rate[1] * bar_box.width)
+    blue_bar_width = int(color_rate[2] * bar_box.width)
+
+    # 逆関数のテスト
+    expected_upper = int(
+        (RGB_BAR_TICKS-1) * (bar_box.upper_x - bar_box.left) / bar_box.width)
+    expected_lower = int(
+        (RGB_BAR_TICKS-1) * (bar_box.lower_x - bar_box.left) / bar_box.width)
+    expected_theta = theta
+    expected_color = (int((RGB_BAR_TICKS-1)*color_rate[0]),
+                      int((RGB_BAR_TICKS-1)*color_rate[1]),
+                      int((RGB_BAR_TICKS-1)*color_rate[2]))
+    actual_theta, actual_upper, actual_lower, pattern = inverse_func(
+        expected_color)
+    # 誤差 +-1 まで許容
+    if actual_upper < expected_upper - 1.0 or expected_upper + 1.0 < actual_upper:
+        diff = actual_upper - expected_upper
+        print(
+            f"ERROR           | expected_upper={expected_upper:3} \
+actual_upper={actual_upper:3} diff={diff} theta={theta} pattern={pattern}")
+    if actual_lower < expected_lower - 1.0 or expected_lower + 1.0 < actual_lower:
+        diff = actual_lower - expected_lower
+        print(
+            f"ERROR           | expected_lower={expected_lower:3} \
+actual_lower={actual_lower:3} diff={diff} theta={theta} pattern={pattern}")
+    if actual_theta < expected_theta - 1.0 or expected_theta + 1.0 < actual_theta:
+        diff = actual_theta - expected_theta
+        print(
+            f"ERROR           | expected_theta={expected_theta}° \
+actual_theta={actual_theta:9.4f}° diff={diff:9.4f} pattern={pattern}")
 
     # バーR
-    bar_box.red_top = bar_box.bottom - red_bar_height
+    bar_box.red_right = bar_box.left + red_bar_width
     # バーG
-    bar_box.green_top = bar_box.bottom - green_bar_height
+    bar_box.green_right = bar_box.left + green_bar_width
     # バーB
-    bar_box.blue_top = bar_box.bottom - blue_bar_height
+    bar_box.blue_right = bar_box.left + blue_bar_width
 
     # 外環状
     theta = outer_circle.phase * outer_circle.unit_arc
-    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    outer_circle.color_list.append(convert_3heights_to_3bytes(
-        rank23d_3bars_height, bar_box.height))
+    n3bars_width = bar_box.create_3bars_width()
+    outer_circle.color_list.append(convert_3pixels_to_3bytes(
+        n3bars_width, bar_box.width))
     #
 
     inscribed_triangle.update(
-        circle_rail.top, bar_box.lower_y, circle_rail.center, theta, rank23d_3bars_height)
+        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, n3bars_width)
 
     gravity = inscribed_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],
                gravity[1] - circle_rail.center[1])
     inscribed_triangle.correct_horizon(diff_xy)
+
+    # 時計の針
+    clock_hand.theta = theta
 
 
 def draw_grid(_canvas):
@@ -239,21 +283,21 @@ def draw_tone_name(canvas, bar_box, tone_name):
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, int(BAR_TOP1-3.5*GRID_UNIT)),  # x,y
+                (bar_box.left, int(BAR_BOX_TOP-3.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 DARK_GRAYISH_BLACK,
                 line_type)
     cv2.putText(canvas,
                 f"tone diameter",
-                (bar_box.left+GRID_UNIT, int(BAR_TOP1-2.5*GRID_UNIT)),  # x,y
+                (bar_box.left+GRID_UNIT, int(BAR_BOX_TOP-2.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 DARK_GRAYISH_BLACK,
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
+def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_circle(canvas)  # 円レール
@@ -262,80 +306,42 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
 
     inscribed_triangle.draw(canvas)
 
-    # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
-    rank23d_3bars_height = bar_box.create_rank23d_3bars_height()
-    rank23d_color = convert_3heights_to_3bytes(
-        rank23d_3bars_height, bar_box.height)
     bar_box.draw_3bars(canvas)  # RGBバー
 
-    bar_box.draw_y_axis_label(canvas)  # バー率テキスト
+    bar_box.draw_x_axis_label(canvas)  # X軸のラベル
 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
              inscribed_triangle.rbg_points[0],
-             (bar_box.red_left, bar_box.red_top),
+             (bar_box.red_right, bar_box.red_top),
              RED, thickness=2)
 
     # 水平線G
     cv2.line(canvas,
              inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
-             (bar_box.green_left, bar_box.green_top),
+             (bar_box.green_right, bar_box.green_top),
              GREEN, thickness=2)
 
     # 水平線B
     cv2.line(canvas,
              inscribed_triangle.rbg_points[1],
-             (bar_box.blue_left, bar_box.blue_top),
+             (bar_box.blue_right, bar_box.blue_top),
              BLUE, thickness=2)
 
     outer_circle.draw_me(canvas)  # 外環状
 
     # 時計の針
-    tickness = 2
-    inner_range = circle_rail.range1
-    second_range = int(6.5*GRID_UNIT)-tickness
-    third_range = int(7.5*GRID_UNIT)+tickness
-    inner_p = (
-        int(inner_range * math.cos(math.radians(circle_rail.theta-90)) +
-            circle_rail.center[0]),
-        int(inner_range * math.sin(math.radians(circle_rail.theta-90))+circle_rail.center[1]))
-    outer_p = (
-        int(second_range *
-            math.cos(math.radians(circle_rail.theta-90))+circle_rail.center[0]),
-        int(second_range * math.sin(math.radians(circle_rail.theta-90))
-            + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
-    # 時計の針の先
-    # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-    start_angle = int(circle_rail.theta-outer_circle.unit_arc/2)
-    end_angle = int(circle_rail.theta+outer_circle.unit_arc/2)
-    if start_angle == end_angle:
-        end_angle += 1  # 差が 0 だと変なとこ描画するんで
-    cv2.ellipse(canvas,
-                circle_rail.center,
-                (second_range, second_range),
-                -90,
-                start_angle,
-                end_angle,
-                PALE_GRAY,
-                thickness=tickness)
-    cv2.ellipse(canvas,
-                circle_rail.center,
-                (third_range, third_range),
-                -90,
-                start_angle,
-                end_angle,
-                PALE_GRAY,
-                thickness=tickness)
-    #
+    clock_hand.draw_clock_hand(canvas)
 
     # バー箱の２段目の黒枠
     bar_box.draw_rank2_box(canvas)
 
     # 色成分数
-    bar_box.draw_rgb_number(canvas,
-                            rank23d_color)
+    # 1色成分 (高さから 255 へ丸めるとき、誤差が出る)
+    n3bars_width = bar_box.create_3bars_width()
+    color = convert_3bars_to_3bytes(n3bars_width, bar_box.width)
+    bar_box.draw_rgb_number(canvas, color)
 
     # gravity = inscribed_triangle.triangular_center_of_gravity()
 

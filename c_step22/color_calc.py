@@ -1,7 +1,7 @@
 """(WIP) RGB値を計算します
 """
 
-from conf import RGB_BAR_TICKS
+from conf import BAR_TICKS
 
 
 def convert_3bars_to_3bytes(n3bars_pixel, total_pixels):
@@ -10,9 +10,9 @@ def convert_3bars_to_3bytes(n3bars_pixel, total_pixels):
     g_x = n3bars_pixel[1]/total_pixels
     b_x = n3bars_pixel[2]/total_pixels
 
-    rrx = int((RGB_BAR_TICKS-1)*r_x)
-    ggx = int((RGB_BAR_TICKS-1)*g_x)
-    bbx = int((RGB_BAR_TICKS-1)*b_x)
+    rrx = int((BAR_TICKS-1)*r_x)
+    ggx = int((BAR_TICKS-1)*g_x)
+    bbx = int((BAR_TICKS-1)*b_x)
 
     return (rrx, ggx, bbx)
 
@@ -34,7 +34,7 @@ def convert_pixel_to_byte(element_pixels, total_pixels):
 
 def convert_byte_to_pixel(color, pixels):
     """色を、バーの縦幅ピクセルに変えます"""
-    return int(color/(RGB_BAR_TICKS-1)*pixels)
+    return int(color/(BAR_TICKS-1)*pixels)
 
 
 def convert_3rates_to_3bytes(n3rates):
@@ -47,7 +47,7 @@ def convert_3rates_to_3bytes(n3rates):
 
 def convert_rate_to_byte(rate):
     """バーの縦幅ピクセルを、色に変えます"""
-    return int(rate*(RGB_BAR_TICKS-1))
+    return int(rate*(BAR_TICKS-1))
 
 
 def append_rank3_to_color_rate(step1_color_rate, bar_rate):

@@ -4,10 +4,10 @@
 import cv2
 from colors import  \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
-    DARK_GRAYISH_BLACK, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
+    DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_pixel_to_byte
-from conf import GRID_UNIT, RGB_BAR_TICKS
+from conf import GRID_UNIT, BAR_TICKS
 from rectangle import Rectangle
 
 
@@ -236,7 +236,7 @@ class BarBox():
              self.__top - thickness_minus1),
             (self.__upper_x + thickness_minus1,
              self.__bottom + thickness_minus1),
-            DARK_GRAYISH_BLACK,
+            DARK_GRAYISH_GRAY,
             thickness=thickness_minus1+1)
 
     def draw_3figures(self, canvas, num, left, top, color):
@@ -340,7 +340,7 @@ class BarBox():
         top = self.top+self.label_gap
         # バーの最大値(0から始まる数)
         self.draw_3figures(
-            canvas, RGB_BAR_TICKS-1,
+            canvas, BAR_TICKS-1,
             int(self.right+GRID_UNIT/2),
             top,
             BRIGHT_GRAY)
@@ -355,13 +355,13 @@ class BarBox():
             canvas, rank23_byte,
             int(self.upper_x+GRID_UNIT/2),
             top,
-            DARK_GRAYISH_BLACK)
+            DARK_GRAYISH_GRAY)
         # L
         self.draw_3figures(
             canvas, rank3_byte,
             int(self.lower_x-2.5*GRID_UNIT),
             top,
-            DARK_GRAYISH_BLACK)
+            DARK_GRAYISH_GRAY)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
@@ -382,7 +382,7 @@ class BarBox():
                     (left, top),  # x,y
                     self.font,
                     self.font_scale,
-                    DARK_GRAYISH_BLACK,
+                    DARK_GRAYISH_GRAY,
                     self.line_type)
         # 左列のバー率
         left = int(self.__left - 3*GRID_UNIT)

@@ -6,12 +6,12 @@ import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
     SOFT_GRAY, RED, GREEN, BLUE, \
-    DARK_GRAYISH_BLACK
+    DARK_GRAYISH_GRAY
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
-from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, RGB_BAR_TICKS
+from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, BAR_TICKS
 from inscribed_triangle import InscribedTriangle
 from clock_hand import ClockHand
 from rectangle import Rectangle
@@ -217,13 +217,13 @@ def update_scene1_with_rotate(
 
     # 逆関数のテスト
     expected_upper = int(
-        (RGB_BAR_TICKS-1) * (bar_box.upper_x - bar_box.left) / bar_box.width)
+        (BAR_TICKS-1) * (bar_box.upper_x - bar_box.left) / bar_box.width)
     expected_lower = int(
-        (RGB_BAR_TICKS-1) * (bar_box.lower_x - bar_box.left) / bar_box.width)
+        (BAR_TICKS-1) * (bar_box.lower_x - bar_box.left) / bar_box.width)
     expected_theta = theta
-    expected_color = (int((RGB_BAR_TICKS-1)*color_rate[0]),
-                      int((RGB_BAR_TICKS-1)*color_rate[1]),
-                      int((RGB_BAR_TICKS-1)*color_rate[2]))
+    expected_color = (int((BAR_TICKS-1)*color_rate[0]),
+                      int((BAR_TICKS-1)*color_rate[1]),
+                      int((BAR_TICKS-1)*color_rate[2]))
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
     # 誤差 +-1 まで許容
@@ -286,14 +286,14 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 (bar_box.left, int(BAR_BOX_TOP-3.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
-                DARK_GRAYISH_BLACK,
+                DARK_GRAYISH_GRAY,
                 line_type)
     cv2.putText(canvas,
                 f"tone diameter",
                 (bar_box.left+GRID_UNIT, int(BAR_BOX_TOP-2.5*GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
-                DARK_GRAYISH_BLACK,
+                DARK_GRAYISH_GRAY,
                 line_type)
 
 

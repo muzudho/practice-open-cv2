@@ -94,7 +94,7 @@ def inverse_func(color):
             return theta, upper, lower, "B11"
         # パターン１２
         height = (blue - lower) - radius
-        theta = math.degrees(math.asin(height/diameter)) + 30
+        theta = 330 - math.degrees(math.asin(height/diameter))
         return theta, upper, lower, "B12"
 
     raise Exception(

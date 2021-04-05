@@ -1,11 +1,10 @@
 """png画像を複数枚出力します
 """
 
-import math
 import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
-from colors import PALE_GRAY,  \
+from colors import \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_BLACK
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
@@ -114,7 +113,8 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
         bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
         update_scene1_with_rotate(vertical_parcent,
-                                  phase, bar_box, circle_rail, outer_circle, inscribed_triangle)
+                                  phase, bar_box, circle_rail, outer_circle,
+                                  inscribed_triangle, clock_hand)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
@@ -176,16 +176,20 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # 時計の針
     clock_hand = ClockHand()
+    clock_hand.center = (circle_rail.center[0], circle_rail.center[1])
+    clock_hand.unit_arc = outer_circle.unit_arc
     clock_hand.tickness = 2
     clock_hand.rng1 = circle_rail.range1  # 1st range
-    clock_hand.rng2 = int(6.5*GRID_UNIT)-clock_hand.tickness  # 2nd range
-    clock_hand.rng3 = int(7.5*GRID_UNIT)+clock_hand.tickness  # 3rd range
+    clock_hand.rng2 = int(bar_box.width*9/10-GRID_UNIT) - \
+        clock_hand.tickness  # 2nd range
+    clock_hand.rng3 = int(bar_box.width*9/10)+clock_hand.tickness  # 3rd range
 
     return bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand
 
 
 def update_scene1_with_rotate(
-        vertical_parcent, phase, bar_box, circle_rail, outer_circle, inscribed_triangle):
+        vertical_parcent, phase, bar_box, circle_rail, outer_circle,
+        inscribed_triangle, clock_hand):
     """回転が伴うモデルを更新"""
     theta = 360/PHASE_COUNTS*phase
 
@@ -216,15 +220,18 @@ def update_scene1_with_rotate(
     if actual_upper < expected_upper - 1.0 or expected_upper + 1.0 < actual_upper:
         diff = actual_upper - expected_upper
         print(
-            f"ERROR           | expected_upper={expected_upper:3} actual_upper={actual_upper:3} diff={diff} theta={theta} pattern={pattern}")
+            f"ERROR           | expected_upper={expected_upper:3} \
+actual_upper={actual_upper:3} diff={diff} theta={theta} pattern={pattern}")
     if actual_lower < expected_lower - 1.0 or expected_lower + 1.0 < actual_lower:
         diff = actual_lower - expected_lower
         print(
-            f"ERROR           | expected_lower={expected_lower:3} actual_lower={actual_lower:3} diff={diff} theta={theta} pattern={pattern}")
+            f"ERROR           | expected_lower={expected_lower:3} \
+actual_lower={actual_lower:3} diff={diff} theta={theta} pattern={pattern}")
     if actual_theta < expected_theta - 1.0 or expected_theta + 1.0 < actual_theta:
         diff = actual_theta - expected_theta
         print(
-            f"ERROR           | expected_theta={expected_theta}° actual_theta={actual_theta:9.4f}° diff={diff:9.4f} pattern={pattern}")
+            f"ERROR           | expected_theta={expected_theta}° \
+actual_theta={actual_theta:9.4f}° diff={diff:9.4f} pattern={pattern}")
 
     # バーR
     bar_box.red_right = bar_box.left + red_bar_width
@@ -247,6 +254,9 @@ def update_scene1_with_rotate(
     diff_xy = (gravity[0] - circle_rail.center[0],
                gravity[1] - circle_rail.center[1])
     inscribed_triangle.correct_horizon(diff_xy)
+
+    # 時計の針
+    clock_hand.theta = theta
 
 
 def draw_grid(_canvas):
@@ -312,39 +322,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     outer_circle.draw_me(canvas)  # 外環状
 
     # 時計の針
-    inner_p = (
-        int(clock_hand.rng1 * math.cos(math.radians(circle_rail.theta)) +
-            circle_rail.center[0]),
-        int(-clock_hand.rng1 * math.sin(math.radians(circle_rail.theta))+circle_rail.center[1]))
-    outer_p = (
-        int(clock_hand.rng2 *
-            math.cos(math.radians(circle_rail.theta))+circle_rail.center[0]),
-        int(-clock_hand.rng2 * math.sin(math.radians(circle_rail.theta))
-            + circle_rail.center[1]))
-    cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
-    # 時計の針の先
-    # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-    start_angle = int(circle_rail.theta-outer_circle.unit_arc/2)
-    end_angle = int(circle_rail.theta+outer_circle.unit_arc/2)
-    if start_angle == end_angle:
-        end_angle += 1  # 差が 0 だと変なとこ描画するんで
-    cv2.ellipse(canvas,
-                circle_rail.center,
-                (clock_hand.rng2, clock_hand.rng2),
-                0,
-                360-start_angle,
-                360-end_angle,
-                PALE_GRAY,
-                thickness=clock_hand.tickness)
-    cv2.ellipse(canvas,
-                circle_rail.center,
-                (clock_hand.rng3, clock_hand.rng3),
-                0,
-                360-start_angle,
-                360-end_angle,
-                PALE_GRAY,
-                thickness=clock_hand.tickness)
-    #
+    clock_hand.draw_clock_hand(canvas)
 
     # バー箱の２段目の黒枠
     bar_box.draw_rank2_box(canvas)

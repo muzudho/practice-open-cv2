@@ -14,6 +14,7 @@ from circle_rail import CircleRail
 from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 from inscribed_triangle import InscribedTriangle
+from clock_hand import ClockHand
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -29,8 +30,6 @@ BAR_BOX_TOP = 6 * GRID_UNIT
 BAR_BOX_LEFT = int(18 * GRID_UNIT)
 # 円の中心と、箱の左との距離
 CIRCLE_DISTANCE = int(14 * GRID_UNIT)
-
-# 時計の針
 
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
@@ -83,7 +82,7 @@ def main():
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
-            bar_box, circle_rail, _outer_circle, _inscribed_triangle = update_scene1(
+            bar_box, circle_rail, _outer_circle, _inscribed_triangle, _clock_hand = update_scene1(
                 vertical_parcent, outer_circle)
             draw_grid(canvas)
             circle_rail.draw_circle(canvas)  # 円レール
@@ -112,7 +111,7 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
 
     for phase in range(0, PHASE_COUNTS):
         canvas = make_canvas()
-        bar_box, circle_rail, outer_circle, inscribed_triangle = update_scene1(
+        bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
         update_scene1_with_rotate(vertical_parcent,
                                   phase, bar_box, circle_rail, outer_circle, inscribed_triangle)
@@ -120,7 +119,7 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             outer_circle, inscribed_triangle)
+                             outer_circle, inscribed_triangle, clock_hand)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -175,7 +174,14 @@ def update_scene1(vertical_parcent, outer_circle):
 
     inscribed_triangle = InscribedTriangle()
 
-    return bar_box, circle_rail, outer_circle, inscribed_triangle
+    # 時計の針
+    clock_hand = ClockHand()
+    clock_hand.tickness = 2
+    clock_hand.rng1 = circle_rail.range1  # 1st range
+    clock_hand.rng2 = int(6.5*GRID_UNIT)-clock_hand.tickness  # 2nd range
+    clock_hand.rng3 = int(7.5*GRID_UNIT)+clock_hand.tickness  # 3rd range
+
+    return bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand
 
 
 def update_scene1_with_rotate(
@@ -271,7 +277,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
+def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_circle(canvas)  # 円レール
@@ -306,18 +312,14 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
     outer_circle.draw_me(canvas)  # 外環状
 
     # 時計の針
-    tickness = 2
-    rng1 = circle_rail.range1  # 1st range
-    rng2 = int(6.5*GRID_UNIT)-tickness  # 2nd range
-    rng3 = int(7.5*GRID_UNIT)+tickness  # 3rd range
     inner_p = (
-        int(rng1 * math.cos(math.radians(circle_rail.theta)) +
+        int(clock_hand.rng1 * math.cos(math.radians(circle_rail.theta)) +
             circle_rail.center[0]),
-        int(-rng1 * math.sin(math.radians(circle_rail.theta))+circle_rail.center[1]))
+        int(-clock_hand.rng1 * math.sin(math.radians(circle_rail.theta))+circle_rail.center[1]))
     outer_p = (
-        int(rng2 *
+        int(clock_hand.rng2 *
             math.cos(math.radians(circle_rail.theta))+circle_rail.center[0]),
-        int(-rng2 * math.sin(math.radians(circle_rail.theta))
+        int(-clock_hand.rng2 * math.sin(math.radians(circle_rail.theta))
             + circle_rail.center[1]))
     cv2.line(canvas, inner_p, outer_p, PALE_GRAY, thickness=2)
     # 時計の針の先
@@ -328,20 +330,20 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle):
         end_angle += 1  # 差が 0 だと変なとこ描画するんで
     cv2.ellipse(canvas,
                 circle_rail.center,
-                (rng2, rng2),
+                (clock_hand.rng2, clock_hand.rng2),
                 0,
                 360-start_angle,
                 360-end_angle,
                 PALE_GRAY,
-                thickness=tickness)
+                thickness=clock_hand.tickness)
     cv2.ellipse(canvas,
                 circle_rail.center,
-                (rng3, rng3),
+                (clock_hand.rng3, clock_hand.rng3),
                 0,
                 360-start_angle,
                 360-end_angle,
                 PALE_GRAY,
-                thickness=tickness)
+                thickness=clock_hand.tickness)
     #
 
     # バー箱の２段目の黒枠

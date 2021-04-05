@@ -15,6 +15,7 @@ class OuterCircle():
         self.__circumference = 360  # 半径１の円の一周の長さ
         self.__unit_arc = self.__circumference/self.__phases  # 等分割した１つの弧
         self.__color_list = []
+        self.__tickness = 0
 
     @property
     def origin(self):
@@ -71,6 +72,15 @@ class OuterCircle():
     def color_list(self, val):
         self.__color_list = val
 
+    @property
+    def tickness(self):
+        """線の太さ"""
+        return self.__tickness
+
+    @tickness.setter
+    def tickness(self, val):
+        self.__tickness = val
+
     def draw_me(self, canvas):
         """描きます"""
         # 色相環
@@ -95,4 +105,4 @@ class OuterCircle():
                         360-start_angle,
                         360-end_angle,
                         color,
-                        thickness=int(1.25*GRID_UNIT))
+                        thickness=self.tickness)

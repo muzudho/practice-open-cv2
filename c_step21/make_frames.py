@@ -167,10 +167,12 @@ def update_scene1(vertical_parcent, outer_circle):
                           bar_box.bottom+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
     circle_rail.point_range = 4
 
+    # 外環状
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
     outer_circle.area_size = (int(bar_box.width*9/10),
                               int(bar_box.width*9/10))
     outer_circle.phases = PHASE_COUNTS
+    outer_circle.tickness = int(1.5*GRID_UNIT)
 
     inscribed_triangle = InscribedTriangle()
 
@@ -180,9 +182,11 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.unit_arc = outer_circle.unit_arc
     clock_hand.tickness = 2
     clock_hand.rng1 = circle_rail.range1  # 1st range
-    clock_hand.rng2 = int(bar_box.width*9/10-GRID_UNIT) - \
-        clock_hand.tickness  # 2nd range
-    clock_hand.rng3 = int(bar_box.width*9/10)+clock_hand.tickness  # 3rd range
+    rng2_expected = bar_box.width*9/10
+    clock_hand.rng2 = int(rng2_expected - outer_circle.tickness /
+                          2 - clock_hand.tickness)  # 2nd range
+    clock_hand.rng3 = int(rng2_expected + outer_circle.tickness /
+                          2 + clock_hand.tickness)  # 3rd range
 
     return bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand
 

@@ -14,6 +14,7 @@ from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 from inscribed_triangle import InscribedTriangle
 from clock_hand import ClockHand
+from rectangle import Rectangle
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -159,12 +160,17 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # レールとなる円 circle rail
     circle_rail = CircleRail()
-    circle_rail.border_top = bar_box.bottom + GRID_UNIT
-    circle_rail.border_bottom = CANVAS_HEIGHT - GRID_UNIT
+    circle_rail.drawing_top = bar_box.bottom + GRID_UNIT
+    circle_rail.drawing_bottom = CANVAS_HEIGHT - GRID_UNIT
     circle_rail.range1 = int(width2 / 2)
 
     circle_rail.center = (int((bar_box.lower_x+bar_box.upper_x)/2),
                           bar_box.bottom+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
+    circle_rail.border_rect = Rectangle(
+        bar_box.lower_x,
+        circle_rail.center[1] - circle_rail.range1,
+        bar_box.upper_x,
+        circle_rail.center[1] + circle_rail.range1)
     circle_rail.point_range = 4
 
     # 外環状

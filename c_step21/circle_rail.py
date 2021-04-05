@@ -5,6 +5,7 @@ import math
 
 import cv2
 from colors import WHITE, PALE_GRAY, RED, GREEN, BLUE
+from rectangle import Rectangle
 
 
 class CircleRail():
@@ -12,8 +13,9 @@ class CircleRail():
     """
 
     def __init__(self):
-        self.__border_top = 0
-        self.__border_bottom = 0
+        self.__drawing_top = 0
+        self.__drawing_bottom = 0
+        self.__border_rect = Rectangle()
 
         self.__range1 = 0
         self.__center = (0, 0)
@@ -34,22 +36,31 @@ class CircleRail():
         return 2*self.__range1
 
     @property
-    def border_top(self):
-        """上下の境界線の上端"""
-        return self.__border_top
+    def border_rect(self):
+        """境界線の矩形"""
+        return self.__border_rect
 
-    @border_top.setter
-    def border_top(self, val):
-        self.__border_top = val
+    @border_rect.setter
+    def border_rect(self, val):
+        self.__border_rect = val
 
     @property
-    def border_bottom(self):
-        """上下の境界線の下端"""
-        return self.__border_bottom
+    def drawing_top(self):
+        """上下の境界線の上端"""
+        return self.__drawing_top
 
-    @border_bottom.setter
-    def border_bottom(self, val):
-        self.__border_bottom = val
+    @drawing_top.setter
+    def drawing_top(self, val):
+        self.__drawing_top = val
+
+    @property
+    def drawing_bottom(self):
+        """上下の境界線の下端"""
+        return self.__drawing_bottom
+
+    @drawing_bottom.setter
+    def drawing_bottom(self, val):
+        self.__drawing_bottom = val
 
     @range1.setter
     def range1(self, val):
@@ -165,15 +176,30 @@ class CircleRail():
 
     def draw_border(self, canvas):
         """背景の左限、右限の線"""
+
+        # 矩形
+        diameter = 2*self.range1
+        half_height = diameter * math.tan(math.radians(30))
+        left = int(self.center[0] - self.range1)
+        top = int(self.center[1] - half_height)
+        right = int(self.center[0] + self.range1)
+        bottom = int(self.center[1] + half_height)
+        cv2.rectangle(canvas,
+                      (left, top),
+                      (right, bottom),
+                      PALE_GRAY, thickness=2)
+
+        # 左限の線
         cv2.line(canvas,
                  (int(self.center[0] - self.range1),
-                  self.__border_top),
+                  self.__drawing_top),
                  (int(self.center[0] - self.range1),
-                  self.__border_bottom),
+                  self.__drawing_bottom),
                  PALE_GRAY, thickness=2)
+        # 右限の線
         cv2.line(canvas,
                  (int(self.center[0] + self.range1),
-                  self.__border_top),
+                  self.__drawing_top),
                  (int(self.center[0] + self.range1),
-                  self.__border_bottom),
+                  self.__drawing_bottom),
                  PALE_GRAY, thickness=2)

@@ -225,18 +225,19 @@ def update_scene1_with_rotate(
                       int((BAR_TICKS-1)*color_rate[2]))
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
-    # 誤差 +-1 まで許容
-    if actual_upper < expected_upper - 1.0 or expected_upper + 1.0 < actual_upper:
+    # 誤差 +-2.0 まで許容
+    error = 2.0
+    if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} theta={theta} pattern={pattern}")
-    if actual_lower < expected_lower - 1.0 or expected_lower + 1.0 < actual_lower:
+    if actual_lower < expected_lower - error or expected_lower + error < actual_lower:
         diff = actual_lower - expected_lower
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} theta={theta} pattern={pattern}")
-    if actual_theta < expected_theta - 1.0 or expected_theta + 1.0 < actual_theta:
+    if actual_theta < expected_theta - error or expected_theta + error < actual_theta:
         diff = actual_theta - expected_theta
         print(
             f"ERROR           | expected_theta={expected_theta}° \

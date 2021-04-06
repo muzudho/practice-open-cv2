@@ -54,7 +54,7 @@ def inverse_func(color):
             return theta, upper, lower, "B3"
         # パターン４
         height = red - lower
-        theta = 90 - math.degrees(math.asin(height/diameter)) + 30
+        theta = 120 - math.degrees(math.asin(height/diameter))
         return theta, upper, lower, "B4"
     if red == lower and green == upper:
         # パターン５

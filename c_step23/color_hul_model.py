@@ -74,7 +74,7 @@ def inverse_func(color):
             return theta, upper, lower, "B7"
         # パターン８
         height = green - lower
-        theta = 120 - math.degrees(math.asin(height/diameter)) + 120
+        theta = 30 - math.degrees(math.asin(height/diameter)) + 210
         return theta, upper, lower, "B8"
     if green == lower and blue == upper:
         # パターン９
@@ -84,28 +84,18 @@ def inverse_func(color):
             return theta, upper, lower, "B9"
         # パターン１０
         height = diameter - (red - lower)
-        theta = 300 - math.degrees(math.asin(height/diameter))
+        theta = 30 - math.degrees(math.asin(height/diameter)) + 270
         return theta, upper, lower, "B10"
     if red == upper and green == lower:
         # パターン１１
-        if diameter/2 < green-lower:
-            height = blue - lower
-            theta = math.degrees(math.asin(height/diameter)) + 0
+        if diameter/2 < blue-lower:
+            height = diameter - (blue - lower)
+            theta = math.degrees(math.asin(height/diameter)) + 300
             return theta, upper, lower, "B11"
         # パターン１２
-        #height = (blue - lower) - radius
-        #theta = 330 - math.degrees(math.asin(height/diameter))
-        # return theta, upper, lower, "B12"
-        # height = diameter - (blue - lower)  # まず だいたい自然数 1,2,3... に変換
-        # パターン１２（数が跳ねてしまう）
         height = blue - lower
-        # print(f"height={height}")
-        theta = 360 - math.degrees(math.asin(height/diameter))
+        theta = 30 - math.degrees(math.asin(height/diameter)) + 330
         return theta, upper, lower, "B12"
-        # パターン６
-        # height = diameter - (blue - lower)
-        #theta = 180 - math.degrees(math.asin(height/diameter))
-        # return theta, upper, lower, "B6"
 
     raise Exception(
         f"ERROR           | Logic error. color=({red}, {green}, {blue})")

@@ -49,8 +49,12 @@ def inverse_func(color):
     if green == upper and blue == lower:
         # パターン３
         if diameter/2 < red-lower:
-            height = (red - lower) - radius
-            theta = 90 - math.degrees(math.asin(height/diameter))
+            #height = (red - lower) - radius
+            #theta = 90 - math.degrees(math.asin(height/diameter))
+            # return theta, upper, lower, "B3"
+            # パターン３
+            height = diameter - (red - lower)
+            theta = 180 - (90 - math.degrees(math.asin(height/diameter)) + 30)
             return theta, upper, lower, "B3"
         # パターン４
         height = red - lower

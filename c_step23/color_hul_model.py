@@ -9,6 +9,7 @@ import math
 
 
 def inverse_func(color):
+    """逆関数"""
     red = color[0]
     green = color[1]
     blue = color[2]
@@ -17,6 +18,10 @@ def inverse_func(color):
 
     upper = max(red, green, blue)
     lower = min(red, green, blue)
+    # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
+    bar_length = red + green + blue - upper - lower
+    height = bar_length - lower
+    # print(f"red={red} green={green} blue={blue} bar_length={bar_length}")
 
     # 弧度法
     theta = 0
@@ -38,62 +43,52 @@ def inverse_func(color):
     radius = diameter / 2
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
-        if green-lower < diameter/2:
-            height = green - lower
+        if height < diameter/2:
             theta = math.degrees(math.asin(height/diameter))
             return theta, upper, lower, "B1"
         # パターン２ (30°～60°)
-        height = diameter - (green - lower)
-        theta = 30 - math.degrees(math.asin(height/diameter)) + 30
+        theta = 30 - math.degrees(math.asin((diameter - height)/diameter)) + 30
         return theta, upper, lower, "B2"
     if green == upper and blue == lower:
         # パターン３
-        if diameter/2 < red-lower:
-            height = diameter - (red - lower)
-            theta = math.degrees(math.asin(height/diameter)) + 60
+        if diameter/2 < height:
+            theta = math.degrees(math.asin((diameter - height)/diameter)) + 60
             return theta, upper, lower, "B3"
         # パターン４ (赤バーが下半分で減っていっている)
-        height = red - lower
         theta = 30 - math.degrees(math.asin(height/diameter)) + 90
         return theta, upper, lower, "B4"
     if red == lower and green == upper:
         # パターン５
-        if blue-lower < diameter/2:
-            height = blue - lower
+        if height < diameter/2:
             theta = math.degrees(math.asin(height/diameter)) + 120
             return theta, upper, lower, "B5"
         # パターン６
-        height = diameter - (blue - lower)
-        theta = 30 - math.degrees(math.asin(height/diameter)) + 150
+        theta = 30 - \
+            math.degrees(math.asin((diameter - height)/diameter)) + 150
         return theta, upper, lower, "B6"
     if red == lower and blue == upper:
-        if diameter/2 < green-lower:
+        if diameter/2 < height:
             # パターン７
-            height = diameter - (green - lower)
-            theta = math.degrees(math.asin(height/diameter)) + 180
+            theta = math.degrees(math.asin((diameter - height)/diameter)) + 180
             return theta, upper, lower, "B7"
         # パターン８
-        height = green - lower
         theta = 30 - math.degrees(math.asin(height/diameter)) + 210
         return theta, upper, lower, "B8"
     if green == lower and blue == upper:
         # パターン９
-        if red-lower < diameter/2:
-            height = red - lower
+        if height < diameter/2:
             theta = math.degrees(math.asin(height/diameter)) + 240
             return theta, upper, lower, "B9"
         # パターン１０
-        height = diameter - (red - lower)
-        theta = 30 - math.degrees(math.asin(height/diameter)) + 270
+        theta = 30 - \
+            math.degrees(math.asin((diameter - height)/diameter)) + 270
         return theta, upper, lower, "B10"
     if red == upper and green == lower:
         # パターン１１
-        if diameter/2 < blue-lower:
-            height = diameter - (blue - lower)
-            theta = math.degrees(math.asin(height/diameter)) + 300
+        if diameter/2 < height:
+            theta = math.degrees(math.asin((diameter - height)/diameter)) + 300
             return theta, upper, lower, "B11"
         # パターン１２
-        height = blue - lower
         theta = 30 - math.degrees(math.asin(height/diameter)) + 330
         return theta, upper, lower, "B12"
 

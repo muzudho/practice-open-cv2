@@ -228,7 +228,7 @@ def update_scene1_with_rotate(
     actual_upper *= BAR_TICKS-1
     actual_lower *= BAR_TICKS-1
     # 誤差 +-error まで許容
-    error = 0.5  # < 1.5
+    error = 0.6  # < 0.7
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(

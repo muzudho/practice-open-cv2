@@ -93,12 +93,19 @@ def inverse_func(color):
             theta = math.degrees(math.asin(height/diameter)) + 0
             return theta, upper, lower, "B11"
         # パターン１２
-        height = (blue - lower) - radius
-        theta = 330 - math.degrees(math.asin(height/diameter))
-        return theta, upper, lower, "B12"
-        #height = diameter - blue
-        #theta = math.degrees(math.asin(height/diameter))
+        #height = (blue - lower) - radius
+        #theta = 330 - math.degrees(math.asin(height/diameter))
         # return theta, upper, lower, "B12"
+        # height = diameter - (blue - lower)  # まず だいたい自然数 1,2,3... に変換
+        # パターン１２（数が跳ねてしまう）
+        height = blue - lower
+        # print(f"height={height}")
+        theta = 360 - math.degrees(math.asin(height/diameter))
+        return theta, upper, lower, "B12"
+        # パターン６
+        # height = diameter - (blue - lower)
+        #theta = 180 - math.degrees(math.asin(height/diameter))
+        # return theta, upper, lower, "B6"
 
     raise Exception(
         f"ERROR           | Logic error. color=({red}, {green}, {blue})")

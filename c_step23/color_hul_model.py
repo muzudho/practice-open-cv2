@@ -52,10 +52,25 @@ def inverse_func(color):
             height = diameter - (red - lower)
             theta = math.degrees(math.asin(height/diameter)) + 60
             return theta, upper, lower, "B3"
-        # パターン４
+        # パターン４ (赤バーが下半分で減っていっている)
         height = red - lower
         theta = 120 - math.degrees(math.asin(height/diameter))
         return theta, upper, lower, "B4"
+        # パターン４ (赤バーが下半分で減っていっている)
+        #zoomed_height = red - lower
+        # print(
+        #    f"zoomed_height={zoomed_height} red={red} lower={lower}")
+        #height = zoomed_height / (2 * math.tan(math.radians(30)))
+        # print(
+        #    f"2tan(30°)={2 * math.tan(math.radians(30))} zoomed_height={zoomed_height} --> {height}")
+        #theta = math.degrees(math.asin(height/diameter))
+        # return theta, upper, lower, "B4"
+        # 等差数列や、等比数列ではなく、加速してる？
+        # パターン４ (赤バーが下半分で減っていっている)
+        # x height = radius - (red - lower) + radius
+        # x print(f"height={height:7.3f}")
+        # x theta = math.degrees(math.asin(height/diameter))
+        # x return theta, upper, lower, "B4"
     if red == lower and green == upper:
         # パターン５
         if blue-lower < diameter/2:
@@ -85,7 +100,7 @@ def inverse_func(color):
         # パターン１０
         height = diameter - (red - lower)
         theta = 300 - math.degrees(math.asin(height/diameter))
-        return theta, upper, lower, "B10b"
+        return theta, upper, lower, "B10"
     if red == upper and green == lower:
         # パターン１１
         if diameter/2 < green-lower:

@@ -77,13 +77,13 @@ def inverse_func(color):
             theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
             return math.floor(theta), upper, lower, "B7"
         # パターン８
-        opposite = (math.sqrt(3)/2) * (diameter - width - radius)
-        adjacent = 1
-        hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-        theta = math.degrees(math.atan(opposite / hipotenuse)) + 150
+        #opposite = (math.sqrt(3)/2) * (diameter - width - radius)
+        #adjacent = 1
+        #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+        #theta = math.degrees(math.atan(opposite / hipotenuse)) + 150
         #
         # theta = 30 - math.degrees(math.asin(width/diameter)) + 210
-        #theta = math.degrees(math.acos(width/diameter)) + 150
+        theta = math.degrees(math.acos(width/diameter)) + 150
         return theta, upper, lower, "B8"
     if green == lower and blue == upper:
         # パターン９

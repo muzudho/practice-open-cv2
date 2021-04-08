@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from color_hul_model import to_color_rate, inverse_func, ceil_limit
+from color_hul_model import to_color_rate, inverse_func, round_limit
 from colors import \
     LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, \
     SOFT_GRAY, RED, GREEN, BLUE, \

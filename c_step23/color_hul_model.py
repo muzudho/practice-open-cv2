@@ -22,8 +22,8 @@ def round_limit(number):
         return num1 / 1000000
     # 極限を切り上げます
     new_number = num2 / 1000000
-    print(
-        f"round_limit num1={num1} num2={num2} number={number} new_number={new_number}")
+    # print(
+    #    f"round_limit num1={num1} num2={num2} number={number} new_number={new_number}")
     return new_number
 
 
@@ -68,7 +68,8 @@ def inverse_func(color):
 
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
-        if width <= radius:  # 半分を含む
+        # if width < radius:  # 半分を含まない
+        # if width <= radius:  # 半分を含む
             theta = math.degrees(math.asin(width/diameter))
             # theta = 90 - math.degrees(math.acos(width/diameter))
             # return math.floor(theta), upper, lower, "B1"
@@ -103,19 +104,19 @@ def inverse_func(color):
             theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
             return math.floor(theta), upper, lower, "B7"
             #
-            #tanjent = diameter - width
-            #opposite = (math.sqrt(3)/2) * tanjent
-            #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-            #rad = opposite / hipotenuse
+            # tanjent = diameter - width
+            # opposite = (math.sqrt(3)/2) * tanjent
+            # hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+            # rad = opposite / hipotenuse
             # print(
             #    f"tan={tanjent:4.2f} oppo={opposite:5.2f} hipo={hipotenuse:5.2f} rad={rad:5.2f}")
-            #theta = math.degrees(math.atan(rad)) + 60
+            # theta = math.degrees(math.atan(rad)) + 60
             # return theta, upper, lower, "B7"
         # パターン８
-        #opposite = (math.sqrt(3)/2) * (diameter - width - radius)
-        #adjacent = 1
-        #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-        #theta = math.degrees(math.atan(opposite / hipotenuse)) + 150
+        # opposite = (math.sqrt(3)/2) * (diameter - width - radius)
+        # adjacent = 1
+        # hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+        # theta = math.degrees(math.atan(opposite / hipotenuse)) + 150
         #
         # theta = 30 - math.degrees(math.asin(width/diameter)) + 210
         theta = math.degrees(math.acos(width/diameter)) + 150

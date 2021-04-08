@@ -219,13 +219,14 @@ def update_scene1_with_rotate(
     # 逆関数のテスト
     expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
     expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
-    expected_theta = theta
+    expected_theta = math.radians(theta)
     expected_color = (red, green, blue)
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
     error = 0.0000001  # < 0.7
+    error_theta = 0.02
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
@@ -238,7 +239,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} theta={theta} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-    if actual_theta < expected_theta - error or expected_theta + error < actual_theta:
+    if actual_theta < expected_theta - error_theta or expected_theta + error_theta < actual_theta:
         diff = actual_theta - expected_theta
         upper = max(red, green, blue)
         lower = min(red, green, blue)

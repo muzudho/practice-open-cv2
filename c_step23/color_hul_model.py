@@ -39,17 +39,17 @@ def inverse_func(color):
     lower = min(red, green, blue)
 
     if green == blue and red == upper:
-        return 0, upper, lower, "A1"
+        return math.radians(0), upper, lower, "A1"
     if red == green and blue == lower:
-        return 60, upper, lower, "A2"
+        return math.radians(60), upper, lower, "A2"
     if red == blue and green == upper:
-        return 120, upper, lower, "A3"
+        return math.radians(120), upper, lower, "A3"
     if green == blue and red == lower:
-        return 180, upper, lower, "A4"
+        return math.radians(180), upper, lower, "A4"
     if red == green and blue == upper:
-        return 240, upper, lower, "A5"
+        return math.radians(240), upper, lower, "A5"
     if red == blue and green == lower:
-        return 300, upper, lower, "A6"
+        return math.radians(300), upper, lower, "A6"
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
@@ -69,40 +69,52 @@ def inverse_func(color):
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
         # if width < radius:  # 半分を含まない
-        # if width <= radius:  # 半分を含む
-            theta = math.degrees(math.asin(width/diameter))
+        if width <= radius:  # 半分を含む
+            #theta = math.degrees(math.asin(width/diameter))
+            theta = math.asin(width/diameter)
             # theta = 90 - math.degrees(math.acos(width/diameter))
             # return math.floor(theta), upper, lower, "B1"
-            return math.floor(theta), upper, lower, "B1"
+            return theta, upper, lower, "B1"
         # パターン２ (30°～60°)
         # theta = 30 - math.degrees(math.asin((diameter - width)/diameter)) + 30
-        theta = math.degrees(math.acos((diameter-width)/diameter)) - 30
-        return math.ceil(theta), upper, lower, "B2"
+        # theta = math.degrees(math.acos((diameter-width)/diameter)) - 30
+        theta = math.acos((diameter-width)/diameter) - math.radians(30)
+        # return math.ceil(theta), upper, lower, "B2"
+        return theta, upper, lower, "B2"
     if green == upper and blue == lower:
         # パターン３
         if radius < width:  # 半分を含まない
-            theta = math.degrees(math.asin((diameter - width)/diameter)) + 60
+            # theta = math.degrees(math.asin((diameter - width)/diameter)) + 60
+            theta = math.asin((diameter - width)/diameter) + math.radians(60)
             # theta = 150 - math.degrees(math.acos((diameter - width)/diameter))
-            return math.floor(theta), upper, lower, "B3"
+            # return math.floor(theta), upper, lower, "B3"
+            return theta, upper, lower, "B3"
         # パターン４ (赤バーが下半分で減っていっている)
         # theta = 30 - math.degrees(math.asin(width/diameter)) + 90
-        theta = math.degrees(math.acos(width/diameter)) + 30
-        return math.ceil(theta), upper, lower, "B4"
+        # theta = math.degrees(math.acos(width/diameter)) + 30
+        theta = math.acos(width/diameter) + math.radians(30)
+        # return math.ceil(theta), upper, lower, "B4"
+        return theta, upper, lower, "B4"
     if red == lower and green == upper:
         # パターン５
         if width <= radius:  # 半分を含む
-            theta = math.degrees(math.asin(width/diameter)) + 120
-            return math.floor(theta), upper, lower, "B5"
+            # theta = math.degrees(math.asin(width/diameter)) + 120
+            theta = math.asin(width/diameter) + math.radians(120)
+            # return math.floor(theta), upper, lower, "B5"
+            return theta, upper, lower, "B5"
         # パターン６
         # theta = 30 - \
         #    math.degrees(math.asin((diameter - width)/diameter)) + 150
-        theta = math.degrees(math.acos((diameter - width)/diameter)) + 90
-        return math.ceil(theta), upper, lower, "B6"
+        # theta = math.degrees(math.acos((diameter - width)/diameter)) + 90
+        theta = math.acos((diameter - width)/diameter) + math.radians(90)
+        return theta, upper, lower, "B6"
     if red == lower and blue == upper:
         if radius < width:  # 半分を含まない
             # パターン７
-            theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
-            return math.floor(theta), upper, lower, "B7"
+            # theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
+            theta = math.asin((diameter - width)/diameter) + math.radians(180)
+            # return math.floor(theta), upper, lower, "B7"
+            return theta, upper, lower, "B7"
             #
             # tanjent = diameter - width
             # opposite = (math.sqrt(3)/2) * tanjent
@@ -119,32 +131,37 @@ def inverse_func(color):
         # theta = math.degrees(math.atan(opposite / hipotenuse)) + 150
         #
         # theta = 30 - math.degrees(math.asin(width/diameter)) + 210
-        theta = math.degrees(math.acos(width/diameter)) + 150
-        #
-        # theta = math.degrees(math.asin(opposite / hipotenuse)) + 90
-        # theta = math.degrees(math.atan(opposite / hipotenuse))
-        # theta = math.degrees(math.atan(width / hipotenuse))
-        # theta = math.degrees(math.acos(opposite / hipotenuse))
-        return math.ceil(theta), upper, lower, "B8"
+        # theta = math.degrees(math.acos(width/diameter)) + 150
+        theta = math.acos(width/diameter) + math.radians(150)
+        # return math.ceil(theta), upper, lower, "B8"
+        return theta, upper, lower, "B8"
     if green == lower and blue == upper:
         # パターン９
         if width <= radius:  # 半分を含む
-            theta = math.degrees(math.asin(width/diameter)) + 240
-            return math.floor(theta), upper, lower, "B9"
+            # theta = math.degrees(math.asin(width/diameter)) + 240
+            theta = math.asin(width/diameter) + math.radians(240)
+            # return math.floor(theta), upper, lower, "B9"
+            return theta, upper, lower, "B9"
         # パターン１０
         # theta = 30 - \
         #    math.degrees(math.asin((diameter - width)/diameter)) + 270
-        theta = math.degrees(math.acos((diameter - width)/diameter)) + 210
-        return math.ceil(theta), upper, lower, "B10"
+        # theta = math.degrees(math.acos((diameter - width)/diameter)) + 210
+        theta = math.acos((diameter - width)/diameter) + math.radians(210)
+        # return math.ceil(theta), upper, lower, "B10"
+        return theta, upper, lower, "B10"
     if red == upper and green == lower:
         # パターン１１
         if radius < width:  # 半分を含まない
-            theta = math.degrees(math.asin((diameter - width)/diameter)) + 300
-            return math.floor(theta), upper, lower, "B11"
+            # theta = math.degrees(math.asin((diameter - width)/diameter)) + 300
+            theta = math.asin((diameter - width)/diameter) + math.radians(300)
+            # return math.floor(theta), upper, lower, "B11"
+            return theta, upper, lower, "B11"
         # パターン１２
         # theta = 30 - math.degrees(math.asin(width/diameter)) + 330
-        theta = math.degrees(math.acos(width/diameter)) + 270
-        return math.ceil(theta), upper, lower, "B12"
+        # theta = math.degrees(math.acos(width/diameter)) + 270
+        theta = math.acos(width/diameter) + math.radians(270)
+        # return math.ceil(theta), upper, lower, "B12"
+        return theta, upper, lower, "B12"
 
     raise Exception(
         f"ERROR           | Logic error. color=({red}, {green}, {blue})")

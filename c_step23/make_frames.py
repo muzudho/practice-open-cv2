@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
-    BRIGHT_GREEN, \
+    BRIGHT_GREEN, LIGHT_BLUE, \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes, \
@@ -361,10 +361,12 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     diameter = upper - lower
     radius = diameter / 2
     tanjent = diameter - bar_width - radius
-    ex_radius = 2*math.tan(math.radians(30)) * radius
     opposite = (math.sqrt(3)/2) * tanjent
     adjacent = radius
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+    ex_radius = 2*math.tan(math.radians(30)) * radius
+    ex_adjacent = ex_radius
+    ex_hipotenuse = math.sqrt(ex_adjacent**2 + tanjent**2)
 
     # テスト タンジェント
     left = int(circle_rail.center[0]-tanjent)
@@ -409,6 +411,18 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     #            thickness=4)
 
     # テスト斜辺
+    point_x = ex_hipotenuse * \
+        math.cos(math.radians(test_theta+90)) + circle_rail.center[0]
+    point_y = ex_hipotenuse * \
+        -math.sin(math.radians(test_theta+90)) + circle_rail.center[1]
+    # print(f"point_x={point_x} point_y={point_y}")
+    cv2.line(canvas,
+             (circle_rail.center[0], circle_rail.center[1]),
+             (int(point_x), int(point_y)),
+             color_to_byte(BLUE),
+             thickness=4)
+
+    # テスト斜辺
     point_x = hipotenuse * \
         math.cos(math.radians(test_theta+90)) + circle_rail.center[0]
     point_y = hipotenuse * \
@@ -417,7 +431,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     cv2.line(canvas,
              (circle_rail.center[0], circle_rail.center[1]),
              (int(point_x), int(point_y)),
-             color_to_byte(BLUE),
+             color_to_byte(LIGHT_BLUE),
              thickness=4)
 
     # 角60°の補助線（定義から、外接する矩形の左上の角）

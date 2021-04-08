@@ -370,10 +370,16 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
              (right, bottom),
              color_to_byte(GREEN),
              thickness=4)
+    # テスト底辺
+    adjacent = (1*circle_rail.range1)
+    cv2.line(canvas,
+             (circle_rail.center[0], int(circle_rail.center[1]-adjacent)),
+             (circle_rail.center[0], circle_rail.center[1]),
+             color_to_byte(RED),
+             thickness=4)
     # テスト角度
-    adjacent = (math.sqrt(3)/2)
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-    test_theta = math.degrees(math.atan2(opposite, hipotenuse))
+    test_theta = math.degrees(math.atan2(opposite, -hipotenuse))
     cv2.ellipse(canvas,
                 circle_rail.center,
                 (2*circle_rail.range1, 2*circle_rail.range1),
@@ -382,6 +388,16 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
                 test_theta,
                 color_to_byte(RED),
                 thickness=4)
+    # 角60°の補助線（定義から、外接する矩形の左上の角）
+    left = int(circle_rail.center[0]-circle_rail.range1)
+    top = int(circle_rail.center[1]-diameter * math.tan(math.radians(30)))
+    right = int(circle_rail.center[0])
+    bottom = int(circle_rail.center[1])
+    cv2.line(canvas,
+             (left, top),
+             (right, bottom),
+             color_to_byte(RED),
+             thickness=2)
 
     # gravity = inscribed_triangle.triangular_center_of_gravity()
 

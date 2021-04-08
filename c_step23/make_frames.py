@@ -353,12 +353,16 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     red = n3bars_width[0]
     green = n3bars_width[1]
     blue = n3bars_width[2]
+
     upper = max(red, green, blue)
     lower = min(red, green, blue)
     bar_width = red + green + blue - upper - lower - lower
     diameter = upper - lower
     radius = diameter / 2
     opposite = (math.sqrt(3)/2) * (diameter - bar_width - radius)
+    adjacent = radius
+    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+
     left = int(circle_rail.center[0]-opposite)
     # left = int(circle_rail.center[0]-bar_width *
     #           1/(2 * math.tan(math.radians(30))))
@@ -371,14 +375,12 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
              color_to_byte(GREEN),
              thickness=4)
     # テスト底辺
-    adjacent = (1*circle_rail.range1)
     cv2.line(canvas,
              (circle_rail.center[0], int(circle_rail.center[1]-adjacent)),
              (circle_rail.center[0], circle_rail.center[1]),
              color_to_byte(RED),
              thickness=4)
 
-    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
     # atan だとずれる。 asin だとピッタリに見える（＾～＾）acosは向きが違う（＾～＾）
     #test_theta = math.degrees(math.acos(opposite / hipotenuse))
     test_theta = math.degrees(math.asin(opposite / hipotenuse))

@@ -18,13 +18,6 @@ def inverse_func(color):
 
     upper = max(red, green, blue)
     lower = min(red, green, blue)
-    # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
-    bar_length = red + green + blue - upper - lower
-    width = bar_length - lower
-    # print(f"red={red} green={green} blue={blue} bar_length={bar_length}")
-
-    # 弧度法
-    theta = 0
 
     if green == blue and red == upper:
         return 0, upper, lower, "A1"
@@ -39,8 +32,20 @@ def inverse_func(color):
     if red == blue and green == lower:
         return 300, upper, lower, "A6"
 
+    # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
+    bar_length = red + green + blue - upper - lower
+    width = bar_length - lower
+
     diameter = upper - lower
     radius = diameter / 2
+    adjacent = radius
+    opposite = (math.sqrt(3)/2) * (diameter - width - radius)
+    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+    print(
+        f"up={upper} low={lower} dia={diameter} rad={radius} adj={adjacent} \
+red={red:4.2f} green={green:4.2f} blue={blue:4.2f} bar_length={bar_length:4.2f} width={width:4.2f} \
+oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
+
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
         if width <= diameter/2:  # 半分を含む
@@ -73,9 +78,21 @@ def inverse_func(color):
         return math.ceil(theta), upper, lower, "B6"
     if red == lower and blue == upper:
         if diameter/2 < width:  # 半分を含まない
+            if not 0.5 < width <= 1.0:
+                raise Exception(f"up={upper} low={lower} dia={diameter} rad={radius} \
+adj={adjacent} red={red:4.2f} green={green:4.2f} blue={blue:4.2f} bar_length={bar_length:4.2f} \
+width={width:4.2f} oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
+
             # パターン７
-            theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
-            return math.floor(theta), upper, lower, "B7"
+            # theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
+            #
+            opposite = (math.sqrt(3)/2) * (radius - width)
+            hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+            rad = opposite / hipotenuse
+            print(f"oppo={opposite:5.2f} hipo={hipotenuse:5.2f} rad={rad:5.2f}")
+            theta = math.degrees(math.atan(rad)) + 60
+            return theta, upper, lower, "B7"
+            # return math.floor(theta), upper, lower, "B7"
         # パターン８
         #opposite = (math.sqrt(3)/2) * (diameter - width - radius)
         #adjacent = 1
@@ -84,7 +101,12 @@ def inverse_func(color):
         #
         # theta = 30 - math.degrees(math.asin(width/diameter)) + 210
         theta = math.degrees(math.acos(width/diameter)) + 150
-        return theta, upper, lower, "B8"
+        #
+        # theta = math.degrees(math.asin(opposite / hipotenuse)) + 90
+        # theta = math.degrees(math.atan(opposite / hipotenuse))
+        # theta = math.degrees(math.atan(width / hipotenuse))
+        # theta = math.degrees(math.acos(opposite / hipotenuse))
+        return math.ceil(theta), upper, lower, "B8"
     if green == lower and blue == upper:
         # パターン９
         if width <= diameter/2:  # 半分を含む

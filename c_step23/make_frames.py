@@ -389,11 +389,10 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
                 color_to_byte(RED),
                 thickness=4)
     # テスト斜辺
-    point_x = circle_rail.center[0] + circle_rail.range1
-    # point_x = hipotenuse * \
-    #    math.cos(math.radians(test_theta)) + circle_rail.center[0]
+    point_x = hipotenuse * \
+        math.cos(math.radians(test_theta+90)) + circle_rail.center[0]
     point_y = hipotenuse * \
-        -math.sin(math.radians(test_theta)) + circle_rail.center[1]
+        -math.sin(math.radians(test_theta+90)) + circle_rail.center[1]
     # print(f"point_x={point_x} point_y={point_y}")
     cv2.line(canvas,
              (circle_rail.center[0], circle_rail.center[1]),

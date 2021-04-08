@@ -4,7 +4,7 @@
 import math
 import cv2
 import numpy as np
-from color_hul_model import to_color_rate, inverse_func
+from color_hul_model import to_color_rate, inverse_func, ceil_limit
 from colors import \
     LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, \
     SOFT_GRAY, RED, GREEN, BLUE, \
@@ -249,7 +249,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         print(
             f"ERROR           | expected_theta={expected_theta}° \
 actual_theta={actual_theta:9.4f}° diff={diff:9.4f} \
-r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width:9.4f} radius={radius:9.4f} pattern={pattern}")
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern={pattern}")
 
     red_bar_width = int(red * bar_box.width)
     green_bar_width = int(green * bar_box.width)

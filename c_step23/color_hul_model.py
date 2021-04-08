@@ -8,6 +8,24 @@ HSVモデルの仲間で、
 import math
 
 
+def ceil_limit(number):
+    """0.3499999999 みたいな数に 0.0000001 を足して 0.3500000999 にして
+    0.3500000 にし、0.3500000-0.3499999 == 0.0000001 なら採用しないような処理
+    """
+    num1 = math.floor(number*1000000)
+    num2 = math.floor(number*1000000+1)
+    num3 = math.floor(num1/1000)
+    num4 = math.floor(num2/1000)
+    if num4 - num3 < 1:
+        # 採用しません
+        return number
+    # 極限を切り上げます
+    new_number = num2 / 1000000
+    print(
+        f"ceil_limit num1={num1} num2={num2} number={number} new_number={new_number}")
+    return new_number
+
+
 def inverse_func(color):
     """逆関数"""
     red = color[0]
@@ -34,10 +52,10 @@ def inverse_func(color):
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
-    width = bar_length - lower
+    width = ceil_limit(bar_length - lower)
 
     diameter = upper - lower
-    radius = diameter / 2
+    radius = ceil_limit(diameter / 2)
     adjacent = radius
     tanjent = diameter - width - radius
     opposite = (math.sqrt(3)/2) * tanjent
@@ -49,7 +67,7 @@ def inverse_func(color):
 
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
-        if width <= radius:  # 半分を含む
+        if width < radius:  # 半分を含まない
             theta = math.degrees(math.asin(width/diameter))
             # theta = 90 - math.degrees(math.acos(width/diameter))
             # return math.floor(theta), upper, lower, "B1"

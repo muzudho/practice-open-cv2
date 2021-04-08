@@ -379,7 +379,10 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
              thickness=4)
 
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-    test_theta = math.degrees(math.atan(opposite / hipotenuse))
+    # atan だとずれる。 asin だとピッタリに見える（＾～＾）acosは向きが違う（＾～＾）
+    #test_theta = math.degrees(math.acos(opposite / hipotenuse))
+    test_theta = math.degrees(math.asin(opposite / hipotenuse))
+    #test_theta = math.degrees(math.atan(opposite / hipotenuse))
     # テスト角度
     # cv2.ellipse(canvas,
     #            circle_rail.center,

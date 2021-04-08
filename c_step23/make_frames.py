@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
-    BRIGHT_GREEN, LIGHT_BLUE, \
+    LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes, \
@@ -47,9 +47,9 @@ VERTICAL_PARCENT = [
     # [0.0, 0.3, 0.7],  # Pale
     # [0.2, 0.3, 0.5],  # Light grayish
     # [0.4, 0.3, 0.3],  # Grayish
-    # [0.6, 0.3, 0.1],  # Dark grayish
+    [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
-    [0.0, 1.0, 0.0],  # Vivid
+    # [0.0, 1.0, 0.0],  # Vivid
 ]
 TONE_NAME = [
     # 'Bright',
@@ -60,10 +60,10 @@ TONE_NAME = [
     # 'Dull',
     # 'Dark',
     # 'Pale',
-    # 'Light grayish',
+    #'Light grayish',
     # 'Grayish',
-    # 'Dark grayish',
-    'Vivid',  # Cosine curve
+    'Dark grayish',
+    # 'Vivid',  # Cosine curve
 ]
 
 
@@ -217,18 +217,14 @@ def update_scene1_with_rotate(
     blue_bar_width = int(color_rate[2] * bar_box.width)
 
     # 逆関数のテスト
-    expected_upper = int(
-        (BAR_TICKS-1) * (bar_box.upper_x - bar_box.left) / bar_box.width)
-    expected_lower = int(
-        (BAR_TICKS-1) * (bar_box.lower_x - bar_box.left) / bar_box.width)
+    expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
+    expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
     expected_theta = theta
     expected_color = (color_rate[0],
                       color_rate[1],
                       color_rate[2])
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
-    actual_upper *= BAR_TICKS-1
-    actual_lower *= BAR_TICKS-1
     # 誤差 +-error まで許容
     error = 0  # < 0.7
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
@@ -387,13 +383,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     cv2.line(canvas,
              (left, top),
              (right, bottom),
-             color_to_byte(BRIGHT_GREEN),
+             color_to_byte(LIGHT_GREEN),
              thickness=4)
+
+    # テスト底辺
+    cv2.line(canvas,
+             (circle_rail.center[0], int(circle_rail.center[1]-ex_adjacent)),
+             (circle_rail.center[0], circle_rail.center[1]),
+             color_to_byte(RED),
+             thickness=4)
+
     # テスト底辺
     cv2.line(canvas,
              (circle_rail.center[0], int(circle_rail.center[1]-adjacent)),
              (circle_rail.center[0], circle_rail.center[1]),
-             color_to_byte(RED),
+             color_to_byte(LIGHT_RED),
              thickness=4)
 
     # atan だとずれる。 asin だとピッタリに見える（＾～＾）acosは向きが違う（＾～＾）

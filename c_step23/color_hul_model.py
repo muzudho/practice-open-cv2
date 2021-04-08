@@ -39,12 +39,13 @@ def inverse_func(color):
     diameter = upper - lower
     radius = diameter / 2
     adjacent = radius
-    opposite = (math.sqrt(3)/2) * (diameter - width - radius)
+    tanjent = diameter - width - radius
+    opposite = (math.sqrt(3)/2) * tanjent
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
     print(
         f"up={upper} low={lower} dia={diameter} rad={radius} adj={adjacent} \
 red={red:4.2f} green={green:4.2f} blue={blue:4.2f} bar_length={bar_length:4.2f} width={width:4.2f} \
-oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
+tan={tanjent:4.2f} oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
 
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
@@ -81,15 +82,17 @@ oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
             if not 0.5 < width <= 1.0:
                 raise Exception(f"up={upper} low={lower} dia={diameter} rad={radius} \
 adj={adjacent} red={red:4.2f} green={green:4.2f} blue={blue:4.2f} bar_length={bar_length:4.2f} \
-width={width:4.2f} oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
+width={width:4.2f} tan={tanjent:4.2f} oppo={opposite:5.2f} hipo={hipotenuse:4.2f}")
 
             # パターン７
             # theta = math.degrees(math.asin((diameter - width)/diameter)) + 180
             #
-            opposite = (math.sqrt(3)/2) * (radius - width)
+            tanjent = diameter - width
+            opposite = (math.sqrt(3)/2) * tanjent
             hipotenuse = math.sqrt(adjacent**2 + opposite**2)
             rad = opposite / hipotenuse
-            print(f"oppo={opposite:5.2f} hipo={hipotenuse:5.2f} rad={rad:5.2f}")
+            print(
+                f"tan={tanjent:4.2f} oppo={opposite:5.2f} hipo={hipotenuse:5.2f} rad={rad:5.2f}")
             theta = math.degrees(math.atan(rad)) + 60
             return theta, upper, lower, "B7"
             # return math.floor(theta), upper, lower, "B7"

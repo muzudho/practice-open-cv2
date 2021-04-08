@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
+    BRIGHT_GREEN, \
     SOFT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes, \
@@ -359,20 +360,32 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     bar_width = red + green + blue - upper - lower - lower
     diameter = upper - lower
     radius = diameter / 2
-    opposite = (math.sqrt(3)/2) * (diameter - bar_width - radius)
+    tanjent = diameter - bar_width - radius
+    ex_radius = 2*math.tan(math.radians(30)) * radius
+    opposite = (math.sqrt(3)/2) * tanjent
     adjacent = radius
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
+    # テスト タンジェント
+    left = int(circle_rail.center[0]-tanjent)
+    top = int(circle_rail.center[1]-ex_radius)
+    right = int(circle_rail.center[0])
+    bottom = int(circle_rail.center[1]-ex_radius)
+    cv2.line(canvas,
+             (left, top),
+             (right, bottom),
+             color_to_byte(GREEN),
+             thickness=4)
+
+    # テスト対辺
     left = int(circle_rail.center[0]-opposite)
-    # left = int(circle_rail.center[0]-bar_width *
-    #           1/(2 * math.tan(math.radians(30))))
     top = int(circle_rail.center[1]-circle_rail.range1)
     right = int(circle_rail.center[0])
     bottom = int(circle_rail.center[1]-circle_rail.range1)
     cv2.line(canvas,
              (left, top),
              (right, bottom),
-             color_to_byte(GREEN),
+             color_to_byte(BRIGHT_GREEN),
              thickness=4)
     # テスト底辺
     cv2.line(canvas,

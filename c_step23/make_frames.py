@@ -212,17 +212,15 @@ def update_scene1_with_rotate(
     color_rate = to_color_rate(vertical_parcent, theta)
 
     # バーの横幅に変換
-    red_bar_width = int(color_rate[0] * bar_box.width)
-    green_bar_width = int(color_rate[1] * bar_box.width)
-    blue_bar_width = int(color_rate[2] * bar_box.width)
+    red = color_rate[0]
+    green = color_rate[1]
+    blue = color_rate[2]
 
     # 逆関数のテスト
     expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
     expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
     expected_theta = theta
-    expected_color = (color_rate[0],
-                      color_rate[1],
-                      color_rate[2])
+    expected_color = (red, green, blue)
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
@@ -232,18 +230,30 @@ def update_scene1_with_rotate(
         diff = actual_upper - expected_upper
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
-actual_upper={actual_upper:3} diff={diff} theta={theta} pattern={pattern}")
+actual_upper={actual_upper:3} diff={diff} theta={theta} \
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
     if actual_lower < expected_lower - error or expected_lower + error < actual_lower:
         diff = actual_lower - expected_lower
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
-actual_lower={actual_lower:3} diff={diff} theta={theta} pattern={pattern}")
+actual_lower={actual_lower:3} diff={diff} theta={theta} \
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
     if actual_theta < expected_theta - error or expected_theta + error < actual_theta:
         diff = actual_theta - expected_theta
+        upper = max(red, green, blue)
+        lower = min(red, green, blue)
+        bar_length = red + green + blue - upper - lower
+        width = bar_length - lower
+        diameter = upper - lower
+        radius = diameter / 2
         print(
             f"ERROR           | expected_theta={expected_theta}° \
-actual_theta={actual_theta:9.4f}° diff={diff:9.4f} pattern={pattern}")
+actual_theta={actual_theta:9.4f}° diff={diff:9.4f} \
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width:9.4f} radius={radius:9.4f} pattern={pattern}")
 
+    red_bar_width = int(red * bar_box.width)
+    green_bar_width = int(green * bar_box.width)
+    blue_bar_width = int(blue * bar_box.width)
     # バーR
     bar_box.red_right = bar_box.left + red_bar_width
     # バーG

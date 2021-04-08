@@ -359,7 +359,9 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     diameter = upper - lower
     radius = diameter / 2
     opposite = (math.sqrt(3)/2) * (diameter - bar_width - radius)
-    left = int(circle_rail.center[0]-bar_width * opposite)
+    left = int(circle_rail.center[0]-opposite)
+    # left = int(circle_rail.center[0]-bar_width *
+    #           1/(2 * math.tan(math.radians(30))))
     top = int(circle_rail.center[1]-circle_rail.range1)
     right = int(circle_rail.center[0])
     bottom = int(circle_rail.center[1]-circle_rail.range1)
@@ -368,6 +370,18 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
              (right, bottom),
              color_to_byte(GREEN),
              thickness=4)
+    # テスト角度
+    adjacent = (math.sqrt(3)/2)
+    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+    test_theta = math.degrees(math.atan2(opposite, hipotenuse))
+    cv2.ellipse(canvas,
+                circle_rail.center,
+                (2*circle_rail.range1, 2*circle_rail.range1),
+                0,
+                0,
+                test_theta,
+                color_to_byte(RED),
+                thickness=4)
 
     # gravity = inscribed_triangle.triangular_center_of_gravity()
 

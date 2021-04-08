@@ -377,17 +377,19 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
              (circle_rail.center[0], circle_rail.center[1]),
              color_to_byte(RED),
              thickness=4)
-    # テスト角度
+
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
     test_theta = math.degrees(math.atan(opposite / hipotenuse))
-    cv2.ellipse(canvas,
-                circle_rail.center,
-                (2*circle_rail.range1, 2*circle_rail.range1),
-                0,
-                0,
-                test_theta,
-                color_to_byte(RED),
-                thickness=4)
+    # テスト角度
+    # cv2.ellipse(canvas,
+    #            circle_rail.center,
+    #            (2*circle_rail.range1, 2*circle_rail.range1),
+    #            0,
+    #            0,
+    #            test_theta,
+    #            color_to_byte(RED),
+    #            thickness=4)
+
     # テスト斜辺
     point_x = hipotenuse * \
         math.cos(math.radians(test_theta+90)) + circle_rail.center[0]
@@ -399,16 +401,17 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
              (int(point_x), int(point_y)),
              color_to_byte(BLUE),
              thickness=4)
+
     # 角60°の補助線（定義から、外接する矩形の左上の角）
-    left = int(circle_rail.center[0]-circle_rail.range1)
-    top = int(circle_rail.center[1]-diameter * math.tan(math.radians(30)))
-    right = int(circle_rail.center[0])
-    bottom = int(circle_rail.center[1])
-    cv2.line(canvas,
-             (left, top),
-             (right, bottom),
-             color_to_byte(RED),
-             thickness=2)
+    #left = int(circle_rail.center[0]-circle_rail.range1)
+    #top = int(circle_rail.center[1]-diameter * math.tan(math.radians(30)))
+    #right = int(circle_rail.center[0])
+    #bottom = int(circle_rail.center[1])
+    # cv2.line(canvas,
+    #         (left, top),
+    #         (right, bottom),
+    #         color_to_byte(RED),
+    #         thickness=2)
 
     # gravity = inscribed_triangle.triangular_center_of_gravity()
 

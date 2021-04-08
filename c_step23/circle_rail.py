@@ -196,15 +196,15 @@ class CircleRail():
         half_height = diameter * math.tan(math.radians(30))
 
         # 角30°の補助線（外接する矩形の縦幅の1/4）
-        left = int(self.center[0])
-        top = int(self.center[1]-self.range1 * math.tan(math.radians(30)))
-        right = int(self.center[0]+self.range1)
-        bottom = int(self.center[1])
-        cv2.line(canvas,
-                 (right, top),
-                 (left, bottom),
-                 color_to_byte(BLUE),
-                 thickness=1)
+        #left = int(self.center[0])
+        #top = int(self.center[1]-self.range1 * math.tan(math.radians(30)))
+        #right = int(self.center[0]+self.range1)
+        #bottom = int(self.center[1])
+        # cv2.line(canvas,
+        #         (right, top),
+        #         (left, bottom),
+        #         color_to_byte(BLUE),
+        #         thickness=1)
 
         # 角60°の補助線（定義から、外接する矩形の左上の角）
         #left = int(self.center[0]-self.range1)
@@ -218,15 +218,15 @@ class CircleRail():
         #         thickness=2)
 
         # 角270°の補助線（南側の垂線）
-        left = int(self.center[0])
-        top = int(self.center[1])
-        right = int(self.center[0])
-        bottom = int(self.center[1] + diameter * math.tan(math.radians(30)))
-        cv2.line(canvas,
-                 (left, top),
-                 (right, bottom),
-                 color_to_byte(PALE_GRAY),
-                 thickness=1)
+        #left = int(self.center[0])
+        #top = int(self.center[1])
+        #right = int(self.center[0])
+        #bottom = int(self.center[1] + diameter * math.tan(math.radians(30)))
+        # cv2.line(canvas,
+        #         (left, top),
+        #         (right, bottom),
+        #         color_to_byte(PALE_GRAY),
+        #         thickness=1)
 
         # 矩形
         left = int(self.center[0] - self.range1)

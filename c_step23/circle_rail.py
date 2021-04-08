@@ -207,15 +207,15 @@ class CircleRail():
                  thickness=1)
 
         # 角60°の補助線（定義から、外接する矩形の右上の角）
-        left = int(self.center[0])
+        left = int(self.center[0]-self.range1)
         top = int(self.center[1]-diameter * math.tan(math.radians(30)))
-        right = int(self.center[0]+self.range1)
+        right = int(self.center[0])
         bottom = int(self.center[1])
         cv2.line(canvas,
-                 (right, top),
-                 (left, bottom),
+                 (left, top),
+                 (right, bottom),
                  color_to_byte(RED),
-                 thickness=1)
+                 thickness=2)
 
         # 角270°の補助線（南側の垂線）
         left = int(self.center[0])

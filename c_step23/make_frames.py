@@ -1,6 +1,7 @@
 """png画像を複数枚出力します
 """
 
+import math
 import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
@@ -347,6 +348,26 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     n3bars_width = bar_box.create_3bars_width()
     color = convert_3bars_to_3bytes(n3bars_width, bar_box.width)
     bar_box.draw_rgb_number(canvas, color)
+
+    # テスト
+    red = n3bars_width[0]
+    green = n3bars_width[1]
+    blue = n3bars_width[2]
+    upper = max(red, green, blue)
+    lower = min(red, green, blue)
+    bar_width = red + green + blue - upper - lower - lower
+    diameter = upper - lower
+    radius = diameter / 2
+    opposite = (math.sqrt(3)/2) * (diameter - bar_width - radius)
+    left = int(circle_rail.center[0]-bar_width * opposite)
+    top = int(circle_rail.center[1]-circle_rail.range1)
+    right = int(circle_rail.center[0])
+    bottom = int(circle_rail.center[1]-circle_rail.range1)
+    cv2.line(canvas,
+             (left, top),
+             (right, bottom),
+             color_to_byte(GREEN),
+             thickness=4)
 
     # gravity = inscribed_triangle.triangular_center_of_gravity()
 

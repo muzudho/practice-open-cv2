@@ -11,9 +11,10 @@ from pygame.locals import QUIT
 pygame.init()
 
 # 画像の読み込み
-# FRAME_COUNT = 528
 # FRAME_COUNT = 380
-FRAME_COUNT = 4560
+# FRAME_COUNT = 528
+FRAME_COUNT = 960
+# FRAME_COUNT = 4560
 FPS = 8  # 例えば 15 フレームで撮影するなら、ゲーム画面はその半分の FPS ならコマ飛びを感じないぐらい
 IMAGE1 = pygame.image.load('./shared/out-cstep4-0.png')
 IMAGE1_W = IMAGE1.get_width()  # 画像の横幅の取得

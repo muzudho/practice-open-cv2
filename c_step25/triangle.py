@@ -192,15 +192,16 @@ class Triangle():
                  color_to_byte(self.__edge_color),
                  thickness=2)
         # ３頂点
-        cv2.circle(canvas, self.nodes_p[0],
-                   int(self.__node_radius),
-                   color_to_byte(self.__nodes_color[0]),
-                   thickness=-1)
-        cv2.circle(canvas, self.nodes_p[1],
-                   int(self.__node_radius),
-                   color_to_byte(self.__nodes_color[2]),
-                   thickness=-1)
-        cv2.circle(canvas, self.nodes_p[2],
-                   int(self.__node_radius),
-                   color_to_byte(self.__nodes_color[1]),
-                   thickness=-1)
+        if self.__node_radius > 0:
+            cv2.circle(canvas, self.nodes_p[0],
+                       int(self.__node_radius),
+                       color_to_byte(self.__nodes_color[0]),
+                       thickness=-1)
+            cv2.circle(canvas, self.nodes_p[1],
+                       int(self.__node_radius),
+                       color_to_byte(self.__nodes_color[2]),
+                       thickness=-1)
+            cv2.circle(canvas, self.nodes_p[2],
+                       int(self.__node_radius),
+                       color_to_byte(self.__nodes_color[1]),
+                       thickness=-1)

@@ -4,10 +4,11 @@
 import math
 
 import cv2
-from colors import WHITE, PALE_GRAY
+from colors import WHITE, PALE_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import color_to_byte
 from rectangle import Rectangle
 from triangle import Triangle
+from conf import GRID_UNIT
 
 
 class CircleRail():
@@ -23,6 +24,10 @@ class CircleRail():
         self.__center = (0, 0)
         self.__theta = 0
         self.__triangle = Triangle()
+        self.__triangle.edge_color = WHITE
+        self.__triangle.node_radius = int(GRID_UNIT / 2)
+        self.__triangle.nodes_color = (
+            LIGHT_RED, LIGHT_BLUE, LIGHT_GREEN)  # 緑と青が逆なのが工夫
 
     @property
     def range1(self):
@@ -140,18 +145,7 @@ class CircleRail():
 
     def draw_triangle(self, canvas):
         """円に内接する線。正三角形"""
-        cv2.line(canvas, self.__triangle.nodes_p[0],
-                 self.__triangle.nodes_p[1],
-                 color_to_byte(WHITE),
-                 thickness=2)
-        cv2.line(canvas, self.__triangle.nodes_p[1],
-                 self.__triangle.nodes_p[2],
-                 color_to_byte(WHITE),
-                 thickness=2)
-        cv2.line(canvas, self.__triangle.nodes_p[2],
-                 self.__triangle.nodes_p[0],
-                 color_to_byte(WHITE),
-                 thickness=2)
+        self.__triangle.draw(canvas)
 
     def draw_border(self, canvas):
         """背景の左限、右限の線"""

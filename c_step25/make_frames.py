@@ -232,8 +232,8 @@ def update_scene1_with_rotate(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.0000000001  # < 0.000000001
-    error_theta = 0.0116  # 0.011 < x < 0.0117
+    error = 0.00000000001  # < 0.000000001
+    error_theta = 0.0115  # 0.011 < x < 0.0115
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(

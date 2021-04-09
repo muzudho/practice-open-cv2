@@ -10,7 +10,7 @@ import numpy as np
 def calc_triangle(upper_x, lower_x, theta, center):
     """画像を出力
     theta : float
-        0時の方向を0°とする時計回りの角度(弧度法)
+        角度(ラジアン)
     center : (float,float)
         ある点c
     """
@@ -29,8 +29,8 @@ def calc_triangle(upper_x, lower_x, theta, center):
     point_e = line_cross(line_u, line_d)
 
     # 点e で、線d に対して 30° の２本の直線 f,g が走る
-    line_f = make_line(d_length, theta+30, point_e)
-    line_g = make_line(d_length, theta-30, point_e)
+    line_f = make_line(d_length, theta + math.radians(30), point_e)
+    line_g = make_line(d_length, theta - math.radians(30), point_e)
 
     # 線b と、 線 f,g の交点を f', g' とする
     point_fp = line_cross(line_l, line_f)
@@ -44,11 +44,11 @@ def calc_triangle(upper_x, lower_x, theta, center):
     if distance_fp < distance_gp:
         point_i = point_fp
         one_side_len = distance_fp
-        next_theta = theta+30+60
+        next_theta = theta + math.radians(30+60)
     else:
         point_i = point_gp
         one_side_len = distance_gp
-        next_theta = theta-30-60
+        next_theta = theta + math.radians(-30-60)
 
     # 線分 ei, ik のなす角が
     # 60°になるような線分 ik を引く。
@@ -64,17 +64,17 @@ def calc_triangle(upper_x, lower_x, theta, center):
 
 def make_line(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
-    return ((range1 * math.cos(math.radians(theta)) + center[0],
-             -range1 * math.sin(math.radians(theta)) + center[1]),  # yは逆さ
-            (range1 * math.cos(math.radians(180+theta)) + center[0],
-             -range1 * math.sin(math.radians(180+theta)) + center[1]))
+    return ((range1 * math.cos(theta) + center[0],
+             -range1 * math.sin(theta) + center[1]),  # yは逆さ
+            (range1 * math.cos(theta + math.radians(180)) + center[0],
+             -range1 * math.sin(theta + math.radians(180)) + center[1]))
 
 
 def make_beam(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
     return ((center[0], center[1]),  # yは逆さ
-            (range1 * math.cos(math.radians(theta)) + center[0],
-             -range1 * math.sin(math.radians(theta)) + center[1]))
+            (range1 * math.cos(theta) + center[0],
+             -range1 * math.sin(theta) + center[1]))
 
 
 def line_cross(line_ab, line_cd):
@@ -91,7 +91,8 @@ def line_cross(line_ab, line_cd):
     d_y = line_cd[1][1]
     if a_x == b_x and c_x == d_x:
         return (np.nan, np.nan)
-    elif a_x == b_x:
+
+    if a_x == b_x:
         cross_x = a_x
         cross_y = (d_y - c_y) / (d_x - c_x) * (a_x - c_x) + c_y
     elif c_x == d_x:
@@ -102,9 +103,9 @@ def line_cross(line_ab, line_cd):
         work3 = (d_y-c_y)/(d_x-c_x)
         if work1 == work3:
             return (np.nan, np.nan)
-        else:
-            cross_x = (work1*a_x-a_y-work3*c_x+c_y)/(work1-work3)
-            cross_y = (b_y-a_y)/(b_x-a_x)*(cross_x-a_x)+a_y
+
+        cross_x = (work1*a_x-a_y-work3*c_x+c_y)/(work1-work3)
+        cross_y = (b_y-a_y)/(b_x-a_x)*(cross_x-a_x)+a_y
 
     return (cross_x, cross_y)
 

@@ -1,5 +1,6 @@
 """外環状"""
 
+import math
 import cv2
 from conf import BAR_TICKS
 from cv2_helper import color_for_cv2, point_for_cv2
@@ -89,14 +90,14 @@ class OuterCircle():
         # print(
         #    f"color_count={color_count} self.area_size=({self.area_size[0]}, {self.area_size[1]})")
         for i in range(0, color_count):
-            theta = i * self.unit_arc
+            theta = math.radians(i * self.unit_arc)
             color = self.color_list[i]
             # print(f"[{i}] theta={theta} color={color}")
 
             # 円弧
             # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-            start_angle = theta-self.unit_arc/2
-            end_angle = theta+self.unit_arc/2
+            start_angle = math.degrees(theta) - self.unit_arc/2
+            end_angle = math.degrees(theta) + self.unit_arc/2
             if start_angle == end_angle:
                 end_angle += 1  # 差が 0 だと変なとこ描画するんで
             cv2.ellipse(canvas,

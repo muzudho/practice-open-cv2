@@ -93,17 +93,17 @@ class CircleRail():
         radius = self.radius
         # 円周上の赤い点の位置
 
-        red_p = (radius * math.cos(math.radians(theta)) + self.center[0],
-                 -radius * math.sin(math.radians(theta)) + self.center[1])  # yは上下反転
+        red_p = (radius * math.cos(theta) + self.center[0],
+                 -radius * math.sin(theta) + self.center[1])  # yは上下反転
 
         # 円周上の緑の点の位置
-        green_p = (radius * math.cos(math.radians(theta-120)) + self.center[0],
-                   -radius * math.sin(math.radians(theta-120)) +
+        green_p = (radius * math.cos(theta-math.radians(120)) + self.center[0],
+                   -radius * math.sin(theta-math.radians(120)) +
                    self.center[1])
 
         # 円周上の青の点の位置
-        blue_p = (radius * math.cos(math.radians(theta+120)) + self.center[0],
-                  -radius * math.sin(math.radians(theta+120)) +
+        blue_p = (radius * math.cos(theta+math.radians(120)) + self.center[0],
+                  -radius * math.sin(theta+math.radians(120)) +
                   self.center[1])
         self.__triangle.nodes_p = (red_p, green_p, blue_p)
 

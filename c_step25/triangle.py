@@ -1,6 +1,7 @@
 """内接する正三角形
 """
 
+import math
 import cv2
 from triangle_calc import calc_triangle
 from colors import GRAY
@@ -89,7 +90,7 @@ class Triangle():
         red = n3bars_len[0]
         green = n3bars_len[1]
         blue = n3bars_len[2]
-        triangle_theta = theta  # +phase*30
+        triangle_theta = theta
         if green == blue and blue < red:
             # 緑と青は等しく、それより赤が上
             phase = 0  # トライアングル・フェーズ
@@ -102,31 +103,31 @@ class Triangle():
         elif blue < red < green:
             # 下から青、赤、緑
             phase = 3
-            triangle_theta -= 120
+            triangle_theta -= math.radians(120)
         elif blue == red and red < green:
             # 青と赤は等しく、それより緑が上
             phase = 4
-            triangle_theta -= 120
+            triangle_theta -= math.radians(120)
         elif red < blue < green:
             # 下から赤、青、緑
             phase = 5
-            triangle_theta -= 120
+            triangle_theta -= math.radians(120)
         elif red < blue and blue == green:
             # 赤より大きい青は緑と等しい
             phase = 6
-            triangle_theta -= 120
+            triangle_theta -= math.radians(120)
         elif red < green < blue:
             # 下から赤、緑、青
             phase = 7
-            triangle_theta += 120
+            triangle_theta += math.radians(120)
         elif red == green and green < blue:
             # 赤と緑は等しく、それより青が上
             phase = 8
-            triangle_theta += 120
+            triangle_theta += math.radians(120)
         elif green < red < blue:
             # 下から緑、赤、青
             phase = 9
-            triangle_theta += 120
+            triangle_theta += math.radians(120)
         elif green < red and red == blue:
             # 緑より大きい赤は青と等しい
             phase = 10

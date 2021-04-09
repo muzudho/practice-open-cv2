@@ -119,14 +119,14 @@ def to_color_rate(vertical_parcent, theta):
         合計 1.0 となる 0.0～1.0 の値が３つ。
         箱の１段目、２段目、３段目の順
     theta : float
-        弧度法。0°を １２時の方向（赤）とし、
+        ラジアンで 0 を １２時の方向（赤）とし、
         時計回りに黄色、緑、青緑……、と進んでいきます
     """
 
     # 円周上の３点のx位置
-    r_x = math.cos(math.radians(theta))
-    g_x = math.cos(math.radians(theta-120))
-    b_x = math.cos(math.radians(theta+120))
+    r_x = math.cos(theta)
+    g_x = math.cos(theta-math.radians(120))
+    b_x = math.cos(theta+math.radians(120))
 
     # -1.0 ～ 1.0 を使いやすいように 0.0 ～ 1.0 に変換
     rrx = (r_x + 1.0) / 2

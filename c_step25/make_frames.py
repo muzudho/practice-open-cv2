@@ -209,7 +209,7 @@ def update_scene1_with_rotate(
         vertical_parcent, phase, bar_box, circle_rail, outer_circle,
         large_triangle, clock_hand):
     """回転が伴うモデルを更新"""
-    theta = 360/PHASE_COUNTS*phase
+    theta = math.radians(360/PHASE_COUNTS*phase)
 
     outer_circle.phase = phase
 
@@ -226,25 +226,25 @@ def update_scene1_with_rotate(
     # 逆関数のテスト
     expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
     expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
-    expected_theta = math.radians(theta)
+    expected_theta = theta
     expected_color = (red, green, blue)
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.000000001  # < 0.000000001
-    error_theta = 0.0117  # 0.0117 < x < 0.012
+    error = 0.0000000001  # < 0.000000001
+    error_theta = 0.0116  # 0.011 < x < 0.0117
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
-actual_upper={actual_upper:3} diff={diff} theta={theta} \
+actual_upper={actual_upper:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
     if actual_lower < expected_lower - error or expected_lower + error < actual_lower:
         diff = actual_lower - expected_lower
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
-actual_lower={actual_lower:3} diff={diff} theta={theta} \
+actual_lower={actual_lower:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
     if actual_theta < expected_theta - error_theta or expected_theta + error_theta < actual_theta:
         diff = actual_theta - expected_theta
@@ -255,8 +255,8 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         diameter = upper - lower
         radius = diameter / 2
         print(
-            f"ERROR           | expected_theta={expected_theta}° \
-actual_theta={actual_theta:9.4f}° diff={diff:9.4f} \
+            f"ERROR           | expected_angle={math.degrees(expected_theta)}° \
+actual_angle={math.degrees(actual_theta):9.4f}° diff={diff:9.4f} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern={pattern}")
 
     red_bar_width = red * bar_box.width
@@ -270,7 +270,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern=
     bar_box.blue_right = bar_box.left + blue_bar_width
 
     # 外環状
-    theta = outer_circle.phase * outer_circle.unit_arc
+    theta = math.radians(outer_circle.phase * outer_circle.unit_arc)
     n3bars_width = bar_box.create_3bars_width()
     outer_circle.color_list.append(convert_3pixels_to_3bytes(
         n3bars_width, bar_box.width))
@@ -368,11 +368,11 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
 
     # 角度（弧度法）表示
     point_x = (circle_rail.radius + 14*GRID_UNIT) * \
-        math.cos(math.radians(circle_rail.theta)) + circle_rail.center[0]
+        math.cos(circle_rail.theta) + circle_rail.center[0]
     point_y = (circle_rail.radius + 14*GRID_UNIT) * \
-        -math.sin(math.radians(circle_rail.theta)) + circle_rail.center[1]
+        -math.sin(circle_rail.theta) + circle_rail.center[1]
     cv2.putText(canvas,
-                f"{circle_rail.theta:7.3f}",
+                f"{math.degrees(circle_rail.theta):7.3f}",
                 point_for_cv2((point_x, point_y)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
@@ -385,7 +385,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     diff_x = abs(gravity2[0]-gravity1[0])
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
-                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) theta={circle_rail.theta}",
+                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f})  \
+angle={math.degrees(circle_rail.theta)}",
                 point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

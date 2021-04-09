@@ -184,6 +184,7 @@ def update_scene1(vertical_parcent, outer_circle):
     large_triangle = Triangle()
     large_triangle.edge_color = BLACK
     large_triangle.nodes_color = (RED, GREEN, BLUE)
+    large_triangle.node_radius = GRID_UNIT / 2
 
     # 時計の針
     clock_hand = ClockHand()

@@ -5,11 +5,11 @@ from conf import BAR_TICKS
 
 
 def color_to_byte(color):
-    """cv2の色値域に合わせます"""
+    """0.0～1.0 を、cv2の色値域 0～255 に合わせます"""
     return (
-        255*color[0]/BAR_TICKS,
-        255*color[1]/BAR_TICKS,
-        255*color[2]/BAR_TICKS)
+        int(255*color[0]/BAR_TICKS),
+        int(255*color[1]/BAR_TICKS),
+        int(255*color[2]/BAR_TICKS))
 
 
 def convert_3bars_to_3bytes(n3bars_pixel, total_pixels):

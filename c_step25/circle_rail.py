@@ -20,7 +20,6 @@ class CircleRail():
 
         self.__range1 = 0
         self.__center = (0, 0)
-        self.__point_range = 0
         self.__red_p = (0, 0)
         self.__green_p = (0, 0)
         self.__blue_p = (0, 0)
@@ -75,15 +74,6 @@ class CircleRail():
     @center.setter
     def center(self, val):
         self.__center = val
-
-    @property
-    def point_range(self):
-        """円周上の点の半径"""
-        return self.__point_range
-
-    @point_range.setter
-    def point_range(self, val):
-        self.__point_range = val
 
     @property
     def theta(self):
@@ -144,27 +134,6 @@ class CircleRail():
     def zoom(self):
         """直径に対するinner_heightの割合。0.0～1.0"""
         return self.inner_height / self.diameter
-
-    def draw_red_p(self, canvas):
-        """円周上の点Rを描きます"""
-        cv2.circle(canvas, self.red_p,
-                   self.point_range,
-                   color_to_byte(RED),
-                   thickness=-1)
-
-    def draw_green_p(self, canvas):
-        """円周上の点Gを描きます"""
-        cv2.circle(canvas, self.green_p,
-                   self.point_range,
-                   color_to_byte(GREEN),
-                   thickness=-1)
-
-    def draw_blue_p(self, canvas):
-        """円周上の点Bを描きます"""
-        cv2.circle(canvas, self.blue_p,
-                   self.point_range,
-                   color_to_byte(BLUE),
-                   thickness=-1)
 
     def draw_circle(self, canvas):
         """描きます"""

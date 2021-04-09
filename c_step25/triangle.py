@@ -5,7 +5,6 @@ import cv2
 from triangle_calc import calc_triangle
 from colors import GRAY
 from color_calc import color_to_byte
-from conf import GRID_UNIT
 
 
 class Triangle():
@@ -15,6 +14,7 @@ class Triangle():
         self.__rbg_points = ((0, 0), (0, 0), (0, 0))
         self.__edge_color = GRAY
         self.__nodes_color = (GRAY, GRAY, GRAY)
+        self.__node_radius = 0
 
     @property
     def edge_color(self):
@@ -38,6 +38,15 @@ class Triangle():
     def rbg_points(self):
         """円周上の点R,B,G"""
         return self.__rbg_points
+
+    @property
+    def node_radius(self):
+        """円周上の点の半径"""
+        return self.__node_radius
+
+    @node_radius.setter
+    def node_radius(self, val):
+        self.__node_radius = val
 
     def triangular_center_of_gravity(self):
         """三角形の重心"""
@@ -180,14 +189,14 @@ class Triangle():
                  thickness=2)
         # ３頂点
         cv2.circle(canvas, self.rbg_points[0],
-                   int(GRID_UNIT/4),
+                   int(self.__node_radius),
                    color_to_byte(self.__nodes_color[0]),
                    thickness=-1)
         cv2.circle(canvas, self.rbg_points[1],
-                   int(GRID_UNIT/4),
+                   int(self.__node_radius),
                    color_to_byte(self.__nodes_color[2]),
                    thickness=-1)
         cv2.circle(canvas, self.rbg_points[2],
-                   int(GRID_UNIT/4),
+                   int(self.__node_radius),
                    color_to_byte(self.__nodes_color[1]),
                    thickness=-1)

@@ -391,7 +391,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
                 f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) \
-error angle={math.degrees(error_theta):10.6f} deg",
+error angle={math.degrees(error_theta):10.6f} deg \
+{error_theta:9.6f} rad",
                 point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

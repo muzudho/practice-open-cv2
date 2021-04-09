@@ -49,6 +49,8 @@ VERTICAL_PARCENT = [
     [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     [0.0, 1.0, 0.0],  # Vivid
+    # テストケース（鮮やかさ小）
+    [0.0, 0.01, 0.99],
 ]
 TONE_NAME = [
     'Bright',
@@ -63,6 +65,7 @@ TONE_NAME = [
     'Grayish',
     'Dark grayish',
     'Vivid',
+    'Test case',
 ]
 
 
@@ -162,15 +165,15 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail = CircleRail()
     circle_rail.drawing_top = bar_box.bottom + GRID_UNIT
     circle_rail.drawing_bottom = CANVAS_HEIGHT - GRID_UNIT
-    circle_rail.range1 = width2 / 2
+    circle_rail.radius = width2 / 2
 
     circle_rail.center = ((bar_box.lower_x+bar_box.upper_x)/2,
-                          bar_box.bottom+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
+                          bar_box.bottom+CIRCLE_DISTANCE+circle_rail.radius)  # x, y
     circle_rail.border_rect = Rectangle(
         bar_box.lower_x,
-        circle_rail.center[1] - circle_rail.range1,
+        circle_rail.center[1] - circle_rail.radius,
         bar_box.upper_x,
-        circle_rail.center[1] + circle_rail.range1)
+        circle_rail.center[1] + circle_rail.radius)
     circle_rail.point_range = 4
 
     # 外環状
@@ -192,7 +195,7 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.center = (circle_rail.center[0], circle_rail.center[1])
     clock_hand.unit_arc = outer_circle.unit_arc
     clock_hand.tickness = 2
-    clock_hand.radius1 = circle_rail.range1  # 1st range
+    clock_hand.radius1 = circle_rail.radius  # 1st range
     radius2_expected = bar_box.width*9/10
     clock_hand.radius2 = radius2_expected - \
         outer_circle.tickness / 2 - clock_hand.tickness  # 2nd range
@@ -229,8 +232,8 @@ def update_scene1_with_rotate(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.0000001  # < 0.7
-    error_theta = 0.02
+    error = 0.000000001  # < 0.0000001
+    error_theta = 0.015  # < 0.015
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
@@ -369,7 +372,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     diff_x = abs(gravity2[0]-gravity1[0])
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
-                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f})",
+                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) theta={circle_rail.theta}",
                 (10, 10),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
@@ -382,13 +385,13 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
 def draw_border(circle_rail, canvas):
     """背景の左限、右限の線"""
 
-    diameter = 2*circle_rail.range1
+    diameter = 2*circle_rail.radius
     half_height = diameter * math.tan(math.radians(30))
 
     # 矩形
-    left = circle_rail.center[0] - circle_rail.range1
+    left = circle_rail.center[0] - circle_rail.radius
     top = circle_rail.center[1] - half_height
-    right = circle_rail.center[0] + circle_rail.range1
+    right = circle_rail.center[0] + circle_rail.radius
     bottom = circle_rail.center[1] + half_height
     cv2.rectangle(canvas,
                   point_for_cv2((left, top)),
@@ -398,17 +401,17 @@ def draw_border(circle_rail, canvas):
 
     # 左限の線
     cv2.line(canvas,
-             point_for_cv2((circle_rail.center[0] - circle_rail.range1,
+             point_for_cv2((circle_rail.center[0] - circle_rail.radius,
                             circle_rail.drawing_top)),
-             point_for_cv2((circle_rail.center[0] - circle_rail.range1,
+             point_for_cv2((circle_rail.center[0] - circle_rail.radius,
                             circle_rail.drawing_bottom)),
              color_for_cv2(GRAY, BAR_TICKS),
              thickness=2)
     # 右限の線
     cv2.line(canvas,
-             point_for_cv2((circle_rail.center[0] + circle_rail.range1,
+             point_for_cv2((circle_rail.center[0] + circle_rail.radius,
                             circle_rail.drawing_top)),
-             point_for_cv2((circle_rail.center[0] + circle_rail.range1,
+             point_for_cv2((circle_rail.center[0] + circle_rail.radius,
                             circle_rail.drawing_bottom)),
              color_for_cv2(GRAY, BAR_TICKS),
              thickness=2)

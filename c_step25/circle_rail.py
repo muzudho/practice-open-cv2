@@ -20,7 +20,7 @@ class CircleRail():
         self.__drawing_bottom = 0
         self.__border_rect = Rectangle()
 
-        self.__range1 = 0
+        self.__radius = 0
         self.__center = (0, 0)
         self.__theta = 0
         self.__triangle = Triangle()
@@ -31,14 +31,14 @@ class CircleRail():
         self.__triangle.center_color = PALE_GRAY
 
     @property
-    def range1(self):
+    def radius(self):
         """半径"""
-        return self.__range1
+        return self.__radius
 
     @property
     def diameter(self):
         """直径"""
-        return 2*self.__range1
+        return 2*self.__radius
 
     @property
     def border_rect(self):
@@ -67,9 +67,9 @@ class CircleRail():
     def drawing_bottom(self, val):
         self.__drawing_bottom = val
 
-    @range1.setter
-    def range1(self, val):
-        self.__range1 = val
+    @radius.setter
+    def radius(self, val):
+        self.__radius = val
 
     @property
     def center(self):
@@ -90,7 +90,7 @@ class CircleRail():
         """円周上の点の位置を設定"""
 
         self.__theta = theta
-        radius = self.range1
+        radius = self.radius
         # 円周上の赤い点の位置
 
         red_p = (radius * math.cos(math.radians(theta)) + self.center[0],
@@ -141,7 +141,7 @@ class CircleRail():
         # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
         cv2.circle(canvas,
                    point_for_cv2(self.center),
-                   int(self.range1),
+                   int(self.radius),
                    color_for_cv2(PALE_GRAY, BAR_TICKS),
                    thickness=2)
 

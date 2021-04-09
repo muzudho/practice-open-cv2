@@ -12,8 +12,8 @@ GRID_UNIT = 14
 # 色相環一周分のコマ数
 # PHASE_COUNTS = 6
 # PHASE_COUNTS = 24
-PHASE_COUNTS = 60
-# PHASE_COUNTS = 360 # よく確認するにはこれだが、画像が多すぎる（＾～＾）
+# PHASE_COUNTS = 60
+PHASE_COUNTS = 360  # よく確認するにはこれだが、画像が多すぎる（＾～＾）
 
 # フォント倍率
 FONT_SCALE = 0.5

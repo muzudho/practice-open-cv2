@@ -9,7 +9,7 @@ from colors import  \
 from color_calc import convert_pixel_to_byte
 from conf import GRID_UNIT, BAR_TICKS
 from rectangle import Rectangle
-from cv2_helper import color_for_cv2
+from cv2_helper import color_for_cv2, point_for_cv2
 
 
 class BarBox():
@@ -148,7 +148,7 @@ class BarBox():
     @property
     def green_top(self):
         """緑のバー上端"""
-        return int(self.top + self.one_height)
+        return self.top + self.one_height
 
     @property
     def blue_right(self):
@@ -162,7 +162,7 @@ class BarBox():
     @property
     def blue_top(self):
         """青のバーの上端"""
-        return int(self.top + 2*self.one_height)
+        return self.top + 2*self.one_height
 
     @property
     def rank1_rect(self):
@@ -259,7 +259,7 @@ class BarBox():
         for i, figure in enumerate(figures):
             cv2.putText(canvas,
                         f"{figure}",
-                        (int(left+i*0.7*GRID_UNIT), top),  # x,y
+                        point_for_cv2((left+i*0.7*GRID_UNIT, top)),  # x,y
                         self.font,
                         self.font_scale,
                         color_for_cv2(color, BAR_TICKS),
@@ -273,7 +273,7 @@ class BarBox():
             width2+width3, self.height)
         right3_byte = convert_pixel_to_byte(
             width3, self.height)
-        right2_over = int(self.upper_x+GRID_UNIT/2)
+        right2_over = self.upper_x+GRID_UNIT/2
 
         # 10進R値テキスト
         num = rgb_numbers[0]
@@ -281,16 +281,16 @@ class BarBox():
         if num == right2_byte:
             right = right2_over
         elif num == right3_byte:
-            right = int(self.red_right - 2.5*GRID_UNIT)
+            right = self.red_right - 2.5*GRID_UNIT
         else:
-            right = int(self.red_right - 2.5*GRID_UNIT)
+            right = self.red_right - 2.5*GRID_UNIT
             font_color = PALE_RED
 
         self.draw_3figures(
             canvas,
             num,
             right,
-            int(self.red_top+1.5*GRID_UNIT),
+            self.red_top+1.5*GRID_UNIT,
             font_color)
 
         # 10進G値テキスト
@@ -299,16 +299,16 @@ class BarBox():
         if num == right2_byte:
             right = right2_over
         elif num == right3_byte:
-            right = int(self.green_right - 2.5*GRID_UNIT)
+            right = self.green_right - 2.5*GRID_UNIT
         else:
-            right = int(self.green_right - 2.5*GRID_UNIT)
+            right = self.green_right - 2.5*GRID_UNIT
             font_color = PALE_GREEN
 
         self.draw_3figures(
             canvas,
             num,
             right,
-            int(self.green_top+1.5*GRID_UNIT),
+            self.green_top+1.5*GRID_UNIT,
             font_color)
 
         # 10進B値テキスト
@@ -317,16 +317,16 @@ class BarBox():
         if num == right2_byte:
             right = right2_over
         elif num == right3_byte:
-            right = int(self.blue_right - 2.5*GRID_UNIT)
+            right = self.blue_right - 2.5*GRID_UNIT
         else:
-            right = int(self.blue_right - 2.5*GRID_UNIT)
+            right = self.blue_right - 2.5*GRID_UNIT
             font_color = PALE_BLUE
 
         self.draw_3figures(
             canvas,
             num,
             right,
-            int(self.blue_top+1.5*GRID_UNIT),
+            self.blue_top+1.5*GRID_UNIT,
             font_color)
 
     def draw_x_axis_label(self, canvas):
@@ -342,25 +342,25 @@ class BarBox():
         # バーの最大値(0から始まる数)
         self.draw_3figures(
             canvas, BAR_TICKS-1,
-            int(self.right+GRID_UNIT/2),
+            self.right+GRID_UNIT/2,
             top,
             BRIGHT_GRAY)
         # 0
         self.draw_3figures(
             canvas, 0,
-            int(self.left-2.5*GRID_UNIT),
+            self.left-2.5*GRID_UNIT,
             top,
             BRIGHT_GRAY)
         # U
         self.draw_3figures(
             canvas, rank23_byte,
-            int(self.upper_x+GRID_UNIT/2),
+            self.upper_x+GRID_UNIT/2,
             top,
             DARK_GRAYISH_GRAY)
         # L
         self.draw_3figures(
             canvas, rank3_byte,
-            int(self.lower_x-2.5*GRID_UNIT),
+            self.lower_x-2.5*GRID_UNIT,
             top,
             DARK_GRAYISH_GRAY)
 
@@ -368,28 +368,28 @@ class BarBox():
         """バー率を描きます"""
         top = self.top+self.label_gap
         # 右列のバー率
-        left = int(self.__right - 0.5*GRID_UNIT)
+        left = self.__right - 0.5*GRID_UNIT
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
-                    (left, top),  # x,y
+                    point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
                     color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
                     self.line_type)
         # 中列のバー率
-        left = int((self.__lower_x + self.__upper_x)/2 - 1.5*GRID_UNIT)
+        left = (self.__lower_x + self.__upper_x)/2 - 1.5*GRID_UNIT
         cv2.putText(canvas,
                     f"{int(self.rates[1]*100):3}%",
-                    (left, top),  # x,y
+                    point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
                     color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
                     self.line_type)
         # 左列のバー率
-        left = int(self.__left - 3*GRID_UNIT)
+        left = self.__left - 3*GRID_UNIT
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
-                    (left, top),  # x,y
+                    point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
                     color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
@@ -402,21 +402,25 @@ class BarBox():
 
         # バーR
         cv2.rectangle(canvas,
-                      (self.__left, self.__top),
-                      (self.__red_right, int(self.__top + self.one_height)),
+                      point_for_cv2((self.__left, self.__top)),
+                      point_for_cv2((self.__red_right,
+                                     self.__top + self.one_height)),
                       color_for_cv2(RED, BAR_TICKS),
                       thickness=-1)
 
         # バーG
         cv2.rectangle(canvas,
-                      (self.__left, int(self.__top + self.one_height)),
-                      (self.__green_right, int(self.__top + 2*self.one_height)),
+                      point_for_cv2(
+                          (self.__left, self.__top + self.one_height)),
+                      point_for_cv2((self.__green_right,
+                                     self.__top + 2*self.one_height)),
                       color_for_cv2(GREEN, BAR_TICKS),
                       thickness=-1)
 
         # バーB
         cv2.rectangle(canvas,
-                      (self.__left, int(self.__top + 2*self.one_height)),
-                      (self.__blue_right, self.__bottom),
+                      point_for_cv2((self.__left, self.__top +
+                                     2*self.one_height)),
+                      point_for_cv2((self.__blue_right, self.__bottom)),
                       color_for_cv2(BLUE, BAR_TICKS),
                       thickness=-1)

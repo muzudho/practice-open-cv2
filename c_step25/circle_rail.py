@@ -90,20 +90,20 @@ class CircleRail():
         """円周上の点の位置を設定"""
 
         self.__theta = theta
-        rng = self.range1
+        radius = self.range1
         # 円周上の赤い点の位置
 
-        red_p = (rng * math.cos(math.radians(theta)) + self.center[0],
-                 -rng * math.sin(math.radians(theta)) + self.center[1])  # yは上下反転
+        red_p = (radius * math.cos(math.radians(theta)) + self.center[0],
+                 -radius * math.sin(math.radians(theta)) + self.center[1])  # yは上下反転
 
         # 円周上の緑の点の位置
-        green_p = (rng * math.cos(math.radians(theta-120)) + self.center[0],
-                   -rng * math.sin(math.radians(theta-120)) +
+        green_p = (radius * math.cos(math.radians(theta-120)) + self.center[0],
+                   -radius * math.sin(math.radians(theta-120)) +
                    self.center[1])
 
         # 円周上の青の点の位置
-        blue_p = (rng * math.cos(math.radians(theta+120)) + self.center[0],
-                  -rng * math.sin(math.radians(theta+120)) +
+        blue_p = (radius * math.cos(math.radians(theta+120)) + self.center[0],
+                  -radius * math.sin(math.radians(theta+120)) +
                   self.center[1])
         self.__triangle.nodes_p = (red_p, green_p, blue_p)
 

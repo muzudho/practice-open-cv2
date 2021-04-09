@@ -192,12 +192,12 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.center = (circle_rail.center[0], circle_rail.center[1])
     clock_hand.unit_arc = outer_circle.unit_arc
     clock_hand.tickness = 2
-    clock_hand.rng1 = circle_rail.range1  # 1st range
-    rng2_expected = bar_box.width*9/10
-    clock_hand.rng2 = int(rng2_expected - outer_circle.tickness /
-                          2 - clock_hand.tickness)  # 2nd range
-    clock_hand.rng3 = int(rng2_expected + outer_circle.tickness /
-                          2 + clock_hand.tickness)  # 3rd range
+    clock_hand.radius1 = circle_rail.range1  # 1st range
+    radius2_expected = bar_box.width*9/10
+    clock_hand.radius2 = int(radius2_expected - outer_circle.tickness /
+                             2 - clock_hand.tickness)  # 2nd range
+    clock_hand.radius3 = int(radius2_expected + outer_circle.tickness /
+                             2 + clock_hand.tickness)  # 3rd range
 
     return bar_box, circle_rail, outer_circle, large_triangle, clock_hand
 

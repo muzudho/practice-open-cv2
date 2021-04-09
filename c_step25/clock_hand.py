@@ -4,7 +4,7 @@ import math
 import cv2
 from colors import PALE_GRAY
 from conf import BAR_TICKS
-from cv2_helper import color_for_cv2
+from cv2_helper import color_for_cv2, point_for_cv2
 
 
 class ClockHand():
@@ -15,9 +15,9 @@ class ClockHand():
         self.__theta = 0
         self.__unit_arc = 0
         self.__tickness = 0
-        self.__rng1 = 0
-        self.__rng2 = 0
-        self.__rng3 = 0
+        self.__radius1 = 0
+        self.__radius2 = 0
+        self.__radius3 = 0
 
     @property
     def center(self):
@@ -56,55 +56,57 @@ class ClockHand():
         self.__tickness = val
 
     @property
-    def rng1(self):
+    def radius1(self):
         """半径の長さ"""
-        return self.__rng1
+        return self.__radius1
 
-    @rng1.setter
-    def rng1(self, val):
-        self.__rng1 = val
+    @radius1.setter
+    def radius1(self, val):
+        self.__radius1 = val
 
     @property
-    def rng2(self):
+    def radius2(self):
         """半径の長さ"""
-        return self.__rng2
+        return self.__radius2
 
-    @rng2.setter
-    def rng2(self, val):
-        self.__rng2 = val
+    @radius2.setter
+    def radius2(self, val):
+        self.__radius2 = val
 
     @property
-    def rng3(self):
+    def radius3(self):
         """半径の長さ"""
-        return self.__rng3
+        return self.__radius3
 
-    @rng3.setter
-    def rng3(self, val):
-        self.__rng3 = val
+    @radius3.setter
+    def radius3(self, val):
+        self.__radius3 = val
 
     def draw_clock_hand(self, canvas):
         """時計の針を描きます"""
         inner_p = (
-            int(self.rng1 * math.cos(math.radians(self.theta)) +
-                self.center[0]),
-            int(-self.rng1 * math.sin(math.radians(self.theta))+self.center[1]))
+            self.radius1 * math.cos(math.radians(self.theta)) +
+            self.center[0],
+            -self.radius1 * math.sin(math.radians(self.theta))+self.center[1])
         outer_p = (
-            int(self.rng2 *
-                math.cos(math.radians(self.theta))+self.center[0]),
-            int(-self.rng2 * math.sin(math.radians(self.theta))
-                + self.center[1]))
-        cv2.line(canvas, inner_p, outer_p,
+            self.radius2 *
+            math.cos(math.radians(self.theta))+self.center[0],
+            -self.radius2 * math.sin(math.radians(self.theta))
+            + self.center[1])
+        cv2.line(canvas,
+                 point_for_cv2(inner_p),
+                 point_for_cv2(outer_p),
                  color_for_cv2(PALE_GRAY, BAR_TICKS),
                  thickness=2)
         # 時計の針の先
         # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-        start_angle = int(self.theta - self.unit_arc/2)
-        end_angle = int(self.theta + self.unit_arc/2)
+        start_angle = self.theta - self.unit_arc/2
+        end_angle = self.theta + self.unit_arc/2
         if start_angle == end_angle:
             end_angle += 1  # 差が 0 だと変なとこ描画するんで
         cv2.ellipse(canvas,
                     self.center,
-                    (self.rng2, self.rng2),
+                    point_for_cv2((self.radius2, self.radius2)),
                     0,
                     360-start_angle,
                     360-end_angle,
@@ -112,7 +114,7 @@ class ClockHand():
                     thickness=self.tickness)
         cv2.ellipse(canvas,
                     self.center,
-                    (self.rng3, self.rng3),
+                    point_for_cv2((self.radius3, self.radius3)),
                     0,
                     360-start_angle,
                     360-end_angle,

@@ -4,9 +4,10 @@
 import math
 
 import cv2
-from colors import WHITE, PALE_GRAY, RED, GREEN, BLUE
+from colors import WHITE, PALE_GRAY
 from color_calc import color_to_byte
 from rectangle import Rectangle
+from triangle import Triangle
 
 
 class CircleRail():
@@ -20,10 +21,8 @@ class CircleRail():
 
         self.__range1 = 0
         self.__center = (0, 0)
-        self.__red_p = (0, 0)
-        self.__green_p = (0, 0)
-        self.__blue_p = (0, 0)
         self.__theta = 0
+        self.__triangle = Triangle()
 
     @property
     def range1(self):
@@ -87,43 +86,39 @@ class CircleRail():
         self.__theta = theta
         rng = self.range1
         # 円周上の赤い点の位置
-        self.__red_p = (int(rng * math.cos(math.radians(theta)) + self.center[0]),
-                        int(-rng * math.sin(math.radians(theta)) + self.center[1]))  # yは上下反転
+
+        red_p = (int(rng * math.cos(math.radians(theta)) + self.center[0]),
+                 int(-rng * math.sin(math.radians(theta)) + self.center[1]))  # yは上下反転
 
         # 円周上の緑の点の位置
-        self.__green_p = (int(rng * math.cos(math.radians(theta-120)) + self.center[0]),
-                          int(-rng * math.sin(math.radians(theta-120)) +
-                              self.center[1]))
+        green_p = (int(rng * math.cos(math.radians(theta-120)) + self.center[0]),
+                   int(-rng * math.sin(math.radians(theta-120)) +
+                       self.center[1]))
 
         # 円周上の青の点の位置
-        self.__blue_p = (int(rng * math.cos(math.radians(theta+120)) + self.center[0]),
-                         int(-rng * math.sin(math.radians(theta+120)) +
-                             self.center[1]))
+        blue_p = (int(rng * math.cos(math.radians(theta+120)) + self.center[0]),
+                  int(-rng * math.sin(math.radians(theta+120)) +
+                      self.center[1]))
+        self.__triangle.nodes_p = (red_p, green_p, blue_p)
 
     @property
-    def red_p(self):
-        """円周上の赤の点の位置"""
-        return self.__red_p
-
-    @property
-    def green_p(self):
-        """円周上の緑の点の位置"""
-        return self.__green_p
-
-    @property
-    def blue_p(self):
-        """円周上の青の点の位置"""
-        return self.__blue_p
+    def triangle(self):
+        """円に内接する三角形"""
+        return self.__triangle
 
     @property
     def upper_bound_y(self):
         """上限"""
-        return min(self.red_p[1], self.green_p[1], self.blue_p[1])
+        return min(
+            self.__triangle.nodes_p[0][1],
+            self.__triangle.nodes_p[0][1], self.__triangle.nodes_p[0][1])
 
     @property
     def lower_bound_y(self):
         """下限"""
-        return max(self.red_p[1], self.green_p[1], self.blue_p[1])
+        return max(
+            self.__triangle.nodes_p[0][1],
+            self.__triangle.nodes_p[0][1], self.__triangle.nodes_p[0][1])
 
     @property
     def inner_height(self):
@@ -145,16 +140,16 @@ class CircleRail():
 
     def draw_triangle(self, canvas):
         """円に内接する線。正三角形"""
-        cv2.line(canvas, self.red_p,
-                 self.green_p,
+        cv2.line(canvas, self.__triangle.nodes_p[0],
+                 self.__triangle.nodes_p[1],
                  color_to_byte(WHITE),
                  thickness=2)
-        cv2.line(canvas, self.green_p,
-                 self.blue_p,
+        cv2.line(canvas, self.__triangle.nodes_p[1],
+                 self.__triangle.nodes_p[2],
                  color_to_byte(WHITE),
                  thickness=2)
-        cv2.line(canvas, self.blue_p,
-                 self.red_p,
+        cv2.line(canvas, self.__triangle.nodes_p[2],
+                 self.__triangle.nodes_p[0],
                  color_to_byte(WHITE),
                  thickness=2)
 

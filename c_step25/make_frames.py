@@ -328,21 +328,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
-             large_triangle.rbg_points[0],
+             large_triangle.nodes_p[0],
              (bar_box.red_right, bar_box.red_top),
              color_to_byte(RED),
              thickness=2)
 
     # 水平線G
     cv2.line(canvas,
-             large_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
+             large_triangle.nodes_p[2],  # 青と緑が入れ替わっているのが工夫
              (bar_box.green_right, bar_box.green_top),
              color_to_byte(GREEN),
              thickness=2)
 
     # 水平線B
     cv2.line(canvas,
-             large_triangle.rbg_points[1],
+             large_triangle.nodes_p[1],
              (bar_box.blue_right, bar_box.blue_top),
              color_to_byte(BLUE),
              thickness=2)

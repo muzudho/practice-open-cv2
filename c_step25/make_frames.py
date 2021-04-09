@@ -6,16 +6,15 @@ import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
-    LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, \
     SOFT_GRAY, RED, GREEN, BLUE, \
-    DARK_GRAYISH_GRAY
+    DARK_GRAYISH_GRAY, BLACK
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes, \
     color_to_byte
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
-from inscribed_triangle import InscribedTriangle
+from triangle import Triangle
 from clock_hand import ClockHand
 from rectangle import Rectangle
 
@@ -112,16 +111,16 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
 
     for phase in range(0, PHASE_COUNTS):
         canvas = make_canvas()
-        bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand = update_scene1(
+        bar_box, circle_rail, outer_circle, large_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
         update_scene1_with_rotate(vertical_parcent,
                                   phase, bar_box, circle_rail, outer_circle,
-                                  inscribed_triangle, clock_hand)
+                                  large_triangle, clock_hand)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             outer_circle, inscribed_triangle, clock_hand)
+                             outer_circle, large_triangle, clock_hand)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -181,7 +180,10 @@ def update_scene1(vertical_parcent, outer_circle):
     outer_circle.phases = PHASE_COUNTS
     outer_circle.tickness = int(1.5*GRID_UNIT)
 
-    inscribed_triangle = InscribedTriangle()
+    # 長方形に内接する大きな正三角形
+    large_triangle = Triangle()
+    large_triangle.edge_color = BLACK
+    large_triangle.nodes_color = (RED, GREEN, BLUE)
 
     # 時計の針
     clock_hand = ClockHand()
@@ -195,12 +197,12 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.rng3 = int(rng2_expected + outer_circle.tickness /
                           2 + clock_hand.tickness)  # 3rd range
 
-    return bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand
+    return bar_box, circle_rail, outer_circle, large_triangle, clock_hand
 
 
 def update_scene1_with_rotate(
         vertical_parcent, phase, bar_box, circle_rail, outer_circle,
-        inscribed_triangle, clock_hand):
+        large_triangle, clock_hand):
     """回転が伴うモデルを更新"""
     theta = 360/PHASE_COUNTS*phase
 
@@ -269,13 +271,13 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern=
         n3bars_width, bar_box.width))
     #
 
-    inscribed_triangle.update(
+    large_triangle.update(
         bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, n3bars_width)
 
-    gravity = inscribed_triangle.triangular_center_of_gravity()
+    gravity = large_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],
                gravity[1] - circle_rail.center[1])
-    inscribed_triangle.correct_horizon(diff_xy)
+    large_triangle.correct_horizon(diff_xy)
 
     # 時計の針
     clock_hand.theta = theta
@@ -309,14 +311,14 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, clock_hand):
+def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, clock_hand):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_circle(canvas)  # 円レール
     circle_rail.draw_triangle(canvas)  # 円に内接する正三角形
     circle_rail.draw_border(canvas)  # 背景の上限、下限の線
 
-    inscribed_triangle.draw(canvas)
+    large_triangle.draw(canvas)
 
     bar_box.draw_3bars(canvas)  # RGBバー
 
@@ -325,21 +327,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
-             inscribed_triangle.rbg_points[0],
+             large_triangle.rbg_points[0],
              (bar_box.red_right, bar_box.red_top),
              color_to_byte(RED),
              thickness=2)
 
     # 水平線G
     cv2.line(canvas,
-             inscribed_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
+             large_triangle.rbg_points[2],  # 青と緑が入れ替わっているのが工夫
              (bar_box.green_right, bar_box.green_top),
              color_to_byte(GREEN),
              thickness=2)
 
     # 水平線B
     cv2.line(canvas,
-             inscribed_triangle.rbg_points[1],
+             large_triangle.rbg_points[1],
              (bar_box.blue_right, bar_box.blue_top),
              color_to_byte(BLUE),
              thickness=2)
@@ -358,127 +360,6 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, inscribed_triangle, 
     color = convert_3bars_to_3bytes(n3bars_width, bar_box.width)
     bar_box.draw_rgb_number(canvas, color)
 
-    # テスト
-    red = n3bars_width[0]
-    green = n3bars_width[1]
-    blue = n3bars_width[2]
-
-    upper = max(red, green, blue)
-    lower = min(red, green, blue)
-    bar_width = red + green + blue - upper - lower - lower
-    diameter = upper - lower
-    radius = diameter / 2
-    tanjent = diameter - bar_width - radius
-    opposite = (math.sqrt(3)/2) * tanjent
-    adjacent = radius
-    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-    ex_radius = 2*math.tan(math.radians(30)) * radius
-    ex_adjacent = ex_radius
-    ex_hipotenuse = math.sqrt(ex_adjacent**2 + tanjent**2)
-
-    # テスト タンジェント
-    left = int(circle_rail.center[0]-tanjent)
-    top = int(circle_rail.center[1]-ex_radius)
-    right = int(circle_rail.center[0])
-    bottom = int(circle_rail.center[1]-ex_radius)
-    cv2.line(canvas,
-             (left, top),
-             (right, bottom),
-             color_to_byte(GREEN),
-             thickness=4)
-
-    # テスト対辺
-    left = int(circle_rail.center[0]-opposite)
-    top = int(circle_rail.center[1]-circle_rail.range1)
-    right = int(circle_rail.center[0])
-    bottom = int(circle_rail.center[1]-circle_rail.range1)
-    cv2.line(canvas,
-             (left, top),
-             (right, bottom),
-             color_to_byte(LIGHT_GREEN),
-             thickness=4)
-
-    # テスト底辺
-    cv2.line(canvas,
-             (circle_rail.center[0], int(circle_rail.center[1]-ex_adjacent)),
-             (circle_rail.center[0], circle_rail.center[1]),
-             color_to_byte(RED),
-             thickness=4)
-
-    # テスト底辺
-    cv2.line(canvas,
-             (circle_rail.center[0], int(circle_rail.center[1]-adjacent)),
-             (circle_rail.center[0], circle_rail.center[1]),
-             color_to_byte(LIGHT_RED),
-             thickness=4)
-
-    # atan だとずれる。 asin だとピッタリに見える（＾～＾）acosは向きが違う（＾～＾）
-    #test_theta = math.degrees(math.acos(opposite / hipotenuse))
-    test_theta = math.degrees(math.asin(opposite / hipotenuse))
-    #test_theta = math.degrees(math.atan(opposite / hipotenuse))
-    # テスト角度
-    # cv2.ellipse(canvas,
-    #            circle_rail.center,
-    #            (2*circle_rail.range1, 2*circle_rail.range1),
-    #            0,
-    #            0,
-    #            test_theta,
-    #            color_to_byte(RED),
-    #            thickness=4)
-
-    # テスト斜辺
-    point_x = ex_hipotenuse * \
-        math.cos(math.radians(test_theta+90)) + circle_rail.center[0]
-    point_y = ex_hipotenuse * \
-        -math.sin(math.radians(test_theta+90)) + circle_rail.center[1]
-    # print(f"point_x={point_x} point_y={point_y}")
-    cv2.line(canvas,
-             (circle_rail.center[0], circle_rail.center[1]),
-             (int(point_x), int(point_y)),
-             color_to_byte(BLUE),
-             thickness=4)
-
-    # テスト斜辺
-    point_x = hipotenuse * \
-        math.cos(math.radians(test_theta+90)) + circle_rail.center[0]
-    point_y = hipotenuse * \
-        -math.sin(math.radians(test_theta+90)) + circle_rail.center[1]
-    # print(f"point_x={point_x} point_y={point_y}")
-    cv2.line(canvas,
-             (circle_rail.center[0], circle_rail.center[1]),
-             (int(point_x), int(point_y)),
-             color_to_byte(LIGHT_BLUE),
-             thickness=4)
-
-    # 角60°の補助線（定義から、外接する矩形の左上の角）
-    #left = int(circle_rail.center[0]-circle_rail.range1)
-    #top = int(circle_rail.center[1]-diameter * math.tan(math.radians(30)))
-    #right = int(circle_rail.center[0])
-    #bottom = int(circle_rail.center[1])
-    # cv2.line(canvas,
-    #         (left, top),
-    #         (right, bottom),
-    #         color_to_byte(RED),
-    #         thickness=2)
-
-    # gravity = inscribed_triangle.triangular_center_of_gravity()
-
-    # debug
-    # cv2.putText(canvas,
-    #            f"theta={circle_rail.theta}",
-    #            # f"theta={circle_rail.theta} phase={outer_circle.phase} \
-    #  gravity=({gravity[0]:5.1f}, {gravity[1]:5.1f})",
-    #            (10, 10),  # x,y
-    #            cv2.FONT_HERSHEY_SIMPLEX,
-    #            FONT_SCALE,
-    #            color_to_byte(BLACK),
-    #            lineType=2)
-    # f"multiple=({n3bars_multiple[0]:7.3f}, {n3bars_multiple[1]:7.3f}, {n3bars_multiple[2]:7.3f})",
-
-    # cv2.imshow('Title', canvas)
-    # cv2.imwrite('form.jpg',canvas)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
     return canvas
 
 

@@ -9,9 +9,9 @@ import numpy as np
 
 def calc_triangle(upper_x, lower_x, theta, center):
     """画像を出力
-    theta : int
+    theta : float
         0時の方向を0°とする時計回りの角度(弧度法)
-    center : (int,int)
+    center : (float,float)
         ある点c
     """
 
@@ -64,17 +64,17 @@ def calc_triangle(upper_x, lower_x, theta, center):
 
 def make_line(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
-    return ((int(range1 * math.cos(math.radians(theta)) + center[0]),
-             int(-range1 * math.sin(math.radians(theta)) + center[1])),  # yは逆さ
-            (int(range1 * math.cos(math.radians(180+theta)) + center[0]),
-             int(-range1 * math.sin(math.radians(180+theta)) + center[1])))
+    return ((range1 * math.cos(math.radians(theta)) + center[0],
+             -range1 * math.sin(math.radians(theta)) + center[1]),  # yは逆さ
+            (range1 * math.cos(math.radians(180+theta)) + center[0],
+             -range1 * math.sin(math.radians(180+theta)) + center[1]))
 
 
 def make_beam(range1, theta, center):
     """直線((x1,y1),(x2,y2))を求めます"""
     return ((center[0], center[1]),  # yは逆さ
-            (int(range1 * math.cos(math.radians(theta)) + center[0]),
-             int(-range1 * math.sin(math.radians(theta)) + center[1])))
+            (range1 * math.cos(math.radians(theta)) + center[0],
+             -range1 * math.sin(math.radians(theta)) + center[1]))
 
 
 def line_cross(line_ab, line_cd):
@@ -106,7 +106,7 @@ def line_cross(line_ab, line_cd):
             cross_x = (work1*a_x-a_y-work3*c_x+c_y)/(work1-work3)
             cross_y = (b_y-a_y)/(b_x-a_x)*(cross_x-a_x)+a_y
 
-    return (int(cross_x), int(cross_y))
+    return (cross_x, cross_y)
 
 
 def distance(point_a, point_b):

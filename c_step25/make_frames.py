@@ -232,8 +232,8 @@ def update_scene1_with_rotate(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.00000000001  # < 0.000000001
-    error_theta = 0.0115  # 0.011 < x < 0.0115
+    error = 0.0000000000001  # < 0.000000000001
+    error_theta = 0.0113  # 0.011 < x < 0.0114
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
@@ -385,8 +385,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     diff_x = abs(gravity2[0]-gravity1[0])
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
-                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f})  \
-angle={math.degrees(circle_rail.theta)}",
+                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f})",
                 point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

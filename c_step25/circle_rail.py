@@ -4,7 +4,7 @@
 import math
 
 import cv2
-from colors import WHITE, PALE_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
+from colors import WHITE, PALE_GRAY, LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
 from color_calc import color_to_byte
 from rectangle import Rectangle
 from triangle import Triangle
@@ -28,6 +28,7 @@ class CircleRail():
         self.__triangle.node_radius = int(GRID_UNIT / 2)
         self.__triangle.nodes_color = (
             LIGHT_RED, LIGHT_BLUE, LIGHT_GREEN)  # 緑と青が逆なのが工夫
+        self.__triangle.center_color = LIGHT_GRAY
 
     @property
     def range1(self):

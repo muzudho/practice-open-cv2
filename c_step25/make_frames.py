@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
-    SOFT_GRAY, RED, GREEN, BLUE, \
+    SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes, \
     color_to_byte
@@ -17,6 +17,7 @@ from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE
 from triangle import Triangle
 from clock_hand import ClockHand
 from rectangle import Rectangle
+from cv2_helper import point_for_cv2
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -185,6 +186,7 @@ def update_scene1(vertical_parcent, outer_circle):
     large_triangle.edge_color = BLACK
     large_triangle.nodes_color = (RED, GREEN, BLUE)
     large_triangle.node_radius = GRID_UNIT / 2
+    large_triangle.center_color = GRAY
 
     # 時計の針
     clock_hand = ClockHand()
@@ -328,21 +330,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     # 水平線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
-             large_triangle.nodes_p[0],
+             point_for_cv2(large_triangle.nodes_p[0]),
              (bar_box.red_right, bar_box.red_top),
              color_to_byte(RED),
              thickness=2)
 
     # 水平線G
     cv2.line(canvas,
-             large_triangle.nodes_p[2],  # 青と緑が入れ替わっているのが工夫
+             point_for_cv2(large_triangle.nodes_p[2]),  # 青と緑が入れ替わっているのが工夫
              (bar_box.green_right, bar_box.green_top),
              color_to_byte(GREEN),
              thickness=2)
 
     # 水平線B
     cv2.line(canvas,
-             large_triangle.nodes_p[1],
+             point_for_cv2(large_triangle.nodes_p[1]),
              (bar_box.blue_right, bar_box.blue_top),
              color_to_byte(BLUE),
              thickness=2)

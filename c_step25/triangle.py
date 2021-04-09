@@ -5,6 +5,7 @@ import cv2
 from triangle_calc import calc_triangle
 from colors import GRAY
 from color_calc import color_to_byte
+from cv2_helper import point_for_cv2
 
 
 class Triangle():
@@ -15,6 +16,7 @@ class Triangle():
         self.__nodes_p = ((0, 0), (0, 0), (0, 0))
         self.__nodes_color = (GRAY, GRAY, GRAY)
         self.__node_radius = 0
+        self.__center_color = GRAY
 
     @property
     def edge_color(self):
@@ -52,12 +54,21 @@ class Triangle():
     def node_radius(self, val):
         self.__node_radius = val
 
+    @property
+    def center_color(self):
+        """重心の色"""
+        return self.__center_color
+
+    @center_color.setter
+    def center_color(self, val):
+        self.__center_color = val
+
     def triangular_center_of_gravity(self):
         """三角形の重心"""
         return (
-            int((self.__nodes_p[0][0]+self.__nodes_p[1]
-                 [0]+self.__nodes_p[2][0])/3),
-            int((self.__nodes_p[0][1]+self.__nodes_p[1][1]+self.__nodes_p[2][1])/3))
+            (self.__nodes_p[0][0]+self.__nodes_p[1]
+             [0]+self.__nodes_p[2][0])/3,
+            (self.__nodes_p[0][1]+self.__nodes_p[1][1]+self.__nodes_p[2][1])/3)
 
     def correct_horizon(self, diff_xy):
         """垂直方向のずれの修正"""
@@ -82,13 +93,13 @@ class Triangle():
         if green == blue and blue < red:
             # 緑と青は等しく、それより赤が上
             phase = 0  # トライアングル・フェーズ
-        elif blue < green and green < red:
+        elif blue < green < red:
             # 下から青、緑、赤
             phase = 1
         elif blue < green and green == red:
             # 青より大きい緑は赤と等しい
             phase = 2
-        elif blue < red and red < green:
+        elif blue < red < green:
             # 下から青、赤、緑
             phase = 3
             triangle_theta -= 120
@@ -96,7 +107,7 @@ class Triangle():
             # 青と赤は等しく、それより緑が上
             phase = 4
             triangle_theta -= 120
-        elif red < blue and blue < green:
+        elif red < blue < green:
             # 下から赤、青、緑
             phase = 5
             triangle_theta -= 120
@@ -104,7 +115,7 @@ class Triangle():
             # 赤より大きい青は緑と等しい
             phase = 6
             triangle_theta -= 120
-        elif red < green and green < blue:
+        elif red < green < blue:
             # 下から赤、緑、青
             phase = 7
             triangle_theta += 120
@@ -112,7 +123,7 @@ class Triangle():
             # 赤と緑は等しく、それより青が上
             phase = 8
             triangle_theta += 120
-        elif green < red and red < blue:
+        elif green < red < blue:
             # 下から緑、赤、青
             phase = 9
             triangle_theta += 120
@@ -177,31 +188,42 @@ class Triangle():
         """描きます"""
         # ３辺
         cv2.line(canvas,
-                 self.nodes_p[0],
-                 self.nodes_p[1],
+                 point_for_cv2(self.nodes_p[0]),
+                 point_for_cv2(self.nodes_p[1]),
                  color_to_byte(self.__edge_color),
                  thickness=2)
         cv2.line(canvas,
-                 self.nodes_p[1],
-                 self.nodes_p[2],
+                 point_for_cv2(self.nodes_p[1]),
+                 point_for_cv2(self.nodes_p[2]),
                  color_to_byte(self.__edge_color),
                  thickness=2)
         cv2.line(canvas,
-                 self.nodes_p[2],
-                 self.nodes_p[0],
+                 point_for_cv2(self.nodes_p[2]),
+                 point_for_cv2(self.nodes_p[0]),
                  color_to_byte(self.__edge_color),
                  thickness=2)
         # ３頂点
-        if self.__node_radius > 0:
-            cv2.circle(canvas, self.nodes_p[0],
+        if -1 < 0 < self.__node_radius:
+            cv2.circle(canvas,
+                       point_for_cv2(self.nodes_p[0]),
                        int(self.__node_radius),
                        color_to_byte(self.__nodes_color[0]),
                        thickness=-1)
-            cv2.circle(canvas, self.nodes_p[1],
+            cv2.circle(canvas,
+                       point_for_cv2(self.nodes_p[1]),
                        int(self.__node_radius),
                        color_to_byte(self.__nodes_color[2]),
                        thickness=-1)
-            cv2.circle(canvas, self.nodes_p[2],
+            cv2.circle(canvas,
+                       point_for_cv2(self.nodes_p[2]),
                        int(self.__node_radius),
                        color_to_byte(self.__nodes_color[1]),
+                       thickness=-1)
+
+            # 重心
+            gravity = self.triangular_center_of_gravity()
+            cv2.circle(canvas,
+                       point_for_cv2(gravity),
+                       int(self.__node_radius),
+                       color_to_byte(self.__center_color),
                        thickness=-1)

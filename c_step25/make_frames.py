@@ -230,10 +230,10 @@ def update_scene1_with_rotate(
     expected_color = (red, green, blue)
     actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
-    # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
+    # 無限小の丸め誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.0000000000001  # < 0.000000000001
-    error_theta = 0.0113  # 0.011 < x < 0.0114
+    error = 0.00000000000001  # < 0.00000000000001
+    error_theta = 0.01132  # 0.011 < x < 0.01133
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
@@ -256,7 +256,8 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         radius = diameter / 2
         print(
             f"ERROR           | expected_angle={math.degrees(expected_theta)}° \
-actual_angle={math.degrees(actual_theta):9.4f}° diff={diff:9.4f} \
+actual_angle={math.degrees(actual_theta):9.4f}° \
+diff={math.degrees(diff):10.6f}° diff={diff:9.6f}rad \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern={pattern}")
 
     red_bar_width = red * bar_box.width

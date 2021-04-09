@@ -9,19 +9,19 @@ import math
 
 
 def round_limit(number):
-    """0.3499999999 みたいな数を 0.35 にし、
-    0.3500000002 みたいな数を 0.35 にする操作
+    """0.349999999999 みたいな数を 0.35 にし、
+    0.350000000002 みたいな数を 0.35 にする操作
     ざっくり小数点以下7桁だけ面倒を見ます。
     """
-    num1 = math.floor(number*1000000)
-    num2 = math.floor(number*1000000+1)
-    num3 = math.floor(num1/1000)
-    num4 = math.floor(num2/1000)
+    num1 = math.floor(number*100000000)
+    num2 = math.floor(number*100000000+1)
+    num3 = math.floor(num1/1000000)
+    num4 = math.floor(num2/1000000)
     if num4 - num3 < 1:
         # 極限を切り捨てます
-        return num1 / 1000000
+        return num1 / 100000000
     # 極限を切り上げます
-    new_number = num2 / 1000000
+    new_number = num2 / 100000000
     return new_number
 
 

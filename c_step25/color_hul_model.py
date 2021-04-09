@@ -27,27 +27,117 @@ def round_limit(number):
 
 def inverse_func(color):
     """逆関数"""
+    c_phase = color_phase(color)
     red = color[0]
     green = color[1]
     blue = color[2]
-    if red == green == blue:
+    if c_phase == 'M':
         raise Exception(f"monocro color=({red}, {green}, {blue})")
 
     upper = max(red, green, blue)
     lower = min(red, green, blue)
 
+    if c_phase == 'A1':
+        return math.radians(0), upper, lower, c_phase
+    if c_phase == 'A2':
+        return math.radians(60), upper, lower, c_phase
+    if c_phase == 'A3':
+        return math.radians(120), upper, lower, c_phase
+    if c_phase == 'A4':
+        return math.radians(180), upper, lower, c_phase
+    if c_phase == 'A5':
+        return math.radians(240), upper, lower, c_phase
+    if c_phase == 'A6':
+        return math.radians(300), upper, lower, c_phase
+
+    # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
+    bar_length = red + green + blue - upper - lower
+    width = round_limit(bar_length - lower)
+
+    diameter = upper - lower
+    radius = round_limit(diameter / 2)
+    adjacent = radius
+    tanjent = diameter - width - radius
+    opposite = (math.sqrt(3)/2) * tanjent
+    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+
+    if c_phase == 'B1':
+        # パターン１ (0°～30°)
+        theta = math.asin(width/diameter)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B2':
+        # パターン２
+        theta = math.acos((diameter-width)/diameter) - math.radians(30)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B3':
+        # パターン３
+        theta = math.asin((diameter - width)/diameter) + math.radians(60)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B4':
+        # パターン４ (赤バーが下半分で減っていっている)
+        theta = math.acos(width/diameter) + math.radians(30)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B5':
+        # パターン５
+        theta = math.asin(width/diameter) + math.radians(120)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B6':
+        # パターン６
+        theta = math.acos((diameter - width)/diameter) + math.radians(90)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B7':
+        # パターン７
+        theta = math.asin((diameter - width)/diameter) + math.radians(180)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B8':
+        # パターン８
+        theta = math.acos(width/diameter) + math.radians(150)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B9':
+        # パターン９
+        theta = math.asin(width/diameter) + math.radians(240)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B10':
+        # パターン１０
+        theta = math.acos((diameter - width)/diameter) + math.radians(210)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B11':
+        # パターン１１
+        theta = math.asin((diameter - width)/diameter) + math.radians(300)
+        return theta, upper, lower, c_phase
+    if c_phase == 'B12':
+        # パターン１２
+        theta = math.acos(width/diameter) + math.radians(270)
+        return theta, upper, lower, c_phase
+
+    raise Exception(
+        f"ERROR           | Logic error. color=({red}, {green}, {blue})")
+
+
+def color_phase(color):
+    """角度を M、A1～A6、B1～B12の文字列で返します"""
+    red = color[0]
+    green = color[1]
+    blue = color[2]
+    if red == green == blue:
+        # Monocro
+        return 'M'
+
+    upper = max(red, green, blue)
+    lower = min(red, green, blue)
+
     if green == blue and red == upper:
-        return math.radians(0), upper, lower, "A1"
+        return "A1"
     if red == green and blue == lower:
-        return math.radians(60), upper, lower, "A2"
+        return "A2"
     if red == blue and green == upper:
-        return math.radians(120), upper, lower, "A3"
+        return "A3"
     if green == blue and red == lower:
-        return math.radians(180), upper, lower, "A4"
+        return "A4"
     if red == green and blue == upper:
-        return math.radians(240), upper, lower, "A5"
+        return "A5"
     if red == blue and green == lower:
-        return math.radians(300), upper, lower, "A6"
+        return "A6"
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
@@ -63,51 +153,39 @@ def inverse_func(color):
     if red == upper and blue == lower:
         # パターン１ (0°～30°)
         if width <= radius:  # 半分を含む
-            theta = math.asin(width/diameter)
-            return theta, upper, lower, "B1"
+            return "B1"
         # パターン２ (30°～60°)
-        theta = math.acos((diameter-width)/diameter) - math.radians(30)
-        return theta, upper, lower, "B2"
+        return "B2"
     if green == upper and blue == lower:
         # パターン３
         if radius < width:  # 半分を含まない
-            theta = math.asin((diameter - width)/diameter) + math.radians(60)
-            return theta, upper, lower, "B3"
+            return "B3"
         # パターン４ (赤バーが下半分で減っていっている)
-        theta = math.acos(width/diameter) + math.radians(30)
-        return theta, upper, lower, "B4"
+        return "B4"
     if red == lower and green == upper:
         # パターン５
         if width <= radius:  # 半分を含む
-            theta = math.asin(width/diameter) + math.radians(120)
-            return theta, upper, lower, "B5"
+            return "B5"
         # パターン６
-        theta = math.acos((diameter - width)/diameter) + math.radians(90)
-        return theta, upper, lower, "B6"
+        return "B6"
     if red == lower and blue == upper:
         if radius < width:  # 半分を含まない
             # パターン７
-            theta = math.asin((diameter - width)/diameter) + math.radians(180)
-            return theta, upper, lower, "B7"
+            return "B7"
         # パターン８
-        theta = math.acos(width/diameter) + math.radians(150)
-        return theta, upper, lower, "B8"
+        return "B8"
     if green == lower and blue == upper:
         # パターン９
         if width <= radius:  # 半分を含む
-            theta = math.asin(width/diameter) + math.radians(240)
-            return theta, upper, lower, "B9"
+            return "B9"
         # パターン１０
-        theta = math.acos((diameter - width)/diameter) + math.radians(210)
-        return theta, upper, lower, "B10"
+        return "B10"
     if red == upper and green == lower:
         # パターン１１
         if radius < width:  # 半分を含まない
-            theta = math.asin((diameter - width)/diameter) + math.radians(300)
-            return theta, upper, lower, "B11"
+            return "B11"
         # パターン１２
-        theta = math.acos(width/diameter) + math.radians(270)
-        return theta, upper, lower, "B12"
+        return "B12"
 
     raise Exception(
         f"ERROR           | Logic error. color=({red}, {green}, {blue})")

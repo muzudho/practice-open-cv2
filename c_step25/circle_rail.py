@@ -25,7 +25,7 @@ class CircleRail():
         self.__theta = 0
         self.__triangle = Triangle()
         self.__triangle.edge_color = PALE_GRAY
-        self.__triangle.node_radius = int(GRID_UNIT / 2)
+        self.__triangle.node_radius = GRID_UNIT / 2
         self.__triangle.nodes_color = (
             PALE_RED, PALE_BLUE, PALE_GREEN)  # 緑と青が逆なのが工夫
         self.__triangle.center_color = PALE_GRAY
@@ -93,18 +93,18 @@ class CircleRail():
         rng = self.range1
         # 円周上の赤い点の位置
 
-        red_p = (int(rng * math.cos(math.radians(theta)) + self.center[0]),
-                 int(-rng * math.sin(math.radians(theta)) + self.center[1]))  # yは上下反転
+        red_p = (rng * math.cos(math.radians(theta)) + self.center[0],
+                 -rng * math.sin(math.radians(theta)) + self.center[1])  # yは上下反転
 
         # 円周上の緑の点の位置
-        green_p = (int(rng * math.cos(math.radians(theta-120)) + self.center[0]),
-                   int(-rng * math.sin(math.radians(theta-120)) +
-                       self.center[1]))
+        green_p = (rng * math.cos(math.radians(theta-120)) + self.center[0],
+                   -rng * math.sin(math.radians(theta-120)) +
+                   self.center[1])
 
         # 円周上の青の点の位置
-        blue_p = (int(rng * math.cos(math.radians(theta+120)) + self.center[0]),
-                  int(-rng * math.sin(math.radians(theta+120)) +
-                      self.center[1]))
+        blue_p = (rng * math.cos(math.radians(theta+120)) + self.center[0],
+                  -rng * math.sin(math.radians(theta+120)) +
+                  self.center[1])
         self.__triangle.nodes_p = (red_p, green_p, blue_p)
 
     @property

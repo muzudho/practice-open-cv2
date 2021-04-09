@@ -116,14 +116,14 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
         canvas = make_canvas()
         bar_box, circle_rail, outer_circle, large_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
-        update_scene1_with_rotate(seq, vertical_parcent,
-                                  phase, bar_box, circle_rail, outer_circle,
-                                  large_triangle, clock_hand)
+        error_theta = update_scene1_with_rotate(seq, vertical_parcent,
+                                                phase, bar_box, circle_rail, outer_circle,
+                                                large_triangle, clock_hand)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             outer_circle, large_triangle, clock_hand)
+                             outer_circle, large_triangle, clock_hand, error_theta)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -246,8 +246,8 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
+    error_theta = actual_theta - expected_theta
     if actual_theta < expected_theta - error_theta or expected_theta + error_theta < actual_theta:
-        diff = actual_theta - expected_theta
         upper = max(red, green, blue)
         lower = min(red, green, blue)
         bar_length = red + green + blue - upper - lower
@@ -257,7 +257,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         print(
             f"ERROR           | expected_angle={math.degrees(expected_theta)}° \
 actual_angle={math.degrees(actual_theta):9.4f}° \
-diff={math.degrees(diff):10.6f}° diff={diff:9.6f}rad \
+diff={math.degrees(error_theta):10.6f}° diff={error_theta:9.6f}rad \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} \
 width={width} radius={radius} pattern={pattern} seq={seq}")
 
@@ -289,6 +289,8 @@ width={width} radius={radius} pattern={pattern} seq={seq}")
     # 時計の針
     clock_hand.theta = theta
 
+    return error_theta
+
 
 def draw_grid(_canvas):
     """背景に罫線を引きます。あくまで開発用"""
@@ -319,7 +321,8 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 line_type)
 
 
-def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, clock_hand):
+def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
+                large_triangle, clock_hand, error_theta):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_circle(canvas)  # 円レール
@@ -387,7 +390,8 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     diff_x = abs(gravity2[0]-gravity1[0])
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
-                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f})",
+                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) \
+error angle={math.degrees(error_theta):10.6f} deg",
                 point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

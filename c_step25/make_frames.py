@@ -7,8 +7,8 @@ import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
-    DARK_GRAYISH_GRAY
-from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
+    DARK_GRAYISH_GRAY, BLACK
+from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_ticks
 from bar_box import BarBox
 from circle_rail import CircleRail
 from outer_circle import OuterCircle
@@ -360,8 +360,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     # 色成分数
     # 1色成分
     n3bars_width = bar_box.create_3bars_width()
-    color = convert_3bars_to_3bytes(n3bars_width, bar_box.width)
+    color = convert_3bars_to_ticks(n3bars_width, bar_box.width)
     bar_box.draw_rgb_number(canvas, color)
+
+    # debug 重心
+    gravity1 = circle_rail.triangle.triangular_center_of_gravity()
+    gravity2 = large_triangle.triangular_center_of_gravity()
+    diff_x = abs(gravity2[0]-gravity1[0])
+    diff_y = abs(gravity2[1]-gravity1[1])
+    cv2.putText(canvas,
+                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f})",
+                (10, 10),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                color_for_cv2(BLACK, BAR_TICKS),
+                lineType=2)
 
     return canvas
 

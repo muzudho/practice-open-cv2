@@ -4,7 +4,7 @@
 from conf import BAR_TICKS
 
 
-def convert_3bars_to_3bytes(n3bars_pixel, total_pixels):
+def convert_3bars_to_ticks(n3bars_pixel, total_pixels):
     """３本のバーの縦幅ピクセルを、色に変えます"""
     r_x = n3bars_pixel[0]/total_pixels
     g_x = n3bars_pixel[1]/total_pixels
@@ -26,26 +26,21 @@ def convert_3pixels_to_3bytes(n3bars_pixel, total_pixels):
     return convert_3rates_to_3bytes(n3rates)
 
 
-def convert_pixel_to_byte(element_pixels, total_pixels):
+def convert_pixel_to_ticks(element_pixels, total_pixels):
     """バーの縦幅ピクセルを、色に変えます"""
     rate = element_pixels/total_pixels
-    return convert_rate_to_byte(rate)
-
-
-def convert_byte_to_pixel(color, pixels):
-    """色を、バーの縦幅ピクセルに変えます"""
-    return int(color/(BAR_TICKS-1)*pixels)
+    return __convert_rate_to_ticks(rate)
 
 
 def convert_3rates_to_3bytes(n3rates):
     """３本のバーの縦幅ピクセルを、色に変えます"""
     return (
-        convert_rate_to_byte(n3rates[0]),
-        convert_rate_to_byte(n3rates[1]),
-        convert_rate_to_byte(n3rates[2]))
+        __convert_rate_to_ticks(n3rates[0]),
+        __convert_rate_to_ticks(n3rates[1]),
+        __convert_rate_to_ticks(n3rates[2]))
 
 
-def convert_rate_to_byte(rate):
+def __convert_rate_to_ticks(rate):
     """バーの縦幅ピクセルを、色に変えます"""
     return int(rate*(BAR_TICKS-1))
 

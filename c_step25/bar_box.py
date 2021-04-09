@@ -6,7 +6,7 @@ from colors import  \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
-from color_calc import convert_pixel_to_byte
+from color_calc import convert_pixel_to_ticks
 from conf import GRID_UNIT, BAR_TICKS
 from rectangle import Rectangle
 from cv2_helper import color_for_cv2, point_for_cv2
@@ -269,9 +269,9 @@ class BarBox():
         """RGB値テキストを描きます"""
         width2 = self.__upper_x - self.__lower_x
         width3 = self.__lower_x - self.__left
-        right2_byte = convert_pixel_to_byte(
+        right2_byte = convert_pixel_to_ticks(
             width2+width3, self.height)
-        right3_byte = convert_pixel_to_byte(
+        right3_byte = convert_pixel_to_ticks(
             width3, self.height)
         right2_over = self.upper_x+GRID_UNIT/2
 
@@ -333,9 +333,9 @@ class BarBox():
         """X軸のラベルを描きます"""
         width2 = self.__upper_x - self.__lower_x
         width3 = self.__lower_x - self.__left
-        rank23_byte = convert_pixel_to_byte(
+        rank23_byte = convert_pixel_to_ticks(
             width2+width3, self.width)
-        rank3_byte = convert_pixel_to_byte(
+        rank3_byte = convert_pixel_to_ticks(
             width3, self.width)
 
         top = self.top+self.label_gap

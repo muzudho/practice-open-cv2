@@ -34,38 +34,38 @@ CIRCLE_DISTANCE = 14 * GRID_UNIT
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
     # 鮮やかさ2番
-    [0.1, 0.7, 0.2],  # Bright
-    [0.2, 0.7, 0.1],  # Strong
-    [0.3, 0.7, 0.0],  # Deep
+    # [0.1, 0.7, 0.2],  # Bright
+    # [0.2, 0.7, 0.1],  # Strong
+    # [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
-    [0.0, 0.4, 0.6],  # Light
-    [0.1, 0.4, 0.5],  # Soft
-    [0.3, 0.4, 0.3],  # Dull
-    [0.4, 0.4, 0.2],  # Dark
+    # [0.0, 0.4, 0.6],  # Light
+    # [0.1, 0.4, 0.5],  # Soft
+    # [0.3, 0.4, 0.3],  # Dull
+    # [0.4, 0.4, 0.2],  # Dark
     # 鮮やかさ4番
-    [0.0, 0.3, 0.7],  # Pale
-    [0.2, 0.3, 0.5],  # Light grayish
-    [0.4, 0.3, 0.3],  # Grayish
-    [0.6, 0.3, 0.1],  # Dark grayish
+    # [0.0, 0.3, 0.7],  # Pale
+    # [0.2, 0.3, 0.5],  # Light grayish
+    # [0.4, 0.3, 0.3],  # Grayish
+    # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     [0.0, 1.0, 0.0],  # Vivid
     # テストケース（鮮やかさ小）
-    [0.0, 0.01, 0.99],
+    #[0.0, 0.01, 0.99],
 ]
 TONE_NAME = [
-    'Bright',
-    'Strong',
-    'Deep',
-    'Light',
-    'Soft',
-    'Dull',
-    'Dark',
-    'Pale',
-    'Light grayish',
-    'Grayish',
-    'Dark grayish',
+    # 'Bright',
+    # 'Strong',
+    # 'Deep',
+    # 'Light',
+    # 'Soft',
+    # 'Dull',
+    # 'Dark',
+    # 'Pale',
+    #'Light grayish',
+    # 'Grayish',
+    #'Dark grayish',
     'Vivid',
-    'Test case',
+    #'Test case',
 ]
 
 
@@ -116,7 +116,7 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
         canvas = make_canvas()
         bar_box, circle_rail, outer_circle, large_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
-        update_scene1_with_rotate(vertical_parcent,
+        update_scene1_with_rotate(seq, vertical_parcent,
                                   phase, bar_box, circle_rail, outer_circle,
                                   large_triangle, clock_hand)
 
@@ -206,7 +206,7 @@ def update_scene1(vertical_parcent, outer_circle):
 
 
 def update_scene1_with_rotate(
-        vertical_parcent, phase, bar_box, circle_rail, outer_circle,
+        seq, vertical_parcent, phase, bar_box, circle_rail, outer_circle,
         large_triangle, clock_hand):
     """回転が伴うモデルを更新"""
     theta = math.radians(360/PHASE_COUNTS*phase)
@@ -258,7 +258,8 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
             f"ERROR           | expected_angle={math.degrees(expected_theta)}° \
 actual_angle={math.degrees(actual_theta):9.4f}° \
 diff={math.degrees(diff):10.6f}° diff={diff:9.6f}rad \
-r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern={pattern}")
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} \
+width={width} radius={radius} pattern={pattern} seq={seq}")
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width

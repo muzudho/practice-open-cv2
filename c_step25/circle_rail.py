@@ -147,37 +147,3 @@ class CircleRail():
     def draw_triangle(self, canvas):
         """円に内接する線。正三角形"""
         self.__triangle.draw(canvas)
-
-    def draw_border(self, canvas):
-        """背景の左限、右限の線"""
-
-        diameter = 2*self.range1
-        half_height = diameter * math.tan(math.radians(30))
-
-        # 矩形
-        left = int(self.center[0] - self.range1)
-        top = int(self.center[1] - half_height)
-        right = int(self.center[0] + self.range1)
-        bottom = int(self.center[1] + half_height)
-        cv2.rectangle(canvas,
-                      (left, top),
-                      (right, bottom),
-                      color_for_cv2(PALE_GRAY, BAR_TICKS),
-                      thickness=2)
-
-        # 左限の線
-        cv2.line(canvas,
-                 (int(self.center[0] - self.range1),
-                  self.__drawing_top),
-                 (int(self.center[0] - self.range1),
-                  self.__drawing_bottom),
-                 color_for_cv2(PALE_GRAY, BAR_TICKS),
-                 thickness=2)
-        # 右限の線
-        cv2.line(canvas,
-                 (int(self.center[0] + self.range1),
-                  self.__drawing_top),
-                 (int(self.center[0] + self.range1),
-                  self.__drawing_bottom),
-                 color_for_cv2(PALE_GRAY, BAR_TICKS),
-                 thickness=2)

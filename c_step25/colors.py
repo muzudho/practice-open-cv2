@@ -36,7 +36,7 @@ VIVID_GREEN = (0, (BAR_TICKS-1), 0)
 VIVID_BLUE = (0, 0, (BAR_TICKS-1))
 
 # Strong
-GRAY = (int(4.5*BAR_TICKS), int(4.5*BAR_TICKS), int(4.5*BAR_TICKS))
+GRAY = (int(0.45*BAR_TICKS), int(0.45*BAR_TICKS), int(0.45*BAR_TICKS))
 RED = (int(0.8*BAR_TICKS), int(0.1*BAR_TICKS), int(0.1*BAR_TICKS))
 GREEN = (int(0.1*BAR_TICKS), int(0.8*BAR_TICKS), int(0.1*BAR_TICKS))
 BLUE = (int(0.1*BAR_TICKS), int(0.1*BAR_TICKS), int(0.8*BAR_TICKS))

@@ -203,7 +203,7 @@ class Triangle():
                  color_for_cv2(self.__edge_color, BAR_TICKS),
                  thickness=2)
         # ３頂点
-        if -1 < 0 < self.__node_radius:
+        if self.__node_radius > 0:
             cv2.circle(canvas,
                        point_for_cv2(self.nodes_p[0]),
                        int(self.__node_radius),

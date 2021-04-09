@@ -7,7 +7,7 @@ import numpy as np
 from color_hul_model import to_color_rate, inverse_func
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
-    DARK_GRAYISH_GRAY, BLACK
+    DARK_GRAYISH_GRAY
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_3bytes
 from bar_box import BarBox
 from circle_rail import CircleRail
@@ -86,7 +86,7 @@ def main():
                 vertical_parcent, outer_circle)
             draw_grid(canvas)
             circle_rail.draw_circle(canvas)  # 円レール
-            circle_rail.draw_border(canvas)  # 背景の上限、下限の線
+            draw_border(circle_rail, canvas)  # 背景の上限、下限の線
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
             bar_box.draw_bars_rate(canvas)  # バー率テキスト
@@ -182,7 +182,7 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # 長方形に内接する大きな正三角形
     large_triangle = Triangle()
-    large_triangle.edge_color = BLACK
+    large_triangle.edge_color = GRAY
     large_triangle.nodes_color = (RED, GREEN, BLUE)
     large_triangle.node_radius = GRID_UNIT / 2
     large_triangle.center_color = GRAY
@@ -318,7 +318,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
 
     circle_rail.draw_circle(canvas)  # 円レール
     circle_rail.draw_triangle(canvas)  # 円に内接する正三角形
-    circle_rail.draw_border(canvas)  # 背景の上限、下限の線
+    draw_border(circle_rail, canvas)  # 背景の上限、下限の線
 
     large_triangle.draw(canvas)
 
@@ -363,6 +363,41 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     bar_box.draw_rgb_number(canvas, color)
 
     return canvas
+
+
+def draw_border(circle_rail, canvas):
+    """背景の左限、右限の線"""
+
+    diameter = 2*circle_rail.range1
+    half_height = diameter * math.tan(math.radians(30))
+
+    # 矩形
+    left = int(circle_rail.center[0] - circle_rail.range1)
+    top = int(circle_rail.center[1] - half_height)
+    right = int(circle_rail.center[0] + circle_rail.range1)
+    bottom = int(circle_rail.center[1] + half_height)
+    cv2.rectangle(canvas,
+                  (left, top),
+                  (right, bottom),
+                  color_for_cv2(GRAY, BAR_TICKS),
+                  thickness=2)
+
+    # 左限の線
+    cv2.line(canvas,
+             (int(circle_rail.center[0] - circle_rail.range1),
+              circle_rail.drawing_top),
+             (int(circle_rail.center[0] - circle_rail.range1),
+              circle_rail.drawing_bottom),
+             color_for_cv2(GRAY, BAR_TICKS),
+             thickness=2)
+    # 右限の線
+    cv2.line(canvas,
+             (int(circle_rail.center[0] + circle_rail.range1),
+              circle_rail.drawing_top),
+             (int(circle_rail.center[0] + circle_rail.range1),
+              circle_rail.drawing_bottom),
+             color_for_cv2(GRAY, BAR_TICKS),
+             thickness=2)
 
 
 main()

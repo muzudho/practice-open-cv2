@@ -27,9 +27,9 @@ CHANNELS = 3
 # RGBバー（レールとなる円より上にある）
 BAR_BOX_TOP = 6 * GRID_UNIT
 # 箱の左
-BAR_BOX_LEFT = int(18 * GRID_UNIT)
+BAR_BOX_LEFT = 18 * GRID_UNIT
 # 円の中心と、箱の左との距離
-CIRCLE_DISTANCE = int(14 * GRID_UNIT)
+CIRCLE_DISTANCE = 14 * GRID_UNIT
 
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
@@ -144,16 +144,16 @@ def update_scene1(vertical_parcent, outer_circle):
     # RGBバー
     bar_box = BarBox()
     bar_box.rates = vertical_parcent
-    width1 = int(bar_box.rates[0] * 20 * GRID_UNIT)
-    width2 = int(bar_box.rates[1] * 20 * GRID_UNIT)
-    width3 = int(bar_box.rates[2] * 20 * GRID_UNIT)
+    width1 = bar_box.rates[0] * 20 * GRID_UNIT
+    width2 = bar_box.rates[1] * 20 * GRID_UNIT
+    width3 = bar_box.rates[2] * 20 * GRID_UNIT
     bar_box.left = BAR_BOX_LEFT
     bar_box.lower_x = bar_box.left + width3
     bar_box.upper_x = bar_box.lower_x + width2
     bar_box.right = bar_box.upper_x + width1
     bar_box.top = BAR_BOX_TOP
     bar_box.bottom = bar_box.top + 90
-    bar_box.label_gap = int(-0.75*GRID_UNIT)
+    bar_box.label_gap = -0.75*GRID_UNIT
     bar_box.font_scale = FONT_SCALE
     bar_box.line_type = 2
     bar_box.font = cv2.FONT_HERSHEY_SIMPLEX
@@ -162,9 +162,9 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail = CircleRail()
     circle_rail.drawing_top = bar_box.bottom + GRID_UNIT
     circle_rail.drawing_bottom = CANVAS_HEIGHT - GRID_UNIT
-    circle_rail.range1 = int(width2 / 2)
+    circle_rail.range1 = width2 / 2
 
-    circle_rail.center = (int((bar_box.lower_x+bar_box.upper_x)/2),
+    circle_rail.center = ((bar_box.lower_x+bar_box.upper_x)/2,
                           bar_box.bottom+CIRCLE_DISTANCE+circle_rail.range1)  # x, y
     circle_rail.border_rect = Rectangle(
         bar_box.lower_x,
@@ -175,10 +175,10 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # 外環状
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
-    outer_circle.area_size = (int(bar_box.width*9/10),
-                              int(bar_box.width*9/10))
+    outer_circle.area_size = (bar_box.width*9/10,
+                              bar_box.width*9/10)
     outer_circle.phases = PHASE_COUNTS
-    outer_circle.tickness = int(1.5*GRID_UNIT)
+    outer_circle.tickness = 1.5*GRID_UNIT
 
     # 長方形に内接する大きな正三角形
     large_triangle = Triangle()
@@ -194,10 +194,10 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.tickness = 2
     clock_hand.radius1 = circle_rail.range1  # 1st range
     radius2_expected = bar_box.width*9/10
-    clock_hand.radius2 = int(radius2_expected - outer_circle.tickness /
-                             2 - clock_hand.tickness)  # 2nd range
-    clock_hand.radius3 = int(radius2_expected + outer_circle.tickness /
-                             2 + clock_hand.tickness)  # 3rd range
+    clock_hand.radius2 = radius2_expected - \
+        outer_circle.tickness / 2 - clock_hand.tickness  # 2nd range
+    clock_hand.radius3 = radius2_expected + \
+        outer_circle.tickness / 2 + clock_hand.tickness  # 3rd range
 
     return bar_box, circle_rail, outer_circle, large_triangle, clock_hand
 
@@ -256,9 +256,9 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 actual_theta={actual_theta:9.4f}° diff={diff:9.4f} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern={pattern}")
 
-    red_bar_width = int(red * bar_box.width)
-    green_bar_width = int(green * bar_box.width)
-    blue_bar_width = int(blue * bar_box.width)
+    red_bar_width = red * bar_box.width
+    green_bar_width = green * bar_box.width
+    blue_bar_width = blue * bar_box.width
     # バーR
     bar_box.red_right = bar_box.left + red_bar_width
     # バーG
@@ -288,7 +288,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} width={width} radius={radius} pattern=
 def draw_grid(_canvas):
     """背景に罫線を引きます。あくまで開発用"""
     # 水平線グリッド
-    # for i in range(0, int(CANVAS_HEIGHT/(GRID_UNIT/2))+1):
+    # for i in range(0, CANVAS_HEIGHT/(GRID_UNIT/2)+1):
     #    y_num = GRID_UNIT*i
     #    cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
     #             color_for_cv2(PALE_GRAY, BAR_TICKS), thickness=1)
@@ -299,14 +299,15 @@ def draw_tone_name(canvas, bar_box, tone_name):
     line_type = 2
     cv2.putText(canvas,
                 f"{tone_name}",
-                (bar_box.left, int(BAR_BOX_TOP-3.5*GRID_UNIT)),  # x,y
+                point_for_cv2((bar_box.left, BAR_BOX_TOP-3.5*GRID_UNIT)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
                 line_type)
     cv2.putText(canvas,
                 f"tone diameter",
-                (bar_box.left+GRID_UNIT, int(BAR_BOX_TOP-2.5*GRID_UNIT)),  # x,y
+                point_for_cv2((bar_box.left+GRID_UNIT,
+                               BAR_BOX_TOP-2.5*GRID_UNIT)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
@@ -372,30 +373,30 @@ def draw_border(circle_rail, canvas):
     half_height = diameter * math.tan(math.radians(30))
 
     # 矩形
-    left = int(circle_rail.center[0] - circle_rail.range1)
-    top = int(circle_rail.center[1] - half_height)
-    right = int(circle_rail.center[0] + circle_rail.range1)
-    bottom = int(circle_rail.center[1] + half_height)
+    left = circle_rail.center[0] - circle_rail.range1
+    top = circle_rail.center[1] - half_height
+    right = circle_rail.center[0] + circle_rail.range1
+    bottom = circle_rail.center[1] + half_height
     cv2.rectangle(canvas,
-                  (left, top),
-                  (right, bottom),
+                  point_for_cv2((left, top)),
+                  point_for_cv2((right, bottom)),
                   color_for_cv2(GRAY, BAR_TICKS),
                   thickness=2)
 
     # 左限の線
     cv2.line(canvas,
-             (int(circle_rail.center[0] - circle_rail.range1),
-              circle_rail.drawing_top),
-             (int(circle_rail.center[0] - circle_rail.range1),
-              circle_rail.drawing_bottom),
+             point_for_cv2((circle_rail.center[0] - circle_rail.range1,
+                            circle_rail.drawing_top)),
+             point_for_cv2((circle_rail.center[0] - circle_rail.range1,
+                            circle_rail.drawing_bottom)),
              color_for_cv2(GRAY, BAR_TICKS),
              thickness=2)
     # 右限の線
     cv2.line(canvas,
-             (int(circle_rail.center[0] + circle_rail.range1),
-              circle_rail.drawing_top),
-             (int(circle_rail.center[0] + circle_rail.range1),
-              circle_rail.drawing_bottom),
+             point_for_cv2((circle_rail.center[0] + circle_rail.range1,
+                            circle_rail.drawing_top)),
+             point_for_cv2((circle_rail.center[0] + circle_rail.range1,
+                            circle_rail.drawing_bottom)),
              color_for_cv2(GRAY, BAR_TICKS),
              thickness=2)
 

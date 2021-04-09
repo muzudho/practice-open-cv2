@@ -222,8 +222,8 @@ class BarBox():
         """輪郭を描きます"""
         cv2.rectangle(
             canvas,
-            (self.__left, self.__top),
-            (self.__right, self.__bottom),
+            point_for_cv2((self.__left, self.__top)),
+            point_for_cv2((self.__right, self.__bottom)),
             color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
             thickness=self.thickness)
 
@@ -233,10 +233,10 @@ class BarBox():
         thickness_minus1 = self.thickness-1
         cv2.rectangle(
             canvas,
-            (self.__lower_x - thickness_minus1,
-             self.__top - thickness_minus1),
-            (self.__upper_x + thickness_minus1,
-             self.__bottom + thickness_minus1),
+            point_for_cv2((self.__lower_x - thickness_minus1,
+                           self.__top - thickness_minus1)),
+            point_for_cv2((self.__upper_x + thickness_minus1,
+                           self.__bottom + thickness_minus1)),
             color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
             thickness=thickness_minus1+1)
 

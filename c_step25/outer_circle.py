@@ -2,7 +2,7 @@
 
 import cv2
 from conf import BAR_TICKS
-from cv2_helper import color_for_cv2
+from cv2_helper import color_for_cv2, point_for_cv2
 
 
 class OuterCircle():
@@ -95,15 +95,15 @@ class OuterCircle():
 
             # 円弧
             # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-            start_angle = int(theta-self.unit_arc/2)
-            end_angle = int(theta+self.unit_arc/2)
+            start_angle = theta-self.unit_arc/2
+            end_angle = theta+self.unit_arc/2
             if start_angle == end_angle:
                 end_angle += 1  # 差が 0 だと変なとこ描画するんで
             cv2.ellipse(canvas,
-                        self.origin,
-                        self.area_size,
+                        point_for_cv2(self.__origin),
+                        point_for_cv2(self.__area_size),
                         0,
                         360-start_angle,
                         360-end_angle,
                         color_for_cv2(color, BAR_TICKS),
-                        thickness=self.tickness)
+                        thickness=int(self.__tickness))

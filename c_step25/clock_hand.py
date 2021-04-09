@@ -105,18 +105,18 @@ class ClockHand():
         if start_angle == end_angle:
             end_angle += 1  # 差が 0 だと変なとこ描画するんで
         cv2.ellipse(canvas,
-                    self.center,
+                    point_for_cv2(self.center),
                     point_for_cv2((self.radius2, self.radius2)),
                     0,
                     360-start_angle,
                     360-end_angle,
                     color_for_cv2(PALE_GRAY, BAR_TICKS),
-                    thickness=self.tickness)
+                    thickness=int(self.tickness))
         cv2.ellipse(canvas,
-                    self.center,
+                    point_for_cv2(self.center),
                     point_for_cv2((self.radius3, self.radius3)),
                     0,
                     360-start_angle,
                     360-end_angle,
                     color_for_cv2(PALE_GRAY, BAR_TICKS),
-                    thickness=self.tickness)
+                    thickness=int(self.tickness))

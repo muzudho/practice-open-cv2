@@ -8,7 +8,7 @@ from colors import PALE_GRAY, PALE_RED, PALE_GREEN, PALE_BLUE
 from rectangle import Rectangle
 from triangle import Triangle
 from conf import GRID_UNIT, BAR_TICKS
-from cv2_helper import color_for_cv2
+from cv2_helper import color_for_cv2, point_for_cv2
 
 
 class CircleRail():
@@ -139,8 +139,9 @@ class CircleRail():
     def draw_circle(self, canvas):
         """描きます"""
         # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
-        cv2.circle(canvas, self.center,
-                   self.range1,
+        cv2.circle(canvas,
+                   point_for_cv2(self.center),
+                   int(self.range1),
                    color_for_cv2(PALE_GRAY, BAR_TICKS),
                    thickness=2)
 

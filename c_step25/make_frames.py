@@ -232,8 +232,8 @@ def update_scene1_with_rotate(
         expected_color)
     # 無限小の誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.000000001  # < 0.0000001
-    error_theta = 0.015  # < 0.015
+    error = 0.000000001  # < 0.000000001
+    error_theta = 0.0117  # 0.0117 < x < 0.012
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
@@ -366,6 +366,19 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     color = convert_3bars_to_ticks(n3bars_width, bar_box.width)
     bar_box.draw_rgb_number(canvas, color)
 
+    # 角度（弧度法）表示
+    point_x = (circle_rail.radius + 14*GRID_UNIT) * \
+        math.cos(math.radians(circle_rail.theta)) + circle_rail.center[0]
+    point_y = (circle_rail.radius + 14*GRID_UNIT) * \
+        -math.sin(math.radians(circle_rail.theta)) + circle_rail.center[1]
+    cv2.putText(canvas,
+                f"{circle_rail.theta:7.3f}",
+                point_for_cv2((point_x, point_y)),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                color_for_cv2(BLACK, BAR_TICKS),
+                lineType=2)
+
     # debug 重心
     gravity1 = circle_rail.triangle.triangular_center_of_gravity()
     gravity2 = large_triangle.triangular_center_of_gravity()
@@ -373,7 +386,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle, large_triangle, cloc
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
                 f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) theta={circle_rail.theta}",
-                (10, 10),  # x,y
+                point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 color_for_cv2(BLACK, BAR_TICKS),

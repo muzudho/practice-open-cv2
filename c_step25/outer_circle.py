@@ -1,7 +1,8 @@
 """外環状"""
 
 import cv2
-from color_calc import color_to_byte
+from conf import BAR_TICKS
+from cv2_helper import color_for_cv2
 
 
 class OuterCircle():
@@ -104,5 +105,5 @@ class OuterCircle():
                         0,
                         360-start_angle,
                         360-end_angle,
-                        color_to_byte(color),
+                        color_for_cv2(color, BAR_TICKS),
                         thickness=self.tickness)

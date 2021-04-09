@@ -6,9 +6,10 @@ from colors import  \
     BRIGHT_GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
-from color_calc import convert_pixel_to_byte, color_to_byte
+from color_calc import convert_pixel_to_byte
 from conf import GRID_UNIT, BAR_TICKS
 from rectangle import Rectangle
+from cv2_helper import color_for_cv2
 
 
 class BarBox():
@@ -223,7 +224,7 @@ class BarBox():
             canvas,
             (self.__left, self.__top),
             (self.__right, self.__bottom),
-            color_to_byte(BRIGHT_GRAY),
+            color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
             thickness=self.thickness)
 
     def draw_rank2_box(self, canvas):
@@ -236,7 +237,7 @@ class BarBox():
              self.__top - thickness_minus1),
             (self.__upper_x + thickness_minus1,
              self.__bottom + thickness_minus1),
-            color_to_byte(DARK_GRAYISH_GRAY),
+            color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
             thickness=thickness_minus1+1)
 
     def draw_3figures(self, canvas, num, left, top, color):
@@ -261,7 +262,7 @@ class BarBox():
                         (int(left+i*0.7*GRID_UNIT), top),  # x,y
                         self.font,
                         self.font_scale,
-                        color_to_byte(color),
+                        color_for_cv2(color, BAR_TICKS),
                         self.line_type)
 
     def draw_rgb_number(self, canvas, rgb_numbers):
@@ -373,7 +374,7 @@ class BarBox():
                     (left, top),  # x,y
                     self.font,
                     self.font_scale,
-                    color_to_byte(BRIGHT_GRAY),
+                    color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
                     self.line_type)
         # 中列のバー率
         left = int((self.__lower_x + self.__upper_x)/2 - 1.5*GRID_UNIT)
@@ -382,7 +383,7 @@ class BarBox():
                     (left, top),  # x,y
                     self.font,
                     self.font_scale,
-                    color_to_byte(DARK_GRAYISH_GRAY),
+                    color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
                     self.line_type)
         # 左列のバー率
         left = int(self.__left - 3*GRID_UNIT)
@@ -391,7 +392,7 @@ class BarBox():
                     (left, top),  # x,y
                     self.font,
                     self.font_scale,
-                    color_to_byte(BRIGHT_GRAY),
+                    color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
                     self.line_type)
 
     def draw_3bars(self, canvas):
@@ -403,19 +404,19 @@ class BarBox():
         cv2.rectangle(canvas,
                       (self.__left, self.__top),
                       (self.__red_right, int(self.__top + self.one_height)),
-                      color_to_byte(RED),
+                      color_for_cv2(RED, BAR_TICKS),
                       thickness=-1)
 
         # バーG
         cv2.rectangle(canvas,
                       (self.__left, int(self.__top + self.one_height)),
                       (self.__green_right, int(self.__top + 2*self.one_height)),
-                      color_to_byte(GREEN),
+                      color_for_cv2(GREEN, BAR_TICKS),
                       thickness=-1)
 
         # バーB
         cv2.rectangle(canvas,
                       (self.__left, int(self.__top + 2*self.one_height)),
                       (self.__blue_right, self.__bottom),
-                      color_to_byte(BLUE),
+                      color_for_cv2(BLUE, BAR_TICKS),
                       thickness=-1)

@@ -4,11 +4,11 @@
 import math
 
 import cv2
-from colors import WHITE, PALE_GRAY, LIGHT_GRAY, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE
-from color_calc import color_to_byte
+from colors import PALE_GRAY, PALE_RED, PALE_GREEN, PALE_BLUE
 from rectangle import Rectangle
 from triangle import Triangle
-from conf import GRID_UNIT
+from conf import GRID_UNIT, BAR_TICKS
+from cv2_helper import color_for_cv2
 
 
 class CircleRail():
@@ -24,11 +24,11 @@ class CircleRail():
         self.__center = (0, 0)
         self.__theta = 0
         self.__triangle = Triangle()
-        self.__triangle.edge_color = WHITE
+        self.__triangle.edge_color = PALE_GRAY
         self.__triangle.node_radius = int(GRID_UNIT / 2)
         self.__triangle.nodes_color = (
-            LIGHT_RED, LIGHT_BLUE, LIGHT_GREEN)  # 緑と青が逆なのが工夫
-        self.__triangle.center_color = LIGHT_GRAY
+            PALE_RED, PALE_BLUE, PALE_GREEN)  # 緑と青が逆なのが工夫
+        self.__triangle.center_color = PALE_GRAY
 
     @property
     def range1(self):
@@ -141,7 +141,7 @@ class CircleRail():
         # 円レール。描画する画像を指定、座標（x,y),半径、色、線の太さ（-1は塗りつぶし）
         cv2.circle(canvas, self.center,
                    self.range1,
-                   color_to_byte(WHITE),
+                   color_for_cv2(PALE_GRAY, BAR_TICKS),
                    thickness=2)
 
     def draw_triangle(self, canvas):
@@ -162,7 +162,7 @@ class CircleRail():
         cv2.rectangle(canvas,
                       (left, top),
                       (right, bottom),
-                      color_to_byte(PALE_GRAY),
+                      color_for_cv2(PALE_GRAY, BAR_TICKS),
                       thickness=2)
 
         # 左限の線
@@ -171,7 +171,7 @@ class CircleRail():
                   self.__drawing_top),
                  (int(self.center[0] - self.range1),
                   self.__drawing_bottom),
-                 color_to_byte(PALE_GRAY),
+                 color_for_cv2(PALE_GRAY, BAR_TICKS),
                  thickness=2)
         # 右限の線
         cv2.line(canvas,
@@ -179,5 +179,5 @@ class CircleRail():
                   self.__drawing_top),
                  (int(self.center[0] + self.range1),
                   self.__drawing_bottom),
-                 color_to_byte(PALE_GRAY),
+                 color_for_cv2(PALE_GRAY, BAR_TICKS),
                  thickness=2)

@@ -26,8 +26,68 @@ def round_limit(number):
     return new_number
 
 
+def inverse_func_degrees(color):
+    """逆関数。精度は int型の弧度法しかありません"""
+    theta, upper, lower, c_phase = inverse_func(color)
+
+    if c_phase == 'A1':
+        angle = math.degrees(theta)
+    elif c_phase == 'A2':
+        angle = math.degrees(theta)
+    elif c_phase == 'A3':
+        angle = math.degrees(theta)
+    elif c_phase == 'A4':
+        angle = math.degrees(theta)
+    elif c_phase == 'A5':
+        angle = math.degrees(theta)
+    elif c_phase == 'A6':
+        angle = math.degrees(theta)
+    elif c_phase == 'B1':
+        # パターン１
+        angle = math.degrees(theta)
+    elif c_phase == 'B2':
+        # パターン２
+        angle = math.degrees(theta)
+    elif c_phase == 'B3':
+        # パターン３
+        angle = math.degrees(theta)
+    elif c_phase == 'B4':
+        # パターン４
+        angle = math.degrees(theta)
+    elif c_phase == 'B5':
+        # パターン５
+        angle = math.degrees(theta)
+    elif c_phase == 'B6':
+        # パターン６
+        angle = math.degrees(theta)
+    elif c_phase == 'B7':
+        # パターン７
+        angle = math.degrees(theta)
+    elif c_phase == 'B8':
+        # パターン８
+        angle = math.degrees(theta)
+    elif c_phase == 'B9':
+        # パターン９
+        angle = math.degrees(theta)
+    elif c_phase == 'B10':
+        # パターン１０
+        angle = math.degrees(theta)
+    elif c_phase == 'B11':
+        # パターン１１
+        angle = math.degrees(theta)
+    elif c_phase == 'B12':
+        # パターン１２
+        angle = math.degrees(theta)
+    else:
+        raise Exception(
+            f"ERROR           | Logic error. theta={theta} upper={upper} \
+lower={lower} c_phase={c_phase}")
+
+    return angle, upper, lower, c_phase
+
+
 def inverse_func(color):
-    """逆関数"""
+    """逆関数。ラジアン値で 0.02 未満の誤差が出ます"""
     c_phase = color_phase(color)
     red = color[0]
     green = color[1]
@@ -56,69 +116,53 @@ def inverse_func(color):
     width = round_limit(bar_length - lower)
 
     diameter = upper - lower
-    radius = round_limit(diameter / 2)
-    adjacent = radius
-    tanjent = diameter - width - radius
-    opposite = (math.sqrt(3)/2) * tanjent
-    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
-    # hipotenuse_test2 = math.sqrt(diameter**2 + width**2)  # 試し
-    # hipotenuse_test3 = math.sqrt((math.sqrt(3)/2*diameter)**2 + width**2)  # 試し
-    hipotenuse_test4 = math.sqrt(radius**2 + width**2)  # 試し
+    # radius = round_limit(diameter / 2)
+    # adjacent = radius
+    # tanjent = diameter - width - radius
+    # opposite = (math.sqrt(3)/2) * tanjent
+    # hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
     if c_phase == 'B1':
         # パターン１ (0°～30°)
         theta = math.asin(width/diameter)
-        # theta = math.asin(width/hipotenuse_test2)  # これも似たようなものだが誤差は大きい
-        # theta = math.asin(width/hipotenuse_test3)  # これも似たようなものだが誤差は大きい
-        # theta = math.asin(width/hipotenuse_test4)  # これも似たようなものだが誤差は大きい
-        return theta, upper, lower, c_phase
-    if c_phase == 'B2':
+    elif c_phase == 'B2':
         # パターン２
         theta = math.acos((diameter-width)/diameter) - math.radians(30)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B3':
+    elif c_phase == 'B3':
         # パターン３
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B4':
+    elif c_phase == 'B4':
         # パターン４ (赤バーが下半分で減っていっている)
         theta = math.acos(width/diameter) + math.radians(30)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B5':
+    elif c_phase == 'B5':
         # パターン５
         theta = math.asin(width/diameter) + math.radians(120)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B6':
+    elif c_phase == 'B6':
         # パターン６
         theta = math.acos((diameter - width)/diameter) + math.radians(90)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B7':
+    elif c_phase == 'B7':
         # パターン７
         theta = math.asin((diameter - width)/diameter) + math.radians(180)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B8':
+    elif c_phase == 'B8':
         # パターン８
         theta = math.acos(width/diameter) + math.radians(150)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B9':
+    elif c_phase == 'B9':
         # パターン９
         theta = math.asin(width/diameter) + math.radians(240)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B10':
+    elif c_phase == 'B10':
         # パターン１０
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B11':
+    elif c_phase == 'B11':
         # パターン１１
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
-        return theta, upper, lower, c_phase
-    if c_phase == 'B12':
+    elif c_phase == 'B12':
         # パターン１２
         theta = math.acos(width/diameter) + math.radians(270)
-        return theta, upper, lower, c_phase
+    else:
+        raise Exception(
+            f"ERROR           | Logic error. color=({red}, {green}, {blue})")
 
-    raise Exception(
-        f"ERROR           | Logic error. color=({red}, {green}, {blue})")
+    return theta, upper, lower, c_phase
 
 
 def color_phase(color):

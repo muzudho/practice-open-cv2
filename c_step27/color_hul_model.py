@@ -44,7 +44,7 @@ def inverse_func_degrees(color):
         angle = math.degrees(theta)
     elif c_phase == 'B1':
         # パターン１
-        angle = math.floor(math.degrees(theta))
+        angle = math.degrees(theta)
     elif c_phase == 'B2':
         # パターン２
         angle = math.degrees(theta)

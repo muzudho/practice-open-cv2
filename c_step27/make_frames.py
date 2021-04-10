@@ -13,8 +13,9 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_ticks
-from color_hul_model import to_color_rate, inverse_func_degrees
+from color_hul_model import to_color_rate, inverse_func
 from colors import \
+    WHITE, \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
 
@@ -119,14 +120,14 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
         canvas = make_canvas()
         bar_box, circle_rail, outer_circle, large_triangle, clock_hand = update_scene1(
             vertical_parcent, outer_circle)
-        error_angle = update_scene1_with_rotate(seq, vertical_parcent,
+        error_theta = update_scene1_with_rotate(seq, vertical_parcent,
                                                 phase, bar_box, circle_rail, outer_circle,
                                                 large_triangle, clock_hand)
 
         draw_grid(canvas)  # 罫線
         bar_box.draw_outline(canvas)  # 箱の輪郭
         canvas = draw_canvas(canvas, bar_box, circle_rail,
-                             outer_circle, large_triangle, clock_hand, error_angle)
+                             outer_circle, large_triangle, clock_hand, error_theta)
         draw_tone_name(canvas, bar_box, tone_name)  # トーン名
 
         # 書出し
@@ -212,15 +213,14 @@ def update_scene1_with_rotate(
         seq, vertical_parcent, phase, bar_box, circle_rail, outer_circle,
         large_triangle, clock_hand):
     """回転が伴うモデルを更新"""
-    expected_angle = math.floor(360/PHASE_COUNTS*phase)
-    expected_theta = math.radians(expected_angle)
+    theta = math.radians(360/PHASE_COUNTS*phase)
 
     outer_circle.phase = phase
 
     # 円周上の点の位置
-    circle_rail.theta = expected_theta
+    circle_rail.theta = theta
 
-    color_rate = to_color_rate(vertical_parcent, expected_theta)
+    color_rate = to_color_rate(vertical_parcent, theta)
 
     # バーの横幅に変換
     red = color_rate[0]
@@ -230,30 +230,30 @@ def update_scene1_with_rotate(
     # 逆関数のテスト
     expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
     expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
+    expected_theta = theta
     expected_color = (red, green, blue)
-    # 弧度法
-    actual_angle, actual_upper, actual_lower, pattern = inverse_func_degrees(
+    actual_theta, actual_upper, actual_lower, pattern = inverse_func(
         expected_color)
-    # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
+    # 無限小の丸め誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
     tolerance_num = 0.00000000000001  # < 0.00000000000001
-    tolerance_angle = 0
+    tolerance_theta = 0  # 0.011336  # 0.011336 < x < 0.011337
     diff = actual_upper - expected_upper
     if tolerance_num < abs(diff):
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
-actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
+actual_upper={actual_upper:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
     diff = actual_lower - expected_lower
     if tolerance_num < abs(diff):
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
-actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
+actual_lower={actual_lower:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
-    diff_angle = actual_angle - expected_angle
-    if tolerance_angle < abs(diff_angle):
+    diff_theta = actual_theta - expected_theta
+    if tolerance_theta < abs(diff_theta):
         upper = max(red, green, blue)
         lower = min(red, green, blue)
         bar_length = red + green + blue - upper - lower
@@ -261,9 +261,9 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         diameter = upper - lower
         radius = diameter / 2
         print(
-            f"ERROR           | expected_angle={expected_angle:24.20f}° \
-actual_angle={actual_angle:24.20f}° \
-diff={math.radians(diff_angle):24.20f}° \
+            f"ERROR           | expected_angle={math.degrees(expected_theta):24.20f}° \
+actual_angle={math.degrees(actual_theta):24.20f}° \
+diff={math.degrees(diff_theta):24.20f}° diff={diff_theta:23.20f}rad \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} \
 width={width} radius={radius} pattern={pattern} seq={seq}")
 
@@ -295,7 +295,7 @@ width={width} radius={radius} pattern={pattern} seq={seq}")
     # 時計の針
     clock_hand.theta = theta
 
-    return diff_angle
+    return diff_theta
 
 
 def draw_grid(_canvas):
@@ -328,7 +328,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
 
 
 def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
-                large_triangle, clock_hand, error_angle):
+                large_triangle, clock_hand, error_theta):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_circle(canvas)  # 円レール
@@ -397,11 +397,34 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     diff_y = abs(gravity2[1]-gravity1[1])
     cv2.putText(canvas,
                 f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) \
-error angle={error_angle} deg",
+error angle={math.degrees(error_theta):10.6f} deg \
+{error_theta:9.6f} rad",
                 point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 color_for_cv2(BLACK, BAR_TICKS),
+                lineType=2)
+
+    # 誤差を見たい
+    left = circle_rail.center[0] - circle_rail.radius
+    bottom = circle_rail.center[1] + circle_rail.radius + 3*GRID_UNIT
+    right = 2*circle_rail.radius * \
+        math.cos(error_theta) + (circle_rail.center[0] - circle_rail.radius)
+    top = 2*circle_rail.radius * \
+        math.sin(error_theta) + \
+        (circle_rail.center[1] + circle_rail.radius + 3*GRID_UNIT)
+    cv2.line(canvas,
+             point_for_cv2((left, bottom)),
+             point_for_cv2((right, top)),
+             color_for_cv2(WHITE, BAR_TICKS),
+             thickness=1)
+    cv2.putText(canvas,
+                f"error angle",
+                point_for_cv2(
+                    (left - 7*GRID_UNIT, bottom+GRID_UNIT*1/3)),  # x,y
+                cv2.FONT_HERSHEY_SIMPLEX,
+                FONT_SCALE,
+                color_for_cv2(WHITE, BAR_TICKS),
                 lineType=2)
 
     return canvas

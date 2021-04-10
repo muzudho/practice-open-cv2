@@ -8,7 +8,8 @@ from cv2_helper import point_for_cv2, color_for_cv2
 from rectangle import Rectangle
 from clock_hand import ClockHand
 from triangle import Triangle
-from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, BAR_TICKS
+from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, BAR_TICKS, \
+    U_M_L_NAME_LIST
 from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
@@ -32,57 +33,6 @@ BAR_BOX_LEFT = 18 * GRID_UNIT
 # 円の中心と、箱の左との距離
 CIRCLE_DISTANCE = 14 * GRID_UNIT
 
-# とりあえず 11トーン
-VERTICAL_PARCENT = [
-    [0.23, 0.14, 0.63],  # 適当
-    [0.04, 0.51, 0.45],  # 適当
-    [0.39, 0.27, 0.34],  # 適当
-    [0.0, 0.89, 0.11],  # 適当
-    # [0.87, 0.11, 0.02],  # 適当
-    #
-    # 鮮やかさ2番
-    # [0.1, 0.7, 0.2],  # Bright
-    # [0.2, 0.7, 0.1],  # Strong
-    # [0.3, 0.7, 0.0],  # Deep
-    # 鮮やかさ3番
-    # [0.0, 0.4, 0.6],  # Light
-    # [0.1, 0.4, 0.5],  # Soft
-    # [0.3, 0.4, 0.3],  # Dull
-    # [0.4, 0.4, 0.2],  # Dark
-    # 鮮やかさ4番
-    # [0.0, 0.3, 0.7],  # Pale
-    # [0.2, 0.3, 0.5],  # Light grayish
-    # [0.4, 0.3, 0.3],  # Grayish
-    # [0.6, 0.3, 0.1],  # Dark grayish
-    # 鮮やかさ1番
-    # [0.0, 1.0, 0.0],  # Vivid
-    # テストケース（鮮やかさ小）
-    #[0.0, 0.999, 0.001],
-    # テストケース（鮮やかさ小）
-    #[0.0, 0.001, 0.999],
-]
-TONE_NAME = [
-    'Tekitou 1',
-    'Tekitou 2',
-    'Tekitou 3',
-    'Tekitou 4',
-    # 'Tekitou 5',
-    # 'Bright',
-    # 'Strong',
-    # 'Deep',
-    # 'Light',
-    # 'Soft',
-    # 'Dull',
-    # 'Dark',
-    # 'Pale',
-    #'Light grayish',
-    # 'Grayish',
-    #'Dark grayish',
-    # 'Vivid',
-    #'Test case 1',
-    #'Test case 2',
-]
-
 
 def main():
     """RGB値の仕組みが分かるgifアニメ画像を出力します
@@ -91,31 +41,29 @@ def main():
     # 連番
     seq = 0
 
-    size = len(VERTICAL_PARCENT)
-    for i in range(0, size):
-        vertical_parcent = VERTICAL_PARCENT[i]
-        tone_name = TONE_NAME[i]
+    for (_, record) in enumerate(U_M_L_NAME_LIST):
 
         # 描画：トーン名と バー箱 の紹介
         outer_circle = OuterCircle()
         for _ in range(0, 10):  # Wait frames
             canvas = make_canvas()
+            bar_rate = (record[0], record[1], record[2])
             bar_box, circle_rail, _outer_circle, _inscribed_triangle, _clock_hand = update_scene1(
-                vertical_parcent, outer_circle)
+                bar_rate, outer_circle)
             draw_grid(canvas)
             circle_rail.draw_circle(canvas)  # 円レール
             draw_border(circle_rail, canvas)  # 背景の上限、下限の線
             bar_box.draw_outline(canvas)
             bar_box.draw_rank2_box(canvas)
             bar_box.draw_bars_rate(canvas)  # バー率テキスト
-            draw_tone_name(canvas, bar_box, tone_name)
+            draw_tone_name(canvas, bar_box, record[3])
             # 書出し
             canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
             cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
             seq += 1
 
         # 描画：色相環のアニメーション表示
-        seq, canvas = update_circle(canvas, seq, vertical_parcent, tone_name)
+        seq, canvas = update_circle(canvas, seq, bar_rate, record[3])
 
         for _ in range(0, 10):  # Wait frames
             cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
@@ -193,10 +141,10 @@ def update_scene1(vertical_parcent, outer_circle):
 
     # 外環状
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
-    outer_circle.area_size = (bar_box.width*9/10,
-                              bar_box.width*9/10)
+    outer_circle.area_size = (bar_box.width*8/10,
+                              bar_box.width*8/10)
     outer_circle.phases = PHASE_COUNTS
-    outer_circle.tickness = 3.0*GRID_UNIT  # 1.5*GRID_UNIT
+    outer_circle.tickness = 6.0*GRID_UNIT  # 3.0*GRID_UNIT  # 1.5*GRID_UNIT
 
     # 長方形に内接する大きな正三角形
     large_triangle = Triangle()
@@ -211,7 +159,7 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.unit_arc = outer_circle.unit_arc
     clock_hand.tickness = 2
     clock_hand.radius1 = circle_rail.radius  # 1st range
-    radius2_expected = bar_box.width*9/10
+    radius2_expected = bar_box.width*8/10
     clock_hand.radius2 = radius2_expected - \
         outer_circle.tickness / 2 - clock_hand.tickness  # 2nd range
     clock_hand.radius3 = radius2_expected + \
@@ -341,7 +289,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
 
 
 def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
-                large_triangle, clock_hand, error_angle):
+                large_triangle, clock_hand, _error_angle):
     """アニメの１コマを作成します"""
 
     circle_rail.draw_circle(canvas)  # 円レール
@@ -404,18 +352,18 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
                 lineType=2)
 
     # debug 重心
-    gravity1 = circle_rail.triangle.triangular_center_of_gravity()
-    gravity2 = large_triangle.triangular_center_of_gravity()
-    diff_x = abs(gravity2[0]-gravity1[0])
-    diff_y = abs(gravity2[1]-gravity1[1])
-    cv2.putText(canvas,
-                f"gravity diff=({diff_x:11.5f}, {diff_y:11.5f}) \
-error angle={error_angle} deg",
-                point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
-                cv2.FONT_HERSHEY_SIMPLEX,
-                FONT_SCALE,
-                color_for_cv2(BLACK, BAR_TICKS),
-                lineType=2)
+    #gravity1 = circle_rail.triangle.triangular_center_of_gravity()
+    #gravity2 = large_triangle.triangular_center_of_gravity()
+    #diff_x = abs(gravity2[0]-gravity1[0])
+    #diff_y = abs(gravity2[1]-gravity1[1])
+    # cv2.putText(canvas,
+    #            # gravity diff=({diff_x:11.5f}, {diff_y:11.5f})
+    #            f"error angle={error_angle} deg",
+    #            point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
+    #            cv2.FONT_HERSHEY_SIMPLEX,
+    #            FONT_SCALE,
+    #            color_for_cv2(BLACK, BAR_TICKS),
+    #            lineType=2)
 
     return canvas
 

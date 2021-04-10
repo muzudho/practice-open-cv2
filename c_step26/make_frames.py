@@ -234,7 +234,7 @@ def update_scene1_with_rotate(
     # 無限小の丸め誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
     error = 0.00000000000001  # < 0.00000000000001
-    error_theta = 0.011337  # 0.01132 < x < 0.011338
+    error_theta = 0.011336  # 0.01132 < x < 0.011337
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(

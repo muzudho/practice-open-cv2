@@ -36,7 +36,7 @@ def inverse_func_degrees(color):
 
     if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B9u'):
         angle = round_limit(math.degrees(theta))
-    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B7d', 'B9', 'B11'):
+    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B7d', 'B9', 'B11', 'B11d'):
         angle = math.floor(math.degrees(theta))
     elif c_phase in ('B2', 'B4', 'B5u', 'B6', 'B8', 'B10', 'B12'):
         angle = math.ceil(math.degrees(theta))
@@ -110,7 +110,7 @@ def inverse_func(color):
     elif c_phase == 'B10':
         # パターン１０
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
-    elif c_phase == 'B11':
+    elif c_phase in ('B11', 'B11d'):
         # パターン１１
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
     elif c_phase == 'B12':
@@ -124,7 +124,7 @@ def inverse_func(color):
 
 
 def color_phase(color):
-    """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, B7d, B9u の文字列で返します"""
+    """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, B7d, B9u, B11d の文字列で返します"""
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
     red = round_limit(color[0])
@@ -164,7 +164,8 @@ def color_phase(color):
     radius = round_limit(diameter / 2)
 
     if math.isclose(red, upper, abs_tol=ACCURACY) \
-            and not math.isclose(green, upper, abs_tol=ACCURACY) and math.isclose(blue, lower, abs_tol=ACCURACY):
+            and not math.isclose(green, upper, abs_tol=ACCURACY) \
+            and math.isclose(blue, lower, abs_tol=ACCURACY):
         # 緑上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             # +-+
@@ -193,7 +194,8 @@ def color_phase(color):
             #  R    G    B
             c_phase = 'B2'
     elif not math.isclose(red, lower, abs_tol=ACCURACY) \
-            and math.isclose(green, upper, abs_tol=ACCURACY) and math.isclose(blue, lower, abs_tol=ACCURACY):
+            and math.isclose(green, upper, abs_tol=ACCURACY) \
+            and math.isclose(blue, lower, abs_tol=ACCURACY):
         # 赤下降中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
@@ -222,7 +224,8 @@ def color_phase(color):
             #  R    G    B
             c_phase = 'B4'
     elif math.isclose(red, lower, abs_tol=ACCURACY) \
-            and math.isclose(green, upper, abs_tol=ACCURACY) and not math.isclose(blue, upper, abs_tol=ACCURACY):
+            and math.isclose(green, upper, abs_tol=ACCURACY) \
+            and not math.isclose(blue, upper, abs_tol=ACCURACY):
         # 青上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
@@ -314,11 +317,19 @@ def color_phase(color):
             and math.isclose(green, lower, abs_tol=ACCURACY) \
             and not math.isclose(blue, lower, abs_tol=ACCURACY):
         # 青下降中
+        if math.isclose(width, radius, abs_tol=ACCURACY):
+            #           +-+
+            #           | |
+            # +-+       | | x == 330°
+            # | |       | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B11d'
         # パターン１１
-        if radius <= width:  # 半分を含む（必要）
+        elif radius < width:
             # +-+           300° <
             # | |        v         x
-            # | |       +-+          <= 330°
+            # | |       +-+          < 330°
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
@@ -327,9 +338,9 @@ def color_phase(color):
         else:
             # +-+
             # | |
-            # | |       +-+          < 330°
+            # | |       +-+ 330° <
             # | |       |v|        x
-            # +-+  +-+  +-+ 360° <
+            # +-+  +-+  +-+          < 360°
             #  R    G    B
             c_phase = 'B12'
     else:

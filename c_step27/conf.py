@@ -13,9 +13,9 @@ GRID_UNIT = 14
 # PHASE_COUNTS = 6
 # PHASE_COUNTS = 24
 # PHASE_COUNTS = 60
-PHASE_COUNTS = 360  # よく確認するにはこれだが、画像が多すぎる（＾～＾）
+PHASE_COUNTS = 360  # 弧度法の精度ではこれ（＾～＾）
 # PHASE_COUNTS = 8*360  # 誤差を測りたいとき（＾～＾）でも時間がかかってしまう（＾～＾）
-# PHASE_COUNTS = 32*360  # 誤差チェック（＾～＾）
+# PHASE_COUNTS = 64*360  # 誤差チェック（＾～＾）
 
 # フォント倍率
 FONT_SCALE = 0.5

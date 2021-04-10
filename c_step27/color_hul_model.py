@@ -30,7 +30,7 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6'):
+    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u'):
         angle = round_limit(math.degrees(theta))
     elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
         angle = math.floor(math.degrees(theta))
@@ -47,9 +47,10 @@ lower={lower} c_phase={c_phase}")
 def inverse_func(color):
     """逆関数。ラジアン値で 0.02 未満の誤差が出ます"""
     c_phase = color_phase(color)
-    red = color[0]
-    green = color[1]
-    blue = color[2]
+    # 一応、浮動小数点数の丸め誤差を消しとくか。厳密じゃないけど（＾～＾）
+    red = round_limit(color[0])
+    green = round_limit(color[1])
+    blue = round_limit(color[2])
     if c_phase == 'M':
         raise Exception(f"monocro color=({red}, {green}, {blue})")
 
@@ -80,7 +81,7 @@ def inverse_func(color):
     # opposite = (math.sqrt(3)/2) * tanjent
     # hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
-    if c_phase == 'B1':
+    if c_phase in ('B1', 'B1u'):
         # パターン１ (0°～30°)
         theta = math.asin(width/diameter)
     elif c_phase == 'B2':
@@ -124,7 +125,7 @@ def inverse_func(color):
 
 
 def color_phase(color):
-    """角度を M、A1～A6、B1～B12の文字列で返します"""
+    """角度を M、A1～A6、B1～B12, B1u の文字列で返します"""
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
     red = round_limit(color[0])
@@ -164,8 +165,10 @@ def color_phase(color):
 
     if red == upper and green != upper and blue == lower:  # 緑上昇中
         # パターン１
-        if width <= radius:  # 半分を含む
+        if width < radius:  # 半分を含まない
             c_phase = "B1"
+        elif width == radius:  # 半分
+            c_phase = "B1u"
         # パターン２
         else:
             c_phase = "B2"

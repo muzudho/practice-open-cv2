@@ -13,7 +13,7 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_ticks
-from color_hul_model import to_color_rate, inverse_func_degrees
+from color_hul_model import to_color_rate, inverse_func_degrees, round_limit
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
@@ -34,19 +34,19 @@ CIRCLE_DISTANCE = 14 * GRID_UNIT
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
     # 鮮やかさ2番
-    # [0.1, 0.7, 0.2],  # Bright
-    # [0.2, 0.7, 0.1],  # Strong
-    # [0.3, 0.7, 0.0],  # Deep
+    [0.1, 0.7, 0.2],  # Bright
+    [0.2, 0.7, 0.1],  # Strong
+    [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
-    # [0.0, 0.4, 0.6],  # Light
-    # [0.1, 0.4, 0.5],  # Soft
-    # [0.3, 0.4, 0.3],  # Dull
-    # [0.4, 0.4, 0.2],  # Dark
+    [0.0, 0.4, 0.6],  # Light
+    [0.1, 0.4, 0.5],  # Soft
+    [0.3, 0.4, 0.3],  # Dull
+    [0.4, 0.4, 0.2],  # Dark
     # 鮮やかさ4番
-    # [0.0, 0.3, 0.7],  # Pale
-    # [0.2, 0.3, 0.5],  # Light grayish
-    # [0.4, 0.3, 0.3],  # Grayish
-    # [0.6, 0.3, 0.1],  # Dark grayish
+    [0.0, 0.3, 0.7],  # Pale
+    [0.2, 0.3, 0.5],  # Light grayish
+    [0.4, 0.3, 0.3],  # Grayish
+    [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     [0.0, 1.0, 0.0],  # Vivid
     # テストケース（鮮やかさ小）
@@ -55,17 +55,17 @@ VERTICAL_PARCENT = [
     #[0.0, 0.001, 0.999],
 ]
 TONE_NAME = [
-    # 'Bright',
-    # 'Strong',
-    # 'Deep',
-    # 'Light',
-    # 'Soft',
-    # 'Dull',
-    # 'Dark',
-    # 'Pale',
-    #'Light grayish',
-    # 'Grayish',
-    #'Dark grayish',
+    'Bright',
+    'Strong',
+    'Deep',
+    'Light',
+    'Soft',
+    'Dull',
+    'Dark',
+    'Pale',
+    'Light grayish',
+    'Grayish',
+    'Dark grayish',
     'Vivid',
     #'Test case 1',
     #'Test case 2',
@@ -234,26 +234,25 @@ def update_scene1_with_rotate(
     # 弧度法
     actual_angle, actual_upper, actual_lower, pattern = inverse_func_degrees(
         expected_color)
+    actual_upper = round_limit(actual_upper)
+    actual_lower = round_limit(actual_lower)
     # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
-    # 誤差 +-error まで許容
-    tolerance_num = 0.00000000000001  # < 0.00000000000001
-    tolerance_angle = 0
     diff = actual_upper - expected_upper
-    if tolerance_num < abs(diff):
+    if abs(diff) > 0:
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
     diff = actual_lower - expected_lower
-    if tolerance_num < abs(diff):
+    if abs(diff) > 0:
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
     diff_angle = actual_angle - expected_angle
-    if tolerance_angle < abs(diff_angle):
+    if abs(diff_angle) > 0:
         upper = max(red, green, blue)
         lower = min(red, green, blue)
         bar_length = red + green + blue - upper - lower

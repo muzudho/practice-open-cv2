@@ -196,7 +196,7 @@ def update_scene1(vertical_parcent, outer_circle):
     outer_circle.area_size = (bar_box.width*9/10,
                               bar_box.width*9/10)
     outer_circle.phases = PHASE_COUNTS
-    outer_circle.tickness = 1.5*GRID_UNIT
+    outer_circle.tickness = 3.0*GRID_UNIT  # 1.5*GRID_UNIT
 
     # 長方形に内接する大きな正三角形
     large_triangle = Triangle()
@@ -391,13 +391,13 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     bar_box.draw_rgb_number(canvas, color)
 
     # 角度（弧度法）表示
-    point_x = (circle_rail.radius + 12*GRID_UNIT) * \
+    point_x = (outer_circle.area_size[0]/2 + 12*GRID_UNIT) * \
         math.cos(circle_rail.theta) + circle_rail.center[0]
-    point_y = (circle_rail.radius + 12*GRID_UNIT) * \
+    point_y = (outer_circle.area_size[1]/2 + 12*GRID_UNIT) * \
         -math.sin(circle_rail.theta) + circle_rail.center[1]
     cv2.putText(canvas,
-                f"{math.degrees(circle_rail.theta):5.1f}",
-                point_for_cv2((point_x, point_y)),  # x,y
+                f"{math.degrees(circle_rail.theta):3.0f}",
+                point_for_cv2((point_x, point_y)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
                 color_for_cv2(BLACK, BAR_TICKS),

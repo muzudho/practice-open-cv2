@@ -130,24 +130,25 @@ def color_phase(color):
     red = round_limit(color[0])
     green = round_limit(color[1])
     blue = round_limit(color[2])
-    if math.isclose(red, green) and math.isclose(green, blue):
+    if math.isclose(red, green, abs_tol=ACCURACY) \
+            and math.isclose(green, blue, abs_tol=ACCURACY):
         # Monocro
         return 'M'
 
     upper = max(red, green, blue)
     lower = min(red, green, blue)
 
-    if math.isclose(green, blue) and math.isclose(red, upper):
+    if math.isclose(green, blue, abs_tol=ACCURACY) and math.isclose(red, upper, abs_tol=ACCURACY):
         c_phase = "A1"
-    elif math.isclose(red, green) and math.isclose(blue, lower):
+    elif math.isclose(red, green, abs_tol=ACCURACY) and math.isclose(blue, lower, abs_tol=ACCURACY):
         c_phase = "A2"
-    elif math.isclose(red, blue) and math.isclose(green, upper):
+    elif math.isclose(red, blue, abs_tol=ACCURACY) and math.isclose(green, upper, abs_tol=ACCURACY):
         c_phase = "A3"
-    elif math.isclose(green, blue) and math.isclose(red, lower):
+    elif math.isclose(green, blue, abs_tol=ACCURACY) and math.isclose(red, lower, abs_tol=ACCURACY):
         c_phase = "A4"
-    elif math.isclose(red, green) and math.isclose(blue, upper):
+    elif math.isclose(red, green, abs_tol=ACCURACY) and math.isclose(blue, upper, abs_tol=ACCURACY):
         c_phase = "A5"
-    elif math.isclose(red, blue) and math.isclose(green, lower):
+    elif math.isclose(red, blue, abs_tol=ACCURACY) and math.isclose(green, lower, abs_tol=ACCURACY):
         c_phase = "A6"
     else:
         c_phase = None
@@ -162,7 +163,8 @@ def color_phase(color):
     diameter = upper - lower
     radius = round_limit(diameter / 2)
 
-    if math.isclose(red, upper) and not math.isclose(green, upper) and math.isclose(blue, lower):
+    if math.isclose(red, upper, abs_tol=ACCURACY) \
+            and not math.isclose(green, upper, abs_tol=ACCURACY) and math.isclose(blue, lower, abs_tol=ACCURACY):
         # 緑上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             # +-+
@@ -190,7 +192,8 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B2'
-    elif not math.isclose(red, lower) and math.isclose(green, upper) and math.isclose(blue, lower):
+    elif not math.isclose(red, lower, abs_tol=ACCURACY) \
+            and math.isclose(green, upper, abs_tol=ACCURACY) and math.isclose(blue, lower, abs_tol=ACCURACY):
         # 赤下降中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
@@ -218,7 +221,8 @@ def color_phase(color):
             # +-+  +-+  +-+ 60° <=
             #  R    G    B
             c_phase = 'B4'
-    elif math.isclose(red, lower) and math.isclose(green, upper) and not math.isclose(blue, upper):
+    elif math.isclose(red, lower, abs_tol=ACCURACY) \
+            and math.isclose(green, upper, abs_tol=ACCURACY) and not math.isclose(blue, upper, abs_tol=ACCURACY):
         # 青上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
@@ -246,7 +250,8 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B6'
-    elif math.isclose(red, lower) and not math.isclose(green, lower) and math.isclose(blue, upper):
+    elif math.isclose(red, lower, abs_tol=ACCURACY) \
+            and not math.isclose(green, lower, abs_tol=ACCURACY) and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 緑下降中
         # パターン７
         if math.isclose(width, radius, abs_tol=ACCURACY):
@@ -274,7 +279,8 @@ def color_phase(color):
             # +-+  +-+  +-+ 240° <
             #  R    G    B
             c_phase = 'B8'
-    elif not math.isclose(red, upper) and math.isclose(green, lower) and math.isclose(blue, upper):
+    elif not math.isclose(red, upper, abs_tol=ACCURACY) \
+            and math.isclose(green, lower, abs_tol=ACCURACY) and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+
@@ -302,7 +308,8 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B10'
-    elif math.isclose(red, upper) and math.isclose(green, lower) and not math.isclose(blue, lower):
+    elif math.isclose(red, upper, abs_tol=ACCURACY) \
+            and math.isclose(green, lower, abs_tol=ACCURACY) and not math.isclose(blue, lower, abs_tol=ACCURACY):
         # 青下降中
         # パターン１１
         if radius <= width:  # 半分を含む（必要）

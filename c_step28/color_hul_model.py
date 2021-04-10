@@ -71,8 +71,8 @@ def inverse_func(color):
 
     diameter = upper - lower
 
-    # up は sin
-    # down は cos
+    # up は asin, B奇数も asin
+    # down は acos, B偶数も acos
     if c_phase in ('B1', 'B1u'):
         # パターン１ (0°～30°)
         theta = math.asin(width/diameter)

@@ -126,17 +126,34 @@ def color_phase(color):
 
     * 'M' - モノクロ
 
-    60°ずつ回転した形
+    A系 60°ずつ回転した形
+    B系 RGBの位置関係から、１２パターンあります
+    Bxu, Bxd系 １２パターンの真ん中
 
     * 'A1' - 緑と青は等しく、それより赤が大きい
+    * 'B1' - 下から青、緑、赤。緑上昇中
+    * 'B1u' - 下から青、緑、赤。緑上昇中
+    * 'B2' - 下から青、緑、赤。緑上昇中
     * 'A2' - 赤と緑は等しく、それより青は小さい
+    * 'B3' - 下から青、赤、緑。赤下降中
+    * 'B3d' - 下から青、赤、緑。赤下降中
+    * 'B4' - 下から青、赤、緑。赤下降中
     * 'A3' - 青と赤は等しく、それより緑が大きい
+    * 'B5' - 下から赤、青、緑。青上昇中
+    * 'B5u' - 下から赤、青、緑。青上昇中
+    * 'B6' - 下から赤、青、緑。青上昇中
     * 'A4' - 緑と青は等しく、それより赤は小さい
+    * 'B7' - 下から赤、緑、青。緑下降中
+    * 'B7d' - 下から赤、緑、青。緑下降中
+    * 'B8' - 下から赤、緑、青。緑下降中
     * 'A5' - 赤と緑は等しく、それより青が大きい
+    * 'B9' - 下から緑、赤、青。赤上昇中
+    * 'B9u' - 下から緑、赤、青。赤上昇中
+    * 'B10' - 下から緑、赤、青。赤上昇中
     * 'A6' - 赤と青は等しく、それより緑が小さい
-
-    * 'B1' ～ 'B12' - RGBの位置関係から、１２パターンあります
-    * 'B1u', 'B3d', 'B5u', 'B7d', 'B9u', 'B11d' - １２パターンの真ん中
+    * 'B11' - 下から緑、青、赤。青下降中
+    * 'B11d' - 下から緑、青、赤。青下降中
+    * 'B12' - 下から緑、青、赤。青下降中
     """
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
@@ -179,7 +196,7 @@ def color_phase(color):
     if math.isclose(red, upper, abs_tol=ACCURACY) \
             and not math.isclose(green, upper, abs_tol=ACCURACY) \
             and math.isclose(blue, lower, abs_tol=ACCURACY):
-        # 緑上昇中
+        # 下から青、緑、赤。緑上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             # +-+
             # | |
@@ -209,7 +226,7 @@ def color_phase(color):
     elif not math.isclose(red, lower, abs_tol=ACCURACY) \
             and math.isclose(green, upper, abs_tol=ACCURACY) \
             and math.isclose(blue, lower, abs_tol=ACCURACY):
-        # 赤下降中
+        # 下から青、赤、緑。赤下降中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
             #      | |
@@ -239,7 +256,7 @@ def color_phase(color):
     elif math.isclose(red, lower, abs_tol=ACCURACY) \
             and math.isclose(green, upper, abs_tol=ACCURACY) \
             and not math.isclose(blue, upper, abs_tol=ACCURACY):
-        # 青上昇中
+        # 下から赤、青、緑。青上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
             #      | |
@@ -298,7 +315,7 @@ def color_phase(color):
             c_phase = 'B8'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
-    and math.isclose(blue, upper, abs_tol=ACCURACY):
+        and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+
@@ -331,9 +348,9 @@ def color_phase(color):
             and not math.isclose(blue, lower, abs_tol=ACCURACY):
         # 青下降中
         if math.isclose(width, radius, abs_tol=ACCURACY):
-            #           +-+
-            #           | |
-            # +-+       | | x == 330°
+            # +-+
+            # | |
+            # | |       +-+ x == 330°
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B

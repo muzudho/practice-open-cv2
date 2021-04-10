@@ -97,48 +97,42 @@ class Triangle():
         green = n3bars_len[1]
         blue = n3bars_len[2]
         triangle_theta = theta
-        if c_phase == 'A1':  # green == blue and blue < red:
-            # 緑と青は等しく、それより赤が大きい
+        if c_phase == 'A1':  # 緑と青は等しく、それより赤が大きい
             phase = 0  # トライアングル・フェーズ
-        elif blue < green < red:
-            # 下から青、緑、赤
+        elif c_phase in ('B1', 'B1u', 'B2'):  # blue < green < red:
+            # 下から青、緑、赤。緑上昇中
             phase = 1
-        elif c_phase == 'A2':  # blue < green and green == red:
-            # 赤と緑は等しく、それより青は小さい
+        elif c_phase == 'A2':  # 赤と緑は等しく、それより青は小さい
             phase = 2
-        elif blue < red < green:
-            # 下から青、赤、緑
+        elif c_phase in ('B3', 'B3d', 'B4'):  # blue < red < green:
+            # 下から青、赤、緑。赤下降中
             phase = 3
             triangle_theta -= math.radians(120)
-        elif c_phase == 'A3':  # blue == red and red < green:
-            # 青と赤は等しく、それより緑が大きい
+        elif c_phase == 'A3':  # 青と赤は等しく、それより緑が大きい
             phase = 4
             triangle_theta -= math.radians(120)
-        elif red < blue < green:
-            # 下から赤、青、緑
+        elif c_phase in ('B5', 'B5u', 'B6'):  # red < blue < green:
+            # 下から赤、青、緑。青上昇中
             phase = 5
             triangle_theta -= math.radians(120)
-        elif c_phase == 'A4':  # red < blue and blue == green:
-            # 緑と青は等しく、それより赤は小さい
+        elif c_phase == 'A4':  # 緑と青は等しく、それより赤は小さい
             phase = 6
             triangle_theta -= math.radians(120)
-        elif red < green < blue:
-            # 下から赤、緑、青
+        elif c_phase in ('B7', 'B7d', 'B8'):  # red < green < blue:
+            # 下から赤、緑、青。緑下降中
             phase = 7
             triangle_theta += math.radians(120)
-        elif c_phase == 'A5':  # red == green and green < blue:
-            # 赤と緑は等しく、それより青が大きい
+        elif c_phase == 'A5':  # 赤と緑は等しく、それより青が大きい
             phase = 8
             triangle_theta += math.radians(120)
-        elif green < red < blue:
-            # 下から緑、赤、青
+        elif c_phase in ('B9', 'B9u', 'B10'):  # green < red < blue:
+            # 下から緑、赤、青。赤上昇中
             phase = 9
             triangle_theta += math.radians(120)
-        elif c_phase == 'A6':  # green < red and red == blue:
-            # 赤と青は等しく、それより緑が小さい
+        elif c_phase == 'A6':  # 赤と青は等しく、それより緑が小さい
             phase = 10
         else:
-            # 下から緑、青、赤
+            # 下から緑、青、赤。青下降中
             phase = 11
         # 赤、青、緑 の順なのが工夫
         self.__nodes_p = calc_triangle(upper_x,

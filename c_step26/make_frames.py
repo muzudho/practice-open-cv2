@@ -35,38 +35,38 @@ CIRCLE_DISTANCE = 14 * GRID_UNIT
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
     # 鮮やかさ2番
-    # [0.1, 0.7, 0.2],  # Bright
-    # [0.2, 0.7, 0.1],  # Strong
-    # [0.3, 0.7, 0.0],  # Deep
+    [0.1, 0.7, 0.2],  # Bright
+    [0.2, 0.7, 0.1],  # Strong
+    [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
-    # [0.0, 0.4, 0.6],  # Light
-    # [0.1, 0.4, 0.5],  # Soft
-    # [0.3, 0.4, 0.3],  # Dull
-    # [0.4, 0.4, 0.2],  # Dark
+    [0.0, 0.4, 0.6],  # Light
+    [0.1, 0.4, 0.5],  # Soft
+    [0.3, 0.4, 0.3],  # Dull
+    [0.4, 0.4, 0.2],  # Dark
     # 鮮やかさ4番
-    # [0.0, 0.3, 0.7],  # Pale
-    # [0.2, 0.3, 0.5],  # Light grayish
-    # [0.4, 0.3, 0.3],  # Grayish
-    # [0.6, 0.3, 0.1],  # Dark grayish
+    [0.0, 0.3, 0.7],  # Pale
+    [0.2, 0.3, 0.5],  # Light grayish
+    [0.4, 0.3, 0.3],  # Grayish
+    [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     [0.0, 1.0, 0.0],  # Vivid
     # テストケース（鮮やかさ小）
-    #[0.0, 0.01, 0.99],
+    [0.0, 0.01, 0.99],
 ]
 TONE_NAME = [
-    # 'Bright',
-    # 'Strong',
-    # 'Deep',
-    # 'Light',
-    # 'Soft',
-    # 'Dull',
-    # 'Dark',
-    # 'Pale',
-    #'Light grayish',
-    # 'Grayish',
-    #'Dark grayish',
+    'Bright',
+    'Strong',
+    'Deep',
+    'Light',
+    'Soft',
+    'Dull',
+    'Dark',
+    'Pale',
+    'Light grayish',
+    'Grayish',
+    'Dark grayish',
     'Vivid',
-    #'Test case',
+    'Test case',
 ]
 
 
@@ -234,7 +234,7 @@ def update_scene1_with_rotate(
     # 無限小の丸め誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
     error = 0.00000000000001  # < 0.00000000000001
-    error_theta = 0.01132  # 0.011 < x < 0.01133
+    error_theta = 0.011337  # 0.01132 < x < 0.011338
     if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
         diff = actual_upper - expected_upper
         print(
@@ -247,7 +247,6 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-    error_theta = actual_theta - expected_theta
     if actual_theta < expected_theta - error_theta or expected_theta + error_theta < actual_theta:
         upper = max(red, green, blue)
         lower = min(red, green, blue)

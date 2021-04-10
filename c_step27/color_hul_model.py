@@ -31,11 +31,11 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B5u', 'B9u'):
+    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B9u'):
         angle = round_limit(math.degrees(theta))
-    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
+    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B7d', 'B9', 'B11'):
         angle = math.floor(math.degrees(theta))
-    elif c_phase in ('B2', 'B4', 'B6', 'B8', 'B10', 'B12'):
+    elif c_phase in ('B2', 'B4', 'B5u', 'B6', 'B8', 'B10', 'B12'):
         angle = math.ceil(math.degrees(theta))
     else:
         raise Exception(
@@ -95,7 +95,7 @@ def inverse_func(color):
     elif c_phase == 'B6':
         # パターン６
         theta = math.acos((diameter - width)/diameter) + math.radians(90)
-    elif c_phase == 'B7':
+    elif c_phase in ('B7', 'B7d'):
         # パターン７
         theta = math.asin((diameter - width)/diameter) + math.radians(180)
     elif c_phase == 'B8':
@@ -121,7 +121,7 @@ def inverse_func(color):
 
 
 def color_phase(color):
-    """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, 'B9u' の文字列で返します"""
+    """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, B7d, B9u の文字列で返します"""
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
     red = round_limit(color[0])
@@ -246,21 +246,29 @@ def color_phase(color):
     elif math.isclose(red, lower) and not math.isclose(green, lower) and math.isclose(blue, upper):
         # 緑下降中
         # パターン７
-        if radius <= width:  # 半分を含む（必要）
-            #           +-+
-            #       v   | |
-            #      +-+  | |           <= 180°
-            #      | |  | |         x
-            # +-+  +-+  +-+ 210° <=
+        if math.isclose(width, radius):
+            #      +-+
+            #      | |
+            #      | |  +-+ x == 210°
+            #      | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B7d'
+        if radius < width:
+            #           +-+          < 180°
+            #       v   | |        x
+            #      +-+  | | 210° <
+            #      | |  | |
+            # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B7'
         # パターン８
         else:
             #           +-+
             #           | |
-            #      +-+  | |           <= 210°
-            #      |v|  | |         x
-            # +-+  +-+  +-+ 240° <=
+            #      +-+  | |          < 210°
+            #      |v|  | |        x
+            # +-+  +-+  +-+ 240° <
             #  R    G    B
             c_phase = 'B8'
     elif not math.isclose(red, upper) and math.isclose(green, lower) and math.isclose(blue, upper):

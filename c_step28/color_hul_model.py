@@ -18,12 +18,17 @@ def inverse_func_degrees(color):
     # 切り上げ、切り捨てで、ずれを微調整
     if c_phase == 'M':
         angle = float('Nan')
-    elif c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B5u', 'B7d', 'B9u', 'B11d'):  # キリがいい数
+    elif c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6',
+                     'B1u', 'B3d', 'B5u', 'B7d', 'B9u', 'B11d'):  # キリがいい数
         angle = math.degrees(theta)
+    # 'B1', 'B3', 'B5', 'B7', 'B9', 'B11' は diff が正の数なので、そのまま切り捨てでいい。
     elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):  # 奇数
         angle = math.floor(math.degrees(theta))
-    elif c_phase in ('B2', 'B4', 'B6', 'B8', 'B10', 'B12'):  # 偶数
+        # angle = math.degrees(theta)
+    # 'B2', 'B4', 'B6', 'B8', 'B10', 'B12' はdiffが負の数なので、 ceil すると 切り捨ての効果が出る。
+    elif c_phase in ('B2', 'B4', 'B6', 'B8', 'B10', 'B12'):
         angle = math.ceil(math.degrees(theta))
+        # angle = math.degrees(theta)
     else:
         raise Exception(
             f"ERROR           | Logic error. theta={theta} upper={upper} \

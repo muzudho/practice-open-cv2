@@ -100,8 +100,8 @@ class ClockHand():
                  thickness=2)
         # 時計の針の先
         # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
-        start_angle = math.degrees(self.theta) - self.unit_arc/2
-        end_angle = math.degrees(self.theta) + self.unit_arc/2
+        start_angle = int(math.degrees(self.theta) - self.unit_arc/2)
+        end_angle = int(math.degrees(self.theta) + self.unit_arc/2)
         if start_angle == end_angle:
             end_angle += 1  # 差が 0 だと変なとこ描画するんで
         cv2.ellipse(canvas,

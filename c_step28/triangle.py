@@ -93,91 +93,69 @@ class Triangle():
         c_phase = color_phase(color)
 
         # 赤、緑、青 の点の位置関係は全部で１２相です
-        red = n3bars_len[0]
-        green = n3bars_len[1]
-        blue = n3bars_len[2]
         triangle_theta = theta
+
         if c_phase == 'A1':  # 緑と青は等しく、それより赤が大きい
-            phase = 0  # トライアングル・フェーズ
+            pass  # トライアングル・フェーズ
         elif c_phase in ('B1', 'B1u', 'B2'):  # blue < green < red:
             # 下から青、緑、赤。緑上昇中
-            phase = 1
+            pass
         elif c_phase == 'A2':  # 赤と緑は等しく、それより青は小さい
-            phase = 2
+            pass
         elif c_phase in ('B3', 'B3d', 'B4'):  # blue < red < green:
             # 下から青、赤、緑。赤下降中
-            phase = 3
             triangle_theta -= math.radians(120)
         elif c_phase == 'A3':  # 青と赤は等しく、それより緑が大きい
-            phase = 4
             triangle_theta -= math.radians(120)
         elif c_phase in ('B5', 'B5u', 'B6'):  # red < blue < green:
             # 下から赤、青、緑。青上昇中
-            phase = 5
             triangle_theta -= math.radians(120)
         elif c_phase == 'A4':  # 緑と青は等しく、それより赤は小さい
-            phase = 6
             triangle_theta -= math.radians(120)
         elif c_phase in ('B7', 'B7d', 'B8'):  # red < green < blue:
             # 下から赤、緑、青。緑下降中
-            phase = 7
             triangle_theta += math.radians(120)
         elif c_phase == 'A5':  # 赤と緑は等しく、それより青が大きい
-            phase = 8
             triangle_theta += math.radians(120)
         elif c_phase in ('B9', 'B9u', 'B10'):  # green < red < blue:
             # 下から緑、赤、青。赤上昇中
-            phase = 9
             triangle_theta += math.radians(120)
         elif c_phase == 'A6':  # 赤と青は等しく、それより緑が小さい
-            phase = 10
-        else:
+            pass
+        elif c_phase in ('B9', 'B9u', 'B10'):
             # 下から緑、青、赤。青下降中
-            phase = 11
+            pass
+        else:
+            pass
+
         # 赤、青、緑 の順なのが工夫
         self.__nodes_p = calc_triangle(upper_x,
                                        lower_x,
                                        triangle_theta,
                                        center)
-        if phase == 0:
-            # 緑や青より赤が上
-            pass
-        elif phase == 1:
-            # 下から青、緑、赤
-            pass
-        elif phase == 2:
-            # 青より、緑と赤が上
-            pass
-        elif phase == 3:
-            # 下から青、赤、緑
+
+        if c_phase in ('B3', 'B3d', 'B4'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[1], self.nodes_p[0])
-        elif phase == 4:
-            # 青や赤より緑が上
+        elif c_phase == 'A3':
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif phase == 5:
-            # 下から赤、青、緑
+        elif c_phase in ('B5', 'B5u', 'B6'):
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif phase == 6:
-            # 赤より、青と緑が上
+        elif c_phase == 'A4':
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif phase == 7:
-            # 下から赤、緑、青
+        elif c_phase in ('B7', 'B7d', 'B8'):
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[0], self.nodes_p[2])
-        elif phase == 8:
-            # 赤や緑より青が上
+        elif c_phase == 'A5':
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[0], self.nodes_p[1])
-        elif phase == 9:
-            # 下から緑、赤、青
+        elif c_phase in ('B9', 'B9u', 'B10'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[0], self.nodes_p[1])
-        elif phase == 10:
-            # 緑より、赤と青が上
+        elif c_phase == 'A6':
             self.__nodes_p = (
                 self.nodes_p[0], self.nodes_p[2], self.nodes_p[1])
         else:

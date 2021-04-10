@@ -18,10 +18,8 @@ def inverse_func_degrees(color):
     # 切り上げ、切り捨てで、ずれを微調整
     if c_phase == 'M':
         angle = float('Nan')
-    elif c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B5u', 'B9u'):  # キリがいい数
+    elif c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B5u', 'B7d', 'B9u', 'B11d'):  # キリがいい数
         angle = math.degrees(theta)
-    elif c_phase in ('B7d', 'B11d'):  # 丸めがいる
-        angle = round(math.degrees(theta))
     elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):  # 奇数
         angle = math.floor(math.degrees(theta))
     elif c_phase in ('B2', 'B4', 'B6', 'B8', 'B10', 'B12'):  # 偶数

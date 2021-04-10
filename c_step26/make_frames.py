@@ -169,7 +169,7 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail.radius = width2 / 2
 
     circle_rail.center = ((bar_box.lower_x+bar_box.upper_x)/2,
-                          bar_box.bottom+CIRCLE_DISTANCE+circle_rail.radius)  # x, y
+                          bar_box.bottom+CIRCLE_DISTANCE + bar_box.width*4/10)
     circle_rail.border_rect = Rectangle(
         bar_box.lower_x,
         circle_rail.center[1] - circle_rail.radius,
@@ -373,12 +373,12 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     bar_box.draw_rgb_number(canvas, color)
 
     # 角度（弧度法）表示
-    point_x = (circle_rail.radius + 14*GRID_UNIT) * \
+    point_x = (circle_rail.radius + 12*GRID_UNIT) * \
         math.cos(circle_rail.theta) + circle_rail.center[0]
-    point_y = (circle_rail.radius + 14*GRID_UNIT) * \
+    point_y = (circle_rail.radius + 12*GRID_UNIT) * \
         -math.sin(circle_rail.theta) + circle_rail.center[1]
     cv2.putText(canvas,
-                f"{math.degrees(circle_rail.theta):7.3f}",
+                f"{math.degrees(circle_rail.theta):5.1f}",
                 point_for_cv2((point_x, point_y)),  # x,y
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,

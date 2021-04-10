@@ -274,10 +274,10 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         radius = diameter / 2
         print(
             f"ERROR           | pattern={pattern:3} seq={seq:5}  \
-exp={expected_angle:24.20f}° act={actual_angle:24.20f}° \
-diff={diff_angle:24.20f}° r={red:23.20f} g={green:23.20f} b={blue:23.20f} \
-up={upper:23.20f} low={lower:23.20f} \
-width={width} radius={radius}")
+exp={expected_angle:10.6f}° act={actual_angle:10.6f}° \
+diff={diff_angle:10.6f}° r={red:9.6f} g={green:9.6f} b={blue:9.6f} \
+up={upper:9.6f} low={lower:9.6f} \
+width={width:9.6f} radius={radius:9.6f}")
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width

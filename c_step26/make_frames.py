@@ -237,7 +237,7 @@ def update_scene1_with_rotate(
     # 無限小の丸め誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
     tolerance_num = 0.00000000000001  # < 0.00000000000001
-    tolerance_theta = 0.011336  # 0.011336 < x < 0.011337
+    tolerance_theta = 0  # 0.011336  # 0.011336 < x < 0.011337
     diff = actual_upper - expected_upper
     if tolerance_num < abs(diff):
         print(
@@ -261,9 +261,9 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         diameter = upper - lower
         radius = diameter / 2
         print(
-            f"ERROR           | expected_angle={math.degrees(expected_theta)}° \
-actual_angle={math.degrees(actual_theta):9.4f}° \
-diff={math.degrees(diff_theta):34.30f}° diff={diff_theta:33.30f}rad \
+            f"ERROR           | expected_angle={math.degrees(expected_theta):24.20f}° \
+actual_angle={math.degrees(actual_theta):24.20f}° \
+diff={math.degrees(diff_theta):24.20f}° diff={diff_theta:23.20f}rad \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} \
 width={width} radius={radius} pattern={pattern} seq={seq}")
 

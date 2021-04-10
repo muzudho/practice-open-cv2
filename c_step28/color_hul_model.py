@@ -11,25 +11,6 @@ import math
 ACCURACY = 0.0000001  # 浮動小数点精度
 
 
-def round_limit(number):
-    """0.34999999999999 みたいな数を 0.35 にし、
-    0.35000000000002 みたいな数を 0.35 にする操作。
-    この関数によって、精度は下がってしまいます。
-    これで丸めを取ってもまた丸まっていることもある気もする。
-    """
-    accuracy = 10000000000  # こんなん適当な桁（＾～＾）上手く行くとしたらまぐれ（＾～＾）
-    num1 = math.floor(number*accuracy)
-    num2 = math.floor(number*accuracy+1)
-    num3 = math.floor(num1 / (accuracy/100))
-    num4 = math.floor(num2/(accuracy/100))
-    if num4 - num3 < 1:
-        # 極限を切り捨てます
-        return num1 / accuracy
-    # 極限を切り上げます
-    new_number = num2 / accuracy
-    return new_number
-
-
 def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
@@ -37,8 +18,10 @@ def inverse_func_degrees(color):
     if c_phase == 'M':
         angle = float('Nan')
     elif c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B9u'):
-        angle = round_limit(math.degrees(theta))
-    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B7d', 'B9', 'B11', 'B11d'):
+        angle = math.degrees(theta)
+    elif c_phase in ('B11d', 'B7d'):
+        angle = round(math.degrees(theta))
+    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
         angle = math.floor(math.degrees(theta))
     elif c_phase in ('B2', 'B4', 'B5u', 'B6', 'B8', 'B10', 'B12'):
         angle = math.ceil(math.degrees(theta))
@@ -55,9 +38,9 @@ def inverse_func(color):
     モノクロのとき Nan を返します"""
     c_phase = color_phase(color)
     # 一応、浮動小数点数の丸め誤差を消しとくか。厳密じゃないけど（＾～＾）
-    red = round_limit(color[0])
-    green = round_limit(color[1])
-    blue = round_limit(color[2])
+    red = color[0]
+    green = color[1]
+    blue = color[2]
     if c_phase == 'M':
         return float('Nan')
         # raise Exception(f"monocro color=({red}, {green}, {blue})")
@@ -80,7 +63,7 @@ def inverse_func(color):
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
-    width = round_limit(bar_length - lower)
+    width = bar_length - lower
 
     diameter = upper - lower
 
@@ -131,9 +114,9 @@ def color_phase(color):
     """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, B7d, B9u, B11d の文字列で返します"""
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
-    red = round_limit(color[0])
-    green = round_limit(color[1])
-    blue = round_limit(color[2])
+    red = color[0]
+    green = color[1]
+    blue = color[2]
     if math.isclose(red, green, abs_tol=ACCURACY) \
             and math.isclose(green, blue, abs_tol=ACCURACY):
         # Monocro
@@ -162,10 +145,10 @@ def color_phase(color):
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
-    width = round_limit(bar_length - lower)
+    width = bar_length - lower
 
     diameter = upper - lower
-    radius = round_limit(diameter / 2)
+    radius = diameter / 2
 
     if math.isclose(red, upper, abs_tol=ACCURACY) \
             and not math.isclose(green, upper, abs_tol=ACCURACY) \
@@ -289,7 +272,7 @@ def color_phase(color):
             c_phase = 'B8'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
-        and math.isclose(blue, upper, abs_tol=ACCURACY):
+    and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+

@@ -14,7 +14,7 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3bars_to_ticks
-from color_hul_model import to_color_rate, inverse_func_degrees, round_limit, \
+from color_hul_model import to_color_rate, inverse_func_degrees, \
     ACCURACY
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
@@ -183,21 +183,19 @@ def update_scene1_with_rotate(
     color_rate = to_color_rate(bar_rate, expected_theta)
 
     # バーの横幅に変換
-    red = round_limit(color_rate[0])
-    green = round_limit(color_rate[1])
-    blue = round_limit(color_rate[2])
+    red = color_rate[0]
+    green = color_rate[1]
+    blue = color_rate[2]
 
     # 逆関数のテスト
-    expected_upper = round_limit(
-        (bar_box.upper_x - bar_box.left) / bar_box.width)
-    expected_lower = round_limit(
-        (bar_box.lower_x - bar_box.left) / bar_box.width)
+    expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
+    expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
     expected_color = (red, green, blue)
     # 弧度法
     actual_angle, actual_upper, actual_lower, pattern = inverse_func_degrees(
         expected_color)
-    actual_upper = round_limit(actual_upper)
-    actual_lower = round_limit(actual_lower)
+    actual_upper = actual_upper
+    actual_lower = actual_lower
     # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
     diff = actual_upper - expected_upper
     if not math.isclose(actual_upper, expected_upper, abs_tol=ACCURACY):

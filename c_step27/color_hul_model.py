@@ -8,6 +8,9 @@ HSVモデルの仲間で、
 import math
 
 
+ACCURACY = 0.0000001  # 浮動小数点精度
+
+
 def round_limit(number):
     """0.34999999999999 みたいな数を 0.35 にし、
     0.35000000000002 みたいな数を 0.35 にする操作。
@@ -161,7 +164,7 @@ def color_phase(color):
 
     if math.isclose(red, upper) and not math.isclose(green, upper) and math.isclose(blue, lower):
         # 緑上昇中
-        if math.isclose(width, radius):
+        if math.isclose(width, radius, abs_tol=ACCURACY):
             # +-+
             # | |
             # | |  +-+      x == 30°
@@ -189,7 +192,7 @@ def color_phase(color):
             c_phase = 'B2'
     elif not math.isclose(red, lower) and math.isclose(green, upper) and math.isclose(blue, lower):
         # 赤下降中
-        if math.isclose(width, radius):
+        if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
             #      | |
             # +-+  | |      x == 90°
@@ -217,7 +220,7 @@ def color_phase(color):
             c_phase = 'B4'
     elif math.isclose(red, lower) and math.isclose(green, upper) and not math.isclose(blue, upper):
         # 青上昇中
-        if math.isclose(width, radius):
+        if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
             #      | |
             #      | |  +-+ x == 150°
@@ -246,7 +249,7 @@ def color_phase(color):
     elif math.isclose(red, lower) and not math.isclose(green, lower) and math.isclose(blue, upper):
         # 緑下降中
         # パターン７
-        if math.isclose(width, radius):
+        if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
             #      | |
             #      | |  +-+ x == 210°
@@ -273,7 +276,7 @@ def color_phase(color):
             c_phase = 'B8'
     elif not math.isclose(red, upper) and math.isclose(green, lower) and math.isclose(blue, upper):
         # 赤上昇中
-        if math.isclose(width, radius):
+        if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+
             #           | |
             # +-+       | | x == 270°

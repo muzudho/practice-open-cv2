@@ -33,40 +33,51 @@ CIRCLE_DISTANCE = 14 * GRID_UNIT
 
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
+    [0.23, 0.14, 0.63],  # 適当
+    [0.04, 0.51, 0.45],  # 適当
+    [0.39, 0.27, 0.34],  # 適当
+    [0.0, 0.89, 0.11],  # 適当
+    # [0.87, 0.11, 0.02],  # 適当
+    #
     # 鮮やかさ2番
-    [0.1, 0.7, 0.2],  # Bright
-    [0.2, 0.7, 0.1],  # Strong
-    [0.3, 0.7, 0.0],  # Deep
+    # [0.1, 0.7, 0.2],  # Bright
+    # [0.2, 0.7, 0.1],  # Strong
+    # [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
-    [0.0, 0.4, 0.6],  # Light
-    [0.1, 0.4, 0.5],  # Soft
-    [0.3, 0.4, 0.3],  # Dull
-    [0.4, 0.4, 0.2],  # Dark
+    # [0.0, 0.4, 0.6],  # Light
+    # [0.1, 0.4, 0.5],  # Soft
+    # [0.3, 0.4, 0.3],  # Dull
+    # [0.4, 0.4, 0.2],  # Dark
     # 鮮やかさ4番
-    [0.0, 0.3, 0.7],  # Pale
-    [0.2, 0.3, 0.5],  # Light grayish
-    [0.4, 0.3, 0.3],  # Grayish
-    [0.6, 0.3, 0.1],  # Dark grayish
+    # [0.0, 0.3, 0.7],  # Pale
+    # [0.2, 0.3, 0.5],  # Light grayish
+    # [0.4, 0.3, 0.3],  # Grayish
+    # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
-    [0.0, 1.0, 0.0],  # Vivid
+    # [0.0, 1.0, 0.0],  # Vivid
     # テストケース（鮮やかさ小）
     #[0.0, 0.999, 0.001],
     # テストケース（鮮やかさ小）
     #[0.0, 0.001, 0.999],
 ]
 TONE_NAME = [
-    'Bright',
-    'Strong',
-    'Deep',
-    'Light',
-    'Soft',
-    'Dull',
-    'Dark',
-    'Pale',
-    'Light grayish',
-    'Grayish',
-    'Dark grayish',
-    'Vivid',
+    'Tekitou 1',
+    'Tekitou 2',
+    'Tekitou 3',
+    'Tekitou 4',
+    # 'Tekitou 5',
+    # 'Bright',
+    # 'Strong',
+    # 'Deep',
+    # 'Light',
+    # 'Soft',
+    # 'Dull',
+    # 'Dark',
+    # 'Pale',
+    #'Light grayish',
+    # 'Grayish',
+    #'Dark grayish',
+    # 'Vivid',
     #'Test case 1',
     #'Test case 2',
 ]
@@ -228,8 +239,10 @@ def update_scene1_with_rotate(
     blue = color_rate[2]
 
     # 逆関数のテスト
-    expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
-    expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
+    expected_upper = round_limit(
+        (bar_box.upper_x - bar_box.left) / bar_box.width)
+    expected_lower = round_limit(
+        (bar_box.lower_x - bar_box.left) / bar_box.width)
     expected_color = (red, green, blue)
     # 弧度法
     actual_angle, actual_upper, actual_lower, pattern = inverse_func_degrees(

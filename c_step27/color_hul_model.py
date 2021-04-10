@@ -30,7 +30,7 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u'):
+    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B5u'):
         angle = round_limit(math.degrees(theta))
     elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
         angle = math.floor(math.degrees(theta))
@@ -75,11 +75,6 @@ def inverse_func(color):
     width = round_limit(bar_length - lower)
 
     diameter = upper - lower
-    # radius = round_limit(diameter / 2)
-    # adjacent = radius
-    # tanjent = diameter - width - radius
-    # opposite = (math.sqrt(3)/2) * tanjent
-    # hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
     if c_phase in ('B1', 'B1u'):
         # パターン１ (0°～30°)
@@ -93,7 +88,7 @@ def inverse_func(color):
     elif c_phase == 'B4':
         # パターン４ (赤バーが下半分で減っていっている)
         theta = math.acos(width/diameter) + math.radians(30)
-    elif c_phase == 'B5':
+    elif c_phase in ('B5', 'B5u'):
         # パターン５
         theta = math.asin(width/diameter) + math.radians(120)
     elif c_phase == 'B6':
@@ -125,7 +120,7 @@ def inverse_func(color):
 
 
 def color_phase(color):
-    """角度を M、A1～A6、B1～B12, B1u の文字列で返します"""
+    """角度を M、A1～A6、B1～B12, B1u, B5u の文字列で返します"""
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
     red = round_limit(color[0])
@@ -165,48 +160,50 @@ def color_phase(color):
 
     if red == upper and green != upper and blue == lower:  # 緑上昇中
         # パターン１
-        if width < radius:  # 半分を含まない
-            c_phase = "B1"
-        elif width == radius:  # 半分
-            c_phase = "B1u"
+        if width < radius:
+            c_phase = 'B1'  # (0° < x < 30°)
+        elif width == radius:
+            c_phase = 'B1u'  # (x == 30°)
         # パターン２
         else:
-            c_phase = "B2"
+            c_phase = 'B2'  # (30° < x < 60°)
     elif red != lower and green == upper and blue == lower:  # 赤下降中
         # パターン３
-        if radius < width:  # 半分を含まない
-            c_phase = "B3"
+        if radius < width:
+            c_phase = 'B3'  # (60° < x < 90°)
         # パターン４
         else:
-            c_phase = "B4"
+            c_phase = 'B4'  # (90° <= x < 120°)
     elif red == lower and green == upper and blue != upper:  # 青上昇中
         # パターン５
         if width < radius:  # 半分を含まない（必要）
-            c_phase = "B5"
+            c_phase = 'B5'  # (120° <= x < 150°)
+        elif width == radius:
+            c_phase = 'B5u'  # (x == 150°)
         # パターン６
         else:
-            c_phase = "B6"
+            c_phase = 'B6'  # (150° < x < 180°)
     elif red == lower and green != lower and blue == upper:  # 緑下降中
         # パターン７
         if radius <= width:  # 半分を含む（必要）
-            c_phase = "B7"
+            c_phase = 'B7'  # (180° <= x <= 210°)
         # パターン８
         else:
-            c_phase = "B8"
+            c_phase = 'B8'  # (210° < x < 240°)
     elif red != upper and green == lower and blue == upper:  # 赤上昇中
         # パターン９
         if width <= radius:  # 半分を含む
-            c_phase = "B9"
+            c_phase = 'B9'  # (240° <= x <= 270°)
         # パターン１０
         else:
-            c_phase = "B10"
+            c_phase = 'B10'  # (270° < x < 300°)
     elif red == upper and green == lower and blue != lower:  # 青下降中
         # パターン１１
         if radius <= width:  # 半分を含む（必要）
-            c_phase = "B11"
+            c_phase = 'B11'  # (300° < x <= 330°)
         # パターン１２
         else:
-            c_phase = "B12"
+            c_phase = 'B12'  # (330° < x < 360°)
     else:
         raise Exception(
             f"ERROR           | Logic error. color=({red}, {green}, {blue})")
@@ -254,5 +251,5 @@ def to_color_rate(vertical_parcent, theta):
 def __one_fit(rate, left_end, diff):
     """フィットさせます"""
     if diff == 0:
-        return 0  # 0除算が起こるなら（仕方が無いので）差分は 0 にします
+        return 0.0  # 0除算が起こるなら（仕方が無いので）差分は 0 にします
     return (rate-left_end) / diff

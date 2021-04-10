@@ -275,17 +275,17 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 f"{tone_name}",
                 point_for_cv2((bar_box.left, BAR_BOX_TOP-3.5*GRID_UNIT)),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                FONT_SCALE,
+                2*FONT_SCALE,
                 color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
                 line_type)
-    cv2.putText(canvas,
-                f"tone diameter",
-                point_for_cv2((bar_box.left+GRID_UNIT,
-                               BAR_BOX_TOP-2.5*GRID_UNIT)),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                FONT_SCALE,
-                color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
-                line_type)
+    # cv2.putText(canvas,
+    #            f"tone diameter",
+    #            point_for_cv2((bar_box.left+GRID_UNIT,
+    #                           BAR_BOX_TOP-2.5*GRID_UNIT)),
+    #            cv2.FONT_HERSHEY_SIMPLEX,
+    #            FONT_SCALE,
+    #            color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
+    #            line_type)
 
 
 def draw_canvas(canvas, bar_box, circle_rail, outer_circle,

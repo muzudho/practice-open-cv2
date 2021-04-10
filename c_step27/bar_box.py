@@ -3,7 +3,7 @@
 
 import cv2
 from colors import  \
-    BRIGHT_GRAY, RED, GREEN, BLUE, \
+    BRIGHT_GRAY, SOFT_RED, SOFT_GREEN, SOFT_BLUE, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_pixel_to_ticks
@@ -274,12 +274,11 @@ class BarBox():
         lower_ticks = convert_pixel_to_ticks(
             left_box_width, self.width)
         upper_x_over = self.__upper_x+GRID_UNIT/2
-        lower_x_over = self.__lower_x+GRID_UNIT/2
+        lower_x_over = self.__lower_x-2.5*GRID_UNIT
 
         # 10進R値テキスト
         num = rgb_numbers[0]
         font_color = DARK_GRAYISH_RED
-        print(f"num={num} upper_ticks={upper_ticks}")
         if num == upper_ticks:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
@@ -413,7 +412,7 @@ class BarBox():
                       point_for_cv2((self.__left, self.__top)),
                       point_for_cv2((self.__red_right,
                                      self.__top + self.one_height)),
-                      color_for_cv2(RED, BAR_TICKS),
+                      color_for_cv2(SOFT_RED, BAR_TICKS),
                       thickness=-1)
 
         # バーG
@@ -422,7 +421,7 @@ class BarBox():
                           (self.__left, self.__top + self.one_height)),
                       point_for_cv2((self.__green_right,
                                      self.__top + 2*self.one_height)),
-                      color_for_cv2(GREEN, BAR_TICKS),
+                      color_for_cv2(SOFT_GREEN, BAR_TICKS),
                       thickness=-1)
 
         # バーB
@@ -430,5 +429,5 @@ class BarBox():
                       point_for_cv2((self.__left, self.__top +
                                      2*self.one_height)),
                       point_for_cv2((self.__blue_right, self.__bottom)),
-                      color_for_cv2(BLUE, BAR_TICKS),
+                      color_for_cv2(SOFT_BLUE, BAR_TICKS),
                       thickness=-1)

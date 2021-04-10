@@ -267,76 +267,84 @@ class BarBox():
 
     def draw_rgb_number(self, canvas, rgb_numbers):
         """RGB値テキストを描きます"""
-        width2 = self.__upper_x - self.__lower_x
-        width3 = self.__lower_x - self.__left
-        right2_byte = convert_pixel_to_ticks(
-            width2+width3, self.height)
-        right3_byte = convert_pixel_to_ticks(
-            width3, self.height)
-        right2_over = self.upper_x+GRID_UNIT/2
+        center_box_width = self.__upper_x - self.__lower_x
+        left_box_width = self.__lower_x - self.__left
+        upper_ticks = convert_pixel_to_ticks(
+            center_box_width+left_box_width, self.width)
+        lower_ticks = convert_pixel_to_ticks(
+            left_box_width, self.width)
+        upper_x_over = self.__upper_x+GRID_UNIT/2
+        lower_x_over = self.__lower_x+GRID_UNIT/2
 
         # 10進R値テキスト
         num = rgb_numbers[0]
         font_color = DARK_GRAYISH_RED
-        if num == right2_byte:
-            right = right2_over
-        elif num == right3_byte:
-            right = self.red_right - 2.5*GRID_UNIT
+        print(f"num={num} upper_ticks={upper_ticks}")
+        if num == upper_ticks:
+            left = upper_x_over
+            font_color = DARK_GRAYISH_GRAY
+        elif num == lower_ticks:
+            left = lower_x_over
+            font_color = DARK_GRAYISH_GRAY
         else:
-            right = self.red_right - 2.5*GRID_UNIT
+            left = self.red_right - 2.5*GRID_UNIT
             font_color = PALE_RED
 
         self.draw_3figures(
             canvas,
             num,
-            right,
+            left,
             self.red_top+1.5*GRID_UNIT,
             font_color)
 
         # 10進G値テキスト
         num = rgb_numbers[1]
         font_color = DARK_GRAYISH_GREEN
-        if num == right2_byte:
-            right = right2_over
-        elif num == right3_byte:
-            right = self.green_right - 2.5*GRID_UNIT
+        if num == upper_ticks:
+            left = upper_x_over
+            font_color = DARK_GRAYISH_GRAY
+        elif num == lower_ticks:
+            left = lower_x_over
+            font_color = DARK_GRAYISH_GRAY
         else:
-            right = self.green_right - 2.5*GRID_UNIT
+            left = self.green_right - 2.5*GRID_UNIT
             font_color = PALE_GREEN
 
         self.draw_3figures(
             canvas,
             num,
-            right,
+            left,
             self.green_top+1.5*GRID_UNIT,
             font_color)
 
         # 10進B値テキスト
         num = rgb_numbers[2]
         font_color = DARK_GRAYISH_BLUE
-        if num == right2_byte:
-            right = right2_over
-        elif num == right3_byte:
-            right = self.blue_right - 2.5*GRID_UNIT
+        if num == upper_ticks:
+            left = upper_x_over
+            font_color = DARK_GRAYISH_GRAY
+        elif num == lower_ticks:
+            left = lower_x_over
+            font_color = DARK_GRAYISH_GRAY
         else:
-            right = self.blue_right - 2.5*GRID_UNIT
+            left = self.blue_right - 2.5*GRID_UNIT
             font_color = PALE_BLUE
 
         self.draw_3figures(
             canvas,
             num,
-            right,
+            left,
             self.blue_top+1.5*GRID_UNIT,
             font_color)
 
     def draw_x_axis_label(self, canvas):
         """X軸のラベルを描きます"""
-        width2 = self.__upper_x - self.__lower_x
-        width3 = self.__lower_x - self.__left
-        rank23_byte = convert_pixel_to_ticks(
-            width2+width3, self.width)
-        rank3_byte = convert_pixel_to_ticks(
-            width3, self.width)
+        center_box_width = self.__upper_x - self.__lower_x
+        left_box_width = self.__lower_x - self.__left
+        upper_ticks = convert_pixel_to_ticks(
+            center_box_width+left_box_width, self.width)
+        lower_ticks = convert_pixel_to_ticks(
+            left_box_width, self.width)
 
         top = self.top+self.label_gap
         # バーの最大値(0から始まる数)
@@ -353,13 +361,13 @@ class BarBox():
             BRIGHT_GRAY)
         # U
         self.draw_3figures(
-            canvas, rank23_byte,
+            canvas, upper_ticks,
             self.upper_x+GRID_UNIT/2,
             top,
             DARK_GRAYISH_GRAY)
         # L
         self.draw_3figures(
-            canvas, rank3_byte,
+            canvas, lower_ticks,
             self.lower_x-2.5*GRID_UNIT,
             top,
             DARK_GRAYISH_GRAY)

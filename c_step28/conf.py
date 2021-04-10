@@ -12,9 +12,9 @@ GRID_UNIT = 14
 # 色相環一周分のコマ数
 # PHASE_COUNTS = 6
 # PHASE_COUNTS = 24
-# PHASE_COUNTS = 60
-PHASE_COUNTS = 360  # 弧度法の精度ではこれ（＾～＾）
-# PHASE_COUNTS = 8*360  # 誤差を測りたいとき（＾～＾）でも時間がかかってしまう（＾～＾）
+PHASE_COUNTS = 60  # 容量ケチりつつ、見栄えもそこそこ保ちたいとき（＾～＾）
+# PHASE_COUNTS = 360  # 弧度法の精度で最大はこれ（＾～＾）
+# PHASE_COUNTS = 8*360  # ラジアン値で誤差を測りたいとき（＾～＾）でも時間がかかってしまう（＾～＾）
 # PHASE_COUNTS = 64*360  # 誤差チェック（＾～＾）
 
 # フォント倍率
@@ -35,10 +35,10 @@ L_M_U_NAME_LIST = [
     #(0.4375, 0.125, 0.4375, 'Saturation 12.5%'),
 
     # 明るさの説明
-    (0.75, 0.25, 0.0, 'Brightness ----> right'),
-    (0.5, 0.25, 0.25, 'Brightness ---> right'),
-    (0.25, 0.25, 0.5, 'Brightness --> right'),
-    (0.0, 0.25, 0.75, 'Brightness -> right'),
+    #(0.75, 0.25, 0.0, 'Brightness ----> right'),
+    #(0.5, 0.25, 0.25, 'Brightness ---> right'),
+    #(0.25, 0.25, 0.5, 'Brightness --> right'),
+    #(0.0, 0.25, 0.75, 'Brightness -> right'),
 
     # (0.63, 0.14,0.23,  'Tekitou 1'),  # 適当
     # (0.45, 0.51,0.04,  'Tekitou 2'),  # 適当
@@ -46,22 +46,23 @@ L_M_U_NAME_LIST = [
     # (0.11, 0.89,0.0,  'Tekitou 4'),  # 適当
     # (0.02, 0.11,0.87,  'Tekitou 5'),  # 適当
     #
+    # 色調
     # 鮮やかさ2番
-    # (0.2, 0.7,0.1,  'Bright'),  # Bright
-    # (0.1, 0.7,0.2,  'Strong'),  # Strong
-    # (0.0, 0.7,0.3,  'Deep'),  # Deep
+    (0.2, 0.7, 0.1, 'Bright'),  # Bright
+    (0.1, 0.7, 0.2, 'Strong'),  # Strong
+    (0.0, 0.7, 0.3, 'Deep'),  # Deep
     # 鮮やかさ3番
-    # (0.6, 0.4,0.0,  'Light'),  # Light
-    # (0.5, 0.4,0.1,  'Soft'),  # Soft
-    # (0.3, 0.4,0.3,  'Dull'),  # Dull
-    # (0.2, 0.4,0.4,  'Dark'),  # Dark
+    (0.6, 0.4, 0.0, 'Light'),  # Light
+    (0.5, 0.4, 0.1, 'Soft'),  # Soft
+    (0.3, 0.4, 0.3, 'Dull'),  # Dull
+    (0.2, 0.4, 0.4, 'Dark'),  # Dark
     # 鮮やかさ4番
-    # (0.7, 0.3,0.0,  'Pale'),  # Pale
-    # (0.5, 0.3,0.2,  'Light grayish'),  # Light grayish
-    # (0.3, 0.3,0.4,  'Grayish'),  # Grayish
-    # (0.1, 0.3,0.6,  'Dark grayish'),  # Dark grayish
+    (0.7, 0.3, 0.0, 'Pale'),  # Pale
+    (0.5, 0.3, 0.2, 'Light grayish'),  # Light grayish
+    (0.3, 0.3, 0.4, 'Grayish'),  # Grayish
+    (0.1, 0.3, 0.6, 'Dark grayish'),  # Dark grayish
     # 鮮やかさ1番
-    # (0.0, 1.0, 0.0, 'Vivid'),  # Vivid
+    (0.0, 1.0, 0.0, 'Vivid'),  # Vivid
     # テストケース（鮮やかさ小）
     # (0.001, 0.999,0.0,  'Test case 1'),
     # テストケース（鮮やかさ小）

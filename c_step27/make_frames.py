@@ -234,9 +234,9 @@ def update_scene1_with_rotate(
     color_rate = to_color_rate(vertical_parcent, expected_theta)
 
     # バーの横幅に変換
-    red = color_rate[0]
-    green = color_rate[1]
-    blue = color_rate[2]
+    red = round_limit(color_rate[0])
+    green = round_limit(color_rate[1])
+    blue = round_limit(color_rate[2])
 
     # 逆関数のテスト
     expected_upper = round_limit(

@@ -11,7 +11,8 @@ import math
 def round_limit(number):
     """0.34999999999999 みたいな数を 0.35 にし、
     0.35000000000002 みたいな数を 0.35 にする操作。
-    この関数によって、精度は下がってしまいます
+    この関数によって、精度は下がってしまいます。
+    これで丸めを取ってもまた丸まっていることもある気もする。
     """
     accuracy = 10000000000  # こんなん適当な桁（＾～＾）上手く行くとしたらまぐれ（＾～＾）
     num1 = math.floor(number*accuracy)
@@ -30,7 +31,7 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B5u'):
+    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B5u', 'B9u'):
         angle = round_limit(math.degrees(theta))
     elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
         angle = math.floor(math.degrees(theta))
@@ -82,7 +83,7 @@ def inverse_func(color):
     elif c_phase == 'B2':
         # パターン２
         theta = math.acos((diameter-width)/diameter) - math.radians(30)
-    elif c_phase == 'B3':
+    elif c_phase in ('B3', 'B3d'):
         # パターン３
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
     elif c_phase == 'B4':
@@ -100,7 +101,7 @@ def inverse_func(color):
     elif c_phase == 'B8':
         # パターン８
         theta = math.acos(width/diameter) + math.radians(150)
-    elif c_phase == 'B9':
+    elif c_phase in ('B9', 'B9u'):
         # パターン９
         theta = math.asin(width/diameter) + math.radians(240)
     elif c_phase == 'B10':
@@ -120,30 +121,30 @@ def inverse_func(color):
 
 
 def color_phase(color):
-    """角度を M、A1～A6、B1～B12, B1u, B5u の文字列で返します"""
+    """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, 'B9u' の文字列で返します"""
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
     red = round_limit(color[0])
     green = round_limit(color[1])
     blue = round_limit(color[2])
-    if red == green == blue:
+    if math.isclose(red, green) and math.isclose(green, blue):
         # Monocro
         return 'M'
 
     upper = max(red, green, blue)
     lower = min(red, green, blue)
 
-    if green == blue and red == upper:
+    if math.isclose(green, blue) and math.isclose(red, upper):
         c_phase = "A1"
-    elif red == green and blue == lower:
+    elif math.isclose(red, green) and math.isclose(blue, lower):
         c_phase = "A2"
-    elif red == blue and green == upper:
+    elif math.isclose(red, blue) and math.isclose(green, upper):
         c_phase = "A3"
-    elif green == blue and red == lower:
+    elif math.isclose(green, blue) and math.isclose(red, lower):
         c_phase = "A4"
-    elif red == green and blue == upper:
+    elif math.isclose(red, green) and math.isclose(blue, upper):
         c_phase = "A5"
-    elif red == blue and green == lower:
+    elif math.isclose(red, blue) and math.isclose(green, lower):
         c_phase = "A6"
     else:
         c_phase = None
@@ -158,52 +159,158 @@ def color_phase(color):
     diameter = upper - lower
     radius = round_limit(diameter / 2)
 
-    if red == upper and green != upper and blue == lower:  # 緑上昇中
+    if math.isclose(red, upper) and not math.isclose(green, upper) and math.isclose(blue, lower):
+        # 緑上昇中
+        if math.isclose(width, radius):
+            # +-+
+            # | |
+            # | |  +-+      x == 30°
+            # | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B1u'
         # パターン１
-        if width < radius:
-            c_phase = 'B1'  # (0° < x < 30°)
-        elif width == radius:
-            c_phase = 'B1u'  # (x == 30°)
+        elif width < radius:
+            # +-+
+            # | |
+            # | |  +-+              < 30°
+            # | |  |^|            x
+            # +-+  +-+  +-+ 0° <=
+            #  R    G    B
+            c_phase = 'B1'
         # パターン２
         else:
-            c_phase = 'B2'  # (30° < x < 60°)
-    elif red != lower and green == upper and blue == lower:  # 赤下降中
+            # +-+                   < 60°
+            # | |   ^             x
+            # | |  +-+      30° <
+            # | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B2'
+    elif not math.isclose(red, lower) and math.isclose(green, upper) and math.isclose(blue, lower):
+        # 赤下降中
+        if math.isclose(width, radius):
+            #      +-+
+            #      | |
+            # +-+  | |      x == 90°
+            # | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B3d'
         # パターン３
-        if radius < width:
-            c_phase = 'B3'  # (60° < x < 90°)
+        elif radius < width:
+            #      +-+               < 120°
+            #  v   | |             x
+            # +-+  | |      90° <=
+            # | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B3'
         # パターン４
         else:
-            c_phase = 'B4'  # (90° <= x < 120°)
-    elif red == lower and green == upper and blue != upper:  # 青上昇中
+            #      +-+
+            #      | |
+            # +-+  | |               < 90°
+            # |v|  | |             x
+            # +-+  +-+  +-+ 60° <=
+            #  R    G    B
+            c_phase = 'B4'
+    elif math.isclose(red, lower) and math.isclose(green, upper) and not math.isclose(blue, upper):
+        # 青上昇中
+        if math.isclose(width, radius):
+            #      +-+
+            #      | |
+            #      | |  +-+ x == 150°
+            #      | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B5u'
         # パターン５
-        if width < radius:  # 半分を含まない（必要）
-            c_phase = 'B5'  # (120° <= x < 150°)
-        elif width == radius:
-            c_phase = 'B5u'  # (x == 150°)
+        elif width < radius:  # 半分を含まない（必要）
+            #      +-+
+            #      | |
+            #      | |  +-+           < 150°
+            #      | |  |^|         x
+            # +-+  +-+  +-+ 120° <=
+            #  R    G    B
+            c_phase = 'B5'
         # パターン６
         else:
-            c_phase = 'B6'  # (150° < x < 180°)
-    elif red == lower and green != lower and blue == upper:  # 緑下降中
+            #      +-+                < 180°
+            #      | |   ^          x
+            #      | |  +-+ 150° <=
+            #      | |  | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B6'
+    elif math.isclose(red, lower) and not math.isclose(green, lower) and math.isclose(blue, upper):
+        # 緑下降中
         # パターン７
         if radius <= width:  # 半分を含む（必要）
-            c_phase = 'B7'  # (180° <= x <= 210°)
+            #           +-+
+            #       v   | |
+            #      +-+  | |           <= 180°
+            #      | |  | |         x
+            # +-+  +-+  +-+ 210° <=
+            #  R    G    B
+            c_phase = 'B7'
         # パターン８
         else:
-            c_phase = 'B8'  # (210° < x < 240°)
-    elif red != upper and green == lower and blue == upper:  # 赤上昇中
+            #           +-+
+            #           | |
+            #      +-+  | |           <= 210°
+            #      |v|  | |         x
+            # +-+  +-+  +-+ 240° <=
+            #  R    G    B
+            c_phase = 'B8'
+    elif not math.isclose(red, upper) and math.isclose(green, lower) and math.isclose(blue, upper):
+        # 赤上昇中
+        if math.isclose(width, radius):
+            #           +-+
+            #           | |
+            # +-+       | | x == 270°
+            # | |       | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B9u'
         # パターン９
-        if width <= radius:  # 半分を含む
-            c_phase = 'B9'  # (240° <= x <= 270°)
+        elif width < radius:
+            #           +-+
+            #           | |
+            # +-+       | |           < 270°
+            # |^|       | |         x
+            # +-+  +-+  +-+ 240° <=
+            #  R    G    B
+            c_phase = 'B9'
         # パターン１０
         else:
-            c_phase = 'B10'  # (270° < x < 300°)
-    elif red == upper and green == lower and blue != lower:  # 青下降中
+            #           +-+          < 300°
+            #  ^        | |        x
+            # +-+       | | 270° <
+            # | |       | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B10'
+    elif math.isclose(red, upper) and math.isclose(green, lower) and not math.isclose(blue, lower):
+        # 青下降中
         # パターン１１
         if radius <= width:  # 半分を含む（必要）
-            c_phase = 'B11'  # (300° < x <= 330°)
+            # +-+           300° <
+            # | |        v         x
+            # | |       +-+          <= 330°
+            # | |       | |
+            # +-+  +-+  +-+
+            #  R    G    B
+            c_phase = 'B11'
         # パターン１２
         else:
-            c_phase = 'B12'  # (330° < x < 360°)
+            # +-+
+            # | |
+            # | |       +-+          < 330°
+            # | |       |v|        x
+            # +-+  +-+  +-+ 360° <
+            #  R    G    B
+            c_phase = 'B12'
     else:
         raise Exception(
             f"ERROR           | Logic error. color=({red}, {green}, {blue})")

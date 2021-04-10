@@ -84,12 +84,9 @@ class Triangle():
              self.__nodes_p[2][1] - diff_xy[1])
         )
 
-    def update(self, upper_x, lower_x, center, theta, n3bars_len, bar_box_width):
+    def update(self, upper_x, lower_x, center, theta, color):
         """円に内接する線。正三角形"""
 
-        color = (n3bars_len[0]/bar_box_width,
-                 n3bars_len[1]/bar_box_width,
-                 n3bars_len[2]/bar_box_width)
         c_phase = color_phase(color)
 
         # 赤、緑、青 の点の位置関係は全部で１２相です
@@ -134,7 +131,10 @@ class Triangle():
                                        triangle_theta,
                                        center)
 
-        if c_phase in ('B3', 'B3d', 'B4'):
+        if c_phase in ('A1', 'B1', 'B1u', 'B2', 'A2'):
+            self.__nodes_p = (
+                self.nodes_p[0], self.nodes_p[1], self.nodes_p[2])
+        elif c_phase in ('B3', 'B3d', 'B4'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[1], self.nodes_p[0])
         elif c_phase == 'A3':

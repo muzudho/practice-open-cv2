@@ -241,10 +241,10 @@ width={width:9.6f} radius={radius:9.6f}")
     n3bars_width = bar_box.create_3bars_width()
     outer_circle.color_list.append(convert_3bars_to_ticks(
         n3bars_width, bar_box.width))
-    #
 
+    # 大三角形
     large_triangle.update(
-        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, n3bars_width, bar_box.width)
+        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, color_rate)
 
     gravity = large_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],
@@ -276,14 +276,6 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 2*FONT_SCALE,
                 color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
                 line_type)
-    # cv2.putText(canvas,
-    #            f"tone diameter",
-    #            point_for_cv2((bar_box.left+GRID_UNIT,
-    #                           BAR_BOX_TOP-2.5*GRID_UNIT)),
-    #            cv2.FONT_HERSHEY_SIMPLEX,
-    #            FONT_SCALE,
-    #            color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
-    #            line_type)
 
 
 def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
@@ -300,7 +292,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
 
     bar_box.draw_x_axis_label(canvas)  # X軸のラベル
 
-    # 水平線R
+    # 垂直線R
     # 線、描画する画像を指定、座標1点目、2点目、色、線の太さ
     cv2.line(canvas,
              point_for_cv2(large_triangle.nodes_p[0]),
@@ -308,14 +300,14 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
              color_for_cv2(RED, BAR_TICKS),
              thickness=2)
 
-    # 水平線G
+    # 垂直線G
     cv2.line(canvas,
              point_for_cv2(large_triangle.nodes_p[2]),  # 青と緑が入れ替わっているのが工夫
              point_for_cv2((bar_box.green_right, bar_box.green_top)),
              color_for_cv2(GREEN, BAR_TICKS),
              thickness=2)
 
-    # 水平線B
+    # 垂直線B
     cv2.line(canvas,
              point_for_cv2(large_triangle.nodes_p[1]),
              point_for_cv2((bar_box.blue_right, bar_box.blue_top)),
@@ -348,20 +340,6 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
                 FONT_SCALE,
                 color_for_cv2(BLACK, BAR_TICKS),
                 lineType=2)
-
-    # debug 重心
-    #gravity1 = circle_rail.triangle.triangular_center_of_gravity()
-    #gravity2 = large_triangle.triangular_center_of_gravity()
-    #diff_x = abs(gravity2[0]-gravity1[0])
-    #diff_y = abs(gravity2[1]-gravity1[1])
-    # cv2.putText(canvas,
-    #            # gravity diff=({diff_x:11.5f}, {diff_y:11.5f})
-    #            f"error angle={error_angle} deg",
-    #            point_for_cv2((GRID_UNIT, GRID_UNIT)),  # x,y
-    #            cv2.FONT_HERSHEY_SIMPLEX,
-    #            FONT_SCALE,
-    #            color_for_cv2(BLACK, BAR_TICKS),
-    #            lineType=2)
 
     return canvas
 

@@ -10,10 +10,10 @@ import math
 
 def round_limit(number):
     """0.34999999999999 みたいな数を 0.35 にし、
-    0.35000000000002 みたいな数を 0.35 にする操作
-    ざっくり小数点以下7桁だけ面倒を見ます。
+    0.35000000000002 みたいな数を 0.35 にする操作。
+    この関数によって、精度は下がってしまいます
     """
-    accuracy = 10000000000
+    accuracy = 10000000000  # こんなん適当な桁（＾～＾）上手く行くとしたらまぐれ（＾～＾）
     num1 = math.floor(number*accuracy)
     num2 = math.floor(number*accuracy+1)
     num3 = math.floor(num1 / (accuracy/100))
@@ -30,54 +30,12 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase == 'A1':
-        angle = math.degrees(theta)
-    elif c_phase == 'A2':
-        angle = math.degrees(theta)
-    elif c_phase == 'A3':
-        angle = math.degrees(theta)
-    elif c_phase == 'A4':
-        angle = math.degrees(theta)
-    elif c_phase == 'A5':
-        angle = math.degrees(theta)
-    elif c_phase == 'A6':
-        angle = math.degrees(theta)
-    elif c_phase == 'B1':
-        # パターン１
-        angle = math.degrees(theta)
-    elif c_phase == 'B2':
-        # パターン２
-        angle = math.degrees(theta)
-    elif c_phase == 'B3':
-        # パターン３
-        angle = math.degrees(theta)
-    elif c_phase == 'B4':
-        # パターン４
-        angle = math.degrees(theta)
-    elif c_phase == 'B5':
-        # パターン５
-        angle = math.degrees(theta)
-    elif c_phase == 'B6':
-        # パターン６
-        angle = math.degrees(theta)
-    elif c_phase == 'B7':
-        # パターン７
-        angle = math.degrees(theta)
-    elif c_phase == 'B8':
-        # パターン８
-        angle = math.degrees(theta)
-    elif c_phase == 'B9':
-        # パターン９
-        angle = math.degrees(theta)
-    elif c_phase == 'B10':
-        # パターン１０
-        angle = math.degrees(theta)
-    elif c_phase == 'B11':
-        # パターン１１
-        angle = math.degrees(theta)
-    elif c_phase == 'B12':
-        # パターン１２
-        angle = math.degrees(theta)
+    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6'):
+        angle = round_limit(math.degrees(theta))
+    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
+        angle = math.floor(math.degrees(theta))
+    elif c_phase in ('B2', 'B4', 'B6', 'B8', 'B10', 'B12'):
+        angle = math.ceil(math.degrees(theta))
     else:
         raise Exception(
             f"ERROR           | Logic error. theta={theta} upper={upper} \
@@ -167,9 +125,11 @@ def inverse_func(color):
 
 def color_phase(color):
     """角度を M、A1～A6、B1～B12の文字列で返します"""
-    red = color[0]
-    green = color[1]
-    blue = color[2]
+
+    # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
+    red = round_limit(color[0])
+    green = round_limit(color[1])
+    blue = round_limit(color[2])
     if red == green == blue:
         # Monocro
         return 'M'
@@ -178,17 +138,22 @@ def color_phase(color):
     lower = min(red, green, blue)
 
     if green == blue and red == upper:
-        return "A1"
-    if red == green and blue == lower:
-        return "A2"
-    if red == blue and green == upper:
-        return "A3"
-    if green == blue and red == lower:
-        return "A4"
-    if red == green and blue == upper:
-        return "A5"
-    if red == blue and green == lower:
-        return "A6"
+        c_phase = "A1"
+    elif red == green and blue == lower:
+        c_phase = "A2"
+    elif red == blue and green == upper:
+        c_phase = "A3"
+    elif green == blue and red == lower:
+        c_phase = "A4"
+    elif red == green and blue == upper:
+        c_phase = "A5"
+    elif red == blue and green == lower:
+        c_phase = "A6"
+    else:
+        c_phase = None
+
+    if c_phase is not None:
+        return c_phase
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
@@ -196,50 +161,54 @@ def color_phase(color):
 
     diameter = upper - lower
     radius = round_limit(diameter / 2)
-    adjacent = radius
-    tanjent = diameter - width - radius
-    opposite = (math.sqrt(3)/2) * tanjent
-    hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
-    if red == upper and blue == lower:
-        # パターン１ (0°～30°)
+    if red == upper and green != upper and blue == lower:  # 緑上昇中
+        # パターン１
         if width <= radius:  # 半分を含む
-            return "B1"
-        # パターン２ (30°～60°)
-        return "B2"
-    if green == upper and blue == lower:
+            c_phase = "B1"
+        # パターン２
+        else:
+            c_phase = "B2"
+    elif red != lower and green == upper and blue == lower:  # 赤下降中
         # パターン３
         if radius < width:  # 半分を含まない
-            return "B3"
-        # パターン４ (赤バーが下半分で減っていっている)
-        return "B4"
-    if red == lower and green == upper:
+            c_phase = "B3"
+        # パターン４
+        else:
+            c_phase = "B4"
+    elif red == lower and green == upper and blue != upper:  # 青上昇中
         # パターン５
-        if width <= radius:  # 半分を含む
-            return "B5"
+        if width < radius:  # 半分を含まない（必要）
+            c_phase = "B5"
         # パターン６
-        return "B6"
-    if red == lower and blue == upper:
-        if radius < width:  # 半分を含まない
-            # パターン７
-            return "B7"
+        else:
+            c_phase = "B6"
+    elif red == lower and green != lower and blue == upper:  # 緑下降中
+        # パターン７
+        if radius <= width:  # 半分を含む（必要）
+            c_phase = "B7"
         # パターン８
-        return "B8"
-    if green == lower and blue == upper:
+        else:
+            c_phase = "B8"
+    elif red != upper and green == lower and blue == upper:  # 赤上昇中
         # パターン９
         if width <= radius:  # 半分を含む
-            return "B9"
+            c_phase = "B9"
         # パターン１０
-        return "B10"
-    if red == upper and green == lower:
+        else:
+            c_phase = "B10"
+    elif red == upper and green == lower and blue != lower:  # 青下降中
         # パターン１１
-        if radius < width:  # 半分を含まない
-            return "B11"
+        if radius <= width:  # 半分を含む（必要）
+            c_phase = "B11"
         # パターン１２
-        return "B12"
+        else:
+            c_phase = "B12"
+    else:
+        raise Exception(
+            f"ERROR           | Logic error. color=({red}, {green}, {blue})")
 
-    raise Exception(
-        f"ERROR           | Logic error. color=({red}, {green}, {blue})")
+    return c_phase
 
 
 def to_color_rate(vertical_parcent, theta):

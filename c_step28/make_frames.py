@@ -244,7 +244,7 @@ width={width:9.6f} radius={radius:9.6f}")
     #
 
     large_triangle.update(
-        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, n3bars_width)
+        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, n3bars_width, bar_box.width)
 
     gravity = large_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],

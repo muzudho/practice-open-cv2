@@ -70,6 +70,11 @@ def inverse_func(color):
     width = bar_length - lower
 
     diameter = upper - lower
+    #radius = diameter/2
+    #adjacent = radius
+    #tanjent = diameter - width - radius
+    #opposite = (math.sqrt(3)/2) * tanjent
+    #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
     # up は asin, B奇数も asin
     # down は acos, B偶数も acos
@@ -117,7 +122,22 @@ def inverse_func(color):
 
 
 def color_phase(color):
-    """角度を M、A1～A6、B1～B12, B1u, B3d, B5u, B7d, B9u, B11d の文字列で返します"""
+    """角度を、以下の文字列で返します。
+
+    * 'M' - モノクロ
+
+    60°ずつ回転した形
+
+    * 'A1' - 緑と青は等しく、それより赤が大きい
+    * 'A2' - 赤と緑は等しく、それより青は小さい
+    * 'A3' - 青と赤は等しく、それより緑が大きい
+    * 'A4' - 緑と青は等しく、それより赤は小さい
+    * 'A5' - 赤と緑は等しく、それより青が大きい
+    * 'A6' - 赤と青は等しく、それより緑が小さい
+
+    * 'B1' ～ 'B12' - RGBの位置関係から、１２パターンあります
+    * 'B1u', 'B3d', 'B5u', 'B7d', 'B9u', 'B11d' - １２パターンの真ん中
+    """
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
     red = color[0]

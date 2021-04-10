@@ -7,6 +7,7 @@ from triangle_calc import calc_triangle
 from colors import GRAY
 from conf import BAR_TICKS
 from cv2_helper import point_for_cv2, color_for_cv2
+from color_hul_model import color_phase
 
 
 class Triangle():
@@ -83,53 +84,58 @@ class Triangle():
              self.__nodes_p[2][1] - diff_xy[1])
         )
 
-    def update(self, upper_x, lower_x, center, theta, n3bars_len):
+    def update(self, upper_x, lower_x, center, theta, n3bars_len, bar_box_width):
         """円に内接する線。正三角形"""
+
+        color = (n3bars_len[0]/bar_box_width,
+                 n3bars_len[1]/bar_box_width,
+                 n3bars_len[2]/bar_box_width)
+        c_phase = color_phase(color)
 
         # 赤、緑、青 の点の位置関係は全部で１２相です
         red = n3bars_len[0]
         green = n3bars_len[1]
         blue = n3bars_len[2]
         triangle_theta = theta
-        if green == blue and blue < red:
-            # 緑と青は等しく、それより赤が上
+        if c_phase == 'A1':  # green == blue and blue < red:
+            # 緑と青は等しく、それより赤が大きい
             phase = 0  # トライアングル・フェーズ
         elif blue < green < red:
             # 下から青、緑、赤
             phase = 1
-        elif blue < green and green == red:
-            # 青より大きい緑は赤と等しい
+        elif c_phase == 'A2':  # blue < green and green == red:
+            # 赤と緑は等しく、それより青は小さい
             phase = 2
         elif blue < red < green:
             # 下から青、赤、緑
             phase = 3
             triangle_theta -= math.radians(120)
-        elif blue == red and red < green:
-            # 青と赤は等しく、それより緑が上
+        elif c_phase == 'A3':  # blue == red and red < green:
+            # 青と赤は等しく、それより緑が大きい
             phase = 4
             triangle_theta -= math.radians(120)
         elif red < blue < green:
             # 下から赤、青、緑
             phase = 5
             triangle_theta -= math.radians(120)
-        elif red < blue and blue == green:
-            # 赤より大きい青は緑と等しい
+        elif c_phase == 'A4':  # red < blue and blue == green:
+            # 緑と青は等しく、それより赤は小さい
             phase = 6
             triangle_theta -= math.radians(120)
         elif red < green < blue:
             # 下から赤、緑、青
             phase = 7
             triangle_theta += math.radians(120)
-        elif red == green and green < blue:
-            # 赤と緑は等しく、それより青が上
+        elif c_phase == 'A5':  # red == green and green < blue:
+            # 赤と緑は等しく、それより青が大きい
             phase = 8
             triangle_theta += math.radians(120)
         elif green < red < blue:
             # 下から緑、赤、青
             phase = 9
             triangle_theta += math.radians(120)
-        elif green < red and red == blue:
-            # 緑より大きい赤は青と等しい
+        elif c_phase == 'A6':  # green < red and red == blue:
+            # 赤と青は等しく、それより緑が小さい
             phase = 10
         else:
             # 下から緑、青、赤

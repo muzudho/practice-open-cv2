@@ -68,16 +68,18 @@ def inverse_func(color):
 
     diameter = upper - lower
 
+    # up は sin
+    # down は cos
     if c_phase in ('B1', 'B1u'):
         # パターン１ (0°～30°)
         theta = math.asin(width/diameter)
     elif c_phase == 'B2':
         # パターン２
         theta = math.acos((diameter-width)/diameter) - math.radians(30)
-    elif c_phase in ('B3', 'B3d'):
+    elif c_phase == ('B3'):
         # パターン３
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
-    elif c_phase == 'B4':
+    elif c_phase in ('B3d', 'B4'):
         # パターン４ (赤バーが下半分で減っていっている)
         theta = math.acos(width/diameter) + math.radians(30)
     elif c_phase in ('B5', 'B5u'):
@@ -98,10 +100,10 @@ def inverse_func(color):
     elif c_phase == 'B10':
         # パターン１０
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
-    elif c_phase in ('B11', 'B11d'):
+    elif c_phase == ('B11'):
         # パターン１１
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
-    elif c_phase == 'B12':
+    elif c_phase in ('B11d', 'B12'):
         # パターン１２
         theta = math.acos(width/diameter) + math.radians(270)
     else:

@@ -30,54 +30,12 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase == 'A1':
-        angle = math.degrees(theta)
-    elif c_phase == 'A2':
-        angle = math.degrees(theta)
-    elif c_phase == 'A3':
-        angle = math.degrees(theta)
-    elif c_phase == 'A4':
-        angle = math.degrees(theta)
-    elif c_phase == 'A5':
-        angle = math.degrees(theta)
-    elif c_phase == 'A6':
-        angle = math.degrees(theta)
-    elif c_phase == 'B1':
-        # パターン１
+    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6'):
+        angle = round_limit(math.degrees(theta))
+    elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B9', 'B11'):
         angle = math.floor(math.degrees(theta))
-    elif c_phase == 'B2':
-        # パターン２
-        angle = math.degrees(theta)
-    elif c_phase == 'B3':
-        # パターン３
-        angle = math.degrees(theta)
-    elif c_phase == 'B4':
-        # パターン４
-        angle = math.degrees(theta)
-    elif c_phase == 'B5':
-        # パターン５
-        angle = math.degrees(theta)
-    elif c_phase == 'B6':
-        # パターン６
-        angle = math.degrees(theta)
-    elif c_phase == 'B7':
-        # パターン７
-        angle = math.degrees(theta)
-    elif c_phase == 'B8':
-        # パターン８
-        angle = math.degrees(theta)
-    elif c_phase == 'B9':
-        # パターン９
-        angle = math.degrees(theta)
-    elif c_phase == 'B10':
-        # パターン１０
-        angle = math.degrees(theta)
-    elif c_phase == 'B11':
-        # パターン１１
-        angle = math.degrees(theta)
-    elif c_phase == 'B12':
-        # パターン１２
-        angle = math.degrees(theta)
+    elif c_phase in ('B2', 'B4', 'B6', 'B8', 'B10', 'B12'):
+        angle = math.ceil(math.degrees(theta))
     else:
         raise Exception(
             f"ERROR           | Logic error. theta={theta} upper={upper} \

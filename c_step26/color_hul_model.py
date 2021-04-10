@@ -9,19 +9,20 @@ import math
 
 
 def round_limit(number):
-    """0.349999999999 みたいな数を 0.35 にし、
-    0.350000000002 みたいな数を 0.35 にする操作
+    """0.34999999999999 みたいな数を 0.35 にし、
+    0.35000000000002 みたいな数を 0.35 にする操作
     ざっくり小数点以下7桁だけ面倒を見ます。
     """
-    num1 = math.floor(number*100000000)
-    num2 = math.floor(number*100000000+1)
-    num3 = math.floor(num1/1000000)
-    num4 = math.floor(num2/1000000)
+    accuracy = 10000000000
+    num1 = math.floor(number*accuracy)
+    num2 = math.floor(number*accuracy+1)
+    num3 = math.floor(num1 / (accuracy/100))
+    num4 = math.floor(num2/(accuracy/100))
     if num4 - num3 < 1:
         # 極限を切り捨てます
-        return num1 / 100000000
+        return num1 / accuracy
     # 極限を切り上げます
-    new_number = num2 / 100000000
+    new_number = num2 / accuracy
     return new_number
 
 
@@ -60,10 +61,16 @@ def inverse_func(color):
     tanjent = diameter - width - radius
     opposite = (math.sqrt(3)/2) * tanjent
     hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+    # hipotenuse_test2 = math.sqrt(diameter**2 + width**2)  # 試し
+    # hipotenuse_test3 = math.sqrt((math.sqrt(3)/2*diameter)**2 + width**2)  # 試し
+    hipotenuse_test4 = math.sqrt(radius**2 + width**2)  # 試し
 
     if c_phase == 'B1':
         # パターン１ (0°～30°)
         theta = math.asin(width/diameter)
+        # theta = math.asin(width/hipotenuse_test2)  # これも似たようなものだが誤差は大きい
+        # theta = math.asin(width/hipotenuse_test3)  # これも似たようなものだが誤差は大きい
+        # theta = math.asin(width/hipotenuse_test4)  # これも似たようなものだが誤差は大きい
         return theta, upper, lower, c_phase
     if c_phase == 'B2':
         # パターン２

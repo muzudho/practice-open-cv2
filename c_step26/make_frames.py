@@ -35,38 +35,41 @@ CIRCLE_DISTANCE = 14 * GRID_UNIT
 # とりあえず 11トーン
 VERTICAL_PARCENT = [
     # 鮮やかさ2番
-    [0.1, 0.7, 0.2],  # Bright
-    [0.2, 0.7, 0.1],  # Strong
-    [0.3, 0.7, 0.0],  # Deep
+    # [0.1, 0.7, 0.2],  # Bright
+    # [0.2, 0.7, 0.1],  # Strong
+    # [0.3, 0.7, 0.0],  # Deep
     # 鮮やかさ3番
-    [0.0, 0.4, 0.6],  # Light
-    [0.1, 0.4, 0.5],  # Soft
-    [0.3, 0.4, 0.3],  # Dull
-    [0.4, 0.4, 0.2],  # Dark
+    # [0.0, 0.4, 0.6],  # Light
+    # [0.1, 0.4, 0.5],  # Soft
+    # [0.3, 0.4, 0.3],  # Dull
+    # [0.4, 0.4, 0.2],  # Dark
     # 鮮やかさ4番
-    [0.0, 0.3, 0.7],  # Pale
-    [0.2, 0.3, 0.5],  # Light grayish
-    [0.4, 0.3, 0.3],  # Grayish
-    [0.6, 0.3, 0.1],  # Dark grayish
+    # [0.0, 0.3, 0.7],  # Pale
+    # [0.2, 0.3, 0.5],  # Light grayish
+    # [0.4, 0.3, 0.3],  # Grayish
+    # [0.6, 0.3, 0.1],  # Dark grayish
     # 鮮やかさ1番
     [0.0, 1.0, 0.0],  # Vivid
     # テストケース（鮮やかさ小）
-    [0.0, 0.01, 0.99],
+    #[0.0, 0.999, 0.001],
+    # テストケース（鮮やかさ小）
+    #[0.0, 0.001, 0.999],
 ]
 TONE_NAME = [
-    'Bright',
-    'Strong',
-    'Deep',
-    'Light',
-    'Soft',
-    'Dull',
-    'Dark',
-    'Pale',
-    'Light grayish',
-    'Grayish',
-    'Dark grayish',
+    # 'Bright',
+    # 'Strong',
+    # 'Deep',
+    # 'Light',
+    # 'Soft',
+    # 'Dull',
+    # 'Dark',
+    # 'Pale',
+    #'Light grayish',
+    # 'Grayish',
+    #'Dark grayish',
     'Vivid',
-    'Test case',
+    #'Test case 1',
+    #'Test case 2',
 ]
 
 
@@ -233,21 +236,24 @@ def update_scene1_with_rotate(
         expected_color)
     # 無限小の丸め誤差は出るものなので、 誤差 0 はあり得ない。
     # 誤差 +-error まで許容
-    error = 0.00000000000001  # < 0.00000000000001
-    error_theta = 0.011336  # 0.01132 < x < 0.011337
-    if actual_upper < expected_upper - error or expected_upper + error < actual_upper:
-        diff = actual_upper - expected_upper
+    tolerance_num = 0.00000000000001  # < 0.00000000000001
+    tolerance_theta = 0.011336  # 0.011336 < x < 0.011337
+    diff = actual_upper - expected_upper
+    if tolerance_num < abs(diff):
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-    if actual_lower < expected_lower - error or expected_lower + error < actual_lower:
-        diff = actual_lower - expected_lower
+
+    diff = actual_lower - expected_lower
+    if tolerance_num < abs(diff):
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} angle={math.degrees(theta)} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-    if actual_theta < expected_theta - error_theta or expected_theta + error_theta < actual_theta:
+
+    diff_theta = actual_theta - expected_theta
+    if tolerance_theta < abs(diff_theta):
         upper = max(red, green, blue)
         lower = min(red, green, blue)
         bar_length = red + green + blue - upper - lower
@@ -257,7 +263,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         print(
             f"ERROR           | expected_angle={math.degrees(expected_theta)}° \
 actual_angle={math.degrees(actual_theta):9.4f}° \
-diff={math.degrees(error_theta):10.6f}° diff={error_theta:9.6f}rad \
+diff={math.degrees(diff_theta):34.30f}° diff={diff_theta:33.30f}rad \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} \
 width={width} radius={radius} pattern={pattern} seq={seq}")
 
@@ -289,7 +295,7 @@ width={width} radius={radius} pattern={pattern} seq={seq}")
     # 時計の針
     clock_hand.theta = theta
 
-    return error_theta
+    return diff_theta
 
 
 def draw_grid(_canvas):

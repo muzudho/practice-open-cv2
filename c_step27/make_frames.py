@@ -9,7 +9,7 @@ from rectangle import Rectangle
 from clock_hand import ClockHand
 from triangle import Triangle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, BAR_TICKS, \
-    U_M_L_NAME_LIST
+    L_M_U_NAME_LIST
 from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
@@ -41,7 +41,7 @@ def main():
     # 連番
     seq = 0
 
-    for (_, record) in enumerate(U_M_L_NAME_LIST):
+    for (_, record) in enumerate(L_M_U_NAME_LIST):
 
         # 描画：トーン名と バー箱 の紹介
         outer_circle = OuterCircle()
@@ -70,7 +70,7 @@ def main():
             seq += 1
 
 
-def update_circle(canvas, seq, vertical_parcent, tone_name):
+def update_circle(canvas, seq, bar_rate, tone_name):
     """色相環一周分の画像を出力"""
 
     outer_circle = OuterCircle()
@@ -78,8 +78,8 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
     for phase in range(0, PHASE_COUNTS):
         canvas = make_canvas()
         bar_box, circle_rail, outer_circle, large_triangle, clock_hand = update_scene1(
-            vertical_parcent, outer_circle)
-        error_angle = update_scene1_with_rotate(seq, vertical_parcent,
+            bar_rate, outer_circle)
+        error_angle = update_scene1_with_rotate(seq, bar_rate,
                                                 phase, bar_box, circle_rail, outer_circle,
                                                 large_triangle, clock_hand)
 
@@ -103,20 +103,20 @@ def make_canvas():
                    color_for_cv2(SOFT_GRAY, BAR_TICKS)[0], dtype=np.uint8)
 
 
-def update_scene1(vertical_parcent, outer_circle):
+def update_scene1(bar_rate, outer_circle):
     """オブジェクトの位置とキャンバスを返します
     """
 
     # RGBバー
     bar_box = BarBox()
-    bar_box.rates = vertical_parcent
-    width1 = bar_box.rates[0] * 20 * GRID_UNIT
-    width2 = bar_box.rates[1] * 20 * GRID_UNIT
-    width3 = bar_box.rates[2] * 20 * GRID_UNIT
+    bar_box.rates = bar_rate
+    left_box_width = bar_box.rates[0] * 20 * GRID_UNIT
+    middle_box_width = bar_box.rates[1] * 20 * GRID_UNIT
+    right_box_width = bar_box.rates[2] * 20 * GRID_UNIT
     bar_box.left = BAR_BOX_LEFT
-    bar_box.lower_x = bar_box.left + width3
-    bar_box.upper_x = bar_box.lower_x + width2
-    bar_box.right = bar_box.upper_x + width1
+    bar_box.lower_x = bar_box.left + left_box_width
+    bar_box.upper_x = bar_box.lower_x + middle_box_width
+    bar_box.right = bar_box.upper_x + right_box_width
     bar_box.top = BAR_BOX_TOP
     bar_box.bottom = bar_box.top + 90
     bar_box.label_gap = -0.75*GRID_UNIT
@@ -128,7 +128,7 @@ def update_scene1(vertical_parcent, outer_circle):
     circle_rail = CircleRail()
     circle_rail.drawing_top = bar_box.bottom + GRID_UNIT
     circle_rail.drawing_bottom = CANVAS_HEIGHT - GRID_UNIT
-    circle_rail.radius = width2 / 2
+    circle_rail.radius = middle_box_width / 2
 
     circle_rail.center = ((bar_box.lower_x+bar_box.upper_x)/2,
                           bar_box.bottom+CIRCLE_DISTANCE + bar_box.width*4/10)
@@ -169,7 +169,7 @@ def update_scene1(vertical_parcent, outer_circle):
 
 
 def update_scene1_with_rotate(
-        seq, vertical_parcent, phase, bar_box, circle_rail, outer_circle,
+        seq, bar_rate, phase, bar_box, circle_rail, outer_circle,
         large_triangle, clock_hand):
     """回転が伴うモデルを更新"""
     expected_angle = math.floor(360/PHASE_COUNTS*phase)
@@ -180,7 +180,7 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = expected_theta
 
-    color_rate = to_color_rate(vertical_parcent, expected_theta)
+    color_rate = to_color_rate(bar_rate, expected_theta)
 
     # バーの横幅に変換
     red = round_limit(color_rate[0])

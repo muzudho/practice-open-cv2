@@ -48,6 +48,6 @@ def __convert_rate_to_ticks(rate):
 def append_rank3_to_color_rate(step1_color_rate, bar_rate):
     """追加分のないバーが全体に対してどれぐらいの割合かを返します"""
     return (
-        bar_rate[1] * step1_color_rate[0] + bar_rate[2],
-        bar_rate[1] * step1_color_rate[1] + bar_rate[2],
-        bar_rate[1] * step1_color_rate[2] + bar_rate[2])
+        bar_rate[1] * step1_color_rate[0] + bar_rate[0],
+        bar_rate[1] * step1_color_rate[1] + bar_rate[0],
+        bar_rate[1] * step1_color_rate[2] + bar_rate[0])

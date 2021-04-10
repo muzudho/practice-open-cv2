@@ -34,7 +34,9 @@ def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    if c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B9u'):
+    if c_phase == 'M':
+        angle = float('Nan')
+    elif c_phase in ('A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1u', 'B3d', 'B9u'):
         angle = round_limit(math.degrees(theta))
     elif c_phase in ('B1', 'B3', 'B5', 'B7', 'B7d', 'B9', 'B11', 'B11d'):
         angle = math.floor(math.degrees(theta))
@@ -49,14 +51,16 @@ lower={lower} c_phase={c_phase}")
 
 
 def inverse_func(color):
-    """逆関数。ラジアン値で 0.02 未満の誤差が出ます"""
+    """逆関数。ラジアン値で 0.02 未満の誤差が出ます。
+    モノクロのとき Nan を返します"""
     c_phase = color_phase(color)
     # 一応、浮動小数点数の丸め誤差を消しとくか。厳密じゃないけど（＾～＾）
     red = round_limit(color[0])
     green = round_limit(color[1])
     blue = round_limit(color[2])
     if c_phase == 'M':
-        raise Exception(f"monocro color=({red}, {green}, {blue})")
+        return float('Nan')
+        # raise Exception(f"monocro color=({red}, {green}, {blue})")
 
     upper = max(red, green, blue)
     lower = min(red, green, blue)
@@ -350,11 +354,11 @@ def color_phase(color):
     return c_phase
 
 
-def to_color_rate(vertical_parcent, theta):
+def to_color_rate(bar_rate, theta):
     """
-    vertical_parcent : [float, float, float]
+    bar_rate : [float, float, float]
         合計 1.0 となる 0.0～1.0 の値が３つ。
-        箱の１段目、２段目、３段目の順
+        左の箱から１、２、３番目の順
     theta : float
         ラジアンで 0 を １２時の方向（赤）とし、
         時計回りに黄色、緑、青緑……、と進んでいきます
@@ -378,13 +382,10 @@ def to_color_rate(vertical_parcent, theta):
     gggx = __one_fit(ggx, left_end, diff)
     bbbx = __one_fit(bbx, left_end, diff)
 
-    # 'vertical_parcent[1]' - 箱全体に占める２段目の箱の縦幅の割合 0.0～1.0
-    # 'vertical_parcent[2]' - 箱全体に占める３段目の箱の縦幅の割合 0.0～1.0
-    # 0.0 ～ 1.0 の比で返します
     return (
-        rrrx * vertical_parcent[1] + vertical_parcent[2],
-        gggx * vertical_parcent[1] + vertical_parcent[2],
-        bbbx * vertical_parcent[1] + vertical_parcent[2])
+        rrrx * bar_rate[1] + bar_rate[0],
+        gggx * bar_rate[1] + bar_rate[0],
+        bbbx * bar_rate[1] + bar_rate[0])
 
 
 def __one_fit(rate, left_end, diff):

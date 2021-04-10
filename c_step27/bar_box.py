@@ -3,7 +3,7 @@
 
 import cv2
 from colors import  \
-    BRIGHT_GRAY, SOFT_RED, SOFT_GREEN, SOFT_BLUE, RED, GREEN, BLUE, \
+    BRIGHT_GRAY, SOFT_RED, SOFT_GREEN, SOFT_BLUE, \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_pixel_to_ticks
@@ -374,8 +374,8 @@ class BarBox():
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
         top = self.top+self.label_gap
-        # 右列のバー率
-        left = self.__right - 0.5*GRID_UNIT
+        # 左列のバー率
+        left = self.__left - 3*GRID_UNIT
         cv2.putText(canvas,
                     f"{int(self.rates[0]*100):3}%",
                     point_for_cv2((left, top)),  # x,y
@@ -392,8 +392,8 @@ class BarBox():
                     self.font_scale,
                     color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
                     self.line_type)
-        # 左列のバー率
-        left = self.__left - 3*GRID_UNIT
+        # 右列のバー率
+        left = self.__right - 0.5*GRID_UNIT
         cv2.putText(canvas,
                     f"{int(self.rates[2]*100):3}%",
                     point_for_cv2((left, top)),  # x,y

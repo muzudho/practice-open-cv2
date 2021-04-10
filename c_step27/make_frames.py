@@ -13,7 +13,8 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3pixels_to_3bytes, convert_3bars_to_ticks
-from color_hul_model import to_color_rate, inverse_func_degrees, round_limit
+from color_hul_model import to_color_rate, inverse_func_degrees, round_limit, \
+    ACCURACY
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
@@ -251,21 +252,21 @@ def update_scene1_with_rotate(
     actual_lower = round_limit(actual_lower)
     # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
     diff = actual_upper - expected_upper
-    if abs(diff) > 0:
+    if not math.isclose(actual_upper, expected_upper, abs_tol=ACCURACY):
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
     diff = actual_lower - expected_lower
-    if abs(diff) > 0:
+    if not math.isclose(actual_lower, expected_lower, abs_tol=ACCURACY):
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
     diff_angle = actual_angle - expected_angle
-    if abs(diff_angle) > 0:
+    if not math.isclose(actual_angle, expected_angle, abs_tol=ACCURACY):
         upper = max(red, green, blue)
         lower = min(red, green, blue)
         bar_length = red + green + blue - upper - lower

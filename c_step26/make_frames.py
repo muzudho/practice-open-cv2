@@ -263,7 +263,7 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         print(
             f"ERROR           | expected_angle={expected_angle:24.20f}° \
 actual_angle={actual_angle:24.20f}° \
-diff={math.radians(diff_angle):24.20f}° \
+diff={diff_angle:24.20f}° \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} \
 width={width} radius={radius} pattern={pattern} seq={seq}")
 

@@ -11,7 +11,7 @@ class OuterCircle():
 
     def __init__(self):
         self.__origin = (0, 0)
-        self.__area_size = (0, 0)
+        self.__radius = 0
         self.__phase = 0
         self.__phases = 1  # 位相の段階数
         self.__circumference = 360  # 半径１の円の一周の長さ
@@ -29,13 +29,13 @@ class OuterCircle():
         self.__origin = val
 
     @property
-    def area_size(self):
+    def radius(self):
         """描画領域のサイズ"""
-        return self.__area_size
+        return self.__radius
 
-    @area_size.setter
-    def area_size(self, val):
-        self.__area_size = val
+    @radius.setter
+    def radius(self, val):
+        self.__radius = val
 
     @property
     def phase(self):
@@ -87,8 +87,6 @@ class OuterCircle():
         """描きます"""
         # 色相環
         color_count = len(self.color_list)
-        # print(
-        #    f"color_count={color_count} self.area_size=({self.area_size[0]}, {self.area_size[1]})")
         for i in range(0, color_count):
             theta = math.radians(i * self.unit_arc)
             color = self.color_list[i]
@@ -102,7 +100,7 @@ class OuterCircle():
                 end_angle += 1  # 差が 0 だと変なとこ描画するんで
             cv2.ellipse(canvas,
                         point_for_cv2(self.__origin),
-                        point_for_cv2(self.__area_size),
+                        point_for_cv2((self.__radius, self.__radius)),
                         0,
                         360-start_angle,
                         360-end_angle,

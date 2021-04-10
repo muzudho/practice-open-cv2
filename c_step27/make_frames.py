@@ -139,12 +139,13 @@ def update_scene1(vertical_parcent, outer_circle):
         circle_rail.center[1] + circle_rail.radius)
     circle_rail.point_range = 4
 
+    radius2_expected = bar_box.width*9/10
+
     # 外環状
     outer_circle.origin = (circle_rail.center[0], circle_rail.center[1])
-    outer_circle.area_size = (bar_box.width*8/10,
-                              bar_box.width*8/10)
+    outer_circle.radius = radius2_expected
     outer_circle.phases = PHASE_COUNTS
-    outer_circle.tickness = 6.0*GRID_UNIT  # 3.0*GRID_UNIT  # 1.5*GRID_UNIT
+    outer_circle.tickness = 5.0*GRID_UNIT  # 3.0*GRID_UNIT  # 1.5*GRID_UNIT
 
     # 長方形に内接する大きな正三角形
     large_triangle = Triangle()
@@ -159,7 +160,6 @@ def update_scene1(vertical_parcent, outer_circle):
     clock_hand.unit_arc = outer_circle.unit_arc
     clock_hand.tickness = 2
     clock_hand.radius1 = circle_rail.radius  # 1st range
-    radius2_expected = bar_box.width*8/10
     clock_hand.radius2 = radius2_expected - \
         outer_circle.tickness / 2 - clock_hand.tickness  # 2nd range
     clock_hand.radius3 = radius2_expected + \
@@ -339,9 +339,9 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     bar_box.draw_rgb_number(canvas, color)
 
     # 角度（弧度法）表示
-    point_x = (outer_circle.area_size[0]/2 + 12*GRID_UNIT) * \
+    point_x = (outer_circle.radius/2 + 12*GRID_UNIT) * \
         math.cos(circle_rail.theta) + circle_rail.center[0]
-    point_y = (outer_circle.area_size[1]/2 + 12*GRID_UNIT) * \
+    point_y = (outer_circle.radius/2 + 12*GRID_UNIT) * \
         -math.sin(circle_rail.theta) + circle_rail.center[1]
     cv2.putText(canvas,
                 f"{math.degrees(circle_rail.theta):3.0f}",

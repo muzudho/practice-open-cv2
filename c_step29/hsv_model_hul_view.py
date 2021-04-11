@@ -163,6 +163,16 @@ def __inverse_func_radians(color):
     width = bar_length - lower
     diameter = upper - lower
 
+    # ２４箇所に分けて、１つずつ 図形的に証明しようとしたら 浮動小数点の丸みがあるのか
+    # そもそも 誤差0 にできないし、かなり難しいので、今後の挑戦課題（＾～＾）
+    # 今回は図形的証明を止め、 逆関数が作れればいい、ということにした（＾～＾）
+    #
+    # radius = round_limit(diameter / 2)
+    # adjacent = radius
+    # tanjent = diameter - width - radius
+    # opposite = (math.sqrt(3)/2) * tanjent
+    # hipotenuse = math.sqrt(adjacent**2 + opposite**2)
+
     # 1文字目が Bなら asin, Dなら acos です。
     # 4文字目が大文字の U,Dなら width が 半径より長く、 小文字の u,d なら width が半径より短いぜ（＾～＾）
     #

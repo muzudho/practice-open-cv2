@@ -4,44 +4,58 @@
 HSVモデルの仲間で、
 色相と色調を扱うライブラリの実装です。
 
-逆関数の使い方
-============
+to_hue_angle()関数の使い方
+=========================
 
 このプログラムで color というと、以下の仕様です。
 RGB値は R, G, B の順で 0.0～1.0 で指定してください。
 
-  +----------+
-R |          | 1.0
-  +----+-----+
-G |    | 0.4
-  +----+
-B | 0.0
-  +
+       Lower            Upper
+ 0.0    0.2              0.7      1.0
+  +------+----------------+--------+
+R |      |                | 0.7    |
+  +------+-------+--------+        |
+G |      |       | 0.4             |
+  +------+-------+                 |
+B |      | 0.2                     |
+  +------+-------------------------+
 
-color = (1.0, 0.4, 0.0)
+  <-----> <--------------> <------>
+   Left    Middle           Right
+   Box     Box              Box
 
-逆関数を使うと 弧度法が返ってきます。
-hue_angle = inverse_func_degrees(color)
+color = (0.7, 0.4, 0.2)
 
-順関数の使い方
-============
+to_hue_angle()関数を使うと 弧度法が返ってきます。
+戻り値の２つ目はデバッグ用の情報なので要りません。
 
-      0.3   0.6
-  +----+----------+
-R |    |          | 1.0
-  +----+----+-----+
-G |    |    | 0.6
-  +----+----+
-B |    | 0.3
-  +----+
+hue_angle, _ = to_hue_angle(color)
+# hue_angle is 23
 
-  <----><---><---->
-   A     B    C
+to_color()関数の使い方
+=====================
 
-順関数を使うと color が返ってきます。
+(再掲)
+       Lower            Upper
+ 0.0    0.2              0.7      1.0
+  +------+----------------+--------+
+R |      |                | 0.7    |
+  +------+-------+--------+        |
+G |      |       | 0.4             |
+  +------+-------+                 |
+B |      | 0.2                     |
+  +------+-------------------------+
+
+  <-----> <--------------> <------>
+   Left    Middle           Right
+   Box     Box              Box
+
+to_color()関数を使うと color が返ってきます。
 第一引数のリストは先頭から、全体を 1.0 としたときのAの比、第二引数は Bの比、 第三引数は Cの比です。
 第二引数は色相環の角度（ラジアン）です。
-color = to_color([0.3, 0.3, 0.4], math.radians(hue_angle))
+
+color = to_color([0.2, 0.5, 0.3], math.radians(23))
+# color is (0.7, 0.39683272553278354, 0.2)
 """
 
 import math
@@ -50,9 +64,9 @@ import math
 ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
 
 
-def inverse_func_degrees(color):
+def to_hue_angle(color):
     """逆関数。精度は int型の弧度法しかありません"""
-    theta, upper, lower, c_phase = inverse_func(color)
+    theta, upper, lower, c_phase = __inverse_func_radians(color)
 
     # 弧度法の整数部の精度で調整したので、小数部を切り上げ、切り捨てして、ずれを0にします
     # M はモノクロ
@@ -73,10 +87,10 @@ def inverse_func_degrees(color):
             f"ERROR           | Logic error. theta={theta} upper={upper} \
 lower={lower} c_phase={c_phase}")
 
-    return angle, upper, lower, c_phase
+    return angle, (upper, lower, c_phase)
 
 
-def inverse_func(color):
+def __inverse_func_radians(color):
     """逆関数。ラジアン値で 0.02 未満の誤差が出ます。
     モノクロのとき Nan を返します"""
     c_phase = color_phase(color)
@@ -353,7 +367,7 @@ def color_phase(color):
             c_phase = 'D15d'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
-    and math.isclose(blue, upper, abs_tol=ACCURACY):
+        and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+
@@ -453,3 +467,14 @@ def __one_fit(rate, left_end, diff):
     if diff == 0:
         return 0.0  # 0除算が起こるなら（仕方が無いので）差分は 0 にします
     return (rate-left_end) / diff
+
+
+# Example:
+#
+#color = (0.7, 0.4, 0.2)
+#hue_angle, _ = to_hue_angle(color)
+#print(f"hue_angle = {hue_angle}°")
+# # hue_angle = 23°
+# color = to_color([0.2, 0.5, 0.3], math.radians(23))
+# print(f"color = {color}")
+# # color = (0.7, 0.39683272553278354, 0.2)

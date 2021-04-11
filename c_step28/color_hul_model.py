@@ -55,7 +55,7 @@ B |      | 0.2                     |
    Box     Box              Box
 
 to_color()関数を使うと color が返ってきます。
-第一引数のリストは先頭から、全体を 1.0 としたときのAの比、第二引数は Bの比、 第三引数は Cの比です。
+第一引数のリストは先頭から、全体を 1.0 としたときの LeftBoxの比、MiddleBoxの比、RightBoxの比です。
 第二引数は色相環の角度（ラジアン）です。
 
 color = to_color([0.2, 0.5, 0.3], math.radians(23))

@@ -61,6 +61,9 @@ to_color()関数を使うと color が返ってきます。
 color = to_color([0.2, 0.5, 0.3], math.radians(23))
 # color is (0.7, 0.39683272553278354, 0.2)
 
+hue_to_color()関数の使い方
+=====================
+
 しかし、せっかく HULモデル(Hue,Upper,Lowerモデル)という名前なのですから、
 Upper値、Lower値を使っても 色 を出せるようにしましょう。
 引数の順番は 先頭から Hue(弧度法), Upper, Lower です。

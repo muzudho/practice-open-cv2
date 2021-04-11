@@ -68,7 +68,7 @@ color = to_color([0.2, 0.5, 0.3], math.radians(23))
 hul_to_color()関数の使い方
 =====================
 
-しかし、せっかく HULモデル(Hue,Upper,Lowerビューモデル)という名前なのですから、
+しかし、せっかく HULビューモデル(Hue,Upper,Lowerビューモデル)という名前なのですから、
 Upper値、Lower値を使っても 色 を出せるようにしましょう。
 引数の順番は 先頭から Hue(弧度法), Upper, Lower です。
 

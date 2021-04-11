@@ -92,35 +92,30 @@ class Triangle():
         # 赤、緑、青 の点の位置関係は全部で１２相です
         triangle_theta = theta
 
+        # 角度オフセット
         if c_phase == 'A1':  # 緑と青は等しく、それより赤が大きい
-            pass  # トライアングル・フェーズ
-        elif c_phase in ('B1', 'B1u', 'B2'):  # blue < green < red:
-            # 下から青、緑、赤。緑上昇中
+            pass
+        elif c_phase in ('C1u', 'B1u', 'C2u'):  # 下から青、緑、赤。緑上昇中
             pass
         elif c_phase == 'A2':  # 赤と緑は等しく、それより青は小さい
             pass
-        elif c_phase in ('B3', 'B3d', 'B4'):  # blue < red < green:
-            # 下から青、赤、緑。赤下降中
+        elif c_phase in ('C3d', 'B3d', 'C4d'):  # 下から青、赤、緑。赤下降中
             triangle_theta -= math.radians(120)
         elif c_phase == 'A3':  # 青と赤は等しく、それより緑が大きい
             triangle_theta -= math.radians(120)
-        elif c_phase in ('B5', 'B5u', 'B6'):  # red < blue < green:
-            # 下から赤、青、緑。青上昇中
+        elif c_phase in ('C5u', 'B5u', 'C6u'):  # 下から赤、青、緑。青上昇中
             triangle_theta -= math.radians(120)
         elif c_phase == 'A4':  # 緑と青は等しく、それより赤は小さい
             triangle_theta -= math.radians(120)
-        elif c_phase in ('B7', 'B7d', 'B8'):  # red < green < blue:
-            # 下から赤、緑、青。緑下降中
+        elif c_phase in ('C7d', 'B7d', 'C8d'):  # 下から赤、緑、青。緑下降中
             triangle_theta += math.radians(120)
         elif c_phase == 'A5':  # 赤と緑は等しく、それより青が大きい
             triangle_theta += math.radians(120)
-        elif c_phase in ('B9', 'B9u', 'B10'):  # green < red < blue:
-            # 下から緑、赤、青。赤上昇中
+        elif c_phase in ('C9u', 'B9u', 'C10u'):  # 下から緑、赤、青。赤上昇中
             triangle_theta += math.radians(120)
         elif c_phase == 'A6':  # 赤と青は等しく、それより緑が小さい
             pass
-        elif c_phase in ('B9', 'B9u', 'B10'):
-            # 下から緑、青、赤。青下降中
+        elif c_phase in ('C9u', 'B9u', 'C10u'):  # 下から緑、青、赤。青下降中
             pass
         else:
             pass
@@ -131,28 +126,28 @@ class Triangle():
                                        triangle_theta,
                                        center)
 
-        if c_phase in ('A1', 'B1', 'B1u', 'B2', 'A2'):
+        if c_phase in ('A1', 'C1u', 'B1u', 'C2u', 'A2'):
             self.__nodes_p = (
                 self.nodes_p[0], self.nodes_p[1], self.nodes_p[2])
-        elif c_phase in ('B3', 'B3d', 'B4'):
+        elif c_phase in ('C3d', 'B3d', 'C4d'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[1], self.nodes_p[0])
         elif c_phase == 'A3':
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif c_phase in ('B5', 'B5u', 'B6'):
+        elif c_phase in ('C5u', 'B5u', 'C6u'):
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
         elif c_phase == 'A4':
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif c_phase in ('B7', 'B7d', 'B8'):
+        elif c_phase in ('C7d', 'B7d', 'C8d'):
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[0], self.nodes_p[2])
         elif c_phase == 'A5':
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[0], self.nodes_p[1])
-        elif c_phase in ('B9', 'B9u', 'B10'):
+        elif c_phase in ('C9u', 'B9u', 'C10u'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[0], self.nodes_p[1])
         elif c_phase == 'A6':

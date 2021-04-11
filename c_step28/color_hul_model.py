@@ -53,17 +53,34 @@ def inverse_func(color):
     lower = min(red, green, blue)
 
     if c_phase == 'A00u':
-        return math.radians(0), upper, lower, c_phase
-    if c_phase == 'A04D':
-        return math.radians(60), upper, lower, c_phase
-    if c_phase == 'A08u':
-        return math.radians(120), upper, lower, c_phase
-    if c_phase == 'A12D':
-        return math.radians(180), upper, lower, c_phase
-    if c_phase == 'A16u':
-        return math.radians(240), upper, lower, c_phase
-    if c_phase == 'A20D':
-        return math.radians(300), upper, lower, c_phase
+        theta = math.radians(0)
+    elif c_phase == 'C02u':
+        theta = math.radians(30)
+    elif c_phase == 'A04D':
+        theta = math.radians(60)
+    elif c_phase == 'C06D':
+        theta = math.radians(90)
+    elif c_phase == 'A08u':
+        theta = math.radians(120)
+    elif c_phase == 'C10u':
+        theta = math.radians(150)
+    elif c_phase == 'A12D':
+        theta = math.radians(180)
+    elif c_phase == 'C14D':
+        theta = math.radians(210)
+    elif c_phase == 'A16u':
+        theta = math.radians(240)
+    elif c_phase == 'C18u':
+        theta = math.radians(270)
+    elif c_phase == 'A20D':
+        theta = math.radians(300)
+    elif c_phase == 'C22D':
+        theta = math.radians(330)
+    else:
+        theta = None
+
+    if theta is not None:
+        return theta, upper, lower, c_phase
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
@@ -76,42 +93,42 @@ def inverse_func(color):
     #opposite = (math.sqrt(3)/2) * tanjent
     #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
-    # asin - B奇数u, B奇数D, C偶数u, C偶数D(14)
-    # acos - C偶数D(22), D奇数U, D奇数d
-    if c_phase in ('B01u', 'C02u'):
+    # asin - B数u, B数D
+    # acos - D数U, D数d
+    if c_phase == 'B01u':
         # パターン１
         theta = math.asin(width/diameter)
     elif c_phase == 'D03U':
         # パターン２
         theta = math.acos((diameter-width)/diameter) - math.radians(30)
-    elif c_phase == ('B05D'):
+    elif c_phase == 'B05D':
         # パターン３
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
-    elif c_phase in ('C06D', 'D07d'):
+    elif c_phase == 'D07d':
         # パターン４
         theta = math.acos(width/diameter) + math.radians(30)
-    elif c_phase in ('B09u', 'C10u'):
+    elif c_phase == 'B09u':
         # パターン５
         theta = math.asin(width/diameter) + math.radians(120)
     elif c_phase == 'D11U':
         # パターン６
         theta = math.acos((diameter - width)/diameter) + math.radians(90)
-    elif c_phase in ('B13D', 'C14D'):
+    elif c_phase == 'B13D':
         # パターン７
         theta = math.asin((diameter - width)/diameter) + math.radians(180)
     elif c_phase == 'D15d':
         # パターン８
         theta = math.acos(width/diameter) + math.radians(150)
-    elif c_phase in ('B17u', 'C18u'):
+    elif c_phase == 'B17u':
         # パターン９
         theta = math.asin(width/diameter) + math.radians(240)
     elif c_phase == 'D19U':
         # パターン１０
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
-    elif c_phase == ('B21D'):
+    elif c_phase == 'B21D':
         # パターン１１
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
-    elif c_phase in ('C22D', 'D23d'):
+    elif c_phase == 'D23d':
         # パターン１２
         theta = math.acos(width/diameter) + math.radians(270)
     else:
@@ -315,7 +332,7 @@ def color_phase(color):
             c_phase = 'D15d'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
-        and math.isclose(blue, upper, abs_tol=ACCURACY):
+    and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+

@@ -1,7 +1,11 @@
 # practice-open-cv2
 
 ![20210411color65_c_step28.gif](./@doc/c_step/img/20210411color65_c_step28.gif)  
-(上図は 騙し絵(Fake)の一種、良く言えば近似(Approximate)。 ⚡📄`c_step28/make_frames.py` と ⚡📄`e_step4/pygame00.py` 使用)  
+(上図は 騙し絵(Fake)の一種、良く言えば近似(Approximate)。  
+内側の、円に内接する白い正三角形と、外側の、長方形に内接する正三角形は、  
+角度が同じように見えて ずれています。
+どこを測るか計算の仕方によるものの、良く言って ラジアン値で 0.02未満、 弧度法で 0.7°未満 のずれ。   
+⚡📄`c_step28/make_frames.py` と ⚡📄`e_step4/pygame00.py` 使用)  
 
 ## HULビューモデルって何？
 

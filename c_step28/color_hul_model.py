@@ -353,7 +353,7 @@ def color_phase(color):
             c_phase = 'D15d'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
-    and math.isclose(blue, upper, abs_tol=ACCURACY):
+        and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+
@@ -453,3 +453,15 @@ def __one_fit(rate, left_end, diff):
     if diff == 0:
         return 0.0  # 0除算が起こるなら（仕方が無いので）差分は 0 にします
     return (rate-left_end) / diff
+
+
+# Example:
+#
+color = (1.0, 0.4, 0.0)
+hue_angle = inverse_func_degrees(color)
+#
+print(f"hue_angle   = {hue_angle[0]:4}°")
+print(f"upper       = {hue_angle[1]:9.4f}")
+print(f"lower       = {hue_angle[2]:9.4f}")
+print(f"color_phase = {hue_angle[3]:4}")
+# # hue_angle=(23, 1.0, 0.0, 'B01u')

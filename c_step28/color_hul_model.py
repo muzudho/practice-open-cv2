@@ -200,7 +200,10 @@ def __inverse_func_radians(color):
 
 
 def color_phase(color):
-    """角度を、以下の文字列で返します。
+    """角度を、以下の文字列で返します。図解もありますので参照してください。
+
+    図解
+    https://github.com/muzudho/practice-open-cv2/blob/main/@doc/c_step/img/20210411color61a5a1_c_step_28.png
 
     * 'M' - モノクロ
 

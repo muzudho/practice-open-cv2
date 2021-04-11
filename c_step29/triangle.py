@@ -7,7 +7,7 @@ from triangle_calc import calc_triangle
 from colors import GRAY
 from conf import BAR_TICKS
 from cv2_helper import point_for_cv2, color_for_cv2
-from color_hul_view_model import color_phase
+from hsv_model_hul_view import color_phase
 
 
 class Triangle():

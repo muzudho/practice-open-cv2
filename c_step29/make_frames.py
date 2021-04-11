@@ -14,7 +14,7 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3bars_to_ticks
-from color_hul_view_model import to_color, to_hue_angle, \
+from hsv_model_hul_view import to_color, to_hue_angle, \
     ACCURACY
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \

@@ -61,14 +61,14 @@ to_color()関数を使うと color が返ってきます。
 color = to_color([0.2, 0.5, 0.3], math.radians(23))
 # color is (0.7, 0.39683272553278354, 0.2)
 
-hue_to_color()関数の使い方
+hul_to_color()関数の使い方
 =====================
 
 しかし、せっかく HULモデル(Hue,Upper,Lowerモデル)という名前なのですから、
 Upper値、Lower値を使っても 色 を出せるようにしましょう。
 引数の順番は 先頭から Hue(弧度法), Upper, Lower です。
 
-color = hue_to_color(23, 0.7, 0.2)
+color = hul_to_color(23, 0.7, 0.2)
 # color is (0.7, 0.3968327255327835, 0.2)
 """
 
@@ -78,7 +78,7 @@ import math
 ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
 
 
-def hue_to_color(hue_angle, upper, lower):
+def hul_to_color(hue_angle, upper, lower):
     """順関数。RGB値を 0.0～1.0 とする色を返します"""
     return to_color([lower, upper-lower, 1.0-(upper-lower)], math.radians(hue_angle))
 
@@ -499,6 +499,6 @@ def __one_fit(rate, left_end, diff):
 # print(f"color = {color}")
 # # color = (0.7, 0.39683272553278354, 0.2)
 #
-# color = hue_to_color(23, 0.7, 0.2)
+# color = hul_to_color(23, 0.7, 0.2)
 # print(f"color = {color}")
 # # color = (0.7, 0.3968327255327835, 0.2)

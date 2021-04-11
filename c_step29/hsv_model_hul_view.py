@@ -172,6 +172,8 @@ def __inverse_func_radians(color):
     #
     # 全部 asin にする、とか asin, acos のどちらかに揃えたかったが、切り上げ、切り捨て、丸め でずれるなど
     # 合わないので、仕方なく分けてあるぜ（＾～＾）
+    #
+    # しかし こんなことやってたら 図形的な証明にならないよな、あーあ（＾～＾）切り上げ時だぜ（＾～＾）
     if c_phase == 'B01u':
         theta = math.asin(width/diameter)
     elif c_phase == 'D03U':

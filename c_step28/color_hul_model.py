@@ -19,7 +19,7 @@ def inverse_func_degrees(color):
     if c_phase == 'M':
         angle = float('Nan')
     elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D',
-                     'C02u', 'C06D', 'C10u', 'C14D', 'C18u', 'C22D'):  # キリがいい数
+                     'C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):  # キリがいい数
         angle = math.degrees(theta)
     # 'B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D' は diff が正の数なので、そのまま切り捨てでいい。
     elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):  # 奇数
@@ -54,27 +54,27 @@ def inverse_func(color):
 
     if c_phase == 'A00u':
         theta = math.radians(0)
-    elif c_phase == 'C02u':
+    elif c_phase == 'C02U':
         theta = math.radians(30)
     elif c_phase == 'A04D':
         theta = math.radians(60)
-    elif c_phase == 'C06D':
+    elif c_phase == 'C06d':
         theta = math.radians(90)
     elif c_phase == 'A08u':
         theta = math.radians(120)
-    elif c_phase == 'C10u':
+    elif c_phase == 'C10U':
         theta = math.radians(150)
     elif c_phase == 'A12D':
         theta = math.radians(180)
-    elif c_phase == 'C14D':
+    elif c_phase == 'C14d':
         theta = math.radians(210)
     elif c_phase == 'A16u':
         theta = math.radians(240)
-    elif c_phase == 'C18u':
+    elif c_phase == 'C18U':
         theta = math.radians(270)
     elif c_phase == 'A20D':
         theta = math.radians(300)
-    elif c_phase == 'C22D':
+    elif c_phase == 'C22d':
         theta = math.radians(330)
     else:
         theta = None
@@ -150,27 +150,27 @@ def color_phase(color):
 
     * 'A00u' - (       0°     ) 緑と青は等しく、それより赤が大きい
     * 'B01u' - (  0°<   x< 30°) 下から青、緑、赤。緑上昇中
-    * 'C02u' - (      30°     ) 下から青、緑、赤。緑上昇中
+    * 'C02U' - (      30°     ) 下から青、緑、赤。緑上昇中
     * 'D03U' - ( 30°<   x< 60°) 下から青、緑、赤。緑上昇中
     * 'A04D' - (      60°     ) 赤と緑は等しく、それより青は小さい
     * 'B05D' - ( 60°<   x< 90°) 下から青、赤、緑。赤下降中
-    * 'C06D' - (      90°     ) 下から青、赤、緑。赤下降中
+    * 'C06d' - (      90°     ) 下から青、赤、緑。赤下降中
     * 'D07d' - ( 90°<   x<120°) 下から青、赤、緑。赤下降中
     * 'A08u' - (     120°     ) 青と赤は等しく、それより緑が大きい
     * 'B09u' - (120°<   x<150°) 下から赤、青、緑。青上昇中
-    * 'C10u' - (     150°     ) 下から赤、青、緑。青上昇中
+    * 'C10U' - (     150°     ) 下から赤、青、緑。青上昇中
     * 'D11U' - (150°<   x<180°) 下から赤、青、緑。青上昇中
     * 'A12D' - (     180°     ) 緑と青は等しく、それより赤は小さい
     * 'B13D' - (180°<   x<210°) 下から赤、緑、青。緑下降中
-    * 'C14D' - (     210°     ) 下から赤、緑、青。緑下降中
+    * 'C14d' - (     210°     ) 下から赤、緑、青。緑下降中
     * 'D15d' - (210°<   x<240°) 下から赤、緑、青。緑下降中
     * 'A16u' - (     240°     ) 赤と緑は等しく、それより青が大きい
     * 'B17u' - (240°<   x<270°) 下から緑、赤、青。赤上昇中
-    * 'C18u' - (     270°     ) 下から緑、赤、青。赤上昇中
+    * 'C18U' - (     270°     ) 下から緑、赤、青。赤上昇中
     * 'D19U' - (270°<   x<300°) 下から緑、赤、青。赤上昇中
     * 'A20D' - (     300°     ) 赤と青は等しく、それより緑が小さい
     * 'B21D' - (300°<   x<330°) 下から緑、青、赤。青下降中
-    * 'C22D' - (     330°     ) 下から緑、青、赤。青下降中
+    * 'C22d' - (     330°     ) 下から緑、青、赤。青下降中
     * 'D23d' - (330°<   x<360°) 下から緑、青、赤。青下降中
     """
 
@@ -222,7 +222,7 @@ def color_phase(color):
             # | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = 'C02u'
+            c_phase = 'C02U'
         # パターン１
         elif width < radius:
             # +-+
@@ -252,7 +252,7 @@ def color_phase(color):
             # | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = 'C06D'
+            c_phase = 'C06d'
         # パターン３
         elif radius < width:
             #      +-+               < 120°
@@ -282,7 +282,7 @@ def color_phase(color):
             #      | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = 'C10u'
+            c_phase = 'C10U'
         # パターン５
         elif width < radius:  # 半分を含まない（必要）
             #      +-+
@@ -313,7 +313,7 @@ def color_phase(color):
             #      | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = 'C14D'
+            c_phase = 'C14d'
         elif radius < width:
             #           +-+          < 180°
             #       v   | |        x
@@ -342,7 +342,7 @@ def color_phase(color):
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = 'C18u'
+            c_phase = 'C18U'
         # パターン９
         elif width < radius:
             #           +-+
@@ -372,7 +372,7 @@ def color_phase(color):
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = 'C22D'
+            c_phase = 'C22d'
         # パターン１１
         elif radius < width:
             # +-+           300° <

@@ -3,32 +3,71 @@
 
 HSVモデルの仲間で、
 色相と色調を扱うライブラリの実装です。
+
+逆関数の使い方
+============
+
+このプログラムで color というと、以下の仕様です。
+RGB値は R, G, B の順で 0.0～1.0 で指定してください。
+
+  +----------+
+R |          | 1.0
+  +----+-----+
+G |    | 0.4
+  +----+
+B | 0.0
+  +
+
+color = (1.0, 0.4, 0.0)
+
+逆関数を使うと 弧度法が返ってきます。
+hue_angle = inverse_func_degrees(color)
+
+順関数の使い方
+============
+
+      0.3   0.6
+  +----+----------+
+R |    |          | 1.0
+  +----+----+-----+
+G |    |    | 0.6
+  +----+----+
+B |    | 0.3
+  +----+
+
+  <----><---><---->
+   A     B    C
+
+順関数を使うと color が返ってきます。
+第一引数のリストは先頭から、全体を 1.0 としたときのAの比、第二引数は Bの比、 第三引数は Cの比です。
+第二引数は色相環の角度（ラジアン）です。
+color = to_color([0.3, 0.3, 0.4], math.radians(hue_angle))
 """
 
 import math
 
 
-ACCURACY = 0.0000001  # 浮動小数点精度
+ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
 
 
 def inverse_func_degrees(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = inverse_func(color)
 
-    # 切り上げ、切り捨てで、ずれを微調整
+    # 弧度法の整数部の精度で調整したので、小数部を切り上げ、切り捨てして、ずれを0にします
+    # M はモノクロ
     if c_phase == 'M':
         angle = float('Nan')
+    # A,C系は キリがいい数
     elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D',
-                     'C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):  # キリがいい数
+                     'C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):
         angle = math.degrees(theta)
-    # 'B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D' は diff が正の数なので、そのまま切り捨てでいい。
-    elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):  # 奇数
+    # B系は diff が正の数なので、そのまま切り捨てでいい
+    elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):
         angle = math.floor(math.degrees(theta))
-        # angle = math.degrees(theta)
-    # 'D03U', 'D07d', 'D11U', 'D15d', 'D19U', 'D23d' はdiffが負の数なので、 ceil すると 切り捨ての効果が出る。
+    # D系 はdiffが負の数なので、 ceil すると 切り捨ての効果が出る
     elif c_phase in ('D03U', 'D07d', 'D11U', 'D15d', 'D19U', 'D23d'):
         angle = math.ceil(math.degrees(theta))
-        # angle = math.degrees(theta)
     else:
         raise Exception(
             f"ERROR           | Logic error. theta={theta} upper={upper} \
@@ -85,52 +124,40 @@ def inverse_func(color):
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
     bar_length = red + green + blue - upper - lower
     width = bar_length - lower
-
     diameter = upper - lower
-    #radius = diameter/2
-    #adjacent = radius
-    #tanjent = diameter - width - radius
-    #opposite = (math.sqrt(3)/2) * tanjent
-    #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
-    # asin - B数u, B数D
-    # acos - D数U, D数d
-    # 全部 asin にする、とかやりたいが、切り上げ、切り捨て、丸め で合わないので、仕方なく分けてあるぜ（＾～＾）
+    # 1文字目が Bなら asin, Dなら acos です。
+    # 4文字目が大文字の U,Dなら width が 半径より長く、 小文字の u,d なら width が半径より短いぜ（＾～＾）
+    #
+    # sin(30°)=0.5、cos(60°)=0.5 と、30°刻みの角度を有理数にできるから sin, cos の逆関数 asin, acos を使ってるだけで、
+    # ラジアンで 0.02未満、弧度法で 0.7未満の誤差があるぜ（＾～＾） つまり騙し絵、フェイク画像（＾～＾）
+    # ちょうどいい曲線をぶつけただけで 正確な曲線を取れてないぜ（＾～＾）
+    #
+    # 全部 asin にする、とか asin, acos のどちらかに揃えたかったが、切り上げ、切り捨て、丸め でずれるなど
+    # 合わないので、仕方なく分けてあるぜ（＾～＾）
     if c_phase == 'B01u':
-        # パターン１ (widthは半径よりは短い)
         theta = math.asin(width/diameter)
     elif c_phase == 'D03U':
-        # パターン２ (widthは半径よりは長い)
         theta = math.acos((diameter - width)/diameter) - math.radians(30)
     elif c_phase == 'B05D':
-        # パターン３ (widthは半径よりは長い)
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
     elif c_phase == 'D07d':
-        # パターン４ (widthは半径よりは短い)
         theta = math.acos(width/diameter) + math.radians(30)
     elif c_phase == 'B09u':
-        # パターン５ (widthは半径よりは短い)
         theta = math.asin(width/diameter) + math.radians(120)
     elif c_phase == 'D11U':
-        # パターン６ (widthは半径よりは長い)
         theta = math.acos((diameter - width)/diameter) + math.radians(90)
     elif c_phase == 'B13D':
-        # パターン７ (widthは半径よりは長い)
         theta = math.asin((diameter - width)/diameter) + math.radians(180)
     elif c_phase == 'D15d':
-        # パターン８ (widthは半径よりは短い)
         theta = math.acos(width/diameter) + math.radians(150)
     elif c_phase == 'B17u':
-        # パターン９ (widthは半径よりは短い)
         theta = math.asin(width/diameter) + math.radians(240)
     elif c_phase == 'D19U':
-        # パターン１０ (widthは半径よりは長い)
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
     elif c_phase == 'B21D':
-        # パターン１１ (widthは半径よりは長い)
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
     elif c_phase == 'D23d':
-        # パターン１２ (widthは半径よりは短い)
         theta = math.acos(width/diameter) + math.radians(270)
     else:
         raise Exception(
@@ -144,9 +171,10 @@ def color_phase(color):
 
     * 'M' - モノクロ
 
-    A系 60°ずつ回転した形
-    B系 RGBの位置関係から、１２パターンあります
-    Bxu, Bxd系 １２パターンの真ん中
+    A系  0°をスタート地点に、60°ずつ回転した形
+    B系 30°の幅があるので、sin使う方
+    C系 30°をスタート地点に、60°ずつ回転した形
+    D系 30°の幅があるので、cos使う方
 
     * 'A00u' - (       0°     ) 緑と青は等しく、それより赤が大きい
     * 'B01u' - (  0°<   x< 30°) 下から青、緑、赤。緑上昇中
@@ -174,7 +202,7 @@ def color_phase(color):
     * 'D23d' - (330°<   x<360°) 下から緑、青、赤。青下降中
     """
 
-    # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
+    # math.isclose()ってのは、浮動小数点数の丸め誤差を消して等号比較するやつな（＾～＾）
     red = color[0]
     green = color[1]
     blue = color[2]
@@ -223,7 +251,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'C02U'
-        # パターン１
         elif width < radius:
             # +-+
             # | |
@@ -232,7 +259,6 @@ def color_phase(color):
             # +-+  +-+  +-+ 0° <=
             #  R    G    B
             c_phase = 'B01u'
-        # パターン２
         else:
             # +-+                   < 60°
             # | |   ^             x
@@ -253,7 +279,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'C06d'
-        # パターン３
         elif radius < width:
             #      +-+               < 120°
             #  v   | |             x
@@ -262,7 +287,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B05D'
-        # パターン４
         else:
             #      +-+
             #      | |
@@ -283,7 +307,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'C10U'
-        # パターン５
         elif width < radius:  # 半分を含まない（必要）
             #      +-+
             #      | |
@@ -292,7 +315,6 @@ def color_phase(color):
             # +-+  +-+  +-+ 120° <=
             #  R    G    B
             c_phase = 'B09u'
-        # パターン６
         else:
             #      +-+                < 180°
             #      | |   ^          x
@@ -305,7 +327,6 @@ def color_phase(color):
             and not math.isclose(green, lower, abs_tol=ACCURACY) \
             and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 緑下降中
-        # パターン７
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #      +-+
             #      | |
@@ -322,7 +343,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B13D'
-        # パターン８
         else:
             #           +-+
             #           | |
@@ -343,7 +363,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'C18U'
-        # パターン９
         elif width < radius:
             #           +-+
             #           | |
@@ -352,7 +371,6 @@ def color_phase(color):
             # +-+  +-+  +-+ 240° <=
             #  R    G    B
             c_phase = 'B17u'
-        # パターン１０
         else:
             #           +-+          < 300°
             #  ^        | |        x
@@ -373,7 +391,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'C22d'
-        # パターン１１
         elif radius < width:
             # +-+           300° <
             # | |        v         x
@@ -382,7 +399,6 @@ def color_phase(color):
             # +-+  +-+  +-+
             #  R    G    B
             c_phase = 'B21D'
-        # パターン１２
         else:
             # +-+
             # | |
@@ -398,7 +414,7 @@ def color_phase(color):
     return c_phase
 
 
-def to_color_rate(bar_rate, theta):
+def to_color(bar_rate, theta):
     """
     bar_rate : [float, float, float]
         合計 1.0 となる 0.0～1.0 の値が３つ。

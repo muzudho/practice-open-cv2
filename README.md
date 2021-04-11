@@ -3,11 +3,11 @@
 ![20210411color65_c_step28.gif](./@doc/c_step/img/20210411color65_c_step28.gif)  
 (上図は ⚡📄`c_step28/make_frames.py` と ⚡📄`e_step4/pygame00.py` 使用)  
 
-## HULモデルって何？
+## HULビューモデルって何？
 
-ざっくり言うと HSVモデルを図形で説明する試みの１つで、それに失敗したのが HULモデル。  
+ざっくり言うと HSVモデルを図形で説明（View）する試みの１つで、それに失敗したのが HULビューモデル。  
 
-## HSVモデルと、HULモデルの同じところ
+## HSVモデルと、HULビューモデルの同じところ
 
 * (1) HSVモデルの `H` は、 HULモデルも同じ `H`。  
 * (2) HSVモデルの `S` は、 HULモデルの `U - L` 。  

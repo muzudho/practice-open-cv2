@@ -14,7 +14,7 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3bars_to_ticks
-from color_hul_model import to_color_rate, to_hue_angle, \
+from color_hul_view_model import to_color, to_hue_angle, \
     ACCURACY
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
@@ -180,7 +180,7 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = expected_theta
 
-    color_rate = to_color_rate(bar_rate, expected_theta)
+    color_rate = to_color(bar_rate, expected_theta)
 
     # バーの横幅に変換
     red = color_rate[0]

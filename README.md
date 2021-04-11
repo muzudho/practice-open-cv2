@@ -41,6 +41,9 @@ cd e_step4
 python pygame00.py
 ```
 
+## c_step28 図解
+
+![20210411color61a5a1_c_step_28.png](./@doc/c_step/img/20210411color61a5a1_c_step_28.png)
 ## Document
 
 [References](./@doc/references.md)  

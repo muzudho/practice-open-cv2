@@ -100,7 +100,7 @@ class OuterCircle():
             if start_angle == end_angle:
                 end_angle += 1  # 差が 0 だと変なとこ描画するんで
 
-            # 本当は 扇形にしたい
+            # カクカクだが、フェーズを増やせば円に近づくのでこれでいいとするぜ（＾～＾）
             #
             #     end_theta
             #

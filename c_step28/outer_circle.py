@@ -1,9 +1,10 @@
 """外環状"""
 
 import math
+import numpy as np
 import cv2
 from conf import BAR_TICKS
-from cv2_helper import color_for_cv2, point_for_cv2
+from cv2_helper import color_for_cv2
 
 
 class OuterCircle():
@@ -98,11 +99,46 @@ class OuterCircle():
             end_angle = int(math.degrees(theta) + self.unit_arc/2)
             if start_angle == end_angle:
                 end_angle += 1  # 差が 0 だと変なとこ描画するんで
-            cv2.ellipse(canvas,
-                        point_for_cv2(self.__origin),
-                        point_for_cv2((self.__radius, self.__radius)),
-                        0,
-                        360-start_angle,
-                        360-end_angle,
-                        color_for_cv2(color, BAR_TICKS),
-                        thickness=int(self.__tickness))
+            # カクカクだが、フェーズを増やせば円に近づくのでこれでいいとするぜ（＾～＾）
+            #
+            #     end_theta
+            #
+            #       c+---+
+            #        |   +---+
+            #       ++       |
+            #       +---+    ++
+            #       d   ++    |  start_theta
+            #            |  +-+b
+            #            +--+
+            #      x      a
+            #   origin
+            #
+            # tickness/2 <-- radius --> tickness/2
+            # in_r                           out_r
+            #
+            start_theta = theta - math.radians(self.unit_arc/2)
+            end_theta = theta + math.radians(self.unit_arc/2)
+            in_r = self.__radius-self.__tickness/2
+            out_r = self.__radius+self.__tickness/2
+            a_x = int(in_r * math.cos(start_theta) + self.__origin[0])
+            a_y = int(in_r * -math.sin(start_theta) + self.__origin[1])
+            b_x = int(out_r * math.cos(start_theta) + self.__origin[0])
+            b_y = int(out_r * -math.sin(start_theta) + self.__origin[1])
+            c_x = int(out_r * math.cos(end_theta) + self.__origin[0])
+            c_y = int(out_r * -math.sin(end_theta) + self.__origin[1])
+            d_x = int(in_r * math.cos(end_theta) + self.__origin[0])
+            d_y = int(in_r * -math.sin(end_theta) + self.__origin[1])
+            contours = np.array(
+                [[a_x, a_y], [b_x, b_y], [c_x, c_y], [d_x, d_y]])
+            cv2.fillPoly(canvas, pts=[contours],
+                         color=color_for_cv2(color, BAR_TICKS))
+
+            # 丸ブラシ
+            # cv2.ellipse(canvas,
+            #            point_for_cv2(self.__origin),
+            #            point_for_cv2((self.__radius, self.__radius)),
+            #            0,
+            #            360-start_angle,
+            #            360-end_angle,
+            #            color_for_cv2(color, BAR_TICKS),
+            #            thickness=int(self.__tickness))

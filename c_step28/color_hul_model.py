@@ -87,7 +87,7 @@ def inverse_func(color):
     width = bar_length - lower
 
     diameter = upper - lower
-    #radius = diameter/2
+    radius = diameter/2
     #adjacent = radius
     #tanjent = diameter - width - radius
     #opposite = (math.sqrt(3)/2) * tanjent
@@ -95,41 +95,42 @@ def inverse_func(color):
 
     # asin - B数u, B数D
     # acos - D数U, D数d
+    # 全部 asin にする、とかやりたいが、切り上げ、切り捨て、丸め で合わないので、仕方なく分けてあるぜ（＾～＾）
     if c_phase == 'B01u':
-        # パターン１
+        # パターン１ (widthは半径よりは短い)
         theta = math.asin(width/diameter)
     elif c_phase == 'D03U':
-        # パターン２
-        theta = math.acos((diameter-width)/diameter) - math.radians(30)
+        # パターン２ (widthは半径よりは長い)
+        theta = math.acos((diameter - width)/diameter) - math.radians(30)
     elif c_phase == 'B05D':
-        # パターン３
+        # パターン３ (widthは半径よりは長い)
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
     elif c_phase == 'D07d':
-        # パターン４
+        # パターン４ (widthは半径よりは短い)
         theta = math.acos(width/diameter) + math.radians(30)
     elif c_phase == 'B09u':
-        # パターン５
+        # パターン５ (widthは半径よりは短い)
         theta = math.asin(width/diameter) + math.radians(120)
     elif c_phase == 'D11U':
-        # パターン６
+        # パターン６ (widthは半径よりは長い)
         theta = math.acos((diameter - width)/diameter) + math.radians(90)
     elif c_phase == 'B13D':
-        # パターン７
+        # パターン７ (widthは半径よりは長い)
         theta = math.asin((diameter - width)/diameter) + math.radians(180)
     elif c_phase == 'D15d':
-        # パターン８
+        # パターン８ (widthは半径よりは短い)
         theta = math.acos(width/diameter) + math.radians(150)
     elif c_phase == 'B17u':
-        # パターン９
+        # パターン９ (widthは半径よりは短い)
         theta = math.asin(width/diameter) + math.radians(240)
     elif c_phase == 'D19U':
-        # パターン１０
+        # パターン１０ (widthは半径よりは長い)
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
     elif c_phase == 'B21D':
-        # パターン１１
+        # パターン１１ (widthは半径よりは長い)
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
     elif c_phase == 'D23d':
-        # パターン１２
+        # パターン１２ (widthは半径よりは短い)
         theta = math.acos(width/diameter) + math.radians(270)
     else:
         raise Exception(

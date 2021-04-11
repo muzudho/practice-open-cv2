@@ -87,7 +87,7 @@ def inverse_func(color):
     width = bar_length - lower
 
     diameter = upper - lower
-    radius = diameter/2
+    #radius = diameter/2
     #adjacent = radius
     #tanjent = diameter - width - radius
     #opposite = (math.sqrt(3)/2) * tanjent

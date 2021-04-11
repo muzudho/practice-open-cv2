@@ -93,31 +93,31 @@ class Triangle():
         triangle_theta = theta
 
         # 角度オフセット
-        if c_phase == '#A___00':  # 緑と青は等しく、それより赤が大きい
+        if c_phase == 'A00u':  # 緑と青は等しく、それより赤が大きい
             pass
-        elif c_phase in ('#Cu__01', '#Bu__02', '#CU__03'):  # 下から青、緑、赤。緑上昇中
+        elif c_phase in ('B01u', 'C02u', 'D03U'):  # 下から青、緑、赤。緑上昇中
             pass
-        elif c_phase == 'A2__04':  # 赤と緑は等しく、それより青は小さい
+        elif c_phase == 'A04D':  # 赤と緑は等しく、それより青は小さい
             pass
-        elif c_phase in ('#CD__05', '#BD__06', '#Cd__07'):  # 下から青、赤、緑。赤下降中
+        elif c_phase in ('B05D', 'C06D', 'D07d'):  # 下から青、赤、緑。赤下降中
             triangle_theta -= math.radians(120)
-        elif c_phase == '#A___08':  # 青と赤は等しく、それより緑が大きい
+        elif c_phase == 'A08u':  # 青と赤は等しく、それより緑が大きい
             triangle_theta -= math.radians(120)
-        elif c_phase in ('C5u_09', '#Bu__10', 'C6U'):  # 下から赤、青、緑。青上昇中
+        elif c_phase in ('B09u', 'C10u', 'D11U'):  # 下から赤、青、緑。青上昇中
             triangle_theta -= math.radians(120)
-        elif c_phase == '#A___12':  # 緑と青は等しく、それより赤は小さい
+        elif c_phase == 'A12D':  # 緑と青は等しく、それより赤は小さい
             triangle_theta -= math.radians(120)
-        elif c_phase in ('#CD__13', '#BD__14', '#Cd__15'):  # 下から赤、緑、青。緑下降中
+        elif c_phase in ('B13D', 'C14D', 'D15d'):  # 下から赤、緑、青。緑下降中
             triangle_theta += math.radians(120)
-        elif c_phase == '#A___16':  # 赤と緑は等しく、それより青が大きい
+        elif c_phase == 'A16u':  # 赤と緑は等しく、それより青が大きい
             triangle_theta += math.radians(120)
-        elif c_phase in ('#Cu__17', '#Bu__18', '#CU__19'):  # 下から緑、赤、青。赤上昇中
+        elif c_phase in ('B17u', 'C18u', 'D19U'):  # 下から緑、赤、青。赤上昇中
             triangle_theta += math.radians(120)
-        elif c_phase == '#A___20':  # 赤と青は等しく、それより緑が小さい
+        elif c_phase == 'A20D':  # 赤と青は等しく、それより緑が小さい
             pass
-        elif c_phase in ('#Cu__17', '#Bu__18', '#CU__19'):  # 下から緑、青、赤。青下降中
+        elif c_phase in ('B17u', 'C18u', 'D19U'):  # 下から緑、青、赤。青下降中
             pass
-        else:  # '#CD__21', '#BD__22', '#Cd__23' # 下から緑、青、赤。青下降中
+        else:  # 'B21D', 'C22D', 'D23d' # 下から緑、青、赤。青下降中
             pass
 
         # 赤、青、緑 の順なのが工夫
@@ -126,34 +126,34 @@ class Triangle():
                                        triangle_theta,
                                        center)
 
-        if c_phase in ('#A___00', '#Cu__01', '#Bu__02', '#CU__03', 'A2__04'):
+        if c_phase in ('A00u', 'B01u', 'C02u', 'D03U', 'A04D'):
             self.__nodes_p = (
                 self.nodes_p[0], self.nodes_p[1], self.nodes_p[2])
-        elif c_phase in ('#CD__05', '#BD__06', '#Cd__07'):
+        elif c_phase in ('B05D', 'C06D', 'D07d'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[1], self.nodes_p[0])
-        elif c_phase == '#A___08':
+        elif c_phase == 'A08u':
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif c_phase in ('C5u_09', '#Bu__10', 'C6U'):
+        elif c_phase in ('B09u', 'C10u', 'D11U'):
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif c_phase == '#A___12':
+        elif c_phase == 'A12D':
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[2], self.nodes_p[0])
-        elif c_phase in ('#CD__13', '#BD__14', '#Cd__15'):
+        elif c_phase in ('B13D', 'C14D', 'D15d'):
             self.__nodes_p = (
                 self.nodes_p[1], self.nodes_p[0], self.nodes_p[2])
-        elif c_phase == '#A___16':
+        elif c_phase == 'A16u':
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[0], self.nodes_p[1])
-        elif c_phase in ('#Cu__17', '#Bu__18', '#CU__19'):
+        elif c_phase in ('B17u', 'C18u', 'D19U'):
             self.__nodes_p = (
                 self.nodes_p[2], self.nodes_p[0], self.nodes_p[1])
-        elif c_phase == '#A___20':
+        elif c_phase == 'A20D':
             self.__nodes_p = (
                 self.nodes_p[0], self.nodes_p[2], self.nodes_p[1])
-        else:  # '#CD__21', '#BD__22', '#Cd__23'
+        else:  # 'B21D', 'C22D', 'D23d'
             # 下から緑、青、赤
             self.__nodes_p = (
                 self.nodes_p[0], self.nodes_p[2], self.nodes_p[1])

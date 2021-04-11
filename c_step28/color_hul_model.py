@@ -18,15 +18,15 @@ def inverse_func_degrees(color):
     # 切り上げ、切り捨てで、ずれを微調整
     if c_phase == 'M':
         angle = float('Nan')
-    elif c_phase in ('#A___00', '#A___04', '#A___08', '#A___12', '#A___16', '#A___20',
-                     '#Bu__02', '#BD__06', '#Bu__10', '#BD__14', '#Bu__18', '#BD__22'):  # キリがいい数
+    elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D',
+                     'C02u', 'C06D', 'C10u', 'C14D', 'C18u', 'C22D'):  # キリがいい数
         angle = math.degrees(theta)
-    # '#Cu__01', '#CD__05', '#Cu__09', '#CD__13', '#Cu__17', '#CD__21' は diff が正の数なので、そのまま切り捨てでいい。
-    elif c_phase in ('#Cu__01', '#CD__05', '#Cu__09', '#CD__13', '#Cu__17', '#CD__21'):  # 奇数
+    # 'B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D' は diff が正の数なので、そのまま切り捨てでいい。
+    elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):  # 奇数
         angle = math.floor(math.degrees(theta))
         # angle = math.degrees(theta)
-    # '#CU__03', '#Cd__07', '#CU__11', '#Cd__15', '#CU__19', '#Cd__23' はdiffが負の数なので、 ceil すると 切り捨ての効果が出る。
-    elif c_phase in ('#CU__03', '#Cd__07', '#CU__11', '#Cd__15', '#CU__19', '#Cd__23'):
+    # 'D03U', 'D07d', 'D11U', 'D15d', 'D19U', 'D23d' はdiffが負の数なので、 ceil すると 切り捨ての効果が出る。
+    elif c_phase in ('D03U', 'D07d', 'D11U', 'D15d', 'D19U', 'D23d'):
         angle = math.ceil(math.degrees(theta))
         # angle = math.degrees(theta)
     else:
@@ -52,17 +52,17 @@ def inverse_func(color):
     upper = max(red, green, blue)
     lower = min(red, green, blue)
 
-    if c_phase == '#A___00':
+    if c_phase == 'A00u':
         return math.radians(0), upper, lower, c_phase
-    if c_phase == '#A___04':
+    if c_phase == 'A04D':
         return math.radians(60), upper, lower, c_phase
-    if c_phase == '#A___08':
+    if c_phase == 'A08u':
         return math.radians(120), upper, lower, c_phase
-    if c_phase == '#A___12':
+    if c_phase == 'A12D':
         return math.radians(180), upper, lower, c_phase
-    if c_phase == '#A___16':
+    if c_phase == 'A16u':
         return math.radians(240), upper, lower, c_phase
-    if c_phase == '#A___20':
+    if c_phase == 'A20D':
         return math.radians(300), upper, lower, c_phase
 
     # 1本はU、1本はL なので、U と L を消せば動いているバーの長さになります
@@ -76,42 +76,42 @@ def inverse_func(color):
     #opposite = (math.sqrt(3)/2) * tanjent
     #hipotenuse = math.sqrt(adjacent**2 + opposite**2)
 
-    # asin - B数u, C奇数u, C奇数D
-    # acos - B数d, C偶数U, C偶数d
-    if c_phase in ('#Cu__01', '#Bu__02'):
-        # パターン１ (0°～30°)
+    # asin - B奇数u, B奇数D, C偶数u, C偶数D(14)
+    # acos - C偶数D(22), D奇数U, D奇数d
+    if c_phase in ('B01u', 'C02u'):
+        # パターン１
         theta = math.asin(width/diameter)
-    elif c_phase == '#CU__03':
+    elif c_phase == 'D03U':
         # パターン２
         theta = math.acos((diameter-width)/diameter) - math.radians(30)
-    elif c_phase == ('#CD__05'):
+    elif c_phase == ('B05D'):
         # パターン３
         theta = math.asin((diameter - width)/diameter) + math.radians(60)
-    elif c_phase in ('#BD__06', '#Cd__07'):
-        # パターン４ (赤バーが下半分で減っていっている)
+    elif c_phase in ('C06D', 'D07d'):
+        # パターン４
         theta = math.acos(width/diameter) + math.radians(30)
-    elif c_phase in ('#Cu__09', '#Bu__10'):
+    elif c_phase in ('B09u', 'C10u'):
         # パターン５
         theta = math.asin(width/diameter) + math.radians(120)
-    elif c_phase == '#CU__11':
+    elif c_phase == 'D11U':
         # パターン６
         theta = math.acos((diameter - width)/diameter) + math.radians(90)
-    elif c_phase in ('#CD__13', '#BD__14'):
+    elif c_phase in ('B13D', 'C14D'):
         # パターン７
         theta = math.asin((diameter - width)/diameter) + math.radians(180)
-    elif c_phase == '#Cd__15':
+    elif c_phase == 'D15d':
         # パターン８
         theta = math.acos(width/diameter) + math.radians(150)
-    elif c_phase in ('#Cu__17', '#Bu__18'):
+    elif c_phase in ('B17u', 'C18u'):
         # パターン９
         theta = math.asin(width/diameter) + math.radians(240)
-    elif c_phase == '#CU__19':
+    elif c_phase == 'D19U':
         # パターン１０
         theta = math.acos((diameter - width)/diameter) + math.radians(210)
-    elif c_phase == ('#CD__21'):
+    elif c_phase == ('B21D'):
         # パターン１１
         theta = math.asin((diameter - width)/diameter) + math.radians(300)
-    elif c_phase in ('#BD__22', '#Cd__23'):
+    elif c_phase in ('C22D', 'D23d'):
         # パターン１２
         theta = math.acos(width/diameter) + math.radians(270)
     else:
@@ -130,30 +130,30 @@ def color_phase(color):
     B系 RGBの位置関係から、１２パターンあります
     Bxu, Bxd系 １２パターンの真ん中
 
-    * '#A___00' - (       0°     ) 緑と青は等しく、それより赤が大きい
-    * '#Cu__01' - (  0°<   x< 30°) 下から青、緑、赤。緑上昇中
-    * '#Bu__02' - (      30°     ) 下から青、緑、赤。緑上昇中
-    * '#CU__03' - ( 30°<   x< 60°) 下から青、緑、赤。緑上昇中
-    * '#A___04' - (      60°     ) 赤と緑は等しく、それより青は小さい
-    * '#CD__05' - ( 60°<   x< 90°) 下から青、赤、緑。赤下降中
-    * '#BD__06' - (      90°     ) 下から青、赤、緑。赤下降中
-    * '#Cd__07' - ( 90°<   x<120°) 下から青、赤、緑。赤下降中
-    * '#A___08' - (     120°     ) 青と赤は等しく、それより緑が大きい
-    * '#Cu__09' - (120°<   x<150°) 下から赤、青、緑。青上昇中
-    * '#Bu__10' - (     150°     ) 下から赤、青、緑。青上昇中
-    * '#CU__11' - (150°<   x<180°) 下から赤、青、緑。青上昇中
-    * '#A___12' - (     180°     ) 緑と青は等しく、それより赤は小さい
-    * '#CD__13' - (180°<   x<210°) 下から赤、緑、青。緑下降中
-    * '#BD__14' - (     210°     ) 下から赤、緑、青。緑下降中
-    * '#Cd__15' - (210°<   x<240°) 下から赤、緑、青。緑下降中
-    * '#A___16' - (     240°     ) 赤と緑は等しく、それより青が大きい
-    * '#Cu__17' - (240°<   x<270°) 下から緑、赤、青。赤上昇中
-    * '#Bu__18' - (     270°     ) 下から緑、赤、青。赤上昇中
-    * '#CU__19' - (270°<   x<300°) 下から緑、赤、青。赤上昇中
-    * '#A___20' - (     300°     ) 赤と青は等しく、それより緑が小さい
-    * '#CD__21' - (300°<   x<330°) 下から緑、青、赤。青下降中
-    * '#BD__22' - (     330°     ) 下から緑、青、赤。青下降中
-    * '#Cd__23' - (330°<   x<360°) 下から緑、青、赤。青下降中
+    * 'A00u' - (       0°     ) 緑と青は等しく、それより赤が大きい
+    * 'B01u' - (  0°<   x< 30°) 下から青、緑、赤。緑上昇中
+    * 'C02u' - (      30°     ) 下から青、緑、赤。緑上昇中
+    * 'D03U' - ( 30°<   x< 60°) 下から青、緑、赤。緑上昇中
+    * 'A04D' - (      60°     ) 赤と緑は等しく、それより青は小さい
+    * 'B05D' - ( 60°<   x< 90°) 下から青、赤、緑。赤下降中
+    * 'C06D' - (      90°     ) 下から青、赤、緑。赤下降中
+    * 'D07d' - ( 90°<   x<120°) 下から青、赤、緑。赤下降中
+    * 'A08u' - (     120°     ) 青と赤は等しく、それより緑が大きい
+    * 'B09u' - (120°<   x<150°) 下から赤、青、緑。青上昇中
+    * 'C10u' - (     150°     ) 下から赤、青、緑。青上昇中
+    * 'D11U' - (150°<   x<180°) 下から赤、青、緑。青上昇中
+    * 'A12D' - (     180°     ) 緑と青は等しく、それより赤は小さい
+    * 'B13D' - (180°<   x<210°) 下から赤、緑、青。緑下降中
+    * 'C14D' - (     210°     ) 下から赤、緑、青。緑下降中
+    * 'D15d' - (210°<   x<240°) 下から赤、緑、青。緑下降中
+    * 'A16u' - (     240°     ) 赤と緑は等しく、それより青が大きい
+    * 'B17u' - (240°<   x<270°) 下から緑、赤、青。赤上昇中
+    * 'C18u' - (     270°     ) 下から緑、赤、青。赤上昇中
+    * 'D19U' - (270°<   x<300°) 下から緑、赤、青。赤上昇中
+    * 'A20D' - (     300°     ) 赤と青は等しく、それより緑が小さい
+    * 'B21D' - (300°<   x<330°) 下から緑、青、赤。青下降中
+    * 'C22D' - (     330°     ) 下から緑、青、赤。青下降中
+    * 'D23d' - (330°<   x<360°) 下から緑、青、赤。青下降中
     """
 
     # 浮動小数点数の丸め誤差を消さないと等号比較ができないぜ（＾～＾）
@@ -169,17 +169,17 @@ def color_phase(color):
     lower = min(red, green, blue)
 
     if math.isclose(green, blue, abs_tol=ACCURACY) and math.isclose(red, upper, abs_tol=ACCURACY):
-        c_phase = "#A___00"
+        c_phase = 'A00u'
     elif math.isclose(red, green, abs_tol=ACCURACY) and math.isclose(blue, lower, abs_tol=ACCURACY):
-        c_phase = "#A___04"
+        c_phase = 'A04D'
     elif math.isclose(red, blue, abs_tol=ACCURACY) and math.isclose(green, upper, abs_tol=ACCURACY):
-        c_phase = "#A___08"
+        c_phase = 'A08u'
     elif math.isclose(green, blue, abs_tol=ACCURACY) and math.isclose(red, lower, abs_tol=ACCURACY):
-        c_phase = "#A___12"
+        c_phase = 'A12D'
     elif math.isclose(red, green, abs_tol=ACCURACY) and math.isclose(blue, upper, abs_tol=ACCURACY):
-        c_phase = "#A___16"
+        c_phase = 'A16u'
     elif math.isclose(red, blue, abs_tol=ACCURACY) and math.isclose(green, lower, abs_tol=ACCURACY):
-        c_phase = "#A___20"
+        c_phase = 'A20D'
     else:
         c_phase = None
 
@@ -204,7 +204,7 @@ def color_phase(color):
             # | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#Bu__02'
+            c_phase = 'C02u'
         # パターン１
         elif width < radius:
             # +-+
@@ -213,7 +213,7 @@ def color_phase(color):
             # | |  |^|            x
             # +-+  +-+  +-+ 0° <=
             #  R    G    B
-            c_phase = '#Cu__01'
+            c_phase = 'B01u'
         # パターン２
         else:
             # +-+                   < 60°
@@ -222,7 +222,7 @@ def color_phase(color):
             # | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#CU__03'
+            c_phase = 'D03U'
     elif not math.isclose(red, lower, abs_tol=ACCURACY) \
             and math.isclose(green, upper, abs_tol=ACCURACY) \
             and math.isclose(blue, lower, abs_tol=ACCURACY):
@@ -234,7 +234,7 @@ def color_phase(color):
             # | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#BD__06'
+            c_phase = 'C06D'
         # パターン３
         elif radius < width:
             #      +-+               < 120°
@@ -243,7 +243,7 @@ def color_phase(color):
             # | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#CD__05'
+            c_phase = 'B05D'
         # パターン４
         else:
             #      +-+
@@ -252,7 +252,7 @@ def color_phase(color):
             # |v|  | |             x
             # +-+  +-+  +-+ 60° <=
             #  R    G    B
-            c_phase = '#Cd__07'
+            c_phase = 'D07d'
     elif math.isclose(red, lower, abs_tol=ACCURACY) \
             and math.isclose(green, upper, abs_tol=ACCURACY) \
             and not math.isclose(blue, upper, abs_tol=ACCURACY):
@@ -264,7 +264,7 @@ def color_phase(color):
             #      | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#Bu__10'
+            c_phase = 'C10u'
         # パターン５
         elif width < radius:  # 半分を含まない（必要）
             #      +-+
@@ -273,7 +273,7 @@ def color_phase(color):
             #      | |  |^|         x
             # +-+  +-+  +-+ 120° <=
             #  R    G    B
-            c_phase = '#Cu__09'
+            c_phase = 'B09u'
         # パターン６
         else:
             #      +-+                < 180°
@@ -282,7 +282,7 @@ def color_phase(color):
             #      | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#CU__11'
+            c_phase = 'D11U'
     elif math.isclose(red, lower, abs_tol=ACCURACY) \
             and not math.isclose(green, lower, abs_tol=ACCURACY) \
             and math.isclose(blue, upper, abs_tol=ACCURACY):
@@ -295,7 +295,7 @@ def color_phase(color):
             #      | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#BD__14'
+            c_phase = 'C14D'
         elif radius < width:
             #           +-+          < 180°
             #       v   | |        x
@@ -303,7 +303,7 @@ def color_phase(color):
             #      | |  | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#CD__13'
+            c_phase = 'B13D'
         # パターン８
         else:
             #           +-+
@@ -312,7 +312,7 @@ def color_phase(color):
             #      |v|  | |        x
             # +-+  +-+  +-+ 240° <
             #  R    G    B
-            c_phase = '#Cd__15'
+            c_phase = 'D15d'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
         and math.isclose(blue, upper, abs_tol=ACCURACY):
@@ -324,7 +324,7 @@ def color_phase(color):
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#Bu__18'
+            c_phase = 'C18u'
         # パターン９
         elif width < radius:
             #           +-+
@@ -333,7 +333,7 @@ def color_phase(color):
             # |^|       | |         x
             # +-+  +-+  +-+ 240° <=
             #  R    G    B
-            c_phase = '#Cu__17'
+            c_phase = 'B17u'
         # パターン１０
         else:
             #           +-+          < 300°
@@ -342,7 +342,7 @@ def color_phase(color):
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#CU__19'
+            c_phase = 'D19U'
     elif math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
             and not math.isclose(blue, lower, abs_tol=ACCURACY):
@@ -354,7 +354,7 @@ def color_phase(color):
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#BD__22'
+            c_phase = 'C22D'
         # パターン１１
         elif radius < width:
             # +-+           300° <
@@ -363,7 +363,7 @@ def color_phase(color):
             # | |       | |
             # +-+  +-+  +-+
             #  R    G    B
-            c_phase = '#CD__21'
+            c_phase = 'B21D'
         # パターン１２
         else:
             # +-+
@@ -372,7 +372,7 @@ def color_phase(color):
             # | |       |v|        x
             # +-+  +-+  +-+          < 360°
             #  R    G    B
-            c_phase = '#Cd__23'
+            c_phase = 'D23d'
     else:
         raise Exception(
             f"ERROR           | Logic error. color=({red}, {green}, {blue})")

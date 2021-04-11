@@ -1,7 +1,7 @@
 # practice-open-cv2
 
 ![20210411color65_c_step28.gif](./@doc/c_step/img/20210411color65_c_step28.gif)  
-(上図は ⚡📄`c_step28/make_frames.py` と ⚡📄`e_step4/pygame00.py` 使用)  
+(上図は 騙し絵(Fake)の一種、良く言えば近似(Approximate)。 ⚡📄`c_step28/make_frames.py` と ⚡📄`e_step4/pygame00.py` 使用)  
 
 ## HULビューモデルって何？
 

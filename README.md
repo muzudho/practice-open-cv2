@@ -7,7 +7,8 @@
 ⚡📄`c_step28/make_frames.py` と ⚡📄`e_step4/pygame00.py` 使用)  
 
 ![20210413color66_c_step29.gif](./@doc/c_step/img/20210413color66_c_step29.gif)  
-(↑ さらに ⚡📄`c_step29/make_frames.py` で、HSVモデル(円錐版、アメリカ式)に、より近似。誤差+-1°以下)  
+(↑ さらに ⚡📄`c_step29/make_frames.py` で、HSVモデル(円錐版、アメリカ式)に、より近似。
+誤差+-1°以下。整数の精度でこれ以上精度を上げるには 誤差0しかなく、それは非現実的なのでこれが限界)  
 
 ## HULビューって何？
 

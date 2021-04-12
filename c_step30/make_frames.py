@@ -19,7 +19,7 @@ from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
 from hul_in_out_test import hue_angle_test  # upper_test, lower_test
-from hsv_vs_hul_test import hsv_vs_hul_hue_angle_test
+from hsv_vs_hul_test import hsv_vs_hul_hue_angle_test, hsv_vs_hul_vivid_color_test
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -208,6 +208,8 @@ def update_scene1_with_rotate(
         seq, hul_phase, input_angle, output_angle, input_color)
     hsv_vs_hul_hue_angle_test(
         f"seq={seq:5} hul_phase={hul_phase}", input_color)
+    hsv_vs_hul_vivid_color_test(
+        f"seq={seq:5} hul_phase={hul_phase}", input_angle)
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width

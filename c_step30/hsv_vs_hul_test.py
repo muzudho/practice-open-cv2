@@ -1,9 +1,9 @@
 """HSVモデル(円錐モデル)とHULビューの比較を行います
 """
 
-#import math
-from hsv_model_hul_view import to_hue_angle as to_hul_hue_angle
-from hsv_model_cone import to_hue_angle as to_hsv_cone_hue_angle
+import math
+from hsv_model_hul_view import to_hue_angle as to_hul_hue_angle, hul_to_color
+from hsv_model_cone import to_hue_angle as to_hsv_cone_hue_angle, to_color as hsv_to_color
 # from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
 
 ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
@@ -96,6 +96,27 @@ def hsv_vs_hul_hue_angle_test(title, color):
     # {hsv_cone_hue_angle:8.4f}°")
 
 
+def hsv_vs_hul_vivid_color_test(title, hue_angle):
+    """HSVとHULの色（Vivid tone）が等しいかテスト"""
+    hul_color = hul_to_color(hue_angle, 1.0, 0.0)  # Vivid
+    hsv_color = hsv_to_color(hue_angle, 1.0, 1.0)  # Vivid
+    # ずれたら表示します
+    if not math.isclose(hul_color[0], hsv_color[0], rel_tol=ACCURACY, abs_tol=ACCURACY) or \
+        not math.isclose(hul_color[1], hsv_color[1], rel_tol=ACCURACY, abs_tol=ACCURACY) or \
+            not math.isclose(hul_color[2], hsv_color[2], rel_tol=ACCURACY, abs_tol=ACCURACY):
+        print(f"Color test      | {title:22} hue_angle={hue_angle:4}°")
+        print(
+            f"                | hul_color =({hul_color[0]:13.10f}, {hul_color[1]:13.10f}, \
+{hul_color[2]:13.10f})")
+        print(
+            f"                | hsv_color =({hsv_color[0]:13.10f}, {hsv_color[1]:13.10f}, \
+{hsv_color[2]:13.10f})")
+
+
 # 角度を比較してみましょう
 for (_, test_case) in enumerate(TEST_CASES):
     hsv_vs_hul_hue_angle_test(test_case[2], test_case[0])
+
+# 色を比較してみましょう
+for (_, test_case) in enumerate(TEST_CASES):
+    hsv_vs_hul_vivid_color_test(test_case[2], test_case[1])

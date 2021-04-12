@@ -189,20 +189,22 @@ def update_scene1_with_rotate(
     blue = color_rate[2]
 
     # 逆関数のテスト
-    expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
-    expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
     expected_color = (red, green, blue)
     # 弧度法
     actual_angle, description = to_hue_angle(expected_color)
-    actual_upper = description[0]
-    actual_lower = description[1]
     hul_phase = description[2]
-    # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
+
+    # 上限値(U)、下限値(L) テスト
+    #expected_upper = (bar_box.upper_x - bar_box.left) / bar_box.width
+    #expected_lower = (bar_box.lower_x - bar_box.left) / bar_box.width
+    #actual_upper = description[0]
+    #actual_lower = description[1]
     # 逆関数は合っていて、順関数の方が間違っているケースがある（＾～＾）
     # upper_test(seq, hul_phase, expected_upper, actual_upper,
     #           input_angle, color_rate)
     # lower_test(seq, hul_phase, expected_lower, actual_lower,
     #           input_angle, color_rate)
+
     diff_angle = hue_angle_test(
         seq, hul_phase, input_angle, actual_angle, color_rate)
 

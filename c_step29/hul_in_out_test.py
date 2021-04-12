@@ -12,12 +12,14 @@ def upper_test(seq, hul_phase, expected_upper, actual_upper, input_angle, color)
     diff = actual_upper - expected_upper
     if not math.isclose(actual_upper, expected_upper, abs_tol=ACCURACY):
         print(
-            f"ERROR           | seq={seq:5} hul_phase={hul_phase} expected_upper={expected_upper:3} \
+            f"ERROR           | seq={seq:5} hul_phase={hul_phase} \
+expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} input_angle={input_angle} \
 r={color[0]:9.4f} g={color[1]:9.4f} b={color[2]:9.4f}")
     else:
         print(
-            f"OK              | seq={seq:5} hul_phase={hul_phase} expected_upper={expected_upper:3} \
+            f"OK              | seq={seq:5} hul_phase={hul_phase} \
+expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} input_angle={input_angle} \
 r={color[0]:9.4f} g={color[1]:9.4f} b={color[2]:9.4f}")
 
@@ -28,18 +30,23 @@ def lower_test(seq, hul_phase, expected_lower, actual_lower, input_angle, color)
     diff = actual_lower - expected_lower
     if not math.isclose(actual_lower, expected_lower, abs_tol=ACCURACY):
         print(
-            f"ERROR           | seq={seq:5} hul_phase={hul_phase} expected_lower={expected_lower:3} \
+            f"ERROR           | seq={seq:5} hul_phase={hul_phase} \
+expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} input_angle={input_angle} \
 r={color[0]:9.4f} g={color[1]:9.4f} b={color[2]:9.4f}")
     else:
         print(
-            f"OK              | seq={seq:5} hul_phase={hul_phase} expected_lower={expected_lower:3} \
+            f"OK              | seq={seq:5} hul_phase={hul_phase} \
+expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} input_angle={input_angle} \
 r={color[0]:9.4f} g={color[1]:9.4f} b={color[2]:9.4f}")
 
 
 def hue_angle_test(seq, hul_phase, input_angle, actual_angle, color):
+    """色相(H)テスト
+    """
     diff_angle = actual_angle - input_angle
+    # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
     if not math.isclose(actual_angle, input_angle, abs_tol=ACCURACY):
         upper = max(color[0], color[1], color[2])
         lower = min(color[0], color[1], color[2])

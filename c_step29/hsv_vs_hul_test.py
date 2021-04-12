@@ -1,7 +1,7 @@
 """HSVモデル(円錐モデル)とHULビューの比較を行います
 """
 
-import math
+#import math
 from hsv_model_hul_view import to_hue_angle as to_hul_hue_angle
 from hsv_model_cone import to_hue_angle as to_hsv_cone_hue_angle
 # from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
@@ -94,7 +94,8 @@ def hsv_vs_hul_hue_angle_test(title, color):
         print(
             f"                | hul_hue_angle         ={hul_hue_angle:4}° {description[2]}")
         print(
-            f"                | hsv_cone_hue_angle    ={round_hsv_cone_hue_angle:4}° {hsv_cone_hue_angle:8.4f}°")
+            f"                | hsv_cone_hue_angle    ={round_hsv_cone_hue_angle:4}° \
+{hsv_cone_hue_angle:8.4f}°")
         # print(
         #    f"                | hsv_cylinder_hue_angle={hsv_cylinder_hue_angle:8.4f}°")
 

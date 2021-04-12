@@ -11,8 +11,8 @@ from pygame.locals import QUIT
 pygame.init()
 
 # 画像の読み込み
-FRAME_COUNT = 380
-#FRAME_COUNT = 528
+# FRAME_COUNT = 380
+FRAME_COUNT = 528
 #FRAME_COUNT = 960
 # FRAME_COUNT = 4560
 #FRAME_COUNT = 1520

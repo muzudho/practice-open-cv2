@@ -14,12 +14,11 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3bars_to_ticks
-from hsv_model_hul_view import to_color, to_hue_angle, \
-    ACCURACY
+from hsv_model_hul_view import to_color, to_hue_angle  # ACCURACY
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
-from hul_in_out_test import upper_test, lower_test, hue_angle_test
+from hul_in_out_test import hue_angle_test  # upper_test, lower_test
 from hsv_vs_hul_test import hsv_vs_hul_hue_angle_test
 
 # 描画する画像を作る

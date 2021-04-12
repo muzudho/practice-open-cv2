@@ -19,16 +19,18 @@ def to_hue_angle(color):
     max_val = max(red, green, blue)
     min_val = min(red, green, blue)
 
-    # 彩度（円柱モデル）
-    saturation = (max_val - min_val) / max_val
-    if math.isclose(saturation, 0, rel_tol=ACCURACY, abs_tol=ACCURACY):
+    # モノクロさ、逆に言うと彩度（円錐モデル）
+    chroma = (max_val - min_val) / max_val
+    if math.isclose(chroma, 0, rel_tol=ACCURACY, abs_tol=ACCURACY):
         return float('Nan')
 
-    if red <= blue and green <= blue:
-        hue_angle = 60 * (green-red)/saturation + 60
-    elif green <= red and blue <= red:
-        hue_angle = 60 * (blue-green)/saturation + 180
-    elif red <= green and blue <= green:
-        hue_angle = 60 * (red-blue)/saturation + 300
+    if max_val == red:
+        hue_rate = (green-blue)/chroma % 6
+    elif max_val == green:
+        hue_rate = (blue-red)/chroma + 2
+    elif max_val == blue:
+        hue_rate = (red-green)/chroma + 4
+
+    hue_angle = 60 * hue_rate
 
     return hue_angle

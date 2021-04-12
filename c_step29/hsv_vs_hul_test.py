@@ -77,20 +77,24 @@ TEST_CASES = [
 
 
 def hsv_vs_hul_hue_angle_test(title, color):
-    """HSVとHULの色相(H)が等しいかテスト
+    """HSVとHULの色相(H)が等しいかテスト。
+    HUL は 整数の精度しかありませんので、 HSV の方を丸めます
     """
     hul_hue_angle, description = to_hul_hue_angle(color)
     hsv_cone_hue_angle = to_hsv_cone_hue_angle(color)
+    round_hsv_cone_hue_angle = round(hsv_cone_hue_angle)
     # hsv_cylinder_hue_angle = to_hsv_cylinder_hue_angle(color)
     # ずれたら表示します
-    if not math.isclose(hul_hue_angle, hsv_cone_hue_angle, rel_tol=ACCURACY, abs_tol=ACCURACY):
-            # or not math.isclose(hul_hue_angle, hsv_cylinder_hue_angle,
-            #                 rel_tol = ACCURACY, abs_tol = ACCURACY):
+    if hul_hue_angle != round_hsv_cone_hue_angle:
+        # if not math.isclose(hul_hue_angle, hsv_cone_hue_angle, \
+        # rel_tol=ACCURACY, abs_tol=ACCURACY):
+        # or not math.isclose(hul_hue_angle, hsv_cylinder_hue_angle,
+        #                 rel_tol = ACCURACY, abs_tol = ACCURACY):
         print(f"Angle test      | {title:22} color={color}")
         print(
-            f"                | hul_hue_angle         ={hul_hue_angle:8.4f}° {description[2]}")
+            f"                | hul_hue_angle         ={hul_hue_angle:4}° {description[2]}")
         print(
-            f"                | hsv_cone_hue_angle    ={hsv_cone_hue_angle:8.4f}°")
+            f"                | hsv_cone_hue_angle    ={round_hsv_cone_hue_angle:4}° {hsv_cone_hue_angle:8.4f}°")
         # print(
         #    f"                | hsv_cylinder_hue_angle={hsv_cylinder_hue_angle:8.4f}°")
 

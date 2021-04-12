@@ -88,18 +88,20 @@ def hul_to_color(hue_angle, upper, lower):
 
 
 def to_hue_angle(color):
-    """逆関数。精度は int型の弧度法しかありません"""
+    """色から色相(H)を求めます。精度は int型の弧度法しかありません。
+    モノクロなら None を返します。
+    戻り値の第二引数はデバッグ用情報なので無視してください。"""
     theta, upper, lower, c_phase = __inverse_func_radians(color)
 
     # 弧度法の整数部の精度で調整したので、小数部を切り上げ、切り捨てして、
     # HSV を正とし、その ずれを0に調整します
     # M はモノクロ
     if c_phase == 'M':
-        angle = float('Nan')
+        angle = None
     # A,C系は キリがいい数
     elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D',
                      'C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):
-        angle = math.degrees(theta)
+        angle = int(math.degrees(theta))
     # B系は diff が正の数
     # (調整後) floorでは -1 したもの
     elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):

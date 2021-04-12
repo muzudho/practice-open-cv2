@@ -98,10 +98,13 @@ def to_hue_angle(color):
     # M はモノクロ
     if c_phase == 'M':
         angle = None
-    # A,C系は キリがいい数
-    elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D',
-                     'C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):
-        angle = int(math.degrees(theta))
+    # A系は キリがいい数
+    elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D'):
+        angle = math.ceil(math.degrees(theta))
+    # C系は キリがいい数
+    elif c_phase in ('C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):
+        # 'C02U' だけ ceil、それ以外の C系は floor
+        angle = round(math.degrees(theta))
     # B系は diff が正の数
     # (調整後) floorでは -1 したもの
     elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):

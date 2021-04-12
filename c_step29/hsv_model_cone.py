@@ -27,8 +27,8 @@ def to_hue_angle(color):
     if red <= blue and green <= blue:
         hue_angle = 60 * (green-red)/saturation + 60
     elif green <= red and blue <= red:
-        hue_angle = 60 * (blue-green)/saturation + 60
+        hue_angle = 60 * (blue-green)/saturation + 180
     elif red <= green and blue <= green:
-        hue_angle = 60 * (blue-green)/saturation + 60
+        hue_angle = 60 * (red-blue)/saturation + 300
 
     return hue_angle

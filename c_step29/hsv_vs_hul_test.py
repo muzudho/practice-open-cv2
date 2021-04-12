@@ -21,16 +21,25 @@ from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
 #    Left    Middle           Right
 #    Box     Box              Box
 
-VIVID_RED = (1.0, 0.0, 0.0)
-# 赤を 60° とするよう HULモデルを調整します
-HUL_TO_HSV_ANGLE = 60
+# HSV では、 赤180°、緑300°、青 60° です。
+# HUL では、 赤  0°、緑120°、青240°
+# 180° ずれているので調整します
+HUL_TO_HSV_ANGLE = 180
+
+# テストケース
+TEST_CASES = [
+    ((1.0, 0.0, 0.0), 'Vivid red'),
+    ((0.0, 1.0, 0.0), 'Vivid green'),
+    ((0.0, 0.0, 1.0), 'Vivid blue'),
+]
 
 # 角度を比較してみましょう
-hul_hue_angle, _ = to_hul_hue_angle(VIVID_RED)
-hul_hue_angle += HUL_TO_HSV_ANGLE
-hsv_cone_hue_angle = to_hsv_cone_hue_angle(VIVID_RED)
-hsv_cylinder_hue_angle = to_hsv_cylinder_hue_angle(VIVID_RED)
-print(f"VIVID_RED             ={VIVID_RED}°")
-print(f"hul_hue_angle         ={hul_hue_angle:8.4f}°")
-print(f"hsv_cone_hue_angle    ={hsv_cone_hue_angle:8.4f}°")
-print(f"hsv_cylinder_hue_angle={hsv_cylinder_hue_angle:8.4f}°")
+for (_, test_case) in enumerate(TEST_CASES):
+    hul_hue_angle, _ = to_hul_hue_angle(test_case[0])
+    hul_hue_angle = (hul_hue_angle + HUL_TO_HSV_ANGLE) % 360
+    hsv_cone_hue_angle = to_hsv_cone_hue_angle(test_case[0])
+    hsv_cylinder_hue_angle = to_hsv_cylinder_hue_angle(test_case[0])
+    print(f"{test_case[1]:22}={test_case[1]}")
+    print(f"hul_hue_angle         ={hul_hue_angle:8.4f}°")
+    print(f"hsv_cone_hue_angle    ={hsv_cone_hue_angle:8.4f}°")
+    print(f"hsv_cylinder_hue_angle={hsv_cylinder_hue_angle:8.4f}°")

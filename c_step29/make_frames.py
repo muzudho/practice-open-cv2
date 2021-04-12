@@ -197,10 +197,16 @@ def update_scene1_with_rotate(
     actual_lower = description[1]
     pattern = description[2]
     # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
+    # 逆関数は合っていて、順関数の方が間違っているケースがある（＾～＾）
     diff = actual_upper - expected_upper
     if not math.isclose(actual_upper, expected_upper, abs_tol=ACCURACY):
         print(
             f"ERROR           | expected_upper={expected_upper:3} \
+actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
+    else:
+        print(
+            f"OK              | expected_upper={expected_upper:3} \
 actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
@@ -208,6 +214,11 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
     if not math.isclose(actual_lower, expected_lower, abs_tol=ACCURACY):
         print(
             f"ERROR           | expected_lower={expected_lower:3} \
+actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
+r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
+    else:
+        print(
+            f"OK              | expected_lower={expected_lower:3} \
 actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
 r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
 
@@ -221,6 +232,19 @@ r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
         radius = diameter / 2
         print(
             f"ERROR           | pattern={pattern:3} seq={seq:5}  \
+exp={expected_angle:10.6f}° act={actual_angle:10.6f}° \
+diff={diff_angle:10.6f}° r={red:9.6f} g={green:9.6f} b={blue:9.6f} \
+up={upper:9.6f} low={lower:9.6f} \
+width={width:9.6f} radius={radius:9.6f}")
+    else:
+        upper = max(red, green, blue)
+        lower = min(red, green, blue)
+        bar_length = red + green + blue - upper - lower
+        width = bar_length - lower
+        diameter = upper - lower
+        radius = diameter / 2
+        print(
+            f"OK              | pattern={pattern:3} seq={seq:5}  \
 exp={expected_angle:10.6f}° act={actual_angle:10.6f}° \
 diff={diff_angle:10.6f}° r={red:9.6f} g={green:9.6f} b={blue:9.6f} \
 up={upper:9.6f} low={lower:9.6f} \

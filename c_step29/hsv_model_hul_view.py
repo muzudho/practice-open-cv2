@@ -91,7 +91,8 @@ def to_hue_angle(color):
     """逆関数。精度は int型の弧度法しかありません"""
     theta, upper, lower, c_phase = __inverse_func_radians(color)
 
-    # 弧度法の整数部の精度で調整したので、小数部を切り上げ、切り捨てして、ずれを0にします
+    # 弧度法の整数部の精度で調整したので、小数部を切り上げ、切り捨てして、
+    # HSV を正とし、その ずれを0に調整します
     # M はモノクロ
     if c_phase == 'M':
         angle = float('Nan')
@@ -99,12 +100,14 @@ def to_hue_angle(color):
     elif c_phase in ('A00u', 'A04D', 'A08u', 'A12D', 'A16u', 'A20D',
                      'C02U', 'C06d', 'C10U', 'C14d', 'C18U', 'C22d'):
         angle = math.degrees(theta)
-    # B系は diff が正の数なので、そのまま切り捨てでいい
+    # B系は diff が正の数
+    # (調整後) floorでは -1 したもの
     elif c_phase in ('B01u', 'B05D', 'B09u', 'B13D', 'B17u', 'B21D'):
-        angle = math.floor(math.degrees(theta))
-    # D系 はdiffが負の数なので、 ceil すると 切り捨ての効果が出る
-    elif c_phase in ('D03U', 'D07d', 'D11U', 'D15d', 'D19U', 'D23d'):
         angle = math.ceil(math.degrees(theta))
+    # D系 はdiffが負の数
+    # (調整後) ceilでは +1 したもの
+    elif c_phase in ('D03U', 'D07d', 'D11U', 'D15d', 'D19U', 'D23d'):
+        angle = math.floor(math.degrees(theta))
     else:
         raise Exception(
             f"ERROR           | Logic error. theta={theta} upper={upper} \
@@ -405,7 +408,7 @@ def color_phase(color):
             c_phase = 'D15d'
     elif not math.isclose(red, upper, abs_tol=ACCURACY) \
             and math.isclose(green, lower, abs_tol=ACCURACY) \
-    and math.isclose(blue, upper, abs_tol=ACCURACY):
+        and math.isclose(blue, upper, abs_tol=ACCURACY):
         # 赤上昇中
         if math.isclose(width, radius, abs_tol=ACCURACY):
             #           +-+

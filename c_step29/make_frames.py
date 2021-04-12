@@ -20,6 +20,7 @@ from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
 from hul_in_out_test import upper_test, lower_test, hue_angle_test
+from hsv_vs_hul_test import hsv_vs_hul_hue_angle_test
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -181,12 +182,12 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = expected_theta
 
-    color_rate = to_color(bar_rate, expected_theta)
+    color = to_color(bar_rate, expected_theta)
 
     # バーの横幅に変換
-    red = color_rate[0]
-    green = color_rate[1]
-    blue = color_rate[2]
+    red = color[0]
+    green = color[1]
+    blue = color[2]
 
     # 逆関数のテスト
     expected_color = (red, green, blue)
@@ -201,12 +202,13 @@ def update_scene1_with_rotate(
     #actual_lower = description[1]
     # 逆関数は合っていて、順関数の方が間違っているケースがある（＾～＾）
     # upper_test(seq, hul_phase, expected_upper, actual_upper,
-    #           input_angle, color_rate)
+    #           input_angle, color)
     # lower_test(seq, hul_phase, expected_lower, actual_lower,
-    #           input_angle, color_rate)
+    #           input_angle, color)
 
     diff_angle = hue_angle_test(
-        seq, hul_phase, input_angle, actual_angle, color_rate)
+        seq, hul_phase, input_angle, actual_angle, color)
+    hsv_vs_hul_hue_angle_test(f"seq={seq:5} hul_phase={hul_phase}", color)
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width
@@ -226,7 +228,7 @@ def update_scene1_with_rotate(
 
     # 大三角形
     large_triangle.update(
-        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, color_rate)
+        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, color)
 
     gravity = large_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],

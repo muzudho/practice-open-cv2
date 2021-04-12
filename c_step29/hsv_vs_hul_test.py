@@ -1,10 +1,10 @@
-"""HSVモデルとHULビューの比較を行います
+"""HSVモデル(円錐モデル)とHULビューの比較を行います
 """
 
 import math
 from hsv_model_hul_view import to_hue_angle as to_hul_hue_angle
 from hsv_model_cone import to_hue_angle as to_hsv_cone_hue_angle
-from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
+# from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
 
 ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
 
@@ -75,16 +75,26 @@ TEST_CASES = [
     ((1.00, 0.00, 0.25), 'Vivid crimson+'),  # D23d +１° ずれる
 ]
 
+
+def hsv_vs_hul_hue_angle_test(title, color):
+    """HSVとHULの色相(H)が等しいかテスト
+    """
+    hul_hue_angle, description = to_hul_hue_angle(color)
+    hsv_cone_hue_angle = to_hsv_cone_hue_angle(color)
+    # hsv_cylinder_hue_angle = to_hsv_cylinder_hue_angle(color)
+    # ずれたら表示します
+    if not math.isclose(hul_hue_angle, hsv_cone_hue_angle, rel_tol=ACCURACY, abs_tol=ACCURACY):
+            # or not math.isclose(hul_hue_angle, hsv_cylinder_hue_angle,
+            #                 rel_tol = ACCURACY, abs_tol = ACCURACY):
+        print(f"Angle test      | {title:22} color={color}")
+        print(
+            f"                | hul_hue_angle         ={hul_hue_angle:8.4f}° {description[2]}")
+        print(
+            f"                | hsv_cone_hue_angle    ={hsv_cone_hue_angle:8.4f}°")
+        # print(
+        #    f"                | hsv_cylinder_hue_angle={hsv_cylinder_hue_angle:8.4f}°")
+
+
 # 角度を比較してみましょう
 for (_, test_case) in enumerate(TEST_CASES):
-    hul_hue_angle, description = to_hul_hue_angle(test_case[0])
-    hsv_cone_hue_angle = to_hsv_cone_hue_angle(test_case[0])
-    hsv_cylinder_hue_angle = to_hsv_cylinder_hue_angle(test_case[0])
-    # ずれたら表示します
-    if not math.isclose(hul_hue_angle, hsv_cone_hue_angle, rel_tol=ACCURACY, abs_tol=ACCURACY) or \
-            not math.isclose(hul_hue_angle, hsv_cylinder_hue_angle,
-                             rel_tol=ACCURACY, abs_tol=ACCURACY):
-        print(f"{test_case[1]:22}={test_case[1]}")
-        print(f"hul_hue_angle         ={hul_hue_angle:8.4f}° {description[2]}")
-        print(f"hsv_cone_hue_angle    ={hsv_cone_hue_angle:8.4f}°")
-        print(f"hsv_cylinder_hue_angle={hsv_cylinder_hue_angle:8.4f}°")
+    hsv_vs_hul_hue_angle_test(test_case[1], test_case[0])

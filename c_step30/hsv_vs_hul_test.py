@@ -1,7 +1,7 @@
 """HSVモデル(円錐モデル)とHULビューの比較を行います
 """
 
-import math
+# import math
 from hsv_model_hul_view import to_hue_angle as to_hul_hue_angle, hul_to_color
 from hsv_model_cone import to_hue_angle as to_hsv_cone_hue_angle, to_color as hsv_to_color
 # from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
@@ -65,7 +65,7 @@ TEST_CASES = [
 ]
 
 
-def hsv_vs_hul_hue_angle_test(title, color):
+def hsv_vs_hul_hue_angle_test(title, color, tolerance):
     """HSVとHULの色相(H)が等しいかテスト。
     HUL は 整数の精度しかありませんので、 HSV の方を丸めます
     """
@@ -73,8 +73,9 @@ def hsv_vs_hul_hue_angle_test(title, color):
     hsv_cone_hue_angle = to_hsv_cone_hue_angle(color)
     round_hsv_cone_hue_angle = round(hsv_cone_hue_angle)
     # hsv_cylinder_hue_angle = to_hsv_cylinder_hue_angle(color)
-    # ずれたら表示します
-    if hul_hue_angle != round_hsv_cone_hue_angle:
+    # 誤差が許容半径を超えたら表示します
+    diff = abs(hul_hue_angle - round_hsv_cone_hue_angle)
+    if tolerance < diff:
         # if not math.isclose(hul_hue_angle, hsv_cone_hue_angle, \
         # rel_tol=ACCURACY, abs_tol=ACCURACY):
         # or not math.isclose(hul_hue_angle, hsv_cylinder_hue_angle,
@@ -96,14 +97,15 @@ def hsv_vs_hul_hue_angle_test(title, color):
     # {hsv_cone_hue_angle:8.4f}°")
 
 
-def hsv_vs_hul_vivid_color_test(title, hue_angle):
+def hsv_vs_hul_vivid_color_test(title, hue_angle, tolerance):
     """HSVとHULの色（Vivid tone）が等しいかテスト"""
     hul_color = hul_to_color(hue_angle, 1.0, 0.0)  # Vivid
     hsv_color = hsv_to_color(hue_angle, 1.0, 1.0)  # Vivid
-    # ずれたら表示します
-    if not math.isclose(hul_color[0], hsv_color[0], rel_tol=ACCURACY, abs_tol=ACCURACY) or \
-        not math.isclose(hul_color[1], hsv_color[1], rel_tol=ACCURACY, abs_tol=ACCURACY) or \
-            not math.isclose(hul_color[2], hsv_color[2], rel_tol=ACCURACY, abs_tol=ACCURACY):
+    # 誤差が許容半径を超えたら表示します
+    diff_r = abs(hul_color[0] - hsv_color[0])
+    diff_g = abs(hul_color[1] - hsv_color[1])
+    diff_b = abs(hul_color[2] - hsv_color[2])
+    if tolerance < diff_r or tolerance < diff_g or tolerance < diff_b:
         print(f"Color test      | {title:22} hue_angle={hue_angle:4}°")
         print(
             f"                | hul_color =({hul_color[0]:13.10f}, {hul_color[1]:13.10f}, \
@@ -115,8 +117,8 @@ def hsv_vs_hul_vivid_color_test(title, hue_angle):
 
 # 角度を比較してみましょう
 for (_, test_case) in enumerate(TEST_CASES):
-    hsv_vs_hul_hue_angle_test(test_case[2], test_case[0])
+    hsv_vs_hul_hue_angle_test(test_case[2], test_case[0], 1.0000001)
 
 # 色を比較してみましょう
 for (_, test_case) in enumerate(TEST_CASES):
-    hsv_vs_hul_vivid_color_test(test_case[2], test_case[1])
+    hsv_vs_hul_vivid_color_test(test_case[2], test_case[1], 0.02)

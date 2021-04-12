@@ -42,12 +42,12 @@ r={color[0]:9.4f} g={color[1]:9.4f} b={color[2]:9.4f}")
 # r={color[0]:9.4f} g={color[1]:9.4f} b={color[2]:9.4f}")
 
 
-def hue_angle_test(seq, hul_phase, input_angle, actual_angle, color):
+def hue_angle_test(seq, hul_phase, input_angle, actual_angle, color, tolerance):
     """色相(H)テスト
     """
     diff_angle = actual_angle - input_angle
     # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
-    if not math.isclose(actual_angle, input_angle, abs_tol=ACCURACY):
+    if tolerance < diff_angle:
         upper = max(color[0], color[1], color[2])
         lower = min(color[0], color[1], color[2])
         bar_length = color[0] + color[1] + color[2] - upper - lower

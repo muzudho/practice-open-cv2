@@ -205,11 +205,11 @@ def update_scene1_with_rotate(
     #           input_angle, input_color)
 
     diff_angle = hue_angle_test(
-        seq, hul_phase, input_angle, output_angle, input_color)
+        seq, hul_phase, input_angle, output_angle, input_color, 1.0000001)
     hsv_vs_hul_hue_angle_test(
-        f"seq={seq:5} hul_phase={hul_phase}", input_color)
+        f"seq={seq:5} hul_phase={hul_phase}", input_color, 1.0000001)
     hsv_vs_hul_vivid_color_test(
-        f"seq={seq:5} hul_phase={hul_phase}", input_angle)
+        f"seq={seq:5} hul_phase={hul_phase}", input_angle, 0.02)
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width

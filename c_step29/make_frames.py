@@ -19,6 +19,7 @@ from hsv_model_hul_view import to_color, to_hue_angle, \
 from colors import \
     SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
     DARK_GRAYISH_GRAY, BLACK
+from hul_in_out_test import upper_test, lower_test, hue_angle_test
 
 # 描画する画像を作る
 # 横幅 約500 以上にすると ブログで縮小されて .gif ではなくなるので、横幅を 約500未満にすること（＾～＾）
@@ -172,8 +173,8 @@ def update_scene1_with_rotate(
         seq, bar_rate, phase, bar_box, circle_rail, outer_circle,
         large_triangle, clock_hand):
     """回転が伴うモデルを更新"""
-    expected_angle = math.floor(360/PHASE_COUNTS*phase)
-    expected_theta = math.radians(expected_angle)
+    input_angle = math.floor(360/PHASE_COUNTS*phase)
+    expected_theta = math.radians(input_angle)
 
     outer_circle.phase = phase
 
@@ -195,60 +196,15 @@ def update_scene1_with_rotate(
     actual_angle, description = to_hue_angle(expected_color)
     actual_upper = description[0]
     actual_lower = description[1]
-    pattern = description[2]
+    hul_phase = description[2]
     # float型には無限小の丸め誤差が出るものなので、 誤差 0 はあり得ない。等号での比較はしてはいけないぜ（＾～＾）
     # 逆関数は合っていて、順関数の方が間違っているケースがある（＾～＾）
-    diff = actual_upper - expected_upper
-    if not math.isclose(actual_upper, expected_upper, abs_tol=ACCURACY):
-        print(
-            f"ERROR           | expected_upper={expected_upper:3} \
-actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
-r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-    else:
-        print(
-            f"OK              | expected_upper={expected_upper:3} \
-actual_upper={actual_upper:3} diff={diff} expected_angle={expected_angle} \
-r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-
-    diff = actual_lower - expected_lower
-    if not math.isclose(actual_lower, expected_lower, abs_tol=ACCURACY):
-        print(
-            f"ERROR           | expected_lower={expected_lower:3} \
-actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
-r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-    else:
-        print(
-            f"OK              | expected_lower={expected_lower:3} \
-actual_lower={actual_lower:3} diff={diff} expected_angle={expected_angle} \
-r={red:9.4f} g={green:9.4f} b={blue:9.4f} pattern={pattern}")
-
-    diff_angle = actual_angle - expected_angle
-    if not math.isclose(actual_angle, expected_angle, abs_tol=ACCURACY):
-        upper = max(red, green, blue)
-        lower = min(red, green, blue)
-        bar_length = red + green + blue - upper - lower
-        width = bar_length - lower
-        diameter = upper - lower
-        radius = diameter / 2
-        print(
-            f"ERROR           | pattern={pattern:3} seq={seq:5}  \
-exp={expected_angle:10.6f}° act={actual_angle:10.6f}° \
-diff={diff_angle:10.6f}° r={red:9.6f} g={green:9.6f} b={blue:9.6f} \
-up={upper:9.6f} low={lower:9.6f} \
-width={width:9.6f} radius={radius:9.6f}")
-    else:
-        upper = max(red, green, blue)
-        lower = min(red, green, blue)
-        bar_length = red + green + blue - upper - lower
-        width = bar_length - lower
-        diameter = upper - lower
-        radius = diameter / 2
-        print(
-            f"OK              | pattern={pattern:3} seq={seq:5}  \
-exp={expected_angle:10.6f}° act={actual_angle:10.6f}° \
-diff={diff_angle:10.6f}° r={red:9.6f} g={green:9.6f} b={blue:9.6f} \
-up={upper:9.6f} low={lower:9.6f} \
-width={width:9.6f} radius={radius:9.6f}")
+    # upper_test(seq, hul_phase, expected_upper, actual_upper,
+    #           input_angle, color_rate)
+    # lower_test(seq, hul_phase, expected_lower, actual_lower,
+    #           input_angle, color_rate)
+    diff_angle = hue_angle_test(
+        seq, hul_phase, input_angle, actual_angle, color_rate)
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width

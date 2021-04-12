@@ -182,17 +182,16 @@ def update_scene1_with_rotate(
     # 円周上の点の位置
     circle_rail.theta = expected_theta
 
-    color = to_color(bar_rate, expected_theta)
+    input_color = to_color(bar_rate, expected_theta)
 
     # バーの横幅に変換
-    red = color[0]
-    green = color[1]
-    blue = color[2]
+    red = input_color[0]
+    green = input_color[1]
+    blue = input_color[2]
 
     # 逆関数のテスト
-    expected_color = (red, green, blue)
     # 弧度法
-    actual_angle, description = to_hue_angle(expected_color)
+    output_angle, description = to_hue_angle(input_color)
     hul_phase = description[2]
 
     # 上限値(U)、下限値(L) テスト
@@ -202,13 +201,14 @@ def update_scene1_with_rotate(
     #actual_lower = description[1]
     # 逆関数は合っていて、順関数の方が間違っているケースがある（＾～＾）
     # upper_test(seq, hul_phase, expected_upper, actual_upper,
-    #           input_angle, color)
+    #           input_angle, input_color)
     # lower_test(seq, hul_phase, expected_lower, actual_lower,
-    #           input_angle, color)
+    #           input_angle, input_color)
 
     diff_angle = hue_angle_test(
-        seq, hul_phase, input_angle, actual_angle, color)
-    hsv_vs_hul_hue_angle_test(f"seq={seq:5} hul_phase={hul_phase}", color)
+        seq, hul_phase, input_angle, output_angle, input_color)
+    hsv_vs_hul_hue_angle_test(
+        f"seq={seq:5} hul_phase={hul_phase}", input_color)
 
     red_bar_width = red * bar_box.width
     green_bar_width = green * bar_box.width
@@ -228,7 +228,7 @@ def update_scene1_with_rotate(
 
     # 大三角形
     large_triangle.update(
-        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, color)
+        bar_box.upper_x, bar_box.lower_x, circle_rail.center, theta, input_color)
 
     gravity = large_triangle.triangular_center_of_gravity()
     diff_xy = (gravity[0] - circle_rail.center[0],

@@ -8,7 +8,7 @@
 
 ![20210413color66_c_step29.gif](./@doc/c_step/img/20210413color66_c_step29.gif)  
 (↑ さらに ⚡📄`c_step29/make_frames.py` で、HSVモデル(円錐版、アメリカ式)に、より近似。
-色相誤差+-1°以下、RGB成分誤差2%未満。色相を整数の精度でこれ以上精度を上げるには 誤差0しかなく、それは非現実的なのでこれが限界)  
+Vividトーンの色相環を360個に分割したとき、色相誤差+-1°以下、RGB成分誤差2%未満。色相を整数の精度でこれ以上精度を上げるには 誤差0しかなく、それは非現実的なのでこれが限界)  
 
 ## HULビューって何？
 
@@ -54,13 +54,13 @@ HSVモデルの精度が 実数 なのに対し、 HULビューの精度は 弧�
 GPLライセンスのライブラリが含まれてるから、プログラムは個別にライブラリのライセンスを要確認（＾～＾）  
 HULビューはアルゴリズムなんで 著作権無いんで理解したら独自実装し直して持ってけだぜ（＾～＾）  
 
-* 📁`c_step29` - わたしの考えたHULビューのエキシビジョン（＾～＾）
+* 📁`c_step30` - わたしの考えたHULビューのエキシビジョン（＾～＾）
   * 📄`make_frames.py` - 実行しろだぜ（＾～＾）1フレームごとの画像ファイルを 📁`shared` に大量に作るぜ（＾～＾）
   * ⚙️📄`conf.py` - いろいろな設定
   * ⚡📄`color_hul_model.py` - わたしのHULビューをGPLで実装したやつ（＾～＾） ソースはGPLで使いにくいだろうから、それが嫌なやつはアルゴリズムだけ理解して自力実装し直せだぜ（＾～＾）
-* 📁`e_step4` - c_step29 で作った1フレームごとの画像を紙芝居にして動画で流すやつ。
+* 📁`e_step4` - c_step30 で作った1フレームごとの画像を紙芝居にして動画で流すやつ。
   * ⚡📄`pygame00.py` - `FRAME_COUNT` グローバル変数を出力された画像の枚数に設定しろだぜ（＾～＾） 実行しろだぜ（＾～＾）
-* 📁`shared` - c_step29 を実行したら、画像が大量に出力されるぜ（＾～＾）
+* 📁`shared` - c_step30 を実行したら、画像が大量に出力されるぜ（＾～＾）
 
 ## Set up
 
@@ -80,7 +80,7 @@ VSCode `[File] - [Preferences] - [Settings]`。 検索欄に `Python.linting.pyl
 ## Start
 
 ```shell
-cd c_step29
+cd c_step30
 
 python make_frame.py
 
@@ -91,7 +91,7 @@ python pygame00.py
 
 ## c_step28 図解
 
-![20210411color61a5a1_c_step_28.png](./@doc/c_step/img/20210411color61a5a1_c_step_28.png)
+![20210411color61a5a1_c_step_28.png](./@doc/c_step/img/20210411color61a5a1_c_step_28.png)  
 ## Document
 
 [References](./@doc/references.md)  

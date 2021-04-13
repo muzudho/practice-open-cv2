@@ -296,7 +296,7 @@ class BarBox():
 
         self.draw_3figures(
             canvas,
-            red_num,
+            round(red_num),
             left,
             self.red_top+1.5*GRID_UNIT,
             font_color)
@@ -315,7 +315,7 @@ class BarBox():
 
         self.draw_3figures(
             canvas,
-            green_num,
+            round(green_num),
             left,
             self.green_top+1.5*GRID_UNIT,
             font_color)
@@ -334,7 +334,7 @@ class BarBox():
 
         self.draw_3figures(
             canvas,
-            blue_num,
+            round(blue_num),
             left,
             self.blue_top+1.5*GRID_UNIT,
             font_color)
@@ -352,34 +352,38 @@ class BarBox():
         lower_color_element = convert_pixel_to_color_element(
             left_box_width, self.width)
 
-        # if DE_GAMMA_FROM_LINEAR:
-        #    max_val = de_gammer_from_linear_x(max_val)
-        #    zero = de_gammer_from_linear_x(zero)
-        #    upper_color_element = de_gammer_from_linear_x(upper_color_element)
-        #    lower_color_element = de_gammer_from_linear_x(lower_color_element)
+        if DE_GAMMA_FROM_LINEAR:
+            max_val = de_gamma_from_linear_x(max_val)
+            zero = de_gamma_from_linear_x(zero)
+            upper_color_element = de_gamma_from_linear_x(upper_color_element)
+            lower_color_element = de_gamma_from_linear_x(lower_color_element)
 
         top = self.top+self.label_gap
         # バーの最大値(0から始まる数)
         self.draw_3figures(
-            canvas, max_val,
+            canvas,
+            round(max_val),
             self.right+GRID_UNIT/2,
             top,
             BRIGHT_GRAY)
         # 0
         self.draw_3figures(
-            canvas, zero,
+            canvas,
+            round(zero),
             self.left-2.5*GRID_UNIT,
             top,
             BRIGHT_GRAY)
         # U
         self.draw_3figures(
-            canvas, round(BAR_TICKS * upper_color_element),
+            canvas,
+            round(BAR_TICKS * upper_color_element),
             self.upper_x+GRID_UNIT/2,
             top,
             DARK_GRAYISH_GRAY)
         # L
         self.draw_3figures(
-            canvas, round(BAR_TICKS * lower_color_element),
+            canvas,
+            round(BAR_TICKS * lower_color_element),
             self.lower_x-2.5*GRID_UNIT,
             top,
             DARK_GRAYISH_GRAY)
@@ -392,10 +396,10 @@ class BarBox():
         center_box_rate = self.rates[1]
         right_box_rate = self.rates[2]
 
-        # if DE_GAMMA_FROM_LINEAR:
-        #    left_box_rate = de_gammer_from_linear_x(left_box_rate)
-        #    center_box_rate = de_gammer_from_linear_x(center_box_rate)
-        #    right_box_rate = de_gammer_from_linear_x(right_box_rate)
+        if DE_GAMMA_FROM_LINEAR:
+            left_box_rate = de_gamma_from_linear_x(left_box_rate)
+            center_box_rate = de_gamma_from_linear_x(center_box_rate)
+            right_box_rate = de_gamma_from_linear_x(right_box_rate)
 
         top = self.top+self.label_gap
         # 左列のバー率

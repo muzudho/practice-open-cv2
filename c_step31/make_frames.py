@@ -9,7 +9,7 @@ from rectangle import Rectangle
 from clock_hand import ClockHand
 from triangle import Triangle
 from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, \
-    L_M_U_NAME_LIST
+    L_M_U_NAME_LIST, DE_GAMMA_FROM_LINEAR
 from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
@@ -327,6 +327,16 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
 
     # グレースケール関連の補助線
     draw_grayscale(canvas, circle_rail.center, circle_rail.radius)
+
+    # ガンマ補正の掛かっていない線形空間から、ガンマ補正を解除したことの表示
+    if DE_GAMMA_FROM_LINEAR:
+        cv2.putText(canvas,
+                    f"Gamma correction has been canceled from the linear space without gamma correction.",
+                    point_for_cv2((GRID_UNIT, GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
 
     return canvas
 

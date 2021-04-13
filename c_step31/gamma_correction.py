@@ -48,7 +48,13 @@ def de_gamma_from_linear_x(x_val):
         return 0.0
 
     # 逆さに考えます
+    # この書き方だと GAMMA に小数部が付いているので 複素数 になって、round が使えない
     rev = (1.0-x_val)**GAMMA
+    # 仕方ない、ガンマを丸めよ --> 数が変わり過ぎ
+    # rev = (1.0-x_val)**round(GAMMA)
+    # じゃあ意味無いけど、実数部だけ使おう（＾～＾）
+    rev = float(rev.real)
+    # rev = round(rev)
 
     # 逆さに考えたのを、逆さにします。
     # これで 小さい数ほど底上げが大きくなります

@@ -7,9 +7,10 @@ from colors import  \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_pixel_to_color_element
-from conf import GRID_UNIT, BAR_TICKS
+from conf import GRID_UNIT, BAR_TICKS, DE_GAMMA_FROM_LINEAR
 from rectangle import Rectangle
 from cv2_helper import color_for_cv2, point_for_cv2
+from gamma_correction import de_gamma_from_linear_x
 
 
 class BarBox():
@@ -276,13 +277,17 @@ class BarBox():
         upper_x_over = self.__upper_x+GRID_UNIT/2
         lower_x_over = self.__lower_x-2.5*GRID_UNIT
 
+        # 色成分値
+        red_num = round(BAR_TICKS * rgb_numbers[0])
+        green_num = round(BAR_TICKS * rgb_numbers[1])
+        blue_num = round(BAR_TICKS * rgb_numbers[2])
+
         # 10進R値テキスト
-        num = round(BAR_TICKS * rgb_numbers[0])
         font_color = DARK_GRAYISH_RED
-        if num == upper_color_element:
+        if red_num == upper_color_element:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
-        elif num == lower_color_element:
+        elif red_num == lower_color_element:
             left = lower_x_over
             font_color = DARK_GRAYISH_GRAY
         else:
@@ -291,18 +296,17 @@ class BarBox():
 
         self.draw_3figures(
             canvas,
-            num,
+            red_num,
             left,
             self.red_top+1.5*GRID_UNIT,
             font_color)
 
         # 10進G値テキスト
-        num = round(BAR_TICKS * rgb_numbers[1])
         font_color = DARK_GRAYISH_GREEN
-        if num == upper_color_element:
+        if green_num == upper_color_element:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
-        elif num == lower_color_element:
+        elif green_num == lower_color_element:
             left = lower_x_over
             font_color = DARK_GRAYISH_GRAY
         else:
@@ -311,18 +315,17 @@ class BarBox():
 
         self.draw_3figures(
             canvas,
-            num,
+            green_num,
             left,
             self.green_top+1.5*GRID_UNIT,
             font_color)
 
         # 10進B値テキスト
-        num = round(BAR_TICKS * rgb_numbers[2])
         font_color = DARK_GRAYISH_BLUE
-        if num == upper_color_element:
+        if blue_num == upper_color_element:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
-        elif num == lower_color_element:
+        elif blue_num == lower_color_element:
             left = lower_x_over
             font_color = DARK_GRAYISH_GRAY
         else:
@@ -331,7 +334,7 @@ class BarBox():
 
         self.draw_3figures(
             canvas,
-            num,
+            blue_num,
             left,
             self.blue_top+1.5*GRID_UNIT,
             font_color)
@@ -340,44 +343,65 @@ class BarBox():
         """X軸のラベルを描きます"""
         center_box_width = self.__upper_x - self.__lower_x
         left_box_width = self.__lower_x - self.__left
-        upper_color_element = round(BAR_TICKS * convert_pixel_to_color_element(
-            center_box_width+left_box_width, self.width))
-        lower_color_element = round(BAR_TICKS * convert_pixel_to_color_element(
-            left_box_width, self.width))
+
+        # 各数値
+        max_val = BAR_TICKS-1
+        zero = 0
+        upper_color_element = convert_pixel_to_color_element(
+            center_box_width+left_box_width, self.width)
+        lower_color_element = convert_pixel_to_color_element(
+            left_box_width, self.width)
+
+        # if DE_GAMMA_FROM_LINEAR:
+        #    max_val = de_gammer_from_linear_x(max_val)
+        #    zero = de_gammer_from_linear_x(zero)
+        #    upper_color_element = de_gammer_from_linear_x(upper_color_element)
+        #    lower_color_element = de_gammer_from_linear_x(lower_color_element)
 
         top = self.top+self.label_gap
         # バーの最大値(0から始まる数)
         self.draw_3figures(
-            canvas, BAR_TICKS-1,
+            canvas, max_val,
             self.right+GRID_UNIT/2,
             top,
             BRIGHT_GRAY)
         # 0
         self.draw_3figures(
-            canvas, 0,
+            canvas, zero,
             self.left-2.5*GRID_UNIT,
             top,
             BRIGHT_GRAY)
         # U
         self.draw_3figures(
-            canvas, upper_color_element,
+            canvas, round(BAR_TICKS * upper_color_element),
             self.upper_x+GRID_UNIT/2,
             top,
             DARK_GRAYISH_GRAY)
         # L
         self.draw_3figures(
-            canvas, lower_color_element,
+            canvas, round(BAR_TICKS * lower_color_element),
             self.lower_x-2.5*GRID_UNIT,
             top,
             DARK_GRAYISH_GRAY)
 
     def draw_bars_rate(self, canvas):
         """バー率を描きます"""
+
+        # 各数値
+        left_box_rate = self.rates[0]
+        center_box_rate = self.rates[1]
+        right_box_rate = self.rates[2]
+
+        # if DE_GAMMA_FROM_LINEAR:
+        #    left_box_rate = de_gammer_from_linear_x(left_box_rate)
+        #    center_box_rate = de_gammer_from_linear_x(center_box_rate)
+        #    right_box_rate = de_gammer_from_linear_x(right_box_rate)
+
         top = self.top+self.label_gap
         # 左列のバー率
         left = self.__left - 3*GRID_UNIT
         cv2.putText(canvas,
-                    f"{int(self.rates[0]*100):3}%",
+                    f"{int(left_box_rate*100):3}%",
                     point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
@@ -386,7 +410,7 @@ class BarBox():
         # 中列のバー率
         left = (self.__lower_x + self.__upper_x)/2 - 1.5*GRID_UNIT
         cv2.putText(canvas,
-                    f"{int(self.rates[1]*100):3}%",
+                    f"{int(center_box_rate*100):3}%",
                     point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
@@ -395,7 +419,7 @@ class BarBox():
         # 右列のバー率
         left = self.__right - 0.5*GRID_UNIT
         cv2.putText(canvas,
-                    f"{int(self.rates[2]*100):3}%",
+                    f"{int(right_box_rate*100):3}%",
                     point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,

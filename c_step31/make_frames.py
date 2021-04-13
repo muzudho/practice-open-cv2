@@ -328,10 +328,11 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     # グレースケール関連の補助線
     draw_grayscale(canvas, circle_rail.center, circle_rail.radius)
 
+    # 「もし世の中にガンマ補正が存在しなかったら」
     # ガンマ補正の掛かっていない線形空間から、ガンマ補正を解除したことの表示
     if DE_GAMMA_FROM_LINEAR:
         cv2.putText(canvas,
-                    f"Gamma correction has been canceled from the linear space without gamma correction.",
+                    f"If gamma correction does not exist in the world.",
                     point_for_cv2((GRID_UNIT, GRID_UNIT)),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     FONT_SCALE,

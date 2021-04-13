@@ -71,13 +71,16 @@ if DE_GAMMA_FROM_LINEAR:
     BLUE = filtering((L, L, U))
     MAGENTA = filtering((U, L, U))
 else:
-    GRAY = filtering((0.45, 0.45, 0.45))
-    RED = filtering((0.8, 0.1, 0.1))
-    YELLOW = filtering((0.8, 0.8, 0.1))
-    GREEN = filtering((0.1, 0.8, 0.1))
-    CYAN = filtering((0.1, 0.8, 0.8))
-    BLUE = filtering((0.1, 0.1, 0.8))
-    MAGENTA = filtering((0.8, 0.1, 0.8))
+    U = 0.8
+    L = 0.1
+    M = (U+L)/2
+    GRAY = filtering((M, M, M))
+    RED = filtering((U, L, L))
+    YELLOW = filtering((U, U, L))
+    GREEN = filtering((L, U, L))
+    CYAN = filtering((L, U, U))
+    BLUE = filtering((L, L, U))
+    MAGENTA = filtering((U, L, U))
 
 # Dark
 if DE_GAMMA_FROM_LINEAR:

@@ -77,9 +77,7 @@ color = hul_to_color(23, 0.7, 0.2)
 """
 
 import math
-
-
-ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
+from conf import ACCURACY
 
 
 def hul_to_color(hue_angle, upper, lower):

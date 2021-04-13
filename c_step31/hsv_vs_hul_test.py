@@ -1,12 +1,8 @@
 """HSVモデル(円錐モデル)とHULビューの比較を行います
 """
 
-# import math
 from hsv_model_hul_view import to_hue_angle as to_hul_hue_angle, hul_to_color
 from hsv_model_cone import to_hue_angle as to_hsv_cone_hue_angle, to_color as hsv_to_color
-# from hsv_model_cylinder import to_hue_angle as to_hsv_cylinder_hue_angle
-
-ACCURACY = 0.0000001  # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
 
 # このプログラムで color というと、以下の仕様です。
 # RGB値は R, G, B の順で 0.0～1.0 で指定してください。

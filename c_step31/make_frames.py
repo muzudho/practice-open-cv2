@@ -14,7 +14,7 @@ from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
 from color_calc import convert_3bars_to_color
-from hsv_model_hul_view import to_color, to_hue_angle  # ACCURACY
+from hsv_model_hul_view import to_color, to_hue_angle
 from colors import \
     SOFT_GRAY, GRAY, \
     RED, YELLOW, GREEN, CYAN, BLUE, MAGENTA, \

@@ -8,15 +8,16 @@ from cv2_helper import point_for_cv2, color_for_cv2
 from rectangle import Rectangle
 from clock_hand import ClockHand
 from triangle import Triangle
-from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, BAR_TICKS, \
+from conf import GRID_UNIT, PHASE_COUNTS, FONT_SCALE, \
     L_M_U_NAME_LIST
 from outer_circle import OuterCircle
 from circle_rail import CircleRail
 from bar_box import BarBox
-from color_calc import convert_3bars_to_ticks
+from color_calc import convert_3bars_to_color
 from hsv_model_hul_view import to_color, to_hue_angle  # ACCURACY
 from colors import \
-    SOFT_GRAY, GRAY, RED, GREEN, BLUE, \
+    SOFT_GRAY, GRAY, \
+    RED, YELLOW, GREEN, CYAN, BLUE, MAGENTA, \
     DARK_GRAYISH_GRAY, BLACK
 from hul_in_out_test import hue_angle_test  # upper_test, lower_test
 from hsv_vs_hul_test import hsv_vs_hul_hue_angle_test, hsv_vs_hul_vivid_color_test
@@ -101,7 +102,7 @@ def update_circle(canvas, seq, bar_rate, tone_name):
 def make_canvas():
     """キャンバス生成"""
     return np.full((CANVAS_HEIGHT, CANVAS_WIDTH, CHANNELS),
-                   color_for_cv2(SOFT_GRAY, BAR_TICKS)[0], dtype=np.uint8)
+                   color_for_cv2(SOFT_GRAY)[0], dtype=np.uint8)
 
 
 def update_scene1(bar_rate, outer_circle):
@@ -224,7 +225,7 @@ def update_scene1_with_rotate(
     # 外環状
     theta = math.radians(outer_circle.phase * outer_circle.unit_arc)
     n3bars_width = bar_box.create_3bars_width()
-    outer_circle.color_list.append(convert_3bars_to_ticks(
+    outer_circle.color_list.append(convert_3bars_to_color(
         n3bars_width, bar_box.width))
 
     # 大三角形
@@ -248,7 +249,7 @@ def draw_grid(_canvas):
     # for i in range(0, CANVAS_HEIGHT/(GRID_UNIT/2)+1):
     #    y_num = GRID_UNIT*i
     #    cv2.line(canvas, (0, y_num), (CANVAS_WIDTH, y_num),
-    #             color_for_cv2(PALE_GRAY, BAR_TICKS), thickness=1)
+    #             color_for_cv2(PALE_GRAY), thickness=1)
 
 
 def draw_tone_name(canvas, bar_box, tone_name):
@@ -259,7 +260,7 @@ def draw_tone_name(canvas, bar_box, tone_name):
                 point_for_cv2((bar_box.left, BAR_BOX_TOP-3.5*GRID_UNIT)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 2*FONT_SCALE,
-                color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
+                color_for_cv2(DARK_GRAYISH_GRAY),
                 line_type)
 
 
@@ -282,21 +283,21 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
     cv2.line(canvas,
              point_for_cv2(large_triangle.nodes_p[0]),
              point_for_cv2((bar_box.red_right, bar_box.red_top)),
-             color_for_cv2(RED, BAR_TICKS),
+             color_for_cv2(RED),
              thickness=2)
 
     # 垂直線G
     cv2.line(canvas,
              point_for_cv2(large_triangle.nodes_p[2]),  # 青と緑が入れ替わっているのが工夫
              point_for_cv2((bar_box.green_right, bar_box.green_top)),
-             color_for_cv2(GREEN, BAR_TICKS),
+             color_for_cv2(GREEN),
              thickness=2)
 
     # 垂直線B
     cv2.line(canvas,
              point_for_cv2(large_triangle.nodes_p[1]),
              point_for_cv2((bar_box.blue_right, bar_box.blue_top)),
-             color_for_cv2(BLUE, BAR_TICKS),
+             color_for_cv2(BLUE),
              thickness=2)
 
     outer_circle.draw_me(canvas)  # 外環状
@@ -309,7 +310,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
 
     # 色成分数
     bar_box.draw_rgb_number(canvas,
-                            convert_3bars_to_ticks(bar_box.create_3bars_width(), bar_box.width))
+                            convert_3bars_to_color(bar_box.create_3bars_width(), bar_box.width))
 
     # 角度（弧度法）表示
     point_x = (outer_circle.radius/2 + 12*GRID_UNIT) * \
@@ -321,8 +322,11 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
                 point_for_cv2((point_x, point_y)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 FONT_SCALE,
-                color_for_cv2(BLACK, BAR_TICKS),
+                color_for_cv2(BLACK),
                 lineType=2)
+
+    # グレースケール関連の補助線
+    draw_grayscale(canvas, circle_rail.center, circle_rail.radius)
 
     return canvas
 
@@ -341,7 +345,7 @@ def draw_border(circle_rail, canvas):
     cv2.rectangle(canvas,
                   point_for_cv2((left, top)),
                   point_for_cv2((right, bottom)),
-                  color_for_cv2(GRAY, BAR_TICKS),
+                  color_for_cv2(GRAY),
                   thickness=2)
 
     # 左限の線
@@ -350,7 +354,7 @@ def draw_border(circle_rail, canvas):
                             circle_rail.drawing_top)),
              point_for_cv2((circle_rail.center[0] - circle_rail.radius,
                             circle_rail.drawing_bottom)),
-             color_for_cv2(GRAY, BAR_TICKS),
+             color_for_cv2(GRAY),
              thickness=2)
     # 右限の線
     cv2.line(canvas,
@@ -358,8 +362,39 @@ def draw_border(circle_rail, canvas):
                             circle_rail.drawing_top)),
              point_for_cv2((circle_rail.center[0] + circle_rail.radius,
                             circle_rail.drawing_bottom)),
-             color_for_cv2(GRAY, BAR_TICKS),
+             color_for_cv2(GRAY),
              thickness=2)
+
+
+def draw_grayscale(canvas, center, circle_radius):
+    """グレースケール関係の補助線
+    """
+
+    def draw_point(canvas, center, r_radius, r_theta, fill_color):
+        point_x = (r_radius*circle_radius) * math.cos(r_theta) + center[0]
+        point_y = (r_radius*circle_radius) * -math.sin(r_theta) + center[1]
+        cv2.circle(canvas,
+                   point_for_cv2((point_x, point_y)),
+                   6,  # radius
+                   color_for_cv2(fill_color),
+                   thickness=-1)
+
+    # 重み (ITU-R Rec BT.601 規格)
+    w_red = 0.299
+    w_green = 0.587
+    w_blue = 0.114
+    # 赤
+    draw_point(canvas, center, w_red, math.radians(0), RED)
+    # 緑
+    draw_point(canvas, center, w_green, math.radians(120), GREEN)
+    # 青
+    draw_point(canvas, center, w_blue, math.radians(240), BLUE)
+    # イエロー
+    draw_point(canvas, center, w_red+w_green, math.radians(60), YELLOW)
+    # シアン
+    draw_point(canvas, center, w_green+w_blue, math.radians(180), CYAN)
+    # マゼンタ
+    draw_point(canvas, center, w_red+w_blue, math.radians(300), MAGENTA)
 
 
 main()

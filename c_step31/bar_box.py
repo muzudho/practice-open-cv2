@@ -6,7 +6,7 @@ from colors import  \
     BRIGHT_GRAY, SOFT_RED, SOFT_GREEN, SOFT_BLUE, \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
-from color_calc import convert_pixel_to_ticks
+from color_calc import convert_pixel_to_color_element
 from conf import GRID_UNIT, BAR_TICKS
 from rectangle import Rectangle
 from cv2_helper import color_for_cv2, point_for_cv2
@@ -224,7 +224,7 @@ class BarBox():
             canvas,
             point_for_cv2((self.__left, self.__top)),
             point_for_cv2((self.__right, self.__bottom)),
-            color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
+            color_for_cv2(BRIGHT_GRAY),
             thickness=self.thickness)
 
     def draw_rank2_box(self, canvas):
@@ -237,7 +237,7 @@ class BarBox():
                            self.__top - thickness_minus1)),
             point_for_cv2((self.__upper_x + thickness_minus1,
                            self.__bottom + thickness_minus1)),
-            color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
+            color_for_cv2(DARK_GRAYISH_GRAY),
             thickness=thickness_minus1+1)
 
     def draw_3figures(self, canvas, num, left, top, color):
@@ -262,27 +262,27 @@ class BarBox():
                         point_for_cv2((left+i*0.7*GRID_UNIT, top)),  # x,y
                         self.font,
                         self.font_scale,
-                        color_for_cv2(color, BAR_TICKS),
+                        color_for_cv2(color),
                         self.line_type)
 
     def draw_rgb_number(self, canvas, rgb_numbers):
         """RGB値テキストを描きます"""
         center_box_width = self.__upper_x - self.__lower_x
         left_box_width = self.__lower_x - self.__left
-        upper_ticks = convert_pixel_to_ticks(
-            center_box_width+left_box_width, self.width)
-        lower_ticks = convert_pixel_to_ticks(
-            left_box_width, self.width)
+        upper_color_element = round(BAR_TICKS * convert_pixel_to_color_element(
+            center_box_width+left_box_width, self.width))
+        lower_color_element = round(BAR_TICKS * convert_pixel_to_color_element(
+            left_box_width, self.width))
         upper_x_over = self.__upper_x+GRID_UNIT/2
         lower_x_over = self.__lower_x-2.5*GRID_UNIT
 
         # 10進R値テキスト
-        num = rgb_numbers[0]
+        num = round(BAR_TICKS * rgb_numbers[0])
         font_color = DARK_GRAYISH_RED
-        if num == upper_ticks:
+        if num == upper_color_element:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
-        elif num == lower_ticks:
+        elif num == lower_color_element:
             left = lower_x_over
             font_color = DARK_GRAYISH_GRAY
         else:
@@ -297,12 +297,12 @@ class BarBox():
             font_color)
 
         # 10進G値テキスト
-        num = rgb_numbers[1]
+        num = round(BAR_TICKS * rgb_numbers[1])
         font_color = DARK_GRAYISH_GREEN
-        if num == upper_ticks:
+        if num == upper_color_element:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
-        elif num == lower_ticks:
+        elif num == lower_color_element:
             left = lower_x_over
             font_color = DARK_GRAYISH_GRAY
         else:
@@ -317,12 +317,12 @@ class BarBox():
             font_color)
 
         # 10進B値テキスト
-        num = rgb_numbers[2]
+        num = round(BAR_TICKS * rgb_numbers[2])
         font_color = DARK_GRAYISH_BLUE
-        if num == upper_ticks:
+        if num == upper_color_element:
             left = upper_x_over
             font_color = DARK_GRAYISH_GRAY
-        elif num == lower_ticks:
+        elif num == lower_color_element:
             left = lower_x_over
             font_color = DARK_GRAYISH_GRAY
         else:
@@ -340,10 +340,10 @@ class BarBox():
         """X軸のラベルを描きます"""
         center_box_width = self.__upper_x - self.__lower_x
         left_box_width = self.__lower_x - self.__left
-        upper_ticks = convert_pixel_to_ticks(
-            center_box_width+left_box_width, self.width)
-        lower_ticks = convert_pixel_to_ticks(
-            left_box_width, self.width)
+        upper_color_element = round(BAR_TICKS * convert_pixel_to_color_element(
+            center_box_width+left_box_width, self.width))
+        lower_color_element = round(BAR_TICKS * convert_pixel_to_color_element(
+            left_box_width, self.width))
 
         top = self.top+self.label_gap
         # バーの最大値(0から始まる数)
@@ -360,13 +360,13 @@ class BarBox():
             BRIGHT_GRAY)
         # U
         self.draw_3figures(
-            canvas, upper_ticks,
+            canvas, upper_color_element,
             self.upper_x+GRID_UNIT/2,
             top,
             DARK_GRAYISH_GRAY)
         # L
         self.draw_3figures(
-            canvas, lower_ticks,
+            canvas, lower_color_element,
             self.lower_x-2.5*GRID_UNIT,
             top,
             DARK_GRAYISH_GRAY)
@@ -381,7 +381,7 @@ class BarBox():
                     point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
-                    color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
+                    color_for_cv2(BRIGHT_GRAY),
                     self.line_type)
         # 中列のバー率
         left = (self.__lower_x + self.__upper_x)/2 - 1.5*GRID_UNIT
@@ -390,7 +390,7 @@ class BarBox():
                     point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
-                    color_for_cv2(DARK_GRAYISH_GRAY, BAR_TICKS),
+                    color_for_cv2(DARK_GRAYISH_GRAY),
                     self.line_type)
         # 右列のバー率
         left = self.__right - 0.5*GRID_UNIT
@@ -399,7 +399,7 @@ class BarBox():
                     point_for_cv2((left, top)),  # x,y
                     self.font,
                     self.font_scale,
-                    color_for_cv2(BRIGHT_GRAY, BAR_TICKS),
+                    color_for_cv2(BRIGHT_GRAY),
                     self.line_type)
 
     def draw_3bars(self, canvas):
@@ -412,7 +412,7 @@ class BarBox():
                       point_for_cv2((self.__left, self.__top)),
                       point_for_cv2((self.__red_right,
                                      self.__top + self.one_height)),
-                      color_for_cv2(SOFT_RED, BAR_TICKS),
+                      color_for_cv2(SOFT_RED),
                       thickness=-1)
 
         # バーG
@@ -421,7 +421,7 @@ class BarBox():
                           (self.__left, self.__top + self.one_height)),
                       point_for_cv2((self.__green_right,
                                      self.__top + 2*self.one_height)),
-                      color_for_cv2(SOFT_GREEN, BAR_TICKS),
+                      color_for_cv2(SOFT_GREEN),
                       thickness=-1)
 
         # バーB
@@ -429,5 +429,5 @@ class BarBox():
                       point_for_cv2((self.__left, self.__top +
                                      2*self.one_height)),
                       point_for_cv2((self.__blue_right, self.__bottom)),
-                      color_for_cv2(SOFT_BLUE, BAR_TICKS),
+                      color_for_cv2(SOFT_BLUE),
                       thickness=-1)

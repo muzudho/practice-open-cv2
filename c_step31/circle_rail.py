@@ -7,7 +7,7 @@ import cv2
 from colors import PALE_GRAY, PALE_RED, PALE_GREEN, PALE_BLUE
 from rectangle import Rectangle
 from triangle import Triangle
-from conf import GRID_UNIT, BAR_TICKS
+from conf import GRID_UNIT
 from cv2_helper import color_for_cv2, point_for_cv2
 
 
@@ -142,7 +142,7 @@ class CircleRail():
         cv2.circle(canvas,
                    point_for_cv2(self.center),
                    int(self.radius),
-                   color_for_cv2(PALE_GRAY, BAR_TICKS),
+                   color_for_cv2(PALE_GRAY),
                    thickness=2)
 
     def draw_triangle(self, canvas):

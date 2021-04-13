@@ -3,8 +3,7 @@
 import math
 import numpy as np
 import cv2
-from conf import BAR_TICKS
-from cv2_helper import color_for_cv2, point_for_cv2
+from cv2_helper import color_for_cv2
 
 
 class OuterCircle():
@@ -132,7 +131,7 @@ class OuterCircle():
             contours = np.array(
                 [[a_x, a_y], [b_x, b_y], [c_x, c_y], [d_x, d_y]])
             cv2.fillPoly(canvas, pts=[contours],
-                         color=color_for_cv2(color, BAR_TICKS))
+                         color=color_for_cv2(color))
 
             # 丸ブラシ
             # cv2.ellipse(canvas,
@@ -141,5 +140,5 @@ class OuterCircle():
             #            0,
             #            360-start_angle,
             #            360-end_angle,
-            #            color_for_cv2(color, BAR_TICKS),
+            #            color_for_cv2(color),
             #            thickness=int(self.__tickness))

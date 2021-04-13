@@ -5,7 +5,6 @@ import math
 import cv2
 from triangle_calc import calc_triangle
 from colors import GRAY
-from conf import BAR_TICKS
 from cv2_helper import point_for_cv2, color_for_cv2
 from hsv_model_hul_view import color_phase
 
@@ -164,34 +163,34 @@ class Triangle():
         cv2.line(canvas,
                  point_for_cv2(self.nodes_p[0]),
                  point_for_cv2(self.nodes_p[1]),
-                 color_for_cv2(self.__edge_color, BAR_TICKS),
+                 color_for_cv2(self.__edge_color),
                  thickness=2)
         cv2.line(canvas,
                  point_for_cv2(self.nodes_p[1]),
                  point_for_cv2(self.nodes_p[2]),
-                 color_for_cv2(self.__edge_color, BAR_TICKS),
+                 color_for_cv2(self.__edge_color),
                  thickness=2)
         cv2.line(canvas,
                  point_for_cv2(self.nodes_p[2]),
                  point_for_cv2(self.nodes_p[0]),
-                 color_for_cv2(self.__edge_color, BAR_TICKS),
+                 color_for_cv2(self.__edge_color),
                  thickness=2)
         # ３頂点
         if self.__node_radius > 0:
             cv2.circle(canvas,
                        point_for_cv2(self.nodes_p[0]),
                        int(self.__node_radius),
-                       color_for_cv2(self.__nodes_color[0], BAR_TICKS),
+                       color_for_cv2(self.__nodes_color[0]),
                        thickness=-1)
             cv2.circle(canvas,
                        point_for_cv2(self.nodes_p[1]),
                        int(self.__node_radius),
-                       color_for_cv2(self.__nodes_color[2], BAR_TICKS),
+                       color_for_cv2(self.__nodes_color[2]),
                        thickness=-1)
             cv2.circle(canvas,
                        point_for_cv2(self.nodes_p[2]),
                        int(self.__node_radius),
-                       color_for_cv2(self.__nodes_color[1], BAR_TICKS),
+                       color_for_cv2(self.__nodes_color[1]),
                        thickness=-1)
 
             # 重心
@@ -199,5 +198,5 @@ class Triangle():
             cv2.circle(canvas,
                        point_for_cv2(gravity),
                        int(self.__node_radius),
-                       color_for_cv2(self.__center_color, BAR_TICKS),
+                       color_for_cv2(self.__center_color),
                        thickness=-1)

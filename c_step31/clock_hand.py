@@ -3,7 +3,6 @@
 import math
 import cv2
 from colors import PALE_GRAY
-from conf import BAR_TICKS
 from cv2_helper import color_for_cv2, point_for_cv2
 
 
@@ -96,7 +95,7 @@ class ClockHand():
         cv2.line(canvas,
                  point_for_cv2(inner_p),
                  point_for_cv2(outer_p),
-                 color_for_cv2(PALE_GRAY, BAR_TICKS),
+                 color_for_cv2(PALE_GRAY),
                  thickness=2)
         # 時計の針の先
         # 楕円、描画する画像を指定、座標(x,y),xyの半径、角度,色、線の太さ(-1は塗りつぶし)
@@ -110,7 +109,7 @@ class ClockHand():
                     0,
                     360-start_angle,
                     360-end_angle,
-                    color_for_cv2(PALE_GRAY, BAR_TICKS),
+                    color_for_cv2(PALE_GRAY),
                     thickness=int(self.tickness))
         cv2.ellipse(canvas,
                     point_for_cv2(self.center),
@@ -118,5 +117,5 @@ class ClockHand():
                     0,
                     360-start_angle,
                     360-end_angle,
-                    color_for_cv2(PALE_GRAY, BAR_TICKS),
+                    color_for_cv2(PALE_GRAY),
                     thickness=int(self.tickness))

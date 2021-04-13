@@ -7,10 +7,10 @@ from colors import  \
     DARK_GRAYISH_GRAY, DARK_GRAYISH_RED, DARK_GRAYISH_GREEN, DARK_GRAYISH_BLUE, \
     PALE_RED, PALE_GREEN, PALE_BLUE
 from color_calc import convert_pixel_to_color_element
-from conf import GRID_UNIT, BAR_TICKS, DE_GAMMA_FROM_LINEAR
+from conf import GRID_UNIT, BAR_TICKS  # , DE_GAMMA_FROM_LINEAR
 from rectangle import Rectangle
 from cv2_helper import color_for_cv2, point_for_cv2
-from gamma_correction import de_gamma_from_linear_x
+# from gamma_correction import de_gamma_from_linear_x
 
 
 class BarBox():
@@ -352,11 +352,11 @@ class BarBox():
         lower_color_element = convert_pixel_to_color_element(
             left_box_width, self.width)
 
-        if DE_GAMMA_FROM_LINEAR:
-            max_val = de_gamma_from_linear_x(max_val)
-            zero = de_gamma_from_linear_x(zero)
-            upper_color_element = de_gamma_from_linear_x(upper_color_element)
-            lower_color_element = de_gamma_from_linear_x(lower_color_element)
+        # if DE_GAMMA_FROM_LINEAR:
+        #    max_val = de_gamma_from_linear_x(max_val)
+        #    zero = de_gamma_from_linear_x(zero)
+        #    upper_color_element = de_gamma_from_linear_x(upper_color_element)
+        #    lower_color_element = de_gamma_from_linear_x(lower_color_element)
 
         top = self.top+self.label_gap
         # バーの最大値(0から始まる数)
@@ -396,10 +396,10 @@ class BarBox():
         center_box_rate = self.rates[1]
         right_box_rate = self.rates[2]
 
-        if DE_GAMMA_FROM_LINEAR:
-            left_box_rate = de_gamma_from_linear_x(left_box_rate)
-            center_box_rate = de_gamma_from_linear_x(center_box_rate)
-            right_box_rate = de_gamma_from_linear_x(right_box_rate)
+        # if DE_GAMMA_FROM_LINEAR:
+        #    left_box_rate = de_gamma_from_linear_x(left_box_rate)
+        #    center_box_rate = de_gamma_from_linear_x(center_box_rate)
+        #    right_box_rate = de_gamma_from_linear_x(right_box_rate)
 
         top = self.top+self.label_gap
         # 左列のバー率

@@ -35,18 +35,22 @@ BAR_TICKS = 256
 if DE_GAMMA_FROM_LINEAR:
     # RGBの仕様から、ガンマ補正を解除する前提なら、こっち（＾～＾）
     L_M_U_NAME_LIST = [
-        (0.30, 0.70, 0.00, 'Bright'),  # Bright
-        (0.15, 0.70, 0.15, 'Strong'),  # Strong
-        (0.00, 0.70, 0.30, 'Deep'),  # Deep
-        (0.60, 0.40, 0.00, 'Light'),  # Light
-        (0.40, 0.40, 0.20, 'Soft'),  # Soft
-        (0.20, 0.40, 0.40, 'Dull'),  # Dull
-        (0.00, 0.40, 0.60, 'Dark'),  # Dark
-        (0.90, 0.10, 0.00, 'Pale'),  # Pale
-        (0.60, 0.10, 0.30, 'Light grayish'),  # Light grayish
-        (0.30, 0.10, 0.60, 'Grayish'),  # Grayish
-        (0.00, 0.10, 0.90, 'Dark grayish'),  # Dark grayish
-        (0.00, 1.00, 0.00, 'Vivid'),  # Vivid
+        # 鮮やかさ2番
+        (0.250, 0.750, 0.000, 'Bright'),  # Bright
+        (0.125, 0.750, 0.125, 'Strong'),  # Strong
+        (0.000, 0.750, 0.250, 'Deep'),  # Deep
+        # 鮮やかさ3番
+        (0.500, 0.500, 0.000, 'Light'),  # Light
+        (0.334, 0.500, 0.116, 'Soft'),  # Soft
+        (0.116, 0.500, 0.334, 'Dull'),  # Dull
+        (0.000, 0.500, 0.500, 'Dark'),  # Dark
+        # 鮮やかさ4番
+        (0.750, 0.250, 0.000, 'Pale'),  # Pale
+        (0.500, 0.250, 0.250, 'Light grayish'),  # Light grayish
+        (0.250, 0.250, 0.500, 'Grayish'),  # Grayish
+        (0.000, 0.250, 0.750, 'Dark grayish'),  # Dark grayish
+        # 鮮やかさ1番
+        (0.000, 1.000, 0.000, 'Vivid'),  # Vivid
     ]
 else:
     # 合計 1.0 になるように 左から埋めろだぜ（＾～＾） 左の箱、真ん中の箱、右の箱の横幅の比だぜ（＾～＾）

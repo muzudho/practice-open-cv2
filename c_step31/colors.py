@@ -16,13 +16,35 @@ def filtering(color):
 
 
 # White
-WHITE = filtering((0.95, 0.95, 0.95))  # 少し控えめ
+if DE_GAMMA_FROM_LINEAR:
+    # もしガンマ補正が世の中に存在しなかったら、バー全体に表現の幅があります
+    U = 1.00
+    L = 0.95  # 少し控えめ
+    M = (U+L)/2
+    WHITE = filtering((M, M, M))
+else:
+    # 世の中にはガンマ補正が存在するから、バーの上の方に表現の幅が偏ります
+    M = 0.95  # 少し控えめ
+    WHITE = filtering((M, M, M))
+
 
 # Pale
-PALE_GRAY = filtering((0.85, 0.85, 0.85))
-PALE_RED = filtering((1.0, 0.7, 0.7))
-PALE_GREEN = filtering((0.7, 1.0, 0.7))
-PALE_BLUE = filtering((0.7, 0.7, 1.0))
+if DE_GAMMA_FROM_LINEAR:
+    U = 1.00
+    L = 0.75
+    M = (U+L)/2
+    PALE_GRAY = filtering((M, M, M))
+    PALE_RED = filtering((U, L, L))
+    PALE_GREEN = filtering((L, U, L))
+    PALE_BLUE = filtering((L, L, U))
+else:
+    U = 1.00
+    L = 0.70
+    M = (U+L)/2
+    PALE_GRAY = filtering((M, M, M))
+    PALE_RED = filtering((U, L, L))
+    PALE_GREEN = filtering((L, U, L))
+    PALE_BLUE = filtering((L, L, U))
 
 # Bright
 if DE_GAMMA_FROM_LINEAR:
@@ -41,27 +63,61 @@ else:
     BRIGHT_BLUE = filtering((0.2, 0.2, 0.9))
 
 # Light
-LIGHT_GRAY = filtering((0.8, 0.8, 0.8))
-LIGHT_RED = filtering((1.0, 0.6, 0.6))
-LIGHT_GREEN = filtering((0.6, 1.0, 0.6))
-LIGHT_BLUE = filtering((0.6, 0.6, 1.0))
+if DE_GAMMA_FROM_LINEAR:
+    U = 1.00
+    L = 0.50
+    M = (U+L)/2
+    LIGHT_GRAY = filtering((M, M, M))
+    LIGHT_RED = filtering((U, L, L))
+    LIGHT_GREEN = filtering((L, U, L))
+    LIGHT_BLUE = filtering((L, L, U))
+else:
+    U = 1.00
+    L = 0.60
+    M = (U+L)/2
+    LIGHT_GRAY = filtering((M, M, M))
+    LIGHT_RED = filtering((U, L, L))
+    LIGHT_GREEN = filtering((L, U, L))
+    LIGHT_BLUE = filtering((L, L, U))
 
 # Soft
-SOFT_GRAY = filtering((0.7, 0.7, 0.7))
-SOFT_RED = filtering((0.9, 0.5, 0.5))
-SOFT_GREEN = filtering((0.5, 0.9, 0.5))
-SOFT_BLUE = filtering((0.5, 0.5, 0.9))
+if DE_GAMMA_FROM_LINEAR:
+    U = 0.872
+    L = 0.372
+    M = (U+L)/2
+    SOFT_GRAY = filtering((M, M, M))
+    SOFT_RED = filtering((U, L, L))
+    SOFT_GREEN = filtering((L, U, L))
+    SOFT_BLUE = filtering((L, L, U))
+else:
+    U = 0.90
+    L = 0.50
+    M = (U+L)/2
+    SOFT_GRAY = filtering((M, M, M))
+    SOFT_RED = filtering((U, L, L))
+    SOFT_GREEN = filtering((L, U, L))
+    SOFT_BLUE = filtering((L, L, U))
 
 # Vivid
-VIVID_RED = filtering((1.0, 0, 0))
-VIVID_GREEN = filtering((0, 1.0, 0))
-VIVID_BLUE = filtering((0, 0, 1.0))
+if DE_GAMMA_FROM_LINEAR:
+    U = 1.000
+    L = 0.000
+    M = (U+L)/2
+    VIVID_RED = filtering((U, L, L))
+    VIVID_GREEN = filtering((L, U, L))
+    VIVID_BLUE = filtering((L, L, U))
+else:
+    U = 1.000
+    L = 0.000
+    M = (U+L)/2
+    VIVID_RED = filtering((U, L, L))
+    VIVID_GREEN = filtering((L, U, L))
+    VIVID_BLUE = filtering((L, L, U))
 
 # Strong
 if DE_GAMMA_FROM_LINEAR:
-    # ガンマ補正を解除する前提なら、上の方と下の方の全部を使える
-    U = 0.85
-    L = 0.15
+    U = 0.875
+    L = 0.125
     M = (U+L)/2
     GRAY = filtering((M, M, M))
     RED = filtering((U, L, L))
@@ -84,25 +140,46 @@ else:
 
 # Dark
 if DE_GAMMA_FROM_LINEAR:
-    # ガンマ補正を解除する前提なら、下の方を使える
-    U = 0.4
-    L = 0.0
+    U = 0.500
+    L = 0.000
     M = (U+L)/2
     DARK_GRAY = filtering((M, M, M))
     DARK_RED = filtering((U, L, L))
     DARK_GREEN = filtering((L, U, L))
     DARK_BLUE = filtering((L, L, U))
 else:
-    DARK_GRAY = filtering((0.4, 0.4, 0.4))
-    DARK_RED = filtering((0.6, 0.2, 0.2))
-    DARK_GREEN = filtering((0.2, 0.6, 0.2))
-    DARK_BLUE = filtering((0.2, 0.2, 0.6))
+    U = 0.600
+    L = 0.200
+    M = (U+L)/2
+    DARK_GRAY = filtering((M, M, M))
+    DARK_RED = filtering((U, L, L))
+    DARK_GREEN = filtering((L, U, L))
+    DARK_BLUE = filtering((L, L, U))
 
 # Dark grayish
-DARK_GRAYISH_GRAY = filtering((0.25, 0.25, 0.25))
-DARK_GRAYISH_RED = filtering((0.4, 0.1, 0.1))
-DARK_GRAYISH_GREEN = filtering((0.1, 0.4, 0.1))
-DARK_GRAYISH_BLUE = filtering((0.1, 0.1, 0.4))
+if DE_GAMMA_FROM_LINEAR:
+    U = 0.250
+    L = 0.000
+    M = (U+L)/2
+    DARK_GRAYISH_GRAY = filtering((M, M, M))
+    DARK_GRAYISH_RED = filtering((U, L, L))
+    DARK_GRAYISH_GREEN = filtering((L, U, L))
+    DARK_GRAYISH_BLUE = filtering((L, L, U))
+else:
+    U = 0.400
+    L = 0.100
+    M = (U+L)/2
+    DARK_GRAYISH_GRAY = filtering((M, M, M))
+    DARK_GRAYISH_RED = filtering((U, L, L))
+    DARK_GRAYISH_GREEN = filtering((L, U, L))
+    DARK_GRAYISH_BLUE = filtering((L, L, U))
 
 # BLACK
-BLACK = filtering((0.05, 0.05, 0.05))  # 少し控えめ
+if DE_GAMMA_FROM_LINEAR:
+    U = 0.050
+    L = 0.000
+    M = (U+L)/2
+    BLACK = filtering((M, M, M))
+else:
+    M = 0.05  # 少し控えめ
+    BLACK = filtering((M, M, M))

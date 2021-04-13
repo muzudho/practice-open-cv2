@@ -268,6 +268,59 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
                 large_triangle, clock_hand, _error_angle):
     """アニメの１コマを作成します"""
 
+    # 「もし世の中にガンマ補正が存在しなかったら」
+    # ガンマ補正の掛かっていない線形空間から、ガンマ補正を解除したことの表示
+    if DE_GAMMA_FROM_LINEAR:
+        cv2.putText(canvas,
+                    f"Hypothesis:",
+                    point_for_cv2((GRID_UNIT, 4*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+        cv2.putText(canvas,
+                    f"If gamma",
+                    point_for_cv2((GRID_UNIT, 8*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+        cv2.putText(canvas,
+                    f"correction",
+                    point_for_cv2((GRID_UNIT, 12*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+        cv2.putText(canvas,
+                    f"does not",
+                    point_for_cv2((GRID_UNIT, 16*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+        cv2.putText(canvas,
+                    f"exist.",
+                    point_for_cv2((GRID_UNIT, 20*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+        cv2.putText(canvas,
+                    f"RGB bar is",
+                    point_for_cv2((GRID_UNIT, 24*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+        cv2.putText(canvas,
+                    f"**LINEAR**",
+                    point_for_cv2((GRID_UNIT, 28*GRID_UNIT)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    2*FONT_SCALE,
+                    color_for_cv2(BLACK),
+                    lineType=2)
+
     circle_rail.draw_circle(canvas)  # 円レール
     circle_rail.draw_triangle(canvas)  # 円に内接する正三角形
     draw_border(circle_rail, canvas)  # 背景の上限、下限の線
@@ -326,18 +379,7 @@ def draw_canvas(canvas, bar_box, circle_rail, outer_circle,
                 lineType=2)
 
     # グレースケール関連の補助線
-    draw_grayscale(canvas, circle_rail.center, circle_rail.radius)
-
-    # 「もし世の中にガンマ補正が存在しなかったら」
-    # ガンマ補正の掛かっていない線形空間から、ガンマ補正を解除したことの表示
-    if DE_GAMMA_FROM_LINEAR:
-        cv2.putText(canvas,
-                    f"If gamma correction does not exist in the world.",
-                    point_for_cv2((GRID_UNIT, GRID_UNIT)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    FONT_SCALE,
-                    color_for_cv2(BLACK),
-                    lineType=2)
+    # draw_grayscale(canvas, circle_rail.center, circle_rail.radius)
 
     return canvas
 

@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from cv2_helper import point_for_cv2, color_for_cv2
 from colors import \
-    PALE_GRAY, SOFT_GRAY, BLACK
+    PALE_GRAY, BRIGHT_GRAY, SOFT_GRAY, BLACK
 from conf import CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
 from japanese import draw_jp
 
@@ -39,7 +39,7 @@ def main():
 
     # キャンバス生成
     canvas = np.full((canvas_rows*GRID_UNIT, canvas_columns*GRID_UNIT, CANVAS_CHANNELS),
-                     color_for_cv2(SOFT_GRAY)[0], dtype=np.uint8)
+                     color_for_cv2(PALE_GRAY)[0], dtype=np.uint8)
 
     # 方眼紙
     # 水平線
@@ -48,7 +48,7 @@ def main():
         cv2.line(canvas,
                  point_for_cv2((0, y_num)),
                  point_for_cv2((canvas_columns*GRID_UNIT, y_num)),
-                 color_for_cv2(PALE_GRAY),
+                 color_for_cv2(BRIGHT_GRAY),
                  thickness=1)
     # 垂直線
     for i in range(0, canvas_columns+1):
@@ -56,7 +56,7 @@ def main():
         cv2.line(canvas,
                  point_for_cv2((x_num, 0)),
                  point_for_cv2((x_num, canvas_rows*GRID_UNIT)),
-                 color_for_cv2(PALE_GRAY),
+                 color_for_cv2(BRIGHT_GRAY),
                  thickness=1)
 
     # 文字

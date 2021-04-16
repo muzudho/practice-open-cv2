@@ -11,9 +11,16 @@ from cv2_helper import point_for_cv2, color_for_cv2
 TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
 
 
-def cv2_put_text_5(canvas, text, left_top, true_type_font, font_size, color, mode=0):
-    # cv2.putText()にないオリジナル引数「mode」　orgで指定した座標の基準
-    # 0（デフォ）＝cv2.putText()と同じく左下　1＝左上　2＝中央
+def cv2_put_text_5(canvas, text, left_top, true_type_font, font_size, color, anchor=0):
+    """テキスト描画
+
+    Parameters
+    ----------
+    anchor : int
+        0（デフォ）＝cv2.putText()と同じく左下
+        1＝左上
+        2＝中央
+    """
 
     # テキスト描写域を取得
     true_type_font = ImageFont.truetype(font=true_type_font, size=font_size)
@@ -25,8 +32,8 @@ def cv2_put_text_5(canvas, text, left_top, true_type_font, font_size, color, mod
     left_x, left_y = left_top
     offset_x = [0, 0, text_w//2]
     offset_y = [text_h, 0, (text_h+text_b)//2]
-    x_0 = left_x - offset_x[mode]
-    y_0 = left_y - offset_y[mode]
+    x_0 = left_x - offset_x[anchor]
+    y_0 = left_y - offset_y[anchor]
     img_h, img_w = canvas.shape[:2]
 
     # 画面外なら何もしない
@@ -64,7 +71,7 @@ def draw_jp(canvas, text, left_top, true_type_font, font_size, color):
                             true_type_font=true_type_font,
                             font_size=font_size,
                             color=color_for_cv2(color),
-                            mode=2)           # 今指定した座標は文字描写域の中心だぞ
+                            anchor=2)           # 今指定した座標は文字描写域の中心だぞ
 
 
 if __name__ == '__main__':

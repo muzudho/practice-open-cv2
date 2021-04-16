@@ -12,6 +12,8 @@ from japanese import draw_jp
 CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 800
 CHANNELS = 3
+# OSによってフォント・ファイルの場所が違うので注意
+TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
 
 
 def main():
@@ -42,7 +44,8 @@ def main():
                  thickness=1)
 
     # 文字
-    draw_jp(canvas, "/", (1*GRID_UNIT, 1*GRID_UNIT), 30, BLACK)
+    draw_jp(canvas, "/", (0.5*GRID_UNIT, 0.5*GRID_UNIT),
+            TRUE_TYPE_FONT, GRID_UNIT, BLACK)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする

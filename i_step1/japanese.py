@@ -7,6 +7,9 @@ import cv2
 from PIL import Image, ImageDraw, ImageFont
 from cv2_helper import point_for_cv2, color_for_cv2
 
+# OSによってフォント・ファイルの場所が違うので注意
+TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
+
 
 def cv2_put_text_5(canvas, text, left_top, true_type_font, font_size, color, mode=0):
     # cv2.putText()にないオリジナル引数「mode」　orgで指定した座標の基準
@@ -53,18 +56,13 @@ def cv2_put_text_5(canvas, text, left_top, true_type_font, font_size, color, mod
     return canvas
 
 
-def draw_jp(canvas, text, left_top, color):
+def draw_jp(canvas, text, left_top, true_type_font, font_size, color):
     """日本語の表示"""
-
-    # OSによってフォント・ファイルの場所が違うので注意
-    true_type_font = "C:/Windows/Fonts/meiryo.ttc"
-    size = 30
-
     canvas = cv2_put_text_5(canvas=canvas,
                             text=text,
                             left_top=point_for_cv2(left_top),
                             true_type_font=true_type_font,
-                            font_size=size,
+                            font_size=font_size,
                             color=color_for_cv2(color),
                             mode=2)           # 今指定した座標は文字描写域の中心だぞ
 
@@ -72,7 +70,8 @@ def draw_jp(canvas, text, left_top, color):
 if __name__ == '__main__':
     CANVAS = np.full((200, 400, 3), (160, 160, 160), dtype=np.uint8)
     IMG_H, IMG_W = CANVAS.shape[:2]
-    draw_jp(CANVAS, '日本語も\n可能なり', (IMG_W/2, IMG_H/2), (1.0, 0.0, 0.5))
+    draw_jp(CANVAS, '日本語も\n可能なり', (IMG_W/2, IMG_H/2),
+            TRUE_TYPE_FONT, 30, (1.0, 0.0, 0.5))
     cv2.imshow("make_image.py", CANVAS)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

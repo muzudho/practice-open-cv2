@@ -13,8 +13,6 @@ from japanese import draw_jp
 def main():
     """画像を出力します"""
 
-    print("Start")
-
     # キャンバス生成
     canvas = np.full((CANVAS_ROWS*GRID_UNIT, CANVAS_COLUMNS*GRID_UNIT, CANVAS_CHANNELS),
                      color_for_cv2(SOFT_GRAY)[0], dtype=np.uint8)
@@ -38,14 +36,16 @@ def main():
                  thickness=1)
 
     # カンマ区切り テキスト
-    text = """\
-  ,  ,┌ ,─ ,あ,─ ,┐
-  ,  ,├ ,─ ,い,─ ,┤
-  ,  ,├ ,─ ,う,─ ,┤
-─ ,─ ,┤ ,  ,  ,  ,├ ,─ ,─
-  ,  ,├ ,─ ,え,─ ,┤
-  ,  ,└ ,─ ,お,─ ,┘
-"""
+#    text = """\
+#  ,  ,┌ ,─ ,あ,─ ,┐
+#  ,  ,├ ,─ ,い,─ ,┤
+#  ,  ,├ ,─ ,う,─ ,┤
+# ─ ,─ ,┤ ,  ,  ,  ,├ ,─ ,─
+#  ,  ,├ ,─ ,え,─ ,┤
+#  ,  ,└ ,─ ,お,─ ,┘
+# """
+    with open('./input/i_step1/screen.csv', encoding='utf8') as f:
+        text = f.read()
 
     # 文字
     for (row, line) in enumerate(text.split('\n')):

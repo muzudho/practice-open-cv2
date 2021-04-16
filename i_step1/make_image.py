@@ -6,34 +6,12 @@ import numpy as np
 from cv2_helper import point_for_cv2, color_for_cv2
 from colors import \
     PALE_GRAY, SOFT_GRAY, BLACK
-from conf import CANVAS_COLUMNS, CANVAS_ROWS, CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
+from conf import CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
 from japanese import draw_jp
 
 
 def main():
     """画像を出力します"""
-
-    # キャンバス生成
-    canvas = np.full((CANVAS_ROWS*GRID_UNIT, CANVAS_COLUMNS*GRID_UNIT, CANVAS_CHANNELS),
-                     color_for_cv2(SOFT_GRAY)[0], dtype=np.uint8)
-
-    # 方眼紙
-    # 水平線
-    for i in range(0, CANVAS_ROWS+1):
-        y_num = GRID_UNIT*i
-        cv2.line(canvas,
-                 point_for_cv2((0, y_num)),
-                 point_for_cv2((CANVAS_COLUMNS*GRID_UNIT, y_num)),
-                 color_for_cv2(PALE_GRAY),
-                 thickness=1)
-    # 垂直線
-    for i in range(0, CANVAS_COLUMNS+1):
-        x_num = GRID_UNIT*i
-        cv2.line(canvas,
-                 point_for_cv2((x_num, 0)),
-                 point_for_cv2((x_num, CANVAS_ROWS*GRID_UNIT)),
-                 color_for_cv2(PALE_GRAY),
-                 thickness=1)
 
     # カンマ区切り テキスト
 #    text = """\
@@ -46,6 +24,40 @@ def main():
 # """
     with open('./@input/i_step1/screen.csv', encoding='utf8') as file:
         text = file.read()
+
+    # 最大列、最大行を求めます
+    lines = text.split('\n')
+    max_row = len(lines)
+    max_column = 0
+    for (row, line) in enumerate(lines):
+        cells = len(line.split(','))
+        if max_column < cells:
+            max_column = cells
+
+    canvas_rows = max_row
+    canvas_columns = max_column
+
+    # キャンバス生成
+    canvas = np.full((canvas_rows*GRID_UNIT, canvas_columns*GRID_UNIT, CANVAS_CHANNELS),
+                     color_for_cv2(SOFT_GRAY)[0], dtype=np.uint8)
+
+    # 方眼紙
+    # 水平線
+    for i in range(0, canvas_rows+1):
+        y_num = GRID_UNIT*i
+        cv2.line(canvas,
+                 point_for_cv2((0, y_num)),
+                 point_for_cv2((canvas_columns*GRID_UNIT, y_num)),
+                 color_for_cv2(PALE_GRAY),
+                 thickness=1)
+    # 垂直線
+    for i in range(0, canvas_columns+1):
+        x_num = GRID_UNIT*i
+        cv2.line(canvas,
+                 point_for_cv2((x_num, 0)),
+                 point_for_cv2((x_num, canvas_rows*GRID_UNIT)),
+                 color_for_cv2(PALE_GRAY),
+                 thickness=1)
 
     # 文字
     for (row, line) in enumerate(text.split('\n')):

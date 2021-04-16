@@ -5,8 +5,9 @@ import cv2
 import numpy as np
 from cv2_helper import point_for_cv2, color_for_cv2
 from colors import \
-    PALE_GRAY, SOFT_GRAY
+    PALE_GRAY, SOFT_GRAY, BLACK
 from conf import GRID_UNIT
+from japanese import draw_jp
 
 CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 800
@@ -40,9 +41,16 @@ def main():
                  color_for_cv2(PALE_GRAY),
                  thickness=1)
 
+    # 文字
+    draw_jp(canvas, "/", BLACK)
+
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
     cv2.imwrite(f"./shared/out-istep1.png", canvas)
+
+    cv2.imshow("make_image.py", canvas)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
 main()

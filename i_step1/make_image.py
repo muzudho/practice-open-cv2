@@ -43,33 +43,22 @@ def main():
                  color_for_cv2(PALE_GRAY),
                  thickness=1)
 
-    # テキスト
+    # カンマ区切り テキスト
     text = """\
-┌─┬─┐
-| | |
-├─┼─┤
-| | |
-└─┴─┘
-
-  ┌─あ─┐
-  ├─い─┤
-  ├─う─┤
-──┤   ├──
-  ├─え─┤
-  └─お─┘
   ,  ,┌ ,─ ,あ,─ ,┐
   ,  ,├ ,─ ,い,─ ,┤
   ,  ,├ ,─ ,う,─ ,┤
-─ ,─ ,┤ ,  ,  ,├ ,─ ,─
+─ ,─ ,┤ ,  ,  ,  ,├ ,─ ,─
   ,  ,├ ,─ ,え,─ ,┤
   ,  ,└ ,─ ,お,─ ,┘
 """
 
     # 文字
     for (row, line) in enumerate(text.split('\n')):
-        for (column, char) in enumerate(line):
-            draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
-                    TRUE_TYPE_FONT, GRID_UNIT, BLACK)
+        for (column, cell) in enumerate(line.split(',')):
+            for (_, char) in enumerate(cell):
+                draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
+                        TRUE_TYPE_FONT, GRID_UNIT, BLACK)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする

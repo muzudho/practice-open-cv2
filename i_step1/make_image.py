@@ -44,13 +44,18 @@ def main():
                  thickness=1)
 
     # テキスト
-    text = "\
-┌─┬─┐"
+    text = """\
+┌─┬─┐
+| | |
+├─┼─┤
+| | |
+└─┴─┘"""
 
     # 文字
-    for (column, char) in enumerate(text):
-        draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, 0.5*GRID_UNIT),
-                TRUE_TYPE_FONT, GRID_UNIT, BLACK)
+    for (row, line) in enumerate(text.split('\n')):
+        for (column, char) in enumerate(line):
+            draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
+                    TRUE_TYPE_FONT, GRID_UNIT, BLACK)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする

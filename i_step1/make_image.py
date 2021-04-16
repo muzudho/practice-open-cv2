@@ -42,7 +42,7 @@ def main():
                  thickness=1)
 
     # 文字
-    draw_jp(canvas, "/", BLACK)
+    draw_jp(canvas, "/", (1*GRID_UNIT, 1*GRID_UNIT), BLACK)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする

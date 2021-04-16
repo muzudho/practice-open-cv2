@@ -92,14 +92,14 @@ def main():
             draw_tone_name(canvas, bar_box, tone_name)
             # 書出し
             canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
-            cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+            cv2.imwrite(f"./@share/out-cstep4-{seq}.png", canvas)
             seq += 1
 
         # 描画：色相環のアニメーション表示
         seq, canvas = update_circle(canvas, seq, vertical_parcent, tone_name)
 
         for _ in range(0, 10):  # Wait frames
-            cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+            cv2.imwrite(f"./@share/out-cstep4-{seq}.png", canvas)
             seq += 1
 
 
@@ -124,7 +124,7 @@ def update_circle(canvas, seq, vertical_parcent, tone_name):
 
         # 書出し
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
-        cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+        cv2.imwrite(f"./@share/out-cstep4-{seq}.png", canvas)
         seq += 1
 
     return seq, canvas

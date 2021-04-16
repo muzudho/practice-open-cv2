@@ -62,7 +62,7 @@ def main():
     # BGRをRGBにする
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
-    cv2.imwrite(f"./shared/out-f_step1.png", canvas)
+    cv2.imwrite(f"./@share/out-f_step1.png", canvas)
 
 
 main()

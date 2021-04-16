@@ -79,7 +79,7 @@ def make_circle(seq, bar_rate, tone_name):
         # BGRをRGBにする
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
-        cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+        cv2.imwrite(f"./@share/out-cstep4-{seq}.png", canvas)
         seq += 1
 
     return seq

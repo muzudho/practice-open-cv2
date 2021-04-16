@@ -18,7 +18,7 @@ FRAME_COUNT = 528
 #FRAME_COUNT = 1520
 
 FPS = 8  # 例えば 15 フレームで撮影するなら、ゲーム画面はその半分の FPS ならコマ飛びを感じないぐらい
-IMAGE1 = pygame.image.load('./shared/out-cstep4-0.png')
+IMAGE1 = pygame.image.load('./@share/out-cstep4-0.png')
 IMAGE1_W = IMAGE1.get_width()  # 画像の横幅の取得
 IMAGE1_H = IMAGE1.get_height()  # 画像の高さの取得
 
@@ -31,7 +31,7 @@ CLOCK = pygame.time.Clock()  # フレームレート制御のための Clock オ
 # 画像の先読み
 FRAMES = []
 for i in range(0, FRAME_COUNT):
-    IMAGE1 = pygame.image.load(f'./shared/out-cstep4-{i}.png')
+    IMAGE1 = pygame.image.load(f'./@share/out-cstep4-{i}.png')
     FRAMES.append(IMAGE1)
 
 

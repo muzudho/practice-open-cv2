@@ -177,7 +177,7 @@ def main():
     # BGRをRGBにする
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
-    cv2.imwrite(f"./shared/out-g_step1.png", canvas)
+    cv2.imwrite(f"./@share/out-g_step1.png", canvas)
 
 
 def make_line(range1, theta, center):

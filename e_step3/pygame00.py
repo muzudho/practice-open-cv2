@@ -12,7 +12,7 @@ pygame.init()
 
 # 画像の読み込み
 FRAME_COUNT = 36
-IMAGE1 = pygame.image.load('./shared/out-cstep4-0.png')
+IMAGE1 = pygame.image.load('./@share/out-cstep4-0.png')
 IMAGE1_W = IMAGE1.get_width()  # 画像の横幅の取得
 IMAGE1_H = IMAGE1.get_height()  # 画像の高さの取得
 
@@ -32,7 +32,7 @@ DY = 2  # 移動量
 for j in range(0, 2):  # 2ループ
     for i in range(0, FRAME_COUNT):
         SURFACE.fill(WHITE)  # 背景の色
-        IMAGE1 = pygame.image.load(f'./shared/out-cstep4-{i}.png')
+        IMAGE1 = pygame.image.load(f'./@share/out-cstep4-{i}.png')
         SURFACE.blit(IMAGE1, (BALLP[0], BALLP[1]))  # ボールの描画
 
         # イベントキューを処理するループ

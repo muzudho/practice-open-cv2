@@ -86,7 +86,7 @@ def main():
             draw_tone_name(canvas, bar_box, tone_name)
             # 書出し
             canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
-            cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+            cv2.imwrite(f"./@share/out-cstep4-{seq}.png", canvas)
             seq += 1
 
         seq = make_circle(canvas, seq, bar_rate, tone_name)
@@ -108,7 +108,7 @@ def make_circle(canvas, seq, bar_rate, tone_name):
 
         # 書出し
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
-        cv2.imwrite(f"./shared/out-cstep4-{seq}.png", canvas)
+        cv2.imwrite(f"./@share/out-cstep4-{seq}.png", canvas)
         seq += 1
 
     return seq

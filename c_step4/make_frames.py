@@ -18,7 +18,7 @@ def main():
         # BGRをRGBにする
         canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
 
-        cv2.imwrite(f"./shared/out-cstep4-{i}.png", canvas)
+        cv2.imwrite(f"./@share/out-cstep4-{i}.png", canvas)
 
 
 def make_canvas(base_theta):

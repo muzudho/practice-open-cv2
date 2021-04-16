@@ -44,8 +44,8 @@ def main():
 #  ,  ,├ ,─ ,え,─ ,┤
 #  ,  ,└ ,─ ,お,─ ,┘
 # """
-    with open('./input/i_step1/screen.csv', encoding='utf8') as f:
-        text = f.read()
+    with open('./@input/i_step1/screen.csv', encoding='utf8') as file:
+        text = file.read()
 
     # 文字
     for (row, line) in enumerate(text.split('\n')):
@@ -56,7 +56,7 @@ def main():
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
-    cv2.imwrite(f"./shared/out-istep1.png", canvas)
+    cv2.imwrite(f"./@share/out-istep1.png", canvas)
 
     cv2.imshow("make_image.py", canvas)
     cv2.waitKey(0)

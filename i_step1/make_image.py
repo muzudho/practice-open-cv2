@@ -6,14 +6,8 @@ import numpy as np
 from cv2_helper import point_for_cv2, color_for_cv2
 from colors import \
     PALE_GRAY, SOFT_GRAY, BLACK
-from conf import GRID_UNIT
+from conf import CANVAS_COLUMNS, CANVAS_ROWS, CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
 from japanese import draw_jp
-
-CANVAS_WIDTH = 800
-CANVAS_HEIGHT = 800
-CHANNELS = 3
-# OSによってフォント・ファイルの場所が違うので注意
-TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
 
 
 def main():
@@ -22,24 +16,24 @@ def main():
     print("Start")
 
     # キャンバス生成
-    canvas = np.full((CANVAS_HEIGHT, CANVAS_WIDTH, CHANNELS),
+    canvas = np.full((CANVAS_ROWS*GRID_UNIT, CANVAS_COLUMNS*GRID_UNIT, CANVAS_CHANNELS),
                      color_for_cv2(SOFT_GRAY)[0], dtype=np.uint8)
 
     # 方眼紙
     # 水平線
-    for i in range(0, int(CANVAS_HEIGHT/GRID_UNIT)+1):
+    for i in range(0, CANVAS_ROWS+1):
         y_num = GRID_UNIT*i
         cv2.line(canvas,
                  point_for_cv2((0, y_num)),
-                 point_for_cv2((CANVAS_WIDTH, y_num)),
+                 point_for_cv2((CANVAS_COLUMNS*GRID_UNIT, y_num)),
                  color_for_cv2(PALE_GRAY),
                  thickness=1)
     # 垂直線
-    for i in range(0, int(CANVAS_WIDTH/GRID_UNIT)+1):
+    for i in range(0, CANVAS_COLUMNS+1):
         x_num = GRID_UNIT*i
         cv2.line(canvas,
                  point_for_cv2((x_num, 0)),
-                 point_for_cv2((x_num, CANVAS_WIDTH)),
+                 point_for_cv2((x_num, CANVAS_ROWS*GRID_UNIT)),
                  color_for_cv2(PALE_GRAY),
                  thickness=1)
 

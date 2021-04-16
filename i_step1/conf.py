@@ -11,8 +11,14 @@ DE_GAMMA_FROM_LINEAR = True
 # 浮動小数点精度。ネイピアの対数表の精度をリスペクトして、適当に7桁にしたんで深い意味ない（＾～＾）
 ACCURACY = 0.0000001
 
+# キャンバス設定（１マスは正方形）
+CANVAS_COLUMNS = 40
+CANVAS_ROWS = 25
+CANVAS_CHANNELS = 3
 # グリッド間隔
 GRID_UNIT = 32
+# OSによってフォント・ファイルの場所が違うので注意
+TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
 
 # フォント倍率
 FONT_SCALE = 0.5

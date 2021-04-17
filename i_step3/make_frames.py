@@ -13,7 +13,7 @@ from agent_move import move_up, move_to_right, move_down, move_to_left, \
 from drawing import draw_board, draw_agent
 
 
-def search(seq, board, agent):
+def search(seq, board, agent, prev_location):
     """描画と探索
     Parameters
     ----------
@@ -37,11 +37,12 @@ def search(seq, board, agent):
     seq += 1
 
     dead_end = True
+    before_move_location = agent.location
 
     # 上に行く
-    if move_up(board, agent):
+    if move_up(board, agent, prev_location):
         dead_end = False
-        seq, dead_end2 = search(seq, board, agent)
+        seq, dead_end2 = search(seq, board, agent, before_move_location)
         if dead_end2:
             # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
             board.checked_rows[agent.location[1]][agent.location[0]] = True
@@ -49,9 +50,9 @@ def search(seq, board, agent):
         undo_move_up(agent)
 
     # 右に行く
-    if move_to_right(board, agent):
+    if move_to_right(board, agent, prev_location):
         dead_end = False
-        seq, dead_end2 = search(seq, board, agent)
+        seq, dead_end2 = search(seq, board, agent, before_move_location)
         if dead_end2:
             # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
             board.checked_rows[agent.location[1]][agent.location[0]] = True
@@ -59,9 +60,9 @@ def search(seq, board, agent):
         undo_move_to_right(agent)
 
     # 下に行く
-    if move_down(board, agent):
+    if move_down(board, agent, prev_location):
         dead_end = False
-        seq, dead_end2 = search(seq, board, agent)
+        seq, dead_end2 = search(seq, board, agent, before_move_location)
         if dead_end2:
             # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
             board.checked_rows[agent.location[1]][agent.location[0]] = True
@@ -69,9 +70,9 @@ def search(seq, board, agent):
         undo_move_down(agent)
 
     # 左に行く
-    if move_to_left(board, agent):
+    if move_to_left(board, agent, prev_location):
         dead_end = False
-        seq, dead_end2 = search(seq, board, agent)
+        seq, dead_end2 = search(seq, board, agent, before_move_location)
         if dead_end2:
             # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
             board.checked_rows[agent.location[1]][agent.location[0]] = True
@@ -95,4 +96,4 @@ AGENT1.prev_location = BOARD1.start_location
 #        print(f"[{column},{row}]={cell}")
 
 SEQ = 0
-search(SEQ, BOARD1, AGENT1)
+search(SEQ, BOARD1, AGENT1, AGENT1.location)

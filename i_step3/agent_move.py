@@ -7,6 +7,7 @@ def move_up(board, agent):
     column = agent.location[0]
     row = agent.location[1]
 
+    # 現在マス
     if board.rows[row][column] in ('→', '↓', '←', '┌', '┐', '┘│', '│└', '┐┌', '─┌', '┐─'):
         # 上を移動禁止とする現在マス
         return False
@@ -14,16 +15,19 @@ def move_up(board, agent):
     row -= 1
 
     if row >= 0 and column < len(board.checked_rows[row]) and not board.checked_rows[row][column]:
-        if board.rows[row][column] in ('┌', '┐', '┌r', '┐r', '│', '│┌', '┐│', '┘│', '│└', '┐┌'):
+        # 次マス
+        if board.rows[row][column] in ('┌', '┐', '┌r', '┐r', '│', '│┌', '┐│', '┘│', '│└', '┐┌', '┘┐', '┐┘', '└┌', '┌└'):
             # 道
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[1] -= 1
             return True
 
         if len(board.rows[row][column]) == 1 or board.rows[row][column] == '..':
             # 文字
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[1] -= 1
             return True
@@ -52,14 +56,16 @@ def move_to_right(board, agent):
         # 道
         if board.rows[row][column] in ('┐', '┘', '┐r', '┘r',
                                        '─', '─┌', '┐─', '┘─', '─└', '┘┐', '┐┘'):
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[0] += 1
             return True
 
         if len(board.rows[row][column]) == 1 or board.rows[row][column] == '..':
             # 文字
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[0] += 1
             return True
@@ -85,15 +91,17 @@ def move_down(board, agent):
     row += 1
     if row < board.height and column < len(board.checked_rows[row]) and not board.checked_rows[row][column]:
         # 道
-        if board.rows[row][column] in ('┘', '└', '┘r', '└r', '│', '│┌', '┐│', '┘│', '│└', '┘└'):
-            board.checked_rows[row][column] = True
+        if board.rows[row][column] in ('┘', '└', '┘r', '└r', '│', '│┌', '┐│', '┘│', '│└', '┘└', '┘┐', '┐┘', '└┌', '┌└'):
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[1] += 1
             return True
 
         if len(board.rows[row][column]) == 1 or board.rows[row][column] == '..':
             # 文字
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[1] += 1
             return True
@@ -122,14 +130,16 @@ def move_to_left(board, agent):
         if board.rows[row][column] in ('┌', '└', '┌r', '└r',
                                        '─', '─┌', '┐─', '┘─', '─└', '└┌', '┌└'):
             # 道
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[0] -= 1
             return True
 
         if len(board.rows[row][column]) == 1 or board.rows[row][column] == '..':
             # 文字
-            board.checked_rows[row][column] = True
+            board.checked_rows[agent.prev_location[1]
+                               ][agent.prev_location[0]] = True  # 移動前の位置をチェック
             agent.prev_location = agent.location
             agent.location[0] -= 1
             return True

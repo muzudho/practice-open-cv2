@@ -102,4 +102,6 @@ python pygame00.py
 
 ![20210417gif1.gif](./@doc/i_step/img/20210417gif1.gif)  
 
-📂`i_step3` は パーサー図だぜ（＾～＾）  
+📂`i_step4` は パーサー図だぜ（＾～＾）  
+📂`e_step5` で紙芝居しろだぜ（＾～＾）  
+

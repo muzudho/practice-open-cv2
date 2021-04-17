@@ -1,24 +1,19 @@
-"""エージェントの移動
+"""エージェントの移動。
+すべてのマスは 移動可能と考えた上で、制限をしていきます。
+テキストは 左から右にしか進入させません。
 """
 
 
 def is_rail(board, location):
     """罫線、矢印なら真"""
     return board.rows[location[1]][location[0]] in (
-        # 矢印
-        '↑', '→', '↓', '←',
-        # コーナー
-        '┌', '┐', '┘', '└', '┌r', '┐r', '┘r', '└r',
-        # 一直線
-        '│', '─',
-        # 上分岐
-        '┘─', '─└', '┘└',
-        # 右分岐
-        '│┌', '│└', '└┌', '┌└',
-        # 下分岐
-        '─┌', '┐─', '┐┌',
-        # 左分岐
-        '┐│', '┘│', '┘┐', '┐┘')
+        '↑', '→', '↓', '←',  # 矢印
+        '┌', '┐', '┘', '└', '┌r', '┐r', '┘r', '└r',  # コーナー
+        '│', '─',  # 一直線
+        '┘─', '─└', '┘└',  # 上分岐
+        '│┌', '│└', '└┌', '┌└',  # 右分岐
+        '─┌', '┐─', '┐┌',  # 下分岐
+        '┐│', '┘│', '┘┐', '┐┘')  # 左分岐
 
 
 def is_letter(board, location):
@@ -43,26 +38,21 @@ def move_up(board, agent):
     next_col = cur_col
     next_row = cur_row - 1
 
-    # 次マス
-    if board.rows[next_row][next_col] in ('→', '↓', '←'):
-        # 下からの侵入を禁止する次のマス
+    # 下からの進入を禁止する移動先マス
+    forbidden = board.rows[next_row][next_col] in ('',  # 何もないところ
+                                                   '→', '↓', '←',  # 矢印
+                                                   '┘', '└', '┘r', '└r',  # コーナー
+                                                   '─',  # 一直線
+                                                   '┘─', '─└', '┘└')  # 上分岐
+    if forbidden or is_letter(board, agent.location):
         return False
 
     if next_row >= 0 and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
-        if board.rows[next_row][next_col] in ('┌', '┐', '┌r', '┐r',
-                                              '│', '│┌', '┐│', '┘│', '│└',
-                                              '┐┌', '┘┐', '┐┘', '└┌', '┌└'):
-            # 道
-            board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-            agent.location[1] -= 1
-            return True
-
-        if len(board.rows[next_row][next_col]) == 1 or board.rows[next_row][next_col] == '..':
-            # 文字
-            board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-            agent.location[1] -= 1
-            return True
+        # 移動可能範囲内で、未チェックなら移動
+        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+        agent.location[1] -= 1
+        return True
 
     return False
 
@@ -85,25 +75,21 @@ def move_to_right(board, agent):
     next_col = cur_col + 1
     next_row = cur_row
 
-    # 次マス
-    if board.rows[next_row][next_col] in ('↑', '↓', '←'):
-        # 左からの侵入を禁止する次のマス
+    # 左からの進入を禁止する移動先マス
+    forbidden = board.rows[next_row][next_col] in ('',  # 何もないところ
+                                                   '↑', '↓', '←',  # 矢印
+                                                   '┌', '└', '┌r', '└r',  # コーナー
+                                                   '│',  # 一直線
+                                                   '│┌', '│└', '└┌', '┌└')  # 右分岐
+    if forbidden:
         return False
 
     if next_col < board.width and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
-        # 道
-        if board.rows[next_row][next_col] in ('┐', '┘', '┐r', '┘r',
-                                              '─', '─┌', '┐─', '┘─', '─└', '┘┐', '┐┘'):
-            board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-            agent.location[0] += 1
-            return True
-
-        if len(board.rows[next_row][next_col]) == 1 or board.rows[next_row][next_col] == '..':
-            # 文字
-            board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-            agent.location[0] += 1
-            return True
+        # 移動可能範囲内で、未チェックなら移動可
+        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+        agent.location[0] += 1
+        return True
 
     return False
 
@@ -127,26 +113,21 @@ def move_down(board, agent):
     next_col = cur_col
     next_row = cur_row + 1
 
-    # 次マス
-    if board.rows[next_row][next_col] in ('↑', '→', '←'):
-        # 左からの侵入を禁止する次のマス
+    # 上からの進入を禁止する移動先マス
+    forbidden = board.rows[next_row][next_col] in ('',  # 何もないところ
+                                                   '↑', '→', '←',  # 矢印
+                                                   '┌', '┐', '┌r', '┐r',  # コーナー
+                                                   '─',  # 一直線
+                                                   '─┌', '┐─', '┐┌')  # 下分岐
+    if forbidden or is_letter(board, agent.location):
         return False
 
+    # 移動可能範囲内で、未チェックなら移動可
     if next_row < board.height and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
-        # 道
-        if board.rows[next_row][next_col] in ('┘', '└', '┘r', '└r',
-                                              '│', '│┌', '┐│', '┘│', '│└',
-                                              '┘└', '┘┐', '┐┘', '└┌', '┌└'):
-            board.checked_rows[next_row][next_col] = True  # 移動前の位置をチェック
-            agent.location[1] += 1
-            return True
-
-        if len(board.rows[next_row][next_col]) == 1 or board.rows[next_row][next_col] == '..':
-            # 文字
-            board.checked_rows[next_row][next_col] = True  # 移動前の位置をチェック
-            agent.location[1] += 1
-            return True
+        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+        agent.location[1] += 1
+        return True
 
     return False
 
@@ -173,25 +154,21 @@ def move_to_left(board, agent):
     next_col = cur_col - 1
     next_row = cur_row
 
-    # 次マス
-    if board.rows[next_row][next_col] in ('↑', '→', '↓'):
-        # 左からの侵入を禁止する次のマス
+    # 右からの進入を禁止する移動先マス
+    forbidden = board.rows[next_row][next_col] in ('',  # 何もないところ
+                                                   '↑', '→', '↓',  # 矢印
+                                                   '┐', '┘', '┐r', '┘r',  # コーナー
+                                                   '│',  # 一直線
+                                                   '┐│', '┘│', '┘┐', '┐┘')  # 左分岐
+    if forbidden or is_letter(board, agent.location):
         return False
 
+    # 移動可能範囲内で、未チェックなら移動可
     if next_col > 0 and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
-        if board.rows[next_row][next_col] in ('┌', '└', '┌r', '└r',
-                                              '─', '─┌', '┐─', '┘─', '─└', '└┌', '┌└'):
-            # 道
-            board.checked_rows[next_row][next_col] = True  # 移動前の位置をチェック
-            agent.location[0] -= 1
-            return True
-
-        if len(board.rows[next_row][next_col]) == 1 or board.rows[next_row][next_col] == '..':
-            # 文字
-            board.checked_rows[next_row][next_col] = True  # 移動前の位置をチェック
-            agent.location[0] -= 1
-            return True
+        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+        agent.location[0] -= 1
+        return True
 
     return False
 

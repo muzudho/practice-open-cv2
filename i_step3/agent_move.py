@@ -43,9 +43,13 @@ def move_up(board, agent):
     next_col = cur_col
     next_row = cur_row - 1
 
+    # 次マス
+    if board.rows[next_row][next_col] in ('→', '↓', '←'):
+        # 下からの侵入を禁止する次のマス
+        return False
+
     if next_row >= 0 and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
-        # 次マス
         if board.rows[next_row][next_col] in ('┌', '┐', '┌r', '┐r',
                                               '│', '│┌', '┐│', '┘│', '│└',
                                               '┐┌', '┘┐', '┐┘', '└┌', '┌└'):
@@ -80,6 +84,11 @@ def move_to_right(board, agent):
 
     next_col = cur_col + 1
     next_row = cur_row
+
+    # 次マス
+    if board.rows[next_row][next_col] in ('↑', '↓', '←'):
+        # 左からの侵入を禁止する次のマス
+        return False
 
     if next_col < board.width and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
@@ -117,6 +126,11 @@ def move_down(board, agent):
 
     next_col = cur_col
     next_row = cur_row + 1
+
+    # 次マス
+    if board.rows[next_row][next_col] in ('↑', '→', '←'):
+        # 左からの侵入を禁止する次のマス
+        return False
 
     if next_row < board.height and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:
@@ -158,6 +172,11 @@ def move_to_left(board, agent):
 
     next_col = cur_col - 1
     next_row = cur_row
+
+    # 次マス
+    if board.rows[next_row][next_col] in ('↑', '→', '↓'):
+        # 左からの侵入を禁止する次のマス
+        return False
 
     if next_col > 0 and next_col < len(board.checked_rows[next_row]) and \
             not board.checked_rows[next_row][next_col]:

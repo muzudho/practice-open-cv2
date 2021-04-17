@@ -29,11 +29,10 @@ def is_letter(board, location):
              ) == 1 or board.rows[location[1]][location[0]] == '..')
 
 
-def move_up(board, agent, prev_location):
-    """↑上に移動"""
+def can_move_up(board, agent, prev_location):
+    """↑上に移動できるか"""
     # １つ前のマス
     pre_col = prev_location[0]
-    _pre_row = prev_location[1]
 
     # 現在マス
     cur_col = agent.location[0]
@@ -73,9 +72,12 @@ def move_up(board, agent, prev_location):
     if not can_proceed(board, (next_col, next_row)):
         return False
 
-    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-    agent.location[1] -= 1
     return True
+
+
+def move_up(agent):
+    """↑上に移動"""
+    agent.location[1] -= 1
 
 
 def undo_move_up(agent):
@@ -83,8 +85,8 @@ def undo_move_up(agent):
     agent.location[1] += 1
 
 
-def move_to_right(board, agent, prev_location):
-    """→右に移動"""
+def can_move_to_right(board, agent, prev_location):
+    """→右に移動できるか"""
     # １つ前のマス
     _pre_col = prev_location[0]
     pre_row = prev_location[1]
@@ -125,9 +127,12 @@ def move_to_right(board, agent, prev_location):
     if not can_proceed(board, (next_col, next_row)):
         return False
 
-    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-    agent.location[0] += 1
     return True
+
+
+def move_to_right(agent):
+    """→右に移動"""
+    agent.location[0] += 1
 
 
 def undo_move_to_right(agent):
@@ -135,8 +140,8 @@ def undo_move_to_right(agent):
     agent.location[0] -= 1
 
 
-def move_down(board, agent, prev_location):
-    """↓下に移動"""
+def can_move_down(board, agent, prev_location):
+    """↓下に移動できるか"""
     # １つ前のマス
     pre_col = prev_location[0]
     _pre_row = prev_location[1]
@@ -178,9 +183,12 @@ def move_down(board, agent, prev_location):
     if not can_proceed(board, (next_col, next_row)):
         return False
 
-    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-    agent.location[1] += 1
     return True
+
+
+def move_down(agent):
+    """↓下に移動"""
+    agent.location[1] += 1
 
 
 def undo_move_down(agent):
@@ -188,8 +196,8 @@ def undo_move_down(agent):
     agent.location[1] -= 1
 
 
-def move_to_left(board, agent, prev_location):
-    """←左に移動"""
+def can_move_to_left(board, agent, prev_location):
+    """←左に移動できるか"""
     # １つ前のマス
     _pre_col = prev_location[0]
     pre_row = prev_location[1]
@@ -233,9 +241,12 @@ def move_to_left(board, agent, prev_location):
     if not can_proceed(board, (next_col, next_row)):
         return False
 
-    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-    agent.location[0] -= 1
     return True
+
+
+def move_to_left(agent):
+    """←左に移動"""
+    agent.location[0] -= 1
 
 
 def undo_move_to_left(agent):

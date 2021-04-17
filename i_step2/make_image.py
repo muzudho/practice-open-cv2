@@ -11,8 +11,10 @@ from japanese import draw_jp
 
 FILE_PATH = './@input/i_step2/screen.csv'
 LINE_THICKNESS = 2
+FONT_THICKNESS = 1
 GRID_COLOR = BRIGHT_GRAY
 LINE_COLOR = SOFT_GRAY
+FONT_COLOR = BLACK
 
 
 def main():
@@ -67,6 +69,12 @@ def main():
     # 文字 または 図形
     for (row, line) in enumerate(text.split('\n')):
         for (column, cell) in enumerate(line.split(',')):
+
+            if cell.strip() == '..':
+                # '..' 半角スペース
+                draw_space(canvas, column, row)
+                continue
+
             for (_, char) in enumerate(cell):
                 if char == '↑':
                     draw_up_arrow(canvas, column, row)
@@ -98,7 +106,7 @@ def main():
                     draw_left_tee(canvas, column, row)
                 else:
                     draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
-                            TRUE_TYPE_FONT, GRID_UNIT, BLACK)
+                            TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -307,6 +315,35 @@ def draw_left_tee(canvas, column, row):
              point_for_cv2((left, bottom)),
              color_for_cv2(LINE_COLOR),
              thickness=LINE_THICKNESS)
+
+
+def draw_space(canvas, column, row):
+    """半角スペースを三角形で描画"""
+    center = (column+0.5)*GRID_UNIT
+    bottom2 = (row+0.8)*GRID_UNIT
+    # 底辺部
+    left = (column+0.1)*GRID_UNIT
+    right = (column+0.9)*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, bottom)),
+             point_for_cv2((right, bottom)),
+             color_for_cv2(FONT_COLOR),
+             thickness=FONT_THICKNESS)
+    # 左斜辺
+    left2 = (column+0.1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left2, bottom)),
+             point_for_cv2((center, bottom2)),
+             color_for_cv2(FONT_COLOR),
+             thickness=FONT_THICKNESS)
+    # 右斜辺
+    left2 = (column+0.9)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((center, bottom2)),
+             point_for_cv2((right, bottom)),
+             color_for_cv2(FONT_COLOR),
+             thickness=FONT_THICKNESS)
 
 
 def draw_up_arrow(canvas, column, row):

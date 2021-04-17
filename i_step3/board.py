@@ -6,7 +6,7 @@ class Board():
 
     def __init__(self):
         self.__rows = []
-        self.__start_location = (0, 0)
+        self.__start_location = [0, 0]
         self.__width = 0
         self.__height = 0
 

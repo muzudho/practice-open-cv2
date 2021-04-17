@@ -56,7 +56,7 @@ def read_screen_csv():
             columns.append(cell)
 
             if cell == 'Start':
-                board.start_location = (column, row)
+                board.start_location = [column, row]
         board.rows.append(columns)
 
     return board
@@ -642,9 +642,24 @@ def search(board, agent):
             TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
 
     # 上に行く
+    if move_up(board, agent):
+        # 戻る
+        move_down(board, agent)
+
     # 右に行く
+    if move_to_right(board, agent):
+        # 戻る
+        move_to_left(board, agent)
+
     # 下に行く
+    if move_down(board, agent):
+        # 戻る
+        move_up(board, agent)
+
     # 左に行く
+    if move_to_left(board, agent):
+        # 戻る
+        move_to_right(board, agent)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする

@@ -7,7 +7,7 @@ class Agent():
     """
 
     def __init__(self):
-        self.__location = (0, 0)
+        self.__location = [0, 0]
 
     @property
     def location(self):

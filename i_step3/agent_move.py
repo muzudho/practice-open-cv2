@@ -4,6 +4,12 @@
 """
 
 
+def can_proceed(board, location):
+    """進むことができます"""
+    return location[1] < board.height and location[0] < len(board.checked_rows[location[1]]) and \
+        not board.checked_rows[location[1]][location[0]]
+
+
 def is_rail(board, location):
     """罫線、矢印なら真"""
     return board.rows[location[1]][location[0]] in (
@@ -49,14 +55,13 @@ def move_up(board, agent):
     if forbidden or is_letter(board, agent.location):
         return False
 
-    if next_row >= 0 and next_col < len(board.checked_rows[next_row]) and \
-            not board.checked_rows[next_row][next_col]:
-        # 移動可能範囲内で、未チェックなら移動
-        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-        agent.location[1] -= 1
-        return True
+    # 移動可能範囲外、またはチェック済み
+    if not can_proceed(board, (next_col, next_row)):
+        return False
 
-    return False
+    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+    agent.location[1] -= 1
+    return True
 
 
 def undo_move_up(agent):
@@ -89,14 +94,13 @@ def move_to_right(board, agent):
     if forbidden:
         return False
 
-    if next_col < board.width and next_col < len(board.checked_rows[next_row]) and \
-            not board.checked_rows[next_row][next_col]:
-        # 移動可能範囲内で、未チェックなら移動可
-        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-        agent.location[0] += 1
-        return True
+    # 移動可能範囲外、またはチェック済み
+    if not can_proceed(board, (next_col, next_row)):
+        return False
 
-    return False
+    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+    agent.location[0] += 1
+    return True
 
 
 def undo_move_to_right(agent):
@@ -130,14 +134,13 @@ def move_down(board, agent):
     if forbidden or is_letter(board, agent.location):
         return False
 
-    # 移動可能範囲内で、未チェックなら移動可
-    if next_row < board.height and next_col < len(board.checked_rows[next_row]) and \
-            not board.checked_rows[next_row][next_col]:
-        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-        agent.location[1] += 1
-        return True
+    # 移動可能範囲外、またはチェック済み
+    if not can_proceed(board, (next_col, next_row)):
+        return False
 
-    return False
+    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+    agent.location[1] += 1
+    return True
 
 
 def undo_move_down(agent):
@@ -173,14 +176,13 @@ def move_to_left(board, agent):
     if forbidden or is_letter(board, agent.location):
         return False
 
-    # 移動可能範囲内で、未チェックなら移動可
-    if next_col > 0 and next_col < len(board.checked_rows[next_row]) and \
-            not board.checked_rows[next_row][next_col]:
-        board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
-        agent.location[0] -= 1
-        return True
+    # 移動可能範囲外、またはチェック済み
+    if not can_proceed(board, (next_col, next_row)):
+        return False
 
-    return False
+    board.checked_rows[cur_row][cur_col] = True  # 移動前の位置をチェック
+    agent.location[0] -= 1
+    return True
 
 
 def undo_move_to_left(agent):

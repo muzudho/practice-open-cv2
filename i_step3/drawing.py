@@ -34,118 +34,120 @@ def draw_board(canvas, board):
         for (column, cell) in enumerate(columns):
 
             cell = cell.strip()
+            ligature = False
             # Ligature(合字;リガチャ)
             if cell == '..':
                 # '..' 半角スペース
                 draw_space(canvas, column, row)
-                continue
+                ligature = True
             elif cell == 'Start':
                 draw_color_circle(canvas, column, row, START_COLOR)
                 draw_jp(canvas, 'S', ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
                         TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
                 board.start_location = (column, row)
-                continue
+                ligature = True
             elif cell == 'Goal':
                 draw_color_circle(canvas, column, row, GOAL_COLOR)
                 draw_jp(canvas, 'G', ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
                         TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
-                continue
+                ligature = True
             elif cell == '┌r':
                 draw_left_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┐r':
                 draw_right_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┘r':
                 draw_right_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '└r':
                 draw_left_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '└r':
                 draw_left_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┘└':
                 draw_left_bottom_round_corner(canvas, column, row)
                 draw_right_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell in ('└┌', '┌└'):
                 draw_left_bottom_round_corner(canvas, column, row)
                 draw_left_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┐┌':
                 draw_right_top_round_corner(canvas, column, row)
                 draw_left_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell in ('┘┐', '┐┘'):
                 draw_right_bottom_round_corner(canvas, column, row)
                 draw_right_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '│┌':
                 draw_vertical_line(canvas, column, row)
                 draw_left_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┐│':
                 draw_vertical_line(canvas, column, row)
                 draw_right_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┘│':
                 draw_vertical_line(canvas, column, row)
                 draw_right_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '│└':
                 draw_vertical_line(canvas, column, row)
                 draw_left_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '─┌':
                 draw_horizontal_line(canvas, column, row)
                 draw_left_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '─┌':
                 draw_horizontal_line(canvas, column, row)
                 draw_right_top_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '┘─':
                 draw_horizontal_line(canvas, column, row)
                 draw_right_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
             elif cell == '─└':
                 draw_horizontal_line(canvas, column, row)
                 draw_left_bottom_round_corner(canvas, column, row)
-                continue
+                ligature = True
 
-            for (_, char) in enumerate(cell):
-                if char == '↑':
-                    draw_up_arrow(canvas, column, row)
-                elif char == '→':
-                    draw_right_arrow(canvas, column, row)
-                elif char == '↓':
-                    draw_down_arrow(canvas, column, row)
-                elif char == '←':
-                    draw_left_arrow(canvas, column, row)
-                elif char == '─':
-                    draw_horizontal_line(canvas, column, row)
-                elif char == '│':
-                    draw_vertical_line(canvas, column, row)
-                elif char == '┌':
-                    draw_left_top_corner(canvas, column, row)
-                elif char == '┐':
-                    draw_right_top_corner(canvas, column, row)
-                elif char == '┘':
-                    draw_right_bottom_corner(canvas, column, row)
-                elif char == '└':
-                    draw_left_bottom_corner(canvas, column, row)
-                elif char == '┴':
-                    draw_up_tee(canvas, column, row)
-                elif char == '├':
-                    draw_right_tee(canvas, column, row)
-                elif char == '┬':
-                    draw_down_tee(canvas, column, row)
-                elif char == '┤':
-                    draw_left_tee(canvas, column, row)
-                else:
-                    draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
-                            TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
+            if not ligature:
+                for (_, char) in enumerate(cell):
+                    if char == '↑':
+                        draw_up_arrow(canvas, column, row)
+                    elif char == '→':
+                        draw_right_arrow(canvas, column, row)
+                    elif char == '↓':
+                        draw_down_arrow(canvas, column, row)
+                    elif char == '←':
+                        draw_left_arrow(canvas, column, row)
+                    elif char == '─':
+                        draw_horizontal_line(canvas, column, row)
+                    elif char == '│':
+                        draw_vertical_line(canvas, column, row)
+                    elif char == '┌':
+                        draw_left_top_corner(canvas, column, row)
+                    elif char == '┐':
+                        draw_right_top_corner(canvas, column, row)
+                    elif char == '┘':
+                        draw_right_bottom_corner(canvas, column, row)
+                    elif char == '└':
+                        draw_left_bottom_corner(canvas, column, row)
+                    elif char == '┴':
+                        draw_up_tee(canvas, column, row)
+                    elif char == '├':
+                        draw_right_tee(canvas, column, row)
+                    elif char == '┬':
+                        draw_down_tee(canvas, column, row)
+                    elif char == '┤':
+                        draw_left_tee(canvas, column, row)
+                    else:
+                        draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
+                                TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
 
             # チェック済みマーク
             if board.checked_rows[row][column]:

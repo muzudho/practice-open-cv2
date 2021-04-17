@@ -15,6 +15,10 @@ from drawing import draw_board, draw_agent
 
 def search(seq, board, agent):
     """描画と探索
+    Parameters
+    ----------
+    agent : Agent
+        移動してるやつ
     """
 
     # キャンバス生成
@@ -66,6 +70,7 @@ def search(seq, board, agent):
 BOARD1 = read_screen_csv(FILE_PATH)
 AGENT1 = Agent()
 AGENT1.location = BOARD1.start_location
+AGENT1.prev_location = BOARD1.start_location
 
 # for (row, columns) in enumerate(BOARD1.rows):
 #    for (column, cell) in enumerate(columns):

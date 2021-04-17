@@ -4,7 +4,8 @@ import cv2
 from cv2_helper import point_for_cv2, color_for_cv2
 from japanese import draw_jp
 from conf import GRID_UNIT, TRUE_TYPE_FONT, LINE_THICKNESS, FONT_THICKNESS
-from conf2 import GRID_COLOR, LINE_COLOR, FONT_COLOR, START_COLOR, GOAL_COLOR, AGENT_COLOR
+from conf2 import GRID_COLOR, LINE_COLOR, FONT_COLOR, START_COLOR, GOAL_COLOR, AGENT_COLOR, \
+    CHECKED_COLOR
 
 
 def draw_board(canvas, board):
@@ -145,6 +146,10 @@ def draw_board(canvas, board):
                 else:
                     draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
                             TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
+
+            # チェック済みマーク
+            if board.checked_rows[row][column]:
+                draw_color_cross(canvas, column, row, CHECKED_COLOR)
 
 
 def draw_horizontal_line(canvas, column, row):
@@ -412,7 +417,7 @@ def draw_left_bottom_round_corner(canvas, column, row):
 
 
 def draw_color_circle(canvas, column, row, color):
-    """スタートます"""
+    """○ます"""
     # 円
     left = (column+0.5)*GRID_UNIT
     top = (row+0.5)*GRID_UNIT
@@ -421,6 +426,27 @@ def draw_color_circle(canvas, column, row, color):
                int(GRID_UNIT/2),
                color_for_cv2(color),
                thickness=-1)
+
+
+def draw_color_cross(canvas, column, row, color):
+    """×ます"""
+    # 円
+    left = column*GRID_UNIT
+    right = (column+1)*GRID_UNIT
+    top = row*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    # バロック ダイアゴナル
+    cv2.line(canvas,
+             point_for_cv2((left, bottom)),
+             point_for_cv2((right, top)),
+             color_for_cv2(color),
+             thickness=LINE_THICKNESS)
+    # シニスター ダイアゴナル
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, bottom)),
+             color_for_cv2(color),
+             thickness=LINE_THICKNESS)
 
 
 def draw_space(canvas, column, row):

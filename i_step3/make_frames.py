@@ -50,11 +50,14 @@ def read_screen_csv():
         if board.width < cells_num:
             board.width = cells_num
 
+        columns = []
         for (column, cell) in enumerate(cells):
             cell = cell.strip()
+            columns.append(cell)
 
             if cell == 'Start':
                 board.start_location = (column, row)
+        board.rows.append(columns)
 
     return text, board
 
@@ -655,5 +658,9 @@ def search(text, board, agent):
 TEXT1, BOARD1 = read_screen_csv()
 AGENT1 = Agent()
 AGENT1.location = BOARD1.start_location
+
+# for (row, columns) in enumerate(BOARD1.rows):
+#    for (column, cell) in enumerate(columns):
+#        print(f"[{column},{row}]={cell}")
 
 search(TEXT1, BOARD1, AGENT1)

@@ -10,6 +10,7 @@ from conf import CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
 from japanese import draw_jp
 
 FILE_PATH = './@input/i_step2/screen.csv'
+LINE_THICKNESS = 2
 
 
 def main():
@@ -61,12 +62,38 @@ def main():
                  color_for_cv2(BRIGHT_GRAY),
                  thickness=1)
 
-    # 文字
+    # 文字 または 図形
     for (row, line) in enumerate(text.split('\n')):
         for (column, cell) in enumerate(line.split(',')):
             for (_, char) in enumerate(cell):
-                draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
-                        TRUE_TYPE_FONT, GRID_UNIT, BLACK)
+                if char == '↓':
+                    left = (column+0.5)*GRID_UNIT
+                    top = row*GRID_UNIT
+                    bottom = (row+1)*GRID_UNIT
+                    cv2.line(canvas,
+                             point_for_cv2((left, top)),
+                             point_for_cv2((left, bottom)),
+                             color_for_cv2(BLACK),
+                             thickness=LINE_THICKNESS)
+                    # 矢頭
+                    left2 = (column+0.3)*GRID_UNIT
+                    bottom2 = (row+0.8)*GRID_UNIT
+                    cv2.line(canvas,
+                             point_for_cv2((left, bottom)),
+                             point_for_cv2((left2, bottom2)),
+                             color_for_cv2(BLACK),
+                             thickness=LINE_THICKNESS)
+                    # 矢頭
+                    left2 = (column+0.8)*GRID_UNIT
+                    bottom2 = (row+0.8)*GRID_UNIT
+                    cv2.line(canvas,
+                             point_for_cv2((left, bottom)),
+                             point_for_cv2((left2, bottom2)),
+                             color_for_cv2(BLACK),
+                             thickness=LINE_THICKNESS)
+                else:
+                    draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
+                            TRUE_TYPE_FONT, GRID_UNIT, BLACK)
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
@@ -75,6 +102,10 @@ def main():
     cv2.imshow("make_image.py", canvas)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+def draw_down_arrow():
+    pass
 
 
 main()

@@ -11,6 +11,8 @@ from japanese import draw_jp
 
 FILE_PATH = './@input/i_step2/screen.csv'
 LINE_THICKNESS = 2
+GRID_COLOR = BRIGHT_GRAY
+LINE_COLOR = SOFT_GRAY
 
 
 def main():
@@ -51,7 +53,7 @@ def main():
         cv2.line(canvas,
                  point_for_cv2((0, y_num)),
                  point_for_cv2((canvas_columns*GRID_UNIT, y_num)),
-                 color_for_cv2(BRIGHT_GRAY),
+                 color_for_cv2(GRID_COLOR),
                  thickness=1)
     # 垂直線
     for i in range(0, canvas_columns+1):
@@ -59,38 +61,25 @@ def main():
         cv2.line(canvas,
                  point_for_cv2((x_num, 0)),
                  point_for_cv2((x_num, canvas_rows*GRID_UNIT)),
-                 color_for_cv2(BRIGHT_GRAY),
+                 color_for_cv2(GRID_COLOR),
                  thickness=1)
 
     # 文字 または 図形
     for (row, line) in enumerate(text.split('\n')):
         for (column, cell) in enumerate(line.split(',')):
             for (_, char) in enumerate(cell):
-                if char == '↓':
-                    left = (column+0.5)*GRID_UNIT
-                    top = row*GRID_UNIT
-                    bottom = (row+1)*GRID_UNIT
-                    cv2.line(canvas,
-                             point_for_cv2((left, top)),
-                             point_for_cv2((left, bottom)),
-                             color_for_cv2(BLACK),
-                             thickness=LINE_THICKNESS)
-                    # 矢頭
-                    left2 = (column+0.3)*GRID_UNIT
-                    bottom2 = (row+0.8)*GRID_UNIT
-                    cv2.line(canvas,
-                             point_for_cv2((left, bottom)),
-                             point_for_cv2((left2, bottom2)),
-                             color_for_cv2(BLACK),
-                             thickness=LINE_THICKNESS)
-                    # 矢頭
-                    left2 = (column+0.8)*GRID_UNIT
-                    bottom2 = (row+0.8)*GRID_UNIT
-                    cv2.line(canvas,
-                             point_for_cv2((left, bottom)),
-                             point_for_cv2((left2, bottom2)),
-                             color_for_cv2(BLACK),
-                             thickness=LINE_THICKNESS)
+                if char == '↑':
+                    draw_up_arrow(canvas, column, row)
+                elif char == '→':
+                    draw_right_arrow(canvas, column, row)
+                elif char == '↓':
+                    draw_down_arrow(canvas, column, row)
+                elif char == '←':
+                    draw_left_arrow(canvas, column, row)
+                elif char == '─':
+                    draw_horizontal_line(canvas, column, row)
+                elif char == '│':
+                    draw_vertical_line(canvas, column, row)
                 else:
                     draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
                             TRUE_TYPE_FONT, GRID_UNIT, BLACK)
@@ -104,8 +93,140 @@ def main():
     cv2.destroyAllWindows()
 
 
-def draw_down_arrow():
-    pass
+def draw_horizontal_line(canvas, column, row):
+    """─描画"""
+    left = column*GRID_UNIT
+    right = (column+1)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_vertical_line(canvas, column, row):
+    """│描画"""
+    left = (column+0.5)*GRID_UNIT
+    top = row*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_up_arrow(canvas, column, row):
+    """↑描画"""
+    left = (column+0.5)*GRID_UNIT
+    top = row*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    left2 = (column+0.2)*GRID_UNIT
+    top2 = (row+0.2)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left2, top2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    left2 = (column+0.8)*GRID_UNIT
+    top2 = (row+0.2)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left2, top2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_right_arrow(canvas, column, row):
+    """→描画"""
+    left = column*GRID_UNIT
+    right = (column+1)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    right2 = (column+0.8)*GRID_UNIT
+    top2 = (row+0.2)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((right, top)),
+             point_for_cv2((right2, top2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    right2 = (column+0.8)*GRID_UNIT
+    top2 = (row+0.8)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((right, top)),
+             point_for_cv2((right2, top2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_down_arrow(canvas, column, row):
+    """↓描画"""
+    left = (column+0.5)*GRID_UNIT
+    top = row*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    left2 = (column+0.2)*GRID_UNIT
+    bottom2 = (row+0.8)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, bottom)),
+             point_for_cv2((left2, bottom2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    left2 = (column+0.8)*GRID_UNIT
+    bottom2 = (row+0.8)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, bottom)),
+             point_for_cv2((left2, bottom2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_left_arrow(canvas, column, row):
+    """←描画"""
+    left = column*GRID_UNIT
+    right = (column+1)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    left2 = (column+0.2)*GRID_UNIT
+    top2 = (row+0.2)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left2, top2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 矢頭
+    left2 = (column+0.2)*GRID_UNIT
+    top2 = (row+0.8)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left2, top2)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
 
 
 main()

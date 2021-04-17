@@ -6,11 +6,19 @@ def move_up(board, agent):
     """↑上に移動"""
     column = agent.location[0]
     row = agent.location[1] - 1
-    if row >= 0 and not board.checked_rows[row][column] \
-            and board.rows[row][column] in ('┌', '┐', '│', '│┌', '┐│', '┘│', '│└', '┐┌'):
-        board.checked_rows[row][column] = True
-        agent.location[1] -= 1
-        return True
+    if row >= 0 and not board.checked_rows[row][column]:
+        if board.rows[row][column] in ('┌', '┐', '│', '│┌', '┐│', '┘│', '│└', '┐┌'):
+            # 道
+            board.checked_rows[row][column] = True
+            agent.location[1] -= 1
+            return True
+
+        if len(board.rows[row][column]) == 1:
+            # 文字
+            board.checked_rows[row][column] = True
+            agent.location[1] -= 1
+            return True
+
     return False
 
 
@@ -23,11 +31,19 @@ def move_to_right(board, agent):
     """→右に移動"""
     column = agent.location[0] + 1
     row = agent.location[1]
-    if column < board.width and not board.checked_rows[row][column] \
-            and board.rows[row][column] in ('┐', '┘', '─', '─┌', '┐─', '┘─', '─└', '┘┐', '┐┘'):
-        board.checked_rows[row][column] = True
-        agent.location[0] += 1
-        return True
+    if column < board.width and not board.checked_rows[row][column]:
+        # 道
+        if board.rows[row][column] in ('┐', '┘', '─', '─┌', '┐─', '┘─', '─└', '┘┐', '┐┘'):
+            board.checked_rows[row][column] = True
+            agent.location[0] += 1
+            return True
+
+        if len(board.rows[row][column]) == 1:
+            # 文字
+            board.checked_rows[row][column] = True
+            agent.location[0] += 1
+            return True
+
     return False
 
 
@@ -40,11 +56,19 @@ def move_down(board, agent):
     """↓下に移動"""
     column = agent.location[0]
     row = agent.location[1] + 1
-    if row < board.height and not board.checked_rows[row][column] \
-            and board.rows[row][column] in ('┘', '└', '│', '│┌', '┐│', '┘│', '│└', '┘└'):
-        board.checked_rows[row][column] = True
-        agent.location[1] += 1
-        return True
+    if row < board.height and not board.checked_rows[row][column]:
+        # 道
+        if board.rows[row][column] in ('┘', '└', '│', '│┌', '┐│', '┘│', '│└', '┘└'):
+            board.checked_rows[row][column] = True
+            agent.location[1] += 1
+            return True
+
+        if len(board.rows[row][column]) == 1:
+            # 文字
+            board.checked_rows[row][column] = True
+            agent.location[1] += 1
+            return True
+
     return False
 
 
@@ -57,11 +81,19 @@ def move_to_left(board, agent):
     """←左に移動"""
     column = agent.location[0] - 1
     row = agent.location[1]
-    if column > 0 and not board.checked_rows[row][column] \
-            and board.rows[row][column] in ('┌', '└', '─', '─┌', '┐─', '┘─', '─└', '└┌', '┌└'):
-        board.checked_rows[row][column] = True
-        agent.location[0] -= 1
-        return True
+    if column > 0 and not board.checked_rows[row][column]:
+        if board.rows[row][column] in ('┌', '└', '─', '─┌', '┐─', '┘─', '─└', '└┌', '┌└'):
+            # 道
+            board.checked_rows[row][column] = True
+            agent.location[0] -= 1
+            return True
+
+        if len(board.rows[row][column]) == 1:
+            # 文字
+            board.checked_rows[row][column] = True
+            agent.location[0] -= 1
+            return True
+
     return False
 
 

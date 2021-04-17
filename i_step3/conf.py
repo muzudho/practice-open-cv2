@@ -20,3 +20,7 @@ TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
 
 # フォント倍率
 FONT_SCALE = 0.5
+
+FILE_PATH = './@input/i_step3/screen.csv'
+LINE_THICKNESS = 2
+FONT_THICKNESS = 1

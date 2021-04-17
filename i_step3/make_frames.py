@@ -59,10 +59,10 @@ def read_screen_csv():
                 board.start_location = (column, row)
         board.rows.append(columns)
 
-    return text, board
+    return board
 
 
-def draw_board(canvas, text, board):
+def draw_board(canvas, board):
     """盤の描画"""
 
     # 方眼紙
@@ -84,8 +84,8 @@ def draw_board(canvas, text, board):
                  thickness=1)
 
     # 文字 または 図形
-    for (row, line) in enumerate(text.split('\n')):
-        for (column, cell) in enumerate(line.split(',')):
+    for (row, columns) in enumerate(board.rows):
+        for (column, cell) in enumerate(columns):
 
             cell = cell.strip()
             # Ligature(合字;リガチャ)
@@ -97,7 +97,7 @@ def draw_board(canvas, text, board):
                 draw_color_circle(canvas, column, row, START_COLOR)
                 draw_jp(canvas, 'S', ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
                         TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
-                board.start_location = (column, line)
+                board.start_location = (column, row)
                 continue
             elif cell == 'Goal':
                 draw_color_circle(canvas, column, row, GOAL_COLOR)
@@ -620,7 +620,7 @@ def draw_left_arrow(canvas, column, row):
              thickness=LINE_THICKNESS)
 
 
-def search(text, board, agent):
+def search(board, agent):
     """描画と探索
     """
 
@@ -631,7 +631,7 @@ def search(text, board, agent):
                      color_for_cv2(PALE_GRAY)[0], dtype=np.uint8)
 
     # 盤の描画
-    draw_board(canvas, text, board)
+    draw_board(canvas, board)
 
     # エージェントの描画
     column = agent.location[0]
@@ -655,7 +655,7 @@ def search(text, board, agent):
     # cv2.destroyAllWindows()
 
 
-TEXT1, BOARD1 = read_screen_csv()
+BOARD1 = read_screen_csv()
 AGENT1 = Agent()
 AGENT1.location = BOARD1.start_location
 
@@ -663,4 +663,4 @@ AGENT1.location = BOARD1.start_location
 #    for (column, cell) in enumerate(columns):
 #        print(f"[{column},{row}]={cell}")
 
-search(TEXT1, BOARD1, AGENT1)
+search(BOARD1, AGENT1)

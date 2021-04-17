@@ -49,7 +49,7 @@ def search(seq, board, agent, prev_location, screenshot_func):
         # 戻る
         undo_move_up(agent)
         # 後ろ向き探索のスクリーンショット
-        seq = screenshot_func(seq, board, agent, screenshot_func)
+        seq = screenshot_func(seq, board, agent)
         # 後ろ向き探索中の現在位置をチェック
         board.checked_table[agent.location[1]][agent.location[0]] = 'b'
 

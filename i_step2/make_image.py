@@ -70,9 +70,13 @@ def main():
     for (row, line) in enumerate(text.split('\n')):
         for (column, cell) in enumerate(line.split(',')):
 
-            if cell.strip() == '..':
+            cell = cell.strip()
+            if cell == '..':
                 # '..' 半角スペース
                 draw_space(canvas, column, row)
+                continue
+            elif cell == '┌r':
+                draw_left_top_round_corner(canvas, column, row)
                 continue
 
             for (_, char) in enumerate(cell):
@@ -315,6 +319,22 @@ def draw_left_tee(canvas, column, row):
              point_for_cv2((left, bottom)),
              color_for_cv2(LINE_COLOR),
              thickness=LINE_THICKNESS)
+
+
+def draw_left_top_round_corner(canvas, column, row):
+    """┌描画（丸み）"""
+    # 水平線部
+    right = (column+1)*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.ellipse(canvas,
+                point_for_cv2((right, bottom)),
+                point_for_cv2((GRID_UNIT/2, GRID_UNIT/2)),
+                0,
+                180,  # yが逆さの座標系
+                270,
+                color_for_cv2(LINE_COLOR),
+                thickness=LINE_THICKNESS,
+                lineType=2)
 
 
 def draw_space(canvas, column, row):

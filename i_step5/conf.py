@@ -14,7 +14,7 @@ ACCURACY = 0.0000001
 # キャンバス設定
 CANVAS_CHANNELS = 3
 # グリッド間隔
-GRID_UNIT = 16
+GRID_UNIT = 8
 # OSによってフォント・ファイルの場所が違うので注意
 TRUE_TYPE_FONT = 'C:/Windows/Fonts/meiryo.ttc'
 

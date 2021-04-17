@@ -105,9 +105,9 @@ def can_move_to_right(board, agent, prev_location):
         return False
 
     # 上から右へは行けない
-    forbidden_from_up = cur_sq in ('│┌', '┘─') and cur_row == pre_row-1
+    forbidden_from_up = cur_sq in ('│┌', '┘─') and cur_row == pre_row+1
     # 下から右へは行けない
-    forbidden_from_down = cur_sq in ('│└', '┐─') and cur_row == pre_row+1
+    forbidden_from_down = cur_sq in ('│└', '┐─') and cur_row == pre_row-1
     if forbidden_from_up or forbidden_from_down:
         return False
 
@@ -214,7 +214,7 @@ def can_move_to_left(board, agent, prev_location):
                            '│',  # 一直線
                            '│┌', '│└', '└┌', '┌└')  # 左分岐
 
-    if forbidden or is_letter(board, agent.location):
+    if forbidden:
         # 左を移動禁止とする現在マス
         return False
 

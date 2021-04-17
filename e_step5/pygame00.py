@@ -11,9 +11,9 @@ from pygame.locals import QUIT
 pygame.init()
 
 # 画像の読み込み
-FRAME_COUNT = 44
+FRAME_COUNT = 2432
 
-FPS = 8  # 例えば 15 フレームで撮影するなら、ゲーム画面はその半分の FPS ならコマ飛びを感じないぐらい
+FPS = 8  # 例えば 15 フレームで撮影するなら、ゲーム画面はその半分の 8 FPS ならコマ飛びを感じないぐらい
 IMAGE1 = pygame.image.load('./@share/out-istep1-0.png')
 IMAGE1_W = IMAGE1.get_width()  # 画像の横幅の取得
 IMAGE1_H = IMAGE1.get_height()  # 画像の高さの取得

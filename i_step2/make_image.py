@@ -80,6 +80,14 @@ def main():
                     draw_horizontal_line(canvas, column, row)
                 elif char == '│':
                     draw_vertical_line(canvas, column, row)
+                elif char == '┌':
+                    draw_left_top_corner(canvas, column, row)
+                elif char == '┐':
+                    draw_right_top_corner(canvas, column, row)
+                elif char == '┘':
+                    draw_right_bottom_corner(canvas, column, row)
+                elif char == '└':
+                    draw_left_bottom_corner(canvas, column, row)
                 else:
                     draw_jp(canvas, char, ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
                             TRUE_TYPE_FONT, GRID_UNIT, BLACK)
@@ -110,6 +118,94 @@ def draw_vertical_line(canvas, column, row):
     left = (column+0.5)*GRID_UNIT
     top = row*GRID_UNIT
     bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_left_top_corner(canvas, column, row):
+    """┌描画"""
+    # 水平線部
+    left = (column+0.5)*GRID_UNIT
+    right = (column+1)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 垂直線部
+    left = (column+0.5)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_right_top_corner(canvas, column, row):
+    """┐描画"""
+    # 水平線部
+    left = (column+0)*GRID_UNIT
+    right = (column+0.5)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 垂直線部
+    left = (column+0.5)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_right_bottom_corner(canvas, column, row):
+    """┘描画"""
+    # 水平線部
+    left = (column+0)*GRID_UNIT
+    right = (column+0.5)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 垂直線部
+    left = (column+0.5)*GRID_UNIT
+    top = (row+0)*GRID_UNIT
+    bottom = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((left, bottom)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+
+
+def draw_left_bottom_corner(canvas, column, row):
+    """└描画"""
+    # 水平線部
+    left = (column+0.5)*GRID_UNIT
+    right = (column+1)*GRID_UNIT
+    top = (row+0.5)*GRID_UNIT
+    cv2.line(canvas,
+             point_for_cv2((left, top)),
+             point_for_cv2((right, top)),
+             color_for_cv2(LINE_COLOR),
+             thickness=LINE_THICKNESS)
+    # 垂直線部
+    left = (column+0.5)*GRID_UNIT
+    top = (row+0)*GRID_UNIT
+    bottom = (row+0.5)*GRID_UNIT
     cv2.line(canvas,
              point_for_cv2((left, top)),
              point_for_cv2((left, bottom)),

@@ -36,35 +36,53 @@ def search(seq, board, agent):
     cv2.imwrite(f"./@share/out-istep1-{seq}.png", canvas)
     seq += 1
 
+    dead_end = True
+
     # 上に行く
     if move_up(board, agent):
-        seq = search(seq, board, agent)
+        dead_end = False
+        seq, dead_end2 = search(seq, board, agent)
+        if dead_end2:
+            # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
+            board.checked_rows[agent.location[1]][agent.location[0]] = True
         # 戻る
-        undo_move_up(board, agent)
+        undo_move_up(agent)
 
     # 右に行く
     if move_to_right(board, agent):
-        seq = search(seq, board, agent)
+        dead_end = False
+        seq, dead_end2 = search(seq, board, agent)
+        if dead_end2:
+            # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
+            board.checked_rows[agent.location[1]][agent.location[0]] = True
         # 戻る
-        undo_move_to_right(board, agent)
+        undo_move_to_right(agent)
 
     # 下に行く
     if move_down(board, agent):
-        seq = search(seq, board, agent)
+        dead_end = False
+        seq, dead_end2 = search(seq, board, agent)
+        if dead_end2:
+            # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
+            board.checked_rows[agent.location[1]][agent.location[0]] = True
         # 戻る
-        undo_move_down(board, agent)
+        undo_move_down(agent)
 
     # 左に行く
     if move_to_left(board, agent):
-        seq = search(seq, board, agent)
+        dead_end = False
+        seq, dead_end2 = search(seq, board, agent)
+        if dead_end2:
+            # どの方向にも行けなかった。移動前の位置をチェック（行き止まりから飛ぶんで）
+            board.checked_rows[agent.location[1]][agent.location[0]] = True
         # 戻る
-        undo_move_to_left(board, agent)
+        undo_move_to_left(agent)
 
     #cv2.imshow("make_image.py", canvas)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    return seq
+    return seq, dead_end
 
 
 BOARD1 = read_screen_csv(FILE_PATH)

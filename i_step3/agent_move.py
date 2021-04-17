@@ -28,11 +28,13 @@ def move_up(board, agent):
     cur_col = agent.location[0]
     cur_row = agent.location[1]
 
-    # 現在マス
-    if board.rows[cur_row][cur_col] in ('→', '↓', '←',
-                                        '┌', '┐', '┘│', '│└',
-                                        '┐┌', '─', '─┌', '┐─') or is_letter(board, agent.location):
-        # 上を移動禁止とする現在マス
+    # 上への移動を禁止とする現在マス
+    forbidden = board.rows[cur_row][cur_col] in ('',  # 何もないところ
+                                                 '→', '↓', '←',  # 矢印
+                                                 '┌', '┐', '┌r', '┐r',  # コーナー
+                                                 '─',  # 一直線
+                                                 '┐┌', '─┌', '┐─')  # 下分岐
+    if forbidden or is_letter(board, agent.location):
         return False
 
     next_col = cur_col
@@ -67,9 +69,12 @@ def move_to_right(board, agent):
     cur_col = agent.location[0]
     cur_row = agent.location[1]
 
-    if board.rows[cur_row][cur_col] in ('↑', '↓', '←', '┐', '┘',
-                                        '│', '┘│', '┐│', '┘┐', '┐┘'):
-        # 右を移動禁止とする現在マス
+    # 右への移動を禁止とする現在マス
+    if board.rows[cur_row][cur_col] in ('',  # 何もないところ
+                                        '↑', '↓', '←',  # 矢印
+                                        '┐', '┘', '┐r', '┘r',  # コーナー
+                                        '│',  # 一直線
+                                        '┘│', '┐│', '┘┐', '┐┘'):  # 左分岐
         return False
 
     next_col = cur_col + 1
@@ -104,10 +109,13 @@ def move_down(board, agent):
     cur_col = agent.location[0]
     cur_row = agent.location[1]
 
-    if board.rows[cur_row][cur_col] in ('↑', '→', '←',
-                                        '┘', '└', '─', '┘─', '─└', '┘└') \
-            or is_letter(board, agent.location):
-        # 下を移動禁止とする現在マス
+    # 下への移動を禁止とする現在マス
+    forbidden = board.rows[cur_row][cur_col] in ('',  # 何もないところ
+                                                 '↑', '→', '←',  # 矢印
+                                                 '┘', '└', '┘r', '└r',  # コーナー
+                                                 '─',  # 一直線
+                                                 '┘─', '─└', '┘└')  # 上分岐
+    if forbidden or is_letter(board, agent.location):
         return False
 
     next_col = cur_col
@@ -142,12 +150,14 @@ def move_to_left(board, agent):
     cur_col = agent.location[0]
     cur_row = agent.location[1]
 
-    is_char = not is_rail(board, agent.location) and \
-        len(board.rows[cur_row][cur_col]
-            ) == 1 or board.rows[cur_row][cur_col] == '..'
+    # 左への移動を禁止とする現在マス
+    forbidden = board.rows[cur_row][cur_col] in ('',  # 何もないところ
+                                                 '↑', '→', '↓',  # 矢印
+                                                 '┌', '└', '┌r', '└r',  # コーナー
+                                                 '│',  # 一直線
+                                                 '│┌', '│└', '└┌', '┌└')  # 左分岐
 
-    if board.rows[cur_row][cur_col] in ('↑', '→', '↓',
-                                        '┌', '└', '│', '│┌', '│└', '└┌', '┌└') or is_char:
+    if forbidden or is_letter(board, agent.location):
         # 左を移動禁止とする現在マス
         return False
 

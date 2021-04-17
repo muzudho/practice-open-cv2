@@ -71,6 +71,7 @@ def main():
         for (column, cell) in enumerate(line.split(',')):
 
             cell = cell.strip()
+            # Ligature(合字;リガチャ)
             if cell == '..':
                 # '..' 半角スペース
                 draw_space(canvas, column, row)
@@ -85,6 +86,41 @@ def main():
                 draw_right_bottom_round_corner(canvas, column, row)
                 continue
             elif cell == '└r':
+                draw_left_bottom_round_corner(canvas, column, row)
+                continue
+            elif cell == '└r':
+                draw_left_bottom_round_corner(canvas, column, row)
+                continue
+            elif cell == '│┌':
+                draw_vertical_line(canvas, column, row)
+                draw_left_top_round_corner(canvas, column, row)
+                continue
+            elif cell == '┐│':
+                draw_vertical_line(canvas, column, row)
+                draw_right_top_round_corner(canvas, column, row)
+                continue
+            elif cell == '┘│':
+                draw_vertical_line(canvas, column, row)
+                draw_right_bottom_round_corner(canvas, column, row)
+                continue
+            elif cell == '│└':
+                draw_vertical_line(canvas, column, row)
+                draw_left_bottom_round_corner(canvas, column, row)
+                continue
+            elif cell == '─┌':
+                draw_horizontal_line(canvas, column, row)
+                draw_left_top_round_corner(canvas, column, row)
+                continue
+            elif cell == '─│':
+                draw_horizontal_line(canvas, column, row)
+                draw_right_top_round_corner(canvas, column, row)
+                continue
+            elif cell == '─│':
+                draw_horizontal_line(canvas, column, row)
+                draw_right_bottom_round_corner(canvas, column, row)
+                continue
+            elif cell == '─└':
+                draw_horizontal_line(canvas, column, row)
                 draw_left_bottom_round_corner(canvas, column, row)
                 continue
 

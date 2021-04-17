@@ -53,7 +53,7 @@ def search(seq, board, agent, prev_location):
     # 現在位置をチェック
     board.checked_rows[agent.location[1]][agent.location[0]] = True
 
-    before_move_location = agent.location
+    before_move_location = agent.location[:]  # Copy
 
     # 進める方角チェック
     well_move_up = can_move_up(board, agent, prev_location)
@@ -68,6 +68,8 @@ def search(seq, board, agent, prev_location):
     # 上に行く
     if well_move_up:
         move_up(agent)
+        if before_move_location[0] == agent.location[0] and before_move_location[1] == agent.location[1]:
+            raise Exception(f"move_up失敗")
         seq = search(seq, board, agent, before_move_location)
         # 戻る
         undo_move_up(agent)
@@ -77,6 +79,8 @@ def search(seq, board, agent, prev_location):
     # 右に行く
     if well_move_to_right:
         move_to_right(agent)
+        if before_move_location[0] == agent.location[0] and before_move_location[1] == agent.location[1]:
+            raise Exception(f"move_to_right失敗")
         seq = search(seq, board, agent, before_move_location)
         # 戻る
         undo_move_to_right(agent)
@@ -86,6 +90,8 @@ def search(seq, board, agent, prev_location):
     # 下に行く
     if well_move_down:
         move_down(agent)
+        if before_move_location[0] == agent.location[0] and before_move_location[1] == agent.location[1]:
+            raise Exception(f"move_down失敗")
         seq = search(seq, board, agent, before_move_location)
         # 戻る
         undo_move_down(agent)
@@ -95,6 +101,8 @@ def search(seq, board, agent, prev_location):
     # 左に行く
     if well_move_to_left:
         move_to_left(agent)
+        if before_move_location[0] == agent.location[0] and before_move_location[1] == agent.location[1]:
+            raise Exception(f"move_to_left失敗")
         seq = search(seq, board, agent, before_move_location)
         # 戻る
         undo_move_to_left(agent)
@@ -110,8 +118,8 @@ def search(seq, board, agent, prev_location):
 
 BOARD1 = read_screen_csv(FILE_PATH)
 AGENT1 = Agent()
-AGENT1.location = BOARD1.start_location
-AGENT1.prev_location = BOARD1.start_location
+AGENT1.location = BOARD1.start_location[:]  # Copy
+AGENT1.prev_location = BOARD1.start_location[:]  # Copy
 
 # for (row, columns) in enumerate(BOARD1.rows):
 #    for (column, cell) in enumerate(columns):

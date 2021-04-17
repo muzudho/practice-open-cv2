@@ -3,6 +3,7 @@
 
 
 def is_rail(board, location):
+    """罫線、矢印なら真"""
     return board.rows[location[1]][location[0]] in (
         # 矢印
         '↑', '→', '↓', '←',
@@ -20,18 +21,22 @@ def is_rail(board, location):
         '┐│', '┘│', '┘┐', '┐┘')
 
 
+def is_letter(board, location):
+    """テキストなら真。ただし一文字の矢印などは含めない"""
+    return not is_rail(board, location) and \
+        (len(board.rows[location[1]][location[0]]
+             ) == 1 or board.rows[location[1]][location[0]] == '..')
+
+
 def move_up(board, agent):
     """↑上に移動"""
     cur_col = agent.location[0]
     cur_row = agent.location[1]
 
-    is_char = not is_rail(board, agent.location) and \
-        len(board.rows[cur_row][cur_col]
-            ) == 1 or board.rows[cur_row][cur_col] == '..'
-
     # 現在マス
     if board.rows[cur_row][cur_col] in ('→', '↓', '←',
-                                        '┌', '┐', '┘│', '│└', '┐┌', '─', '─┌', '┐─') or is_char:
+                                        '┌', '┐', '┘│', '│└',
+                                        '┐┌', '─', '─┌', '┐─') or is_letter(board, agent.location):
         # 上を移動禁止とする現在マス
         return False
 
@@ -104,12 +109,9 @@ def move_down(board, agent):
     cur_col = agent.location[0]
     cur_row = agent.location[1]
 
-    is_char = not is_rail(board, agent.location) and \
-        len(board.rows[cur_row][cur_col]
-            ) == 1 or board.rows[cur_row][cur_col] == '..'
-
     if board.rows[cur_row][cur_col] in ('↑', '→', '←',
-                                        '┘', '└', '─', '┘─', '─└', '┘└') or is_char:
+                                        '┘', '└', '─', '┘─', '─└', '┘└') \
+            or is_letter(board, agent.location):
         # 下を移動禁止とする現在マス
         return False
 

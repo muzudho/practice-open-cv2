@@ -10,6 +10,7 @@ from conf import CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
 from japanese import draw_jp
 from board import Board
 from agent import Agent
+from agent_move import move_up, move_to_right, move_down, move_to_left
 
 FILE_PATH = './@input/i_step3/screen.csv'
 LINE_THICKNESS = 2
@@ -636,6 +637,11 @@ def search(text, board, agent):
         canvas, column, row, AGENT_COLOR)
     draw_jp(canvas, '@', ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
             TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
+
+    # 上に行く
+    # 右に行く
+    # 下に行く
+    # 左に行く
 
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする

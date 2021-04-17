@@ -15,6 +15,7 @@ from drawing import draw_board, draw_agent
 
 
 def screenshot(seq, board, agent):
+    """画像を出力します"""
     # キャンバス生成
     canvas = np.full((board.height*GRID_UNIT, board.width*GRID_UNIT, CANVAS_CHANNELS),
                      color_for_cv2(BACKGROUND_COLOR)[0], dtype=np.uint8)

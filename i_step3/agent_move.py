@@ -1,6 +1,6 @@
 """エージェントの移動。
 すべてのマスは 移動可能と考えた上で、制限をしていきます。
-テキストは 左から右にしか進入させません。
+テキストは進行中に１文字ずつ読取ますので、右から左へ移動中は、右から左に書く必要があります。
 """
 
 
@@ -234,7 +234,7 @@ def can_move_to_left(board, agent, prev_location):
                                                    '┐', '┘', '┐r', '┘r',  # コーナー
                                                    '│',  # 一直線
                                                    '┐│', '┘│', '┘┐', '┐┘')  # 左分岐
-    if forbidden or is_letter(board, agent.location):
+    if forbidden:
         return False
 
     # 移動可能範囲外、またはチェック済み

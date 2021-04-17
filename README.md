@@ -95,3 +95,11 @@ python pygame00.py
 ## Document
 
 [References](./@doc/references.md)  
+
+## i_step3 (パーサー図)
+
+こっから別の話しだぜ（＾～＾）  
+
+![20210417gif1.gif](./@doc/i_step/img/20210417gif1.gif)  
+
+📂`i_step3` は パーサー図だぜ（＾～＾）  

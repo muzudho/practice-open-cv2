@@ -34,8 +34,11 @@ def move_up(board, agent):
     return False
 
 
-def undo_move_up(agent):
+def undo_move_up(board, agent):
     """↑上に移動しなかったことにする"""
+    # 移動前の位置をチェック（行き止まりから戻るとき）
+    board.checked_rows[agent.location[1]
+                       ][agent.location[0]] = True
     agent.location[1] += 1
 
 
@@ -68,8 +71,11 @@ def move_to_right(board, agent):
     return False
 
 
-def undo_move_to_right(agent):
+def undo_move_to_right(board, agent):
     """→右に移動しなかったことにする"""
+    # 移動前の位置をチェック（行き止まりから戻るとき）
+    board.checked_rows[agent.location[1]
+                       ][agent.location[0]] = True
     agent.location[0] -= 1
 
 
@@ -103,8 +109,10 @@ def move_down(board, agent):
     return False
 
 
-def undo_move_down(agent):
+def undo_move_down(board, agent):
     """↓下に移動しなかったことにする"""
+    # 移動前の位置をチェック（行き止まりから戻るとき）
+    board.checked_rows[agent.location[1]][agent.location[0]] = True
     agent.location[1] -= 1
 
 
@@ -137,6 +145,8 @@ def move_to_left(board, agent):
     return False
 
 
-def undo_move_to_left(agent):
+def undo_move_to_left(board, agent):
     """←左に移動しなかったことにする"""
+    # 移動前の位置をチェック（行き止まりから戻るとき）
+    board.checked_rows[agent.location[1]][agent.location[0]] = True
     agent.location[0] += 1

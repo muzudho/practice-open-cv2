@@ -40,25 +40,25 @@ def search(seq, board, agent):
     if move_up(board, agent):
         seq = search(seq, board, agent)
         # 戻る
-        undo_move_up(agent)
+        undo_move_up(board, agent)
 
     # 右に行く
     if move_to_right(board, agent):
         seq = search(seq, board, agent)
         # 戻る
-        undo_move_to_right(agent)
+        undo_move_to_right(board, agent)
 
     # 下に行く
     if move_down(board, agent):
         seq = search(seq, board, agent)
         # 戻る
-        undo_move_down(agent)
+        undo_move_down(board, agent)
 
     # 左に行く
     if move_to_left(board, agent):
         seq = search(seq, board, agent)
         # 戻る
-        undo_move_to_left(agent)
+        undo_move_to_left(board, agent)
 
     #cv2.imshow("make_image.py", canvas)
     # cv2.waitKey(0)

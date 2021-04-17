@@ -49,9 +49,12 @@ def move_up(board, agent, prev_location):
     if forbidden or is_letter(board, agent.location):
         return False
 
+    # 右から上へは行けない
+    forbidden_from_right = cur_sq in ('│┌', '┘─') and cur_col == pre_col-1
+    # 右から上へは行けない
+    forbidden_from_left = cur_sq in ('┐│', '─└') and cur_col == pre_col+1
     # １つ前の位置によっては、上への移動を禁止とする現在マス
-    if (cur_sq in ('│┌', '┘─') and cur_col == pre_col-1) or \
-            (cur_sq == ('┐│', '─└') and cur_col == pre_col+1):
+    if forbidden_from_right or forbidden_from_left:
         return False
 
     next_col = cur_col
@@ -99,9 +102,11 @@ def move_to_right(board, agent, prev_location):
                   '┘│', '┐│', '┘┐', '┐┘'):  # 左分岐
         return False
 
-    # １つ前の位置によっては、右への移動を禁止とする現在マス
-    if (cur_sq in ('│┌', '┘─') and cur_row == pre_row+1) or \
-            (cur_sq == ('│└', '┐─') and cur_row == pre_row-1):
+    # 上から右へは行けない
+    forbidden_from_up = cur_sq in ('│┌', '┘─') and cur_row == pre_row-1
+    # 下から右へは行けない
+    forbidden_from_down = cur_sq in ('│└', '┐─') and cur_row == pre_row+1
+    if forbidden_from_up or forbidden_from_down:
         return False
 
     next_col = cur_col + 1
@@ -150,9 +155,11 @@ def move_down(board, agent, prev_location):
     if forbidden or is_letter(board, agent.location):
         return False
 
-    # １つ前の位置によっては、下への移動を禁止とする現在マス
-    if (cur_sq in ('│└', '┐─') and cur_col == pre_col-1) or \
-            (cur_sq == ('┘│', '─┌') and cur_col == pre_col+1):
+    # 右から下へは行けない
+    forbidden_from_right = cur_sq in ('│└', '┐─') and cur_col == pre_col-1
+    # 左から下へは行けない
+    forbidden_from_left = cur_sq in ('┘│', '─┌') and cur_col == pre_col+1
+    if forbidden_from_right or forbidden_from_left:
         return False
 
     next_col = cur_col
@@ -203,9 +210,11 @@ def move_to_left(board, agent, prev_location):
         # 左を移動禁止とする現在マス
         return False
 
-    # １つ前の位置によっては、左への移動を禁止とする現在マス
-    if (cur_sq in ('│┌', '┘─') and cur_row == pre_row+1) or \
-            (cur_sq == ('│└', '┐─') and cur_row == pre_row-1):
+    # 上から左へはいけない
+    forbidden_from_top = cur_sq in ('┐│', '─└') and cur_row == pre_row+1
+    # 下から左へはいけない
+    forbidden_from_bottom = cur_sq in ('┘│', '─┌') and cur_row == pre_row-1
+    if forbidden_from_top or forbidden_from_bottom:
         return False
 
     next_col = cur_col - 1

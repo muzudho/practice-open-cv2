@@ -78,6 +78,15 @@ def main():
             elif cell == '┌r':
                 draw_left_top_round_corner(canvas, column, row)
                 continue
+            elif cell == '┐r':
+                draw_right_top_round_corner(canvas, column, row)
+                continue
+            elif cell == '┘r':
+                draw_right_bottom_round_corner(canvas, column, row)
+                continue
+            elif cell == '└r':
+                draw_left_bottom_round_corner(canvas, column, row)
+                continue
 
             for (_, char) in enumerate(cell):
                 if char == '↑':
@@ -323,7 +332,7 @@ def draw_left_tee(canvas, column, row):
 
 def draw_left_top_round_corner(canvas, column, row):
     """┌描画（丸み）"""
-    # 水平線部
+    # 曲線
     right = (column+1)*GRID_UNIT
     bottom = (row+1)*GRID_UNIT
     cv2.ellipse(canvas,
@@ -332,6 +341,54 @@ def draw_left_top_round_corner(canvas, column, row):
                 0,
                 180,  # yが逆さの座標系
                 270,
+                color_for_cv2(LINE_COLOR),
+                thickness=LINE_THICKNESS,
+                lineType=2)
+
+
+def draw_right_top_round_corner(canvas, column, row):
+    """┐描画（丸み）"""
+    # 曲線
+    left = column*GRID_UNIT
+    bottom = (row+1)*GRID_UNIT
+    cv2.ellipse(canvas,
+                point_for_cv2((left, bottom)),
+                point_for_cv2((GRID_UNIT/2, GRID_UNIT/2)),
+                0,
+                270,  # yが逆さの座標系
+                360,
+                color_for_cv2(LINE_COLOR),
+                thickness=LINE_THICKNESS,
+                lineType=2)
+
+
+def draw_right_bottom_round_corner(canvas, column, row):
+    """┘描画（丸み）"""
+    # 曲線
+    left = column*GRID_UNIT
+    top = row*GRID_UNIT
+    cv2.ellipse(canvas,
+                point_for_cv2((left, top)),
+                point_for_cv2((GRID_UNIT/2, GRID_UNIT/2)),
+                0,
+                0,  # yが逆さの座標系
+                90,
+                color_for_cv2(LINE_COLOR),
+                thickness=LINE_THICKNESS,
+                lineType=2)
+
+
+def draw_left_bottom_round_corner(canvas, column, row):
+    """└描画（丸み）"""
+    # 曲線
+    right = (column+1)*GRID_UNIT
+    top = row*GRID_UNIT
+    cv2.ellipse(canvas,
+                point_for_cv2((right, top)),
+                point_for_cv2((GRID_UNIT/2, GRID_UNIT/2)),
+                0,
+                90,  # yが逆さの座標系
+                180,
                 color_for_cv2(LINE_COLOR),
                 thickness=LINE_THICKNESS,
                 lineType=2)

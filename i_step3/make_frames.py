@@ -8,9 +8,10 @@ from colors import \
     PALE_GRAY, BRIGHT_GRAY, BRIGHT_GREEN, SOFT_GRAY, SOFT_RED, SOFT_BLUE, BLACK
 from conf import CANVAS_CHANNELS, GRID_UNIT, TRUE_TYPE_FONT
 from japanese import draw_jp
-from board import Board
+from board import Board, read_screen_csv
 from agent import Agent
-from agent_move import move_up, move_to_right, move_down, move_to_left
+from agent_move import move_up, move_to_right, move_down, move_to_left, \
+    undo_move_up, undo_move_to_right, undo_move_down, undo_move_to_left
 
 FILE_PATH = './@input/i_step3/screen.csv'
 LINE_THICKNESS = 2
@@ -21,45 +22,6 @@ FONT_COLOR = BLACK
 START_COLOR = SOFT_RED
 GOAL_COLOR = SOFT_BLUE
 AGENT_COLOR = BRIGHT_GREEN
-
-
-def read_screen_csv():
-    """入力ファイルを読み込みます"""
-
-    # カンマ区切り テキスト
-    #    text = """\
-    #  ,  ,┌ ,─ ,あ,─ ,┐
-    #  ,  ,├ ,─ ,い,─ ,┤
-    #  ,  ,├ ,─ ,う,─ ,┤
-    # ─ ,─ ,┤ ,  ,  ,  ,├ ,─ ,─
-    #  ,  ,├ ,─ ,え,─ ,┤
-    #  ,  ,└ ,─ ,お,─ ,┘
-    # """
-    with open(FILE_PATH, encoding='utf8') as file:
-        text = file.read()
-
-    board = Board()
-
-    # 最大列、最大行を求めます
-    lines = text.split('\n')
-    board.height = len(lines)
-    board.width = 0
-    for (row, line) in enumerate(lines):
-        cells = line.split(',')
-        cells_num = len(cells)
-        if board.width < cells_num:
-            board.width = cells_num
-
-        columns = []
-        for (column, cell) in enumerate(cells):
-            cell = cell.strip()
-            columns.append(cell)
-
-            if cell == 'Start':
-                board.start_location = [column, row]
-        board.rows.append(columns)
-
-    return board
 
 
 def draw_board(canvas, board):
@@ -620,11 +582,9 @@ def draw_left_arrow(canvas, column, row):
              thickness=LINE_THICKNESS)
 
 
-def search(board, agent):
+def search(seq, board, agent):
     """描画と探索
     """
-
-    seq = 0
 
     # キャンバス生成
     canvas = np.full((board.height*GRID_UNIT, board.width*GRID_UNIT, CANVAS_CHANNELS),
@@ -641,36 +601,43 @@ def search(board, agent):
     draw_jp(canvas, '@', ((column+0.5)*GRID_UNIT, (row+0.5)*GRID_UNIT),
             TRUE_TYPE_FONT, GRID_UNIT, FONT_COLOR)
 
-    # 上に行く
-    if move_up(board, agent):
-        # 戻る
-        move_down(board, agent)
-
-    # 右に行く
-    if move_to_right(board, agent):
-        # 戻る
-        move_to_left(board, agent)
-
-    # 下に行く
-    if move_down(board, agent):
-        # 戻る
-        move_up(board, agent)
-
-    # 左に行く
-    if move_to_left(board, agent):
-        # 戻る
-        move_to_right(board, agent)
-
     # 書出し
     canvas = cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)  # BGRをRGBにする
     cv2.imwrite(f"./@share/out-istep1-{seq}.png", canvas)
+    seq += 1
+
+    # 上に行く
+    if move_up(board, agent):
+        seq = search(seq, board, agent)
+        # 戻る
+        undo_move_up(agent)
+
+    # 右に行く
+    if move_to_right(board, agent):
+        seq = search(seq, board, agent)
+        # 戻る
+        undo_move_to_right(agent)
+
+    # 下に行く
+    if move_down(board, agent):
+        seq = search(seq, board, agent)
+        # 戻る
+        undo_move_down(agent)
+
+    # 左に行く
+    if move_to_left(board, agent):
+        seq = search(seq, board, agent)
+        # 戻る
+        undo_move_to_left(agent)
 
     #cv2.imshow("make_image.py", canvas)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
+    return seq
 
-BOARD1 = read_screen_csv()
+
+BOARD1 = read_screen_csv(FILE_PATH)
 AGENT1 = Agent()
 AGENT1.location = BOARD1.start_location
 
@@ -678,4 +645,5 @@ AGENT1.location = BOARD1.start_location
 #    for (column, cell) in enumerate(columns):
 #        print(f"[{column},{row}]={cell}")
 
-search(BOARD1, AGENT1)
+SEQ = 0
+search(SEQ, BOARD1, AGENT1)

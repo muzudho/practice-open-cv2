@@ -52,16 +52,8 @@ class Board():
 def read_screen_csv(file_path):
     """入力ファイルを読み込みます"""
 
-    # カンマ区切り テキスト
-    #    text = """\
-    #  ,  ,┌ ,─ ,あ,─ ,┐
-    #  ,  ,├ ,─ ,い,─ ,┤
-    #  ,  ,├ ,─ ,う,─ ,┤
-    # ─ ,─ ,┤ ,  ,  ,  ,├ ,─ ,─
-    #  ,  ,├ ,─ ,え,─ ,┤
-    #  ,  ,└ ,─ ,お,─ ,┘
-    # """
-    with open(file_path, encoding='utf8') as file:
+    # カンマ区切り テキスト。 UTF-8 with BOM の先頭の BOMコードを取り除くため 'utf_8_sig'
+    with open(file_path, encoding='utf_8_sig') as file:
         text = file.read()
 
     board = Board()

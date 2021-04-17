@@ -41,5 +41,7 @@ AGENT1.prev_location = BOARD1.start_location[:]  # Copy
 #    for (column, cell) in enumerate(columns):
 #        print(f"[{column},{row}]={cell}")
 
-SEQ = 0
-search(SEQ, BOARD1, AGENT1, AGENT1.location, screenshot_func)
+SEQ1 = 0
+SEQ1 = search(SEQ1, BOARD1, AGENT1, AGENT1.location, screenshot_func)
+# 後ろ向き探索のスクリーンショット
+screenshot_func(SEQ1, BOARD1, AGENT1)

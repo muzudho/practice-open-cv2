@@ -65,6 +65,9 @@ HULビューはアルゴリズムなんで 著作権無いんで理解したら�
 ## Set up
 
 ```shell
+# pip更新
+python -m pip install --upgrade pip
+
 pip install opencv-python
 pip install pylint
 python -m pylint --generate-rcfile > pylintrc
@@ -82,7 +85,7 @@ VSCode `[File] - [Preferences] - [Settings]`。 検索欄に `Python.linting.pyl
 ```shell
 cd c_step30
 
-python make_frame.py
+python make_frames.py
 
 cd e_step4
 

@@ -81,7 +81,13 @@ python -m pygame.examples.aliens
 VSCode `[File] - [Preferences] - [Settings]`。 検索欄に `Python.linting.pylintArgs` を入れて検索。  
 `Add Item` ボタンを押すなどして、 `--extension-pkg-whitelist=cv2,pygame` を追加。  
 
+![20210810blog1.png](./@doc/img/20210810blog1.png)  
+
+👆 practice-python-open-cv2 フォルダーをワークスペースとして保存。  
+ワークスペースとして開く。ディレクトリー階層は上図の通りになる。   
+
 ## Start
+
 
 ```shell
 cd c_step30

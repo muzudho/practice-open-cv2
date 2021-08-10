@@ -78,7 +78,8 @@ python -m pip install -U pygame --user
 python -m pygame.examples.aliens
 ```
 
-VSCode `[File] - [Preferences] - [Settings]`。 検索欄に `Python.linting.pylintArgs` を入れて検索。 `--extension-pkg-whitelist=cv2,pygame` を追加。  
+VSCode `[File] - [Preferences] - [Settings]`。 検索欄に `Python.linting.pylintArgs` を入れて検索。  
+`Add Item` ボタンを押すなどして、 `--extension-pkg-whitelist=cv2,pygame` を追加。  
 
 ## Start
 
